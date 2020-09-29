@@ -1,0 +1,172 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "journey-maps-client": {
+      "projectType": "library",
+      "root": "projects/journey-maps-client",
+      "sourceRoot": "projects/journey-maps-client/src",
+      "prefix": "rokas",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/journey-maps-client/tsconfig.lib.json",
+            "project": "projects/journey-maps-client/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/journey-maps-client/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/journey-maps-client/src/test.ts",
+            "tsConfig": "projects/journey-maps-client/tsconfig.spec.json",
+            "karmaConfig": "projects/journey-maps-client/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/journey-maps-client/tsconfig.lib.json",
+              "projects/journey-maps-client/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "journey-maps-client-testapp": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/journey-maps-client-testapp",
+      "sourceRoot": "projects/journey-maps-client-testapp/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/journey-maps-client-testapp",
+            "index": "projects/journey-maps-client-testapp/src/index.html",
+            "main": "projects/journey-maps-client-testapp/src/main.ts",
+            "polyfills": "projects/journey-maps-client-testapp/src/polyfills.ts",
+            "tsConfig": "projects/journey-maps-client-testapp/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/journey-maps-client-testapp/src/favicon.ico",
+              "projects/journey-maps-client-testapp/src/assets"
+            ],
+            "styles": [
+              "projects/journey-maps-client-testapp/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/journey-maps-client-testapp/src/environments/environment.ts",
+                  "with": "projects/journey-maps-client-testapp/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "journey-maps-client-testapp:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "journey-maps-client-testapp:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "journey-maps-client-testapp:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/journey-maps-client-testapp/src/test.ts",
+            "polyfills": "projects/journey-maps-client-testapp/src/polyfills.ts",
+            "tsConfig": "projects/journey-maps-client-testapp/tsconfig.spec.json",
+            "karmaConfig": "projects/journey-maps-client-testapp/karma.conf.js",
+            "assets": [
+              "projects/journey-maps-client-testapp/src/favicon.ico",
+              "projects/journey-maps-client-testapp/src/assets"
+            ],
+            "styles": [
+              "projects/journey-maps-client-testapp/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/journey-maps-client-testapp/tsconfig.app.json",
+              "projects/journey-maps-client-testapp/tsconfig.spec.json",
+              "projects/journey-maps-client-testapp/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/journey-maps-client-testapp/e2e/protractor.conf.js",
+            "devServerTarget": "journey-maps-client-testapp:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "journey-maps-client-testapp:serve:production"
+            }
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": "6e26677d-3656-40b9-a44f-40078af23bf9"
+  },
+  "defaultProject": "journey-maps-client"
+}
