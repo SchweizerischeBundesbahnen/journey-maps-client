@@ -18,15 +18,15 @@ pipeline {
       }
     }
 
-    stage('Test') {
-      steps {
-        sh 'npm run test-headless'
-      }
-    }
-
     stage('Build library') {
       steps {
         sh 'npm run build-lib'
+      }
+    }
+
+    stage('Test') {
+      steps {
+        sh 'npm run test-headless'
       }
     }
 
