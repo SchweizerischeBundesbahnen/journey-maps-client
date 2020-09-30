@@ -18,6 +18,12 @@ pipeline {
       }
     }
 
+    stage('Test') {
+      steps {
+        sh 'npm run test'
+      }
+    }
+
     stage('Build library') {
       steps {
         sh 'npm run build-lib'
