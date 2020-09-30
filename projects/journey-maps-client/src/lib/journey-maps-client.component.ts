@@ -2,17 +2,10 @@ import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'rokas-journey-maps-client',
-  template: `
-    <p>
-      journey-maps-client works!
-    </p>
-  `,
-  styles: []
+  templateUrl: './journey-maps-client.component.html',
+  styleUrls: ['./journey-maps-client.component.scss']
 })
 export class JourneyMapsClientComponent implements OnInit {
-
-  constructor() {
-  }
 
   ngOnInit(): void {
   }
