@@ -10,7 +10,7 @@ describe('workspace-project App', () => {
 
   it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('journey-maps-client-testapp app is running!');
+    expect(page.getText()).toEqual('Journey Maps Client works!');
   });
 
   afterEach(async () => {

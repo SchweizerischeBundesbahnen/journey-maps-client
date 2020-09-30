@@ -5,7 +5,7 @@ import {JourneyMapsClientComponent} from './journey-maps-client.component';
 @NgModule({
   declarations: [JourneyMapsClientComponent],
   imports: [],
-  exports: [JourneyMapsClientComponent]
+  exports: [JourneyMapsClientComponent],
 })
 export class JourneyMapsClientModule {
 }

@@ -24,6 +24,12 @@ pipeline {
       }
     }
 
+    stage('Test') {
+      steps {
+        sh 'npm run test-headless'
+      }
+    }
+
     stage('Create snapshot') {
       when {
         allOf {
