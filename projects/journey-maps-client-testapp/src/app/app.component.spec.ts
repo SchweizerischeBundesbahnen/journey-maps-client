@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 import {AppComponent} from './app.component';
-import {JourneyMapsClientComponent} from 'journey-maps-client';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {

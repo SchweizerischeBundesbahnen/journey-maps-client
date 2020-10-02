@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
-import {Marker, MarkerCategory} from 'journey-maps-client';
+import {Marker} from '../../../journey-maps-client/src/lib/model/marker';
+import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 
 @Component({
   selector: 'app-root',
