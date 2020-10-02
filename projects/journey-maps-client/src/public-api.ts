@@ -4,3 +4,4 @@
 
 export * from './lib/journey-maps-client.module';
 export * from './lib/journey-maps-client.component';
+export * from './lib/model/public-api';

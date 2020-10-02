@@ -2,6 +2,10 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/journey-maps-client",
   "lib": {
-    "entryFile": "src/public-api.ts"
+    "entryFile": "src/public-api.ts",
+    "umdModuleIds": {
+      "mapbox-gl": "mapboxgl",
+      "@sbb-esta/angular-core": "sbbEsta.angularCore"
+    }
   }
 }

@@ -1,0 +1,30 @@
+//@import '~@sbb-esta/angular-public/styles.scss';
+
+.infobox {
+  z-index: 99;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 20rem;
+  padding: 1rem;
+  background-color: $sbbColorWhite;
+  box-shadow: -4px 0 0 rgba(0, 0, 0, 0.15);
+
+  .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+  }
+
+  .title {
+    font-size: x-large;
+  }
+
+  .subtitle {
+    font-size: large;
+  }
+}
