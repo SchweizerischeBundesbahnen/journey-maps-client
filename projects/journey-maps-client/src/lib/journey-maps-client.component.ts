@@ -20,7 +20,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @ViewChild('map') private mapElementRef: ElementRef;
   private windowResized = new Subject<void>();
   private destroyed = new Subject<void>();
-  private changeCoursor = new ReplaySubject<boolean>(1);
+  private cursorChanged = new ReplaySubject<boolean>(1);
   private clusterClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private layerClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private styleLoaded = new ReplaySubject(1);
@@ -76,7 +76,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       takeUntil(this.destroyed)
     ).subscribe(() => this.map.resize());
 
-    this.changeCoursor.pipe(
+    this.cursorChanged.pipe(
       debounceTime(50),
       takeUntil(this.destroyed)
     ).subscribe(isEnter => this.map.getCanvas().style.cursor = isEnter ? 'pointer' : '');
@@ -137,8 +137,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.mapService.onMapLoaded(this.map);
     for (const layer of Constants.LAYERS) {
       this.map.setLayoutProperty(layer, 'visibility', 'visible');
-      this.map.on('mouseenter', layer, () => this.changeCoursor.next(true));
-      this.map.on('mouseleave', layer, () => this.changeCoursor.next(false));
+      this.map.on('mouseenter', layer, () => this.cursorChanged.next(true));
+      this.map.on('mouseleave', layer, () => this.cursorChanged.next(false));
     }
 
     for (const infoLayer of Constants.INFO_LAYERS) {

@@ -35,7 +35,7 @@ export class MapService {
     }
   }
 
-  updateMarkers(map: mapboxgl.Map, markers: Marker[]): void {
+  updateMarkers(map: MapboxMap, markers: Marker[]): void {
     this.unselectFeature(map);
 
     const markerSource = this.getMarkerSource(map);
@@ -100,7 +100,7 @@ export class MapService {
     this.selectFeature(map, undefined);
   }
 
-  private selectFeature(map: mapboxgl.Map, selectedFeatureId: string): void {
+  private selectFeature(map: MapboxMap, selectedFeatureId: string): void {
     map.setFilter(Constants.MARKER_LAYER, this.createMarkerFilter(selectedFeatureId ?? '', false));
     map.setFilter(Constants.MARKER_SELECTED_LAYER, this.createMarkerFilter(selectedFeatureId ?? ''));
   }
