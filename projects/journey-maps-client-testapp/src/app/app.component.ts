@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Marker} from '../../../journey-maps-client/src/lib/model/marker';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
+import {TextInfoBlock} from '../../../journey-maps-client/src/lib/model/infoblock/text-info-block';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,12 @@ export class AppComponent {
       subtitle: 'My home is my castle',
       position: [7.296515, 47.069815],
       category: MarkerCategory.INFORMATION,
+      infoBlocks: [
+        {
+          title: 'Lorem Ipsum',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipisici elit.'
+        } as TextInfoBlock
+      ]
     },
     {
       id: 'playground',
