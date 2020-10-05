@@ -1,0 +1,7 @@
+<div class="infobox" *ngIf="shouldRender()" @showHideTrigger>
+  <div class="close" (click)="closeClicked.emit()">
+    <sbb-icon svgIcon="kom:circle-cross-medium" class="sbb-icon-fit"></sbb-icon>
+  </div>
+  <div class="title">{{this.selectedMarker.title}}</div>
+  <div class="subtitle">{{this.selectedMarker.subtitle}}</div>
+</div>

@@ -2,7 +2,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {JourneyMapsClientModule} from 'journey-maps-client';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {JourneyMapsClientModule} from '../../../journey-maps-client/src/lib/journey-maps-client.module';
 
 @NgModule({
   declarations: [
@@ -10,9 +11,9 @@ import {JourneyMapsClientModule} from 'journey-maps-client';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     JourneyMapsClientModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {

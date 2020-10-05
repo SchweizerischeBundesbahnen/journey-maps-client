@@ -1,0 +1,17 @@
+@import 'https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css';
+@import '~@sbb-esta/angular-public/styles.scss';
+
+:host, .map, .map-container {
+  height: 100%;
+}
+
+.map-container {
+  position: relative;
+}
+
+.map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
