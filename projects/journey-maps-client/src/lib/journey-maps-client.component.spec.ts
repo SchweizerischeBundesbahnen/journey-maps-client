@@ -2,7 +2,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {JourneyMapsClientComponent} from './journey-maps-client.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {InfoBoxComponent} from '../../../../dist/journey-maps-client/lib/components/info-box/info-box.component';
+import {InfoBoxComponent} from './components/info-box/info-box.component';
 
 describe('JourneyMapsClientComponent', () => {
   let component: JourneyMapsClientComponent;
