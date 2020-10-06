@@ -1,6 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Marker} from '../../model/marker';
 import {animate, style, transition, trigger} from '@angular/animations';
+import {InfoBlock} from '../../model/infoblock/info-block';
+import {InfoBlockType} from '../../model/infoblock/info-block-type.enum';
 
 @Component({
   selector: 'rokas-info-box',
@@ -34,4 +36,19 @@ export class InfoBoxComponent implements OnInit {
     return !!this.selectedMarker;
   }
 
+  getInfoBlocks(): InfoBlock[] {
+    return this.selectedMarker.infoBlocks ?? [];
+  }
+
+  isTextInfoBlock(infoBlock: InfoBlock): boolean {
+    return infoBlock.type === InfoBlockType.TEXT;
+  }
+
+  isButtonInfoBlock(infoBlock: InfoBlock): boolean {
+    return infoBlock.type === InfoBlockType.BUTTON;
+  }
+
+  isHtmlInfoBlock(infoBlock: InfoBlock): boolean {
+    return infoBlock.type === InfoBlockType.HTML;
+  }
 }
