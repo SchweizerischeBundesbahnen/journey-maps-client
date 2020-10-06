@@ -72,7 +72,7 @@ export class MapService {
 
     map.easeTo({
       center: this.convertToLngLatLike(geometry),
-      zoom
+      zoom: zoom + 0.1
     });
   }
 
