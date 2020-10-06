@@ -1,6 +1,6 @@
 @import '~@sbb-esta/angular-public/styles.scss';
 
-.infobox {
+.infoboxContainer {
   z-index: 99;
   position: absolute;
   top: 0;
@@ -27,4 +27,8 @@
   .subtitle {
     font-size: large;
   }
+}
+
+.infobox {
+  margin-top: 1em;
 }

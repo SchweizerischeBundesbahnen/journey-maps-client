@@ -1,7 +1,14 @@
-<div class="infobox" *ngIf="shouldRender()" @showHideTrigger>
+<div class="infoboxContainer" *ngIf="shouldRender()" @showHideTrigger>
   <div class="close" (click)="closeClicked.emit()">
     <sbb-icon svgIcon="kom:circle-cross-medium" class="sbb-icon-fit"></sbb-icon>
   </div>
   <div class="title">{{this.selectedMarker.title}}</div>
   <div class="subtitle">{{this.selectedMarker.subtitle}}</div>
+  <ng-container *ngFor="let infoBlock of getInfoBlocks()">
+    <div class="infobox">
+      <rokas-text-info-box *ngIf="isTextInfoBlock(infoBlock)" [infoBlock]="infoBlock"></rokas-text-info-box>
+      <rokas-button-info-box *ngIf="isButtonInfoBlock(infoBlock)" [infoBlock]="infoBlock"></rokas-button-info-box>
+      <rokas-html-info-box *ngIf="isHtmlInfoBlock(infoBlock)" [infoBlock]="infoBlock"></rokas-html-info-box>
+    </div>
+  </ng-container>
 </div>
