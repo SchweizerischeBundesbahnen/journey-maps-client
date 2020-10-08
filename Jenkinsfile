@@ -70,7 +70,7 @@ pipeline {
         }
       }
     }
-    stage('Create testapp docker') {
+    stage('Create & deploy testapp docker') {
       when {
         branch 'master'
       }
@@ -81,6 +81,12 @@ pipeline {
             ocApp: 'journey-maps-client-testapp',
             dockerDir: '.',
             ocAppVersion: 'latest'
+          )
+
+          cloud_mergeConfigAndUpdateOpenShift(
+            cluster: 'otc_test_04',
+            credentialId: 'ea1bfded-bc12-4db2-8429-e204a28195d1',
+            projects: 'ki-journey-maps-client'
           )
         }
       }
