@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build-lib": "ng build journey-maps-client --prod",
+    "build-app": "ng build journey-maps-client-testapp --prod --progress=false",
     "build-watch": "ng build journey-maps-client --watch",
     "test": "ng test",
     "test-headless": "ng test --watch=false --browsers=ChromeHeadless",

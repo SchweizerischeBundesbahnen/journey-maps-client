@@ -1,7 +1,7 @@
 {
   "name": "journey-maps-client",
   "version": "0.0.3",
-  "peerDependencies":   {
+  "peerDependencies": {
     "@angular/cdk": ">=v9",
     "@angular/common": ">=v9",
     "@angular/core": ">=v9",
@@ -11,5 +11,7 @@
     "@types/mapbox-gl": "^1.12.2",
     "mapbox-gl": "^1.12.0"
   },
-  "dependencies": {"tslib": "^2.0.0"}
+  "dependencies": {
+    "tslib": "^2.0.0"
+  }
 }
