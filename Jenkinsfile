@@ -34,12 +34,24 @@ pipeline {
       when {
         allOf {
           branch 'master'
-          expression {return !params.RELEASE}
+          expression { return !params.RELEASE }
         }
       }
       steps {
         script {
-          bin_npmPublishSnapshot(targetRepo: 'rokas.npm', packageJson: './projects/journey-maps-client/package.json', publishablePackageJsons: './dist/journey-maps-client/package.json')
+          bin_npmPublishSnapshot(
+            targetRepo: 'rokas.npm',
+            packageJson: './projects/journey-maps-client/package.json',
+            publishablePackageJsons: './dist/journey-maps-client/package.json'
+          )
+
+          // Create docker image for demo app
+          cloud_buildDockerImage(
+            artifactoryProject: 'rokas.docker',
+            ocApp: 'journey-maps-client-testapp',
+            dockerDir: '.',
+            ocAppVersion: 'latest'
+          )
         }
       }
     }
@@ -48,7 +60,7 @@ pipeline {
       when {
         allOf {
           branch 'master'
-          expression {return params.RELEASE}
+          expression { return params.RELEASE }
         }
       }
       steps {
@@ -56,8 +68,13 @@ pipeline {
           def packageJson = readJSON file: './projects/journey-maps-client/package.json'
           def (int major, int minor, int patch) = packageJson.version.tokenize('.')
 
-          bin_npmLeanPublish(targetRepo: 'rokas.npm', packageJson: './projects/journey-maps-client/package.json', publishablePackageJsons: './dist/journey-maps-client/package.json',
-            nextReleaseVersion: "${major}.${minor}.${patch + 1}".toString(), releaseVersion: "${major}.${minor}.${patch}".toString())
+          bin_npmLeanPublish(
+            targetRepo: 'rokas.npm',
+            packageJson: './projects/journey-maps-client/package.json',
+            publishablePackageJsons: './dist/journey-maps-client/package.json',
+            nextReleaseVersion: "${major}.${minor}.${patch + 1}".toString(),
+            releaseVersion: "${major}.${minor}.${patch}".toString()
+          )
         }
       }
     }
