@@ -44,14 +44,6 @@ pipeline {
             packageJson: './projects/journey-maps-client/package.json',
             publishablePackageJsons: './dist/journey-maps-client/package.json'
           )
-
-          // Create docker image for demo app
-          cloud_buildDockerImage(
-            artifactoryProject: 'rokas.docker',
-            ocApp: 'journey-maps-client-testapp',
-            dockerDir: '.',
-            ocAppVersion: 'latest'
-          )
         }
       }
     }
@@ -74,6 +66,21 @@ pipeline {
             publishablePackageJsons: './dist/journey-maps-client/package.json',
             nextReleaseVersion: "${major}.${minor}.${patch + 1}".toString(),
             releaseVersion: "${major}.${minor}.${patch}".toString()
+          )
+        }
+      }
+    }
+    stage('Create testapp docker') {
+      when {
+        branch 'master'
+      }
+      steps {
+        script {
+          cloud_buildDockerImage(
+            artifactoryProject: 'rokas.docker',
+            ocApp: 'journey-maps-client-testapp',
+            dockerDir: '.',
+            ocAppVersion: 'latest'
           )
         }
       }
