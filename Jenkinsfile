@@ -92,7 +92,7 @@ pipeline {
           cloud_callDeploy(
             cluster: 'otc_test_04',
             credentialId: 'ea1bfded-bc12-4db2-8429-e204a28195d1',
-            dc: 'ki-journey-maps-client',
+            dc: 'journey-maps-client',
             project: 'ki-journey-maps-client',
             doNotFailOnRunningDeployment: true
           )
