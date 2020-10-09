@@ -70,7 +70,10 @@
             "styles": [
               "projects/journey-maps-client-testapp/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "highlight.js"
+            ]
           },
           "configurations": {
             "production": {

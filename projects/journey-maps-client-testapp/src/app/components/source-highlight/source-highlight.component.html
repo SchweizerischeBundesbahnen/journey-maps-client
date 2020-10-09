@@ -1,0 +1,10 @@
+<sbb-tabs *ngIf="showTabs()">
+  <sbb-tab *ngFor="let entry of sources | keyvalue; let i = index"
+           [label]="entry.key"
+           [active]="i == 0"
+  >
+    <pre>
+      <code [highlight]="entry.value"></code>
+    </pre>
+  </sbb-tab>
+</sbb-tabs>

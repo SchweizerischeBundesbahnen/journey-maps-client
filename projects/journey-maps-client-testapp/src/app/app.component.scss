@@ -1,4 +1,8 @@
-:host {
-  height: 90vh;
-  display: block;
+.map {
+  height: 50vh;
+  box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, .15);
+}
+
+.source {
+  margin: 1em;
 }
