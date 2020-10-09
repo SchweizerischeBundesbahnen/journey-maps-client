@@ -2,8 +2,16 @@
   <rokas-journey-maps-client
     language="de"
     [markers]="markers"
+    [(zoomLevel)]="zoomLevel"
+    [(mapCenter)]="mapCenter"
   >
   </rokas-journey-maps-client>
+</div>
+<div>
+  <ul>
+    <li>Zoom Level: {{zoomLevel}}</li>
+    <li>Map center: {{mapCenter}}</li>
+  </ul>
 </div>
 
 <div class="source">

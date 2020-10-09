@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {GeoJSONSource, LngLatLike, Map as MapboxMap, MapboxGeoJSONFeature} from 'mapbox-gl';
+import {GeoJSONSource, LngLat, LngLatLike, Map as MapboxMap, MapboxGeoJSONFeature} from 'mapbox-gl';
 import {Constants} from './constants';
 import {Marker} from '../model/marker';
 import {MarkerConverterService} from './marker-converter.service';
@@ -96,7 +96,7 @@ export class MapService {
     return selectedFeatureId;
   }
 
-  unselectFeature(map: mapboxgl.Map): void {
+  unselectFeature(map: MapboxMap): void {
     this.selectFeature(map, undefined);
   }
 
@@ -107,5 +107,14 @@ export class MapService {
 
   private createMarkerFilter(id: string, include = true): Array<any> {
     return ['all', ['!has', 'point_count'], [include ? 'in' : '!in', 'id', id]];
+  }
+
+  updateCenter(map: MapboxMap, center: mapboxgl.LngLatLike): void {
+    const oldCenter = map.getCenter();
+    const newCenter = LngLat.convert(center);
+    const distance = oldCenter.distanceTo(newCenter);
+    if (distance > 1) {
+      map.setCenter(newCenter);
+    }
   }
 }
