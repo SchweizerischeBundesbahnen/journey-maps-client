@@ -93,7 +93,7 @@ pipeline {
             cluster: 'otc_test_04',
             credentialId: 'ea1bfded-bc12-4db2-8429-e204a28195d1',
             dc: 'ki-journey-maps-client',
-            projects: 'ki-journey-maps-client',
+            project: 'ki-journey-maps-client',
             doNotFailOnRunningDeployment: true
           )
 
