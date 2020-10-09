@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
+import {AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
 import {MapInitService} from './services/map-init.service';
 import {ReplaySubject, Subject} from 'rxjs';
 import {debounceTime, delay, filter, map, take, takeUntil} from 'rxjs/operators';
@@ -16,8 +16,15 @@ import {Marker} from './model/marker';
 export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDestroy {
 
   selectedMarker: Marker = undefined;
+
   private map: MapboxMap;
   @ViewChild('map') private mapElementRef: ElementRef;
+
+  private _zoomLevel?: number;
+  @Output() zoomLevelChange = new EventEmitter<number>();
+  private _mapCenter?: LngLatLike;
+  @Output() mapCenterChange = new EventEmitter<LngLatLike>();
+
   private windowResized = new Subject<void>();
   private destroyed = new Subject<void>();
   private cursorChanged = new ReplaySubject<boolean>(1);
@@ -70,6 +77,32 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
+
+  get zoomLevel(): number {
+    return this._zoomLevel;
+  }
+
+  @Input()
+  set zoomLevel(value: number) {
+    this._zoomLevel = value;
+    if (this.map?.isStyleLoaded() && value) {
+      this.map.setZoom(value);
+    }
+  }
+
+
+  get mapCenter(): mapboxgl.LngLatLike {
+    return this._mapCenter;
+  }
+
+  @Input()
+  set mapCenter(value: mapboxgl.LngLatLike) {
+    this._mapCenter = value;
+    if (this.map?.isStyleLoaded() && value) {
+      this.mapService.updateCenter(this.map, value);
+    }
+  }
+
   ngOnInit(): void {
     this.windowResized.pipe(
       debounceTime(500),
@@ -107,7 +140,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   ngAfterViewInit(): void {
     // CHECKME ses: Lazy initialization with IntersectionObserver?
-    this.mapInitService.initializeMap(this.mapElementRef.nativeElement, this.language).subscribe(
+    this.mapInitService.initializeMap(this.mapElementRef.nativeElement, this.language, this.zoomLevel, this.mapCenter).subscribe(
       m => {
         this.map = m;
         this.registerStyleLoadedHandler();
@@ -146,7 +179,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
 
     this.map.on('click', Constants.CLUSTER_LAYER, event => this.clusterClicked.next(event));
-
+    this.map.on('zoomend', () => this.zoomLevelChange.emit(this.map.getZoom()));
+    this.map.on('moveend', () => this.mapCenterChange.emit(this.map.getCenter()));
     // CHECKME ses: Handle missing map image
   }
 

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Map as MapboxMap, NavigationControl, Style} from 'mapbox-gl';
+import {LngLatLike, Map as MapboxMap, NavigationControl, Style} from 'mapbox-gl';
 import {map, tap} from 'rxjs/operators';
 import {Constants} from './constants';
 
@@ -11,6 +11,8 @@ import {Constants} from './constants';
 // TODO ses: Magic numbers as constants
 export class MapInitService {
 
+  private readonly defaultZoom = 7.5;
+  private readonly defaultMapCenter: LngLatLike = [7.299265, 47.072120];
   private readonly styleUrl = 'https://api.maptiler.com/maps/16bebf72-aee9-4a63-9ae6-018a6615455c/style.json?key=9BD3inXxrAPHVp6fEoMN';
   private readonly controlLabels = {
     de: {
@@ -34,8 +36,8 @@ export class MapInitService {
   constructor(private http: HttpClient) {
   }
 
-  initializeMap(mapNativeElement: any, language: string): Observable<MapboxMap> {
-    const mapboxMap = new MapboxMap(this.createOptions(mapNativeElement));
+  initializeMap(mapNativeElement: any, language: string, zoomLevel?: number, mapCenter?: mapboxgl.LngLatLike): Observable<mapboxgl.Map> {
+    const mapboxMap = new MapboxMap(this.createOptions(mapNativeElement, zoomLevel, mapCenter));
 
     this.translateControlLabels(mapboxMap, language);
     this.addControls(mapboxMap);
@@ -47,21 +49,27 @@ export class MapInitService {
     );
   }
 
-  private createOptions(container: any): mapboxgl.MapboxOptions {
-    return {
+  private createOptions(container: any, zoomLevel?: number, mapCenter?: mapboxgl.LngLatLike): mapboxgl.MapboxOptions {
+    const options: mapboxgl.MapboxOptions = {
       container,
       minZoom: 5,
       maxZoom: 18,
-      // center: [7.4391326448171196, 46.948834547463086],
-      // zoom: 15,
       scrollZoom: true,
       dragRotate: false,
-      bounds: [
-        [5.7, 47.9],
-        [10.6, 45.7]
-      ] as any, // CH bounds
       fadeDuration: 10
     };
+
+    if (zoomLevel || mapCenter) {
+      options.zoom = zoomLevel ?? this.defaultZoom;
+      options.center = mapCenter ?? this.defaultMapCenter;
+    } else {
+      options.bounds = [
+        [5.7, 47.9],
+        [10.6, 45.7]
+      ]; // CH bounds
+    }
+
+    return options;
   }
 
   private fetchStyle(): Observable<Style> {

@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {Marker} from '../../../journey-maps-client/src/lib/model/marker';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 import {InfoBlockFactoryService} from '../../../journey-maps-client/src/lib/services/info-block-factory.service';
+import {LngLatLike} from 'mapbox-gl';
+import {LoremIpsum} from 'lorem-ipsum';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +16,11 @@ export class AppComponent {
   }
 
   title = 'journey-maps-client-testapp';
+  loremIpsum = new LoremIpsum();
+
+  zoomLevel = 7.5;
+  mapCenter: LngLatLike = [7.4391326448171196, 46.948834547463086];
+
   markers: Marker[] = [
     {
       id: 'home',
@@ -23,13 +30,13 @@ export class AppComponent {
       category: MarkerCategory.INFORMATION,
       infoBlocks: [
         this.infoBlockFactoryService.createTextInfoBlock(
-          'Bavaria ipsum',
-          'Bavaria ipsum dolor sit amet Resi vui huift vui baddscher obandln'
+          this.loremIpsum.generateWords(3),
+          this.loremIpsum.generateSentences(2),
+          'blueText'
         ),
         this.infoBlockFactoryService.createTextInfoBlock(
-          'Lorem Ipsum',
-          'Lorem ipsum dolor sit amet, consectetur adipisici elit',
-          'blueText'
+          this.loremIpsum.generateWords(3),
+          this.loremIpsum.generateParagraphs(3)
         )
       ]
     },
