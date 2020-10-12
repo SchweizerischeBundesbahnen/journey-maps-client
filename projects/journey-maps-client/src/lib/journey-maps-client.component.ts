@@ -1,4 +1,16 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
 import {MapInitService} from './services/map-init.service';
 import {ReplaySubject, Subject} from 'rxjs';
@@ -19,6 +31,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   private map: MapboxMap;
   @ViewChild('map') private mapElementRef: ElementRef;
+
+  @Input() infoBoxTemplate?: TemplateRef<any>;
 
   private _zoomLevel?: number;
   @Output() zoomLevelChange = new EventEmitter<number>();

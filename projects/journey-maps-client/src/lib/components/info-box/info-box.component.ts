@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef} from '@angular/core';
 import {Marker} from '../../model/marker';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {InfoBlock} from '../../model/infoblock/info-block';
@@ -24,6 +24,7 @@ import {InfoBlockType} from '../../model/infoblock/info-block-type.enum';
 export class InfoBoxComponent implements OnInit {
 
   @Input() selectedMarker: Marker;
+  @Input() infoBoxTemplate?: TemplateRef<any>;
   @Output() closeClicked = new EventEmitter<void>();
 
   constructor() {
@@ -50,5 +51,11 @@ export class InfoBoxComponent implements OnInit {
 
   isHtmlInfoBlock(infoBlock: InfoBlock): boolean {
     return infoBlock.type === InfoBlockType.HTML;
+  }
+
+  getTemplateContext(): any {
+    return {
+      $implicit: this.selectedMarker
+    };
   }
 }
