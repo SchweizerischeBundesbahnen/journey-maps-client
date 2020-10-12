@@ -1,11 +1,19 @@
 <div class="map">
+
+  <!--  Set [infoBoxTemplate]="infoBoxTemplate" to overwrite default template.-->
   <rokas-journey-maps-client
     language="de"
     [markers]="markers"
     [(zoomLevel)]="zoomLevel"
     [(mapCenter)]="mapCenter"
+    [infoBoxTemplate]=""
   >
   </rokas-journey-maps-client>
+
+  <ng-template #infoBoxTemplate let-marker>
+    <h1 style="color: red">{{marker.title}}</h1>
+    <div>{{marker.subtitle}}</div>
+  </ng-template>
 </div>
 <div>
   <ul>
