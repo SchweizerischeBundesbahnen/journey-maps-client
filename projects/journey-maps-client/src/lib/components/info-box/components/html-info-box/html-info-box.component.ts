@@ -1,11 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {HtmlInfoBlock} from '../../../../model/infoblock/html-info-block';
 import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'rokas-html-info-box',
   templateUrl: './html-info-box.component.html',
-  styleUrls: ['./html-info-box.component.scss']
+  styleUrls: ['./html-info-box.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HtmlInfoBoxComponent implements OnInit {
 

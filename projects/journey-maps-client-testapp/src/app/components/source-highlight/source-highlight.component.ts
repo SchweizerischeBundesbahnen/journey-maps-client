@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-source-highlight',
   templateUrl: './source-highlight.component.html',
-  styleUrls: ['./source-highlight.component.scss']
+  styleUrls: ['./source-highlight.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SourceHighlightComponent implements OnInit {
 
