@@ -33,6 +33,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @ViewChild('map') private mapElementRef: ElementRef;
 
   @Input() infoBoxTemplate?: TemplateRef<any>;
+  @Input() apiKey: string;
+  @Input() styleId = '16bebf72-aee9-4a63-9ae6-018a6615455c';
+  @Input() styleUrl = 'https://api.maptiler.com/maps/{styleId}/style.json?key={apiKey}';
 
   private _zoomLevel?: number;
   @Output() zoomLevelChange = new EventEmitter<number>();
@@ -154,7 +157,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   ngAfterViewInit(): void {
     // CHECKME ses: Lazy initialization with IntersectionObserver?
-    this.mapInitService.initializeMap(this.mapElementRef.nativeElement, this.language, this.zoomLevel, this.mapCenter).subscribe(
+    const styleUrl = this.styleUrl
+      .replace('{styleId}', this.styleId)
+      .replace('{apiKey}', this.apiKey);
+
+
+    this.mapInitService.initializeMap(this.mapElementRef.nativeElement, this.language, styleUrl, this.zoomLevel, this.mapCenter).subscribe(
       m => {
         this.map = m;
         this.registerStyleLoadedHandler();
