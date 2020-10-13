@@ -1,9 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {Marker} from '../../../journey-maps-client/src/lib/model/marker';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 import {InfoBlockFactoryService} from '../../../journey-maps-client/src/lib/services/info-block-factory.service';
 import {LngLatLike} from 'mapbox-gl';
 import {LoremIpsum} from 'lorem-ipsum';
+import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 
 @Component({
   selector: 'app-root',
@@ -18,9 +19,11 @@ export class AppComponent {
   title = 'journey-maps-client-testapp';
   loremIpsum = new LoremIpsum();
 
+  @ViewChild(JourneyMapsClientComponent) rokasClient: JourneyMapsClientComponent;
   zoomLevel = 7.5;
   mapCenter: LngLatLike = [7.4391326448171196, 46.948834547463086];
 
+  // Call this.rokasClient.updateMarkers() when markers have been added/removed.
   markers: Marker[] = [
     {
       id: 'home',

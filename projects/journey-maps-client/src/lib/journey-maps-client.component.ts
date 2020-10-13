@@ -80,18 +80,22 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Input()
   set markers(value: Marker[]) {
     this._markers = value;
+    this.updateMarkers();
+  }
+
+
+  updateMarkers(): void {
     this.selectedMarker = undefined;
 
     if (this.map && this.map.isStyleLoaded()) {
-      this.mapService.updateMarkers(this.map, value);
+      this.mapService.updateMarkers(this.map, this.markers);
     } else {
       this.styleLoaded.pipe(
         take(1),
         delay(500)
-      ).subscribe(() => this.mapService.updateMarkers(this.map, value));
+      ).subscribe(() => this.mapService.updateMarkers(this.map, this.markers));
     }
   }
-
 
   get zoomLevel(): number {
     return this._zoomLevel;
@@ -121,6 +125,26 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   ngOnInit(): void {
     this.validateInputParameter();
     this.setupSubjects();
+  }
+
+  ngAfterViewInit(): void {
+    // CHECKME ses: Lazy initialization with IntersectionObserver?
+    const styleUrl = this.styleUrl
+      .replace('{styleId}', this.styleId)
+      .replace('{apiKey}', this.apiKey);
+
+
+    this.mapInitService.initializeMap(this.mapElementRef.nativeElement, this.language, styleUrl, this.zoomLevel, this.mapCenter).subscribe(
+      m => {
+        this.map = m;
+        this.registerStyleLoadedHandler();
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 
   private setupSubjects(): void {
@@ -156,26 +180,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       filter(features => features != null && features.length > 0),
       takeUntil(this.destroyed)
     ).subscribe(features => this.mapService.onClusterClicked(this.map, features[0]));
-  }
-
-  ngAfterViewInit(): void {
-    // CHECKME ses: Lazy initialization with IntersectionObserver?
-    const styleUrl = this.styleUrl
-      .replace('{styleId}', this.styleId)
-      .replace('{apiKey}', this.apiKey);
-
-
-    this.mapInitService.initializeMap(this.mapElementRef.nativeElement, this.language, styleUrl, this.zoomLevel, this.mapCenter).subscribe(
-      m => {
-        this.map = m;
-        this.registerStyleLoadedHandler();
-      }
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed.next();
-    this.destroyed.complete();
   }
 
   @HostListener('window:resize')
