@@ -101,7 +101,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   set zoomLevel(value: number) {
     this._zoomLevel = value;
     if (this.map?.isStyleLoaded() && value) {
-      this.map.setZoom(value);
+      this.map.easeTo({zoom: value});
     }
   }
 

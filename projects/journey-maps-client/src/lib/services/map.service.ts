@@ -117,7 +117,7 @@ export class MapService {
     const newCenter = LngLat.convert(center);
     const distance = oldCenter.distanceTo(newCenter);
     if (distance > 1) {
-      map.setCenter(newCenter);
+      map.flyTo({center: newCenter});
     }
   }
 
