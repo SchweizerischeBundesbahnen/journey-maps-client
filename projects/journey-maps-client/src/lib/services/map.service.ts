@@ -4,6 +4,7 @@ import {Constants} from './constants';
 import {Marker} from '../model/marker';
 import {MarkerConverterService} from './marker-converter.service';
 import {Geometry, Point} from 'geojson';
+import {MarkerCategory} from '../model/marker-category.enum';
 
 
 @Injectable({
@@ -36,7 +37,9 @@ export class MapService {
   }
 
   updateMarkers(map: MapboxMap, markers: Marker[]): void {
+    this.verifyMarkers(markers);
     this.unselectFeature(map);
+    this.addMissingImages(map, markers);
 
     const markerSource = this.getMarkerSource(map);
 
@@ -115,6 +118,52 @@ export class MapService {
     const distance = oldCenter.distanceTo(newCenter);
     if (distance > 1) {
       map.setCenter(newCenter);
+    }
+  }
+
+  private addMissingImages(map: mapboxgl.Map, markers: Marker[]): void {
+    (markers ?? [])
+      .filter(marker => marker.category === MarkerCategory.CUSTOM)
+      .filter(marker => !map.hasImage(this.buildImageName(marker)))
+      .forEach(marker => {
+        const imageName = this.buildImageName(marker);
+        this.addMissingImage(map, imageName, marker.icon, marker.iconSelected);
+        // The image will later be loaded by the category name. Therefore we have to map it back.
+        marker.category = imageName;
+      });
+  }
+
+  private buildImageName(marker: Marker): string {
+    return `${this.convertToImageName(marker.icon)}_${this.convertToImageName(marker.iconSelected)}`;
+  }
+
+  private convertToImageName(iconPath: string): string {
+    return iconPath.substring(iconPath.lastIndexOf('/') + 1, iconPath.lastIndexOf('.'));
+  }
+
+  private verifyMarkers(markers: Marker[]): void {
+    const invalidMarker = (markers ?? [])
+      .filter(marker => marker.category === MarkerCategory.CUSTOM)
+      .find(marker => !marker.icon || !marker.iconSelected);
+
+    if (invalidMarker) {
+      throw new Error(
+        `Marker with id ${invalidMarker.id} and category CUSTOM is missing the required 'icon' or 'iconSelected' definition.`
+      );
+    }
+
+  }
+
+  private addMissingImage(map: mapboxgl.Map, name: string, icon: string, iconSelected: string): void {
+    map.loadImage(icon, (error, image) => this.imageLoadedCallback(map, `sbb_${name}_red`, error, image));
+    map.loadImage(iconSelected, (error, image) => this.imageLoadedCallback(map, `sbb_${name}_black`, error, image));
+  }
+
+  private imageLoadedCallback(map: mapboxgl.Map, name: string, error: any, image: any): void {
+    if (error) {
+      console.error(error);
+    } else {
+      map.addImage(name, image, {pixelRatio: 2});
     }
   }
 }
