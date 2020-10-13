@@ -36,10 +36,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Input() apiKey: string;
   @Input() styleId = '16bebf72-aee9-4a63-9ae6-018a6615455c';
   @Input() styleUrl = 'https://api.maptiler.com/maps/{styleId}/style.json?key={apiKey}';
-
+  private _language = 'de';
+  private _markers: Marker[];
   private _zoomLevel?: number;
-  @Output() zoomLevelChange = new EventEmitter<number>();
   private _mapCenter?: LngLatLike;
+
+  @Output() zoomLevelChange = new EventEmitter<number>();
   @Output() mapCenterChange = new EventEmitter<LngLatLike>();
 
   private windowResized = new Subject<void>();
@@ -52,8 +54,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   constructor(private mapInitService: MapInitService,
               private mapService: MapService) {
   }
-
-  private _language: string;
 
   get language(): string {
     return this._language;
@@ -72,8 +72,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       throw new TypeError('Illegal value for language. Allowed values are de|fr|it|en.');
     }
   }
-
-  private _markers: Marker[];
 
   get markers(): Marker[] {
     return this._markers;
@@ -121,6 +119,11 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnInit(): void {
+    this.validateInputParameter();
+    this.setupSubjects();
+  }
+
+  private setupSubjects(): void {
     this.windowResized.pipe(
       debounceTime(500),
       takeUntil(this.destroyed)
@@ -209,5 +212,11 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   onInfoboxCloseClicked(): void {
     this.selectedMarker = undefined;
     this.mapService.unselectFeature(this.map);
+  }
+
+  private validateInputParameter(): void {
+    if (!this.apiKey) {
+      throw new Error('Input parameter apiKey is mandatory');
+    }
   }
 }
