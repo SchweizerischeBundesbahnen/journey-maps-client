@@ -3,6 +3,7 @@ import {AppComponent} from './app.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 import {InfoBoxComponent} from '../../../journey-maps-client/src/lib/components/info-box/info-box.component';
+import {SourceHighlightComponent} from './components/source-highlight/source-highlight.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -13,7 +14,8 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         JourneyMapsClientComponent,
-        InfoBoxComponent
+        InfoBoxComponent,
+        SourceHighlightComponent
       ],
     }).compileComponents();
   });

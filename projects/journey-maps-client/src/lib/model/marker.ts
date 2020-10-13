@@ -6,7 +6,9 @@ import {InfoBlock} from './infoblock/info-block';
 export interface Marker {
   id: string;
   position: Position;
-  category: MarkerCategory | MarkerCategoryBVI;
+  category: MarkerCategory | MarkerCategoryBVI | string;
+  icon?: string;
+  iconSelected?: string;
   title: string;
   subtitle?: string;
   infoBlocks?: InfoBlock[];

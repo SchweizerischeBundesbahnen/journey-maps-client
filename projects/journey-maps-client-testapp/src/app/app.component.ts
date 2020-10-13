@@ -45,7 +45,9 @@ export class AppComponent {
       title: 'Playground',
       subtitle: 'Sun, fun and nothing to do',
       position: [7.299265, 47.072120],
-      category: MarkerCategory.INFORMATION,
+      category: MarkerCategory.CUSTOM,
+      icon: 'assets/icons/train.png',
+      iconSelected: 'assets/icons/train_selected.png',
       infoBlocks: [
         this.infoBlockFactoryService.createHtmlInfoBlock(
           'Cupcake Ipsum',

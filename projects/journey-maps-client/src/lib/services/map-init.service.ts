@@ -13,7 +13,6 @@ export class MapInitService {
 
   private readonly defaultZoom = 7.5;
   private readonly defaultMapCenter: LngLatLike = [7.299265, 47.072120];
-  private readonly styleUrl = 'https://api.maptiler.com/maps/16bebf72-aee9-4a63-9ae6-018a6615455c/style.json?key=9BD3inXxrAPHVp6fEoMN';
   private readonly controlLabels = {
     de: {
       'NavigationControl.ZoomIn': 'Hineinzoomen',
@@ -36,13 +35,19 @@ export class MapInitService {
   constructor(private http: HttpClient) {
   }
 
-  initializeMap(mapNativeElement: any, language: string, zoomLevel?: number, mapCenter?: mapboxgl.LngLatLike): Observable<mapboxgl.Map> {
+  initializeMap(
+    mapNativeElement: any,
+    language: string,
+    styleUrl: string,
+    zoomLevel?: number,
+    mapCenter?: mapboxgl.LngLatLike
+  ): Observable<mapboxgl.Map> {
     const mapboxMap = new MapboxMap(this.createOptions(mapNativeElement, zoomLevel, mapCenter));
 
     this.translateControlLabels(mapboxMap, language);
     this.addControls(mapboxMap);
 
-    return this.fetchStyle().pipe(
+    return this.fetchStyle(styleUrl).pipe(
       tap(style => this.defineClusterSettings(style)),
       tap(style => mapboxMap.setStyle(style)),
       map(() => mapboxMap)
@@ -72,8 +77,8 @@ export class MapInitService {
     return options;
   }
 
-  private fetchStyle(): Observable<Style> {
-    return this.http.get(this.styleUrl).pipe(
+  private fetchStyle(styleUrl: string): Observable<Style> {
+    return this.http.get(styleUrl).pipe(
       map(style => style as Style)
     );
   }

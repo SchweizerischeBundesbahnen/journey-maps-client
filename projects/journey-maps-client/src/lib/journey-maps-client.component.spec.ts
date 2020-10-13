@@ -22,6 +22,7 @@ describe('JourneyMapsClientComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(JourneyMapsClientComponent);
     component = fixture.componentInstance;
+    component.apiKey = 'apiKey';
     fixture.detectChanges();
   });
 
