@@ -50,6 +50,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private clusterClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private layerClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private styleLoaded = new ReplaySubject(1);
+  private mapParameterChanged = new Subject<void>();
 
   constructor(private mapInitService: MapInitService,
               private mapService: MapService) {
@@ -105,7 +106,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   set zoomLevel(value: number) {
     this._zoomLevel = value;
     if (this.map?.isStyleLoaded() && value) {
-      this.map.easeTo({zoom: value});
+      this.mapParameterChanged.next();
     }
   }
 
@@ -118,7 +119,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   set mapCenter(value: mapboxgl.LngLatLike) {
     this._mapCenter = value;
     if (this.map?.isStyleLoaded() && value) {
-      this.mapService.updateCenter(this.map, value);
+      this.mapParameterChanged.next();
     }
   }
 
@@ -180,6 +181,11 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       filter(features => features != null && features.length > 0),
       takeUntil(this.destroyed)
     ).subscribe(features => this.mapService.onClusterClicked(this.map, features[0]));
+
+    this.mapParameterChanged.pipe(
+      debounceTime(200),
+    ).subscribe(() => this.mapService.moveMap(this.map, this.mapCenter, this.zoomLevel));
+
   }
 
   @HostListener('window:resize')
