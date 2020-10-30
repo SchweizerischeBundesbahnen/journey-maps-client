@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "npm run build-example && ng serve",
-    "start-with-remote-access": "npm run build-example && ng serve --host 0.0.0.0 --disable-host-check",
+    "start": "npm run build-example && ng serve journey-maps-client-testapp",
+    "start-elements": "ng serve journey-maps-client-elements",
+    "start-with-remote-access": "npm run build-example && ng serve journey-maps-client-testapp --host 0.0.0.0 --disable-host-check",
     "build": "ng build",
     "build-lib": "ng build journey-maps-client --prod",
     "build-lib-watch": "ng build journey-maps-client --watch",
