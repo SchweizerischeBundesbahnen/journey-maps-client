@@ -8,10 +8,20 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-<journey-maps-client
-  language="fr"
-  api-key="9BD3inXxrAPHVp6fEoMN"
->
-</journey-maps-client>
+<script>
+  var map = document.createElement('journey-maps-client');
+  map.setAttribute('language', 'de');
+  map.setAttribute('api-key', '9BD3inXxrAPHVp6fEoMN');
+  map.setAttribute('zoom-level', '7.5');
+
+  document.addEventListener('DOMContentLoaded', function (event) {
+    document
+      .getElementById('container')
+      .appendChild(map);
+  });
+</script>
+
+
+<div id="container"></div>
 </body>
 </html>
