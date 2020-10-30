@@ -6,7 +6,7 @@ WORKDIR /home/node
 RUN apk add --no-cache tini \
 && npm install --global http-server \
 && npm ci --silent \
-&& npm run build-app \
+&& npm run build-testapp \
 && rm -rf node_modules
 
 EXPOSE 8080
