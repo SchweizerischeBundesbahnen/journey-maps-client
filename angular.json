@@ -185,7 +185,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "ngx-build-plus:browser",
           "options": {
             "outputPath": "dist/journey-maps-client-elements",
             "index": "projects/journey-maps-client-elements/src/index.html",
@@ -234,7 +234,7 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "ngx-build-plus:dev-server",
           "options": {
             "browserTarget": "journey-maps-client-elements:build"
           },
@@ -251,7 +251,7 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "ngx-build-plus:karma",
           "options": {
             "main": "projects/journey-maps-client-elements/src/test.ts",
             "polyfills": "projects/journey-maps-client-elements/src/polyfills.ts",
