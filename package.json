@@ -13,7 +13,7 @@
     "build-elements": "ng build journey-maps-client-elements --prod --single-bundle --outputHashing=none",
     "build-elements-with-stats": "ng build journey-maps-client-elements --prod --single-bundle --outputHashing=none --stats-json",
     "lint": "ng lint",
-    "test-headless": "npm run test-lib && npm run test-testapp && npm run test-elements",
+    "test-headless": "npm run test-lib && npm run test-testapp",
     "test-lib": "ng test journey-maps-client --watch=false --browsers=ChromeHeadless",
     "test-testapp": "ng test journey-maps-client-testapp --watch=false --browsers=ChromeHeadless",
     "test-elements": "ng test journey-maps-client-elements --watch=false --browsers=ChromeHeadless",
