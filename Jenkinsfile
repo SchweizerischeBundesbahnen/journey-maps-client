@@ -26,9 +26,7 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh 'npm run build-lib'
-        sh 'npm run build-testapp'
-        sh 'npm run elements'
+        sh 'npm run build'
       }
     }
 
