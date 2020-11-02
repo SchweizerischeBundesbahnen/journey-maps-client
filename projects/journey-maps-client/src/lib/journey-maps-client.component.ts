@@ -1,5 +1,7 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -23,7 +25,8 @@ import {Marker} from './model/marker';
 @Component({
   selector: 'rokas-journey-maps-client',
   templateUrl: './journey-maps-client.component.html',
-  styleUrls: ['./journey-maps-client.component.scss']
+  styleUrls: ['./journey-maps-client.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -53,7 +56,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private mapParameterChanged = new Subject<void>();
 
   constructor(private mapInitService: MapInitService,
-              private mapService: MapService) {
+              private mapService: MapService,
+              private cd: ChangeDetectorRef) {
   }
 
   get language(): string {
@@ -90,11 +94,16 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
     if (this.map && this.map.isStyleLoaded()) {
       this.mapService.updateMarkers(this.map, this.markers);
+      this.cd.detectChanges();
     } else {
       this.styleLoaded.pipe(
         take(1),
         delay(500)
-      ).subscribe(() => this.mapService.updateMarkers(this.map, this.markers));
+      ).subscribe(() => {
+          this.mapService.updateMarkers(this.map, this.markers);
+          this.cd.detectChanges();
+        }
+      );
     }
   }
 
@@ -172,6 +181,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     ).subscribe(features => {
       const selectedMarkerId = this.mapService.onLayerClicked(this.map, features[0], this.selectedMarker?.id);
       this.selectedMarker = this.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
+      this.cd.detectChanges();
     });
 
     this.clusterClicked.pipe(
@@ -222,6 +232,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   onInfoboxCloseClicked(): void {
     this.selectedMarker = undefined;
     this.mapService.unselectFeature(this.map);
+    this.cd.detectChanges();
   }
 
   private validateInputParameter(): void {
