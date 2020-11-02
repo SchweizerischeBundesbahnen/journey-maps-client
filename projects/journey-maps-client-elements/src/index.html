@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>JourneyMapsClientElements</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+<script>
+  var map = document.createElement('journey-maps-client');
+  map.language = 'de';
+  map.apiKey = '9BD3inXxrAPHVp6fEoMN';
+  map.zoomLevel = 7.5;
+  map.mapCenter = [7.4391326448171196, 46.948834547463086];
+
+  var marker = {
+    id: 'home',
+    title: 'Home Office',
+    subtitle: 'My home is my castle',
+    position: [7.296515, 47.069815],
+    category: 'INFORMATION',
+    infoBlocks: [
+      {
+        type: 'TEXT',
+        title: 'Lorem Ipsum',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipisici elit'
+      }
+    ]
+  }
+  map.markers = [marker];
+
+  document.addEventListener('DOMContentLoaded', function (event) {
+    document
+      .getElementById('container')
+      .appendChild(map);
+  });
+
+  map.addEventListener('zoomLevelChange', function (event) {
+    console.log(event);
+  })
+</script>
+
+
+<div id="container"></div>
+</body>
+</html>
