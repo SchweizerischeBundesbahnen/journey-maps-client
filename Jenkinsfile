@@ -30,19 +30,6 @@ pipeline {
       }
     }
 
-    stage('removeme') {
-      steps {
-        bin_npmPublishSnapshot(
-          targetRepo: 'rokas.npm',
-          packageJson: './package.json',
-          publishablePackageJsons:
-            './dist/journey-maps-client/package.json,' +
-            './dist/journey-maps-client-elements/package.json'
-        )
-      }
-    }
-
-
     stage('Create snapshot') {
       when {
         allOf {
@@ -54,8 +41,10 @@ pipeline {
         script {
           bin_npmPublishSnapshot(
             targetRepo: 'rokas.npm',
-            packageJson: './projects/journey-maps-client/package.json',
-            publishablePackageJsons: './dist/journey-maps-client/package.json'
+            packageJson: './package.json',
+            publishablePackageJsons:
+              './dist/journey-maps-client/package.json,' +
+              './dist/journey-maps-client-elements/package.json'
           )
         }
       }
@@ -75,8 +64,10 @@ pipeline {
 
           bin_npmLeanPublish(
             targetRepo: 'rokas.npm',
-            packageJson: './projects/journey-maps-client/package.json',
-            publishablePackageJsons: './dist/journey-maps-client/package.json',
+            packageJson: './package.json',
+            publishablePackageJsons:
+              './dist/journey-maps-client/package.json,' +
+              './dist/journey-maps-client-elements/package.json',
             nextReleaseVersion: "${major}.${minor}.${patch + 1}".toString(),
             releaseVersion: "${major}.${minor}.${patch}".toString()
           )
@@ -109,7 +100,6 @@ pipeline {
             project: 'ki-journey-maps-client',
             doNotFailOnRunningDeployment: true
           )
-
         }
       }
     }
