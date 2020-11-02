@@ -36,7 +36,8 @@ pipeline {
         packageJson: './package.json',
         publishablePackageJsons:
             './dist/journey-maps-client/package.json,' +
-            './projects/journey-maps-client-elements/package.json'
+            './projects/journey-maps-client-elements/package.json,' +
+            './package.json'
       )
     }
 
