@@ -36,6 +36,10 @@
       .getElementById('container')
       .appendChild(map);
   });
+
+  map.addEventListener('zoomLevelChange', function (event) {
+    console.log(event);
+  })
 </script>
 
 
