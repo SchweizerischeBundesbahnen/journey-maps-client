@@ -24,11 +24,24 @@ pipeline {
       }
     }
 
-    stage('Build library') {
+    stage('Build') {
       steps {
         sh 'npm run build-lib'
+        sh 'npm run build-testapp'
+        sh 'npm run elements'
       }
     }
+
+    stage('removeme') {
+      bin_npmPublishSnapshot(
+        targetRepo: 'rokas.npm',
+        packageJson: './package.json',
+        publishablePackageJsons:
+            './dist/journey-maps-client/package.json,' +
+            './projects/journey-maps-client-elements/package.json'
+      )
+    }
+
 
     stage('Create snapshot') {
       when {
@@ -83,11 +96,11 @@ pipeline {
             ocAppVersion: 'latest'
           )
 
-           cloud_mergeConfigAndUpdateOpenShift(
-             cluster: 'otc_test_04',
-             credentialId: 'ea1bfded-bc12-4db2-8429-e204a28195d1',
-             projects: 'ki-journey-maps-client'
-           )
+          cloud_mergeConfigAndUpdateOpenShift(
+            cluster: 'otc_test_04',
+            credentialId: 'ea1bfded-bc12-4db2-8429-e204a28195d1',
+            projects: 'ki-journey-maps-client'
+          )
 
           cloud_callDeploy(
             cluster: 'otc_test_04',
