@@ -87,7 +87,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private cd: ChangeDetectorRef) {
   }
 
-  /** @internal */
   get language(): string {
     return this._language;
   }
@@ -111,7 +110,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  /** @internal */
   get markers(): Marker[] {
     return this._markers;
   }
@@ -146,7 +144,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  /** @internal */
   get zoomLevel(): number {
     return this._zoomLevel;
   }
@@ -164,7 +161,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  /** @internal */
   get mapCenter(): mapboxgl.LngLatLike {
     return this._mapCenter;
   }
@@ -249,7 +245,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   }
 
-  /** @internal */
   @HostListener('window:resize')
   onResize(): void {
     this.windowResized.next();
