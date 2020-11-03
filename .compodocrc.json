@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/@compodoc/compodoc/src/config/schema.json",
+  "tsconfig": "projects/journey-maps-client/tsconfig.compodoc.json",
+  "name": "Journey Maps Client documentation",
+  "output": "dist/documentation",
+  "templates": "documentation/templates",
+  "minimal": true,
+  "disableSourceCode": true,
+  "disableTemplateTab": true,
+  "disableStyleTab": true,
+  "disableDomTree": true,
+  "disableInternal": true,
+  "disableProtected": true,
+  "disablePrivate": true,
+  "disableLifeCycleHooks": true
+}
