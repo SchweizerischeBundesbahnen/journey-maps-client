@@ -1,7 +1,7 @@
 {
   "name": "journey-maps-client",
-  "version": "0.0.8",
-  "scripts": {
+  "version": "0.0.9",
+  "scripts":   {
     "ng": "ng",
     "start-testapp": "npm run _testapp-example && ng serve journey-maps-client-testapp",
     "start-testapp-with-remote-access": "npm run _testapp-example && ng serve journey-maps-client-testapp --host 0.0.0.0 --disable-host-check",
@@ -26,7 +26,7 @@
     "_example-rename-source": "renamer --force --find '/(app\\.component\\..*)$/' --replace '$1.txt' projects/journey-maps-client-testapp/src/assets/example/*"
   },
   "private": true,
-  "dependencies": {
+  "dependencies":   {
     "@angular/animations": "~10.2.1",
     "@angular/cdk": "^10.2.6",
     "@angular/common": "~10.2.1",
@@ -51,7 +51,7 @@
     "tslib": "^2.0.3",
     "zone.js": "~0.10.2"
   },
-  "devDependencies": {
+  "devDependencies":   {
     "@angular-devkit/build-angular": "~0.1002.0",
     "@angular/cli": "~10.2.0",
     "@angular/compiler-cli": "~10.2.1",
