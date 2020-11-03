@@ -59,7 +59,7 @@ pipeline {
       }
       steps {
         script {
-          def packageJson = readJSON file: './projects/journey-maps-client/package.json'
+          def packageJson = readJSON file: './package.json'
           def (int major, int minor, int patch) = packageJson.version.tokenize('.')
 
           bin_npmLeanPublish(
