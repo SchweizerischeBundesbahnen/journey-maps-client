@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:12-alpine
 
 COPY / /home/node/
 WORKDIR /home/node
