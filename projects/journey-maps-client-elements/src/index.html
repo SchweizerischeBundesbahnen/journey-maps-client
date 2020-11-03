@@ -20,13 +20,23 @@
     title: 'Home Office',
     subtitle: 'My home is my castle',
     position: [7.296515, 47.069815],
-    category: 'INFORMATION',
+    category: 'INFORMATION', // or WARNING or CUSTOM
     infoBlocks: [
       {
         type: 'TEXT',
         title: 'Lorem Ipsum',
         content: 'Lorem ipsum dolor sit amet, consectetur adipisici elit'
-      }
+      },
+      {
+        type: 'HTML',
+        title: 'Cupcake Ipsum',
+        html: '<ul><li>Chocolate bar</li><li>lemon drops</li><li>Candy canes</li></ul>'
+      },
+      {
+        type: 'BUTTON',
+        title: 'Bavaria Ipsum',
+        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+      },
     ]
   }
   map.markers = [marker];

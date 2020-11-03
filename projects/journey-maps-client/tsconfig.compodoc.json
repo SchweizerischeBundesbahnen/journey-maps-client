@@ -1,0 +1,9 @@
+{
+  "extends": "tsconfig.lib.json",
+  "include": [
+    "src/lib/journey-maps-client.component.ts",
+    "src/lib/journey-maps-client.module.ts",
+    "src/lib/services/info-block-factory.service.ts",
+    "src/lib/model/**"
+  ]
+}
