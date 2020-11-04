@@ -24,3 +24,4 @@ See example code here: https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-
 * You have to include `main-es2015.js` and/or `main-es5.js` in your application to get the custom element working. 
 * Angular `@Input` properties are converted to attributes. The names are converted to dash-separated lowercase. Example `@Input() apiKey` is converted to `api-key.`
 * Angular `@Output` are dispatched as HTML custom events. (See sample code for example) 
+* At the moment you cannot overwrite the marker overlay with a custom template. (As it is possible with `ng-template` for the Angular version.)
