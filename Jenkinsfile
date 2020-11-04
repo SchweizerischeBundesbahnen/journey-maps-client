@@ -70,9 +70,9 @@ pipeline {
             publishablePackageJsons:
               './dist/journey-maps-client/package.json,' +
               './dist/journey-maps-client-elements/package.json',
-            nextReleaseVersion: "${major}.${minor}.${patch + 1}",
-            releaseVersion: "${major}.${minor}.${patch}",
-            tag: "${major}.${minor}.${patch}"
+            nextReleaseVersion: "${major}.${minor}.${patch + 1}".toString(),
+            releaseVersion: "${major}.${minor}.${patch}".toString(),
+            tag: "${major}.${minor}.${patch}".toString()
           )
         }
       }
