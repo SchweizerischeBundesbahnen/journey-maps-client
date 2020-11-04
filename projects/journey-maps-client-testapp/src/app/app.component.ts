@@ -26,6 +26,34 @@ export class AppComponent {
   // Call this.rokasClient.updateMarkers() when markers have been added/removed.
   markers: Marker[] = [
     {
+      id: 'velo',
+      title: '"Basel - Bahnhof SBB - Veloparking"',
+      position: [7.5897, 47.5476], // TODO : DKU Position in lon/lat in geops api
+      // icon: 'assets/icons/train.png', // TODO : DKU Veloparking icon
+      category: MarkerCategory.INFORMATION,
+      infoBlocks: [
+        // TODO : DKU Split title and content in geops api
+        this.infoBlockFactoryService.createTextInfoBlock(
+          'Verfügbare Velotypen',
+          'Komfortvelo, Countrybikes, Mountainbikes, E-Bikes City, Tandem, E-Bikes Mountain, Kindervelos, Kindertrailer, Kinderanhänger'
+        ),
+        // TODO : DKU Split title and content in geops api
+        this.infoBlockFactoryService.createTextInfoBlock(
+          'Rückgabe',
+          'An allen Mietstationen von Rent a Bike'
+        ),
+        // TODO : DKU ContactInfoBlock
+        this.infoBlockFactoryService.createHtmlInfoBlock(
+          'Kontakt', // TODO : DKU Translations
+          'Centralbahnstrasse 20<br>4051 Basel <br><a href="tel:+41 (0)61 272 09 10">+41 (0)61 272 09 10</a><br><a href="mailto:veloparking@iss.ch">veloparking@iss.ch</a>'
+        ),
+        this.infoBlockFactoryService.createButtonInfoBlock(
+          'Zum Velostation', // TODO : DKU Translations
+          'https://www.rentabike.ch/stationen?c=152'
+        )
+      ]
+    },
+    {
       id: 'home',
       title: 'Home Office',
       subtitle: 'My home is my castle',
