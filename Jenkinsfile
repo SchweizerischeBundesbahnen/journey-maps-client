@@ -71,7 +71,8 @@ pipeline {
               './dist/journey-maps-client/package.json,' +
               './dist/journey-maps-client-elements/package.json',
             nextReleaseVersion: "${major}.${minor}.${patch + 1}".toString(),
-            releaseVersion: "${major}.${minor}.${patch}".toString()
+            releaseVersion: "${major}.${minor}.${patch}".toString(),
+            tag: "${major}.${minor}.${patch}".toString()
           )
         }
       }
