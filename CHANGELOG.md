@@ -9,6 +9,7 @@
 ### Added
 * `journey-maps-client-elements` project added. It contains a Web Component version of the component. (Built with Angular Elements)
 * Compodoc API documentation added
+
 ### Changed
 * `ChangeDetectionStrategy.OnPush` for main component
 
