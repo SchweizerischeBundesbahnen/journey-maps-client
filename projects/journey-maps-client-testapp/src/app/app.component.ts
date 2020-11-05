@@ -27,7 +27,7 @@ export class AppComponent {
   markers: Marker[] = [
     {
       id: 'velo',
-      title: '"Basel - Bahnhof SBB - Veloparking"',
+      title: 'Basel - Bahnhof SBB - Veloparking',
       position: [7.5897, 47.5476], // TODO : DKU Position in lon/lat in geops api
       // icon: 'assets/icons/train.png', // TODO : DKU Veloparking icon
       category: MarkerCategory.INFORMATION,
