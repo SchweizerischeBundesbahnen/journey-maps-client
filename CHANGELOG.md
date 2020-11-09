@@ -5,6 +5,10 @@
 ### Changed
 ### Fixed
 
+## [0.1.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.1.0&sourceBranch=refs%2Ftags%2F0.1.1&targetRepoId=46287) - 2020-11-09
+### Fixed
+* Fixed an error which caused custom icons to be loaded more than once.
+
 ## [0.1.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.0.7&sourceBranch=refs%2Ftags%2F0.1.0&targetRepoId=46287) - 2020-11-04
 ### Added
 * `journey-maps-client-elements` project added. It contains a Web Component version of the component. (Built with Angular Elements)
