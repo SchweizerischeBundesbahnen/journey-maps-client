@@ -4,7 +4,6 @@ pipeline {
   agent { label 'nodejs' }
   parameters {
     booleanParam(name: 'RELEASE', defaultValue: false, description: 'Release the current branch?')
-    string(name: 'RELEASE_VERSION', defaultValue: '', description: 'Release version. Will be read from package.json if empty.')
   }
   stages {
     stage('Installation') {
@@ -61,8 +60,7 @@ pipeline {
       steps {
         script {
           def packageJson = readJSON file: './package.json'
-          def version = params.RELEASE_VERSION ? params.RELEASE_VERSION : packageJson.version
-          def (int major, int minor, int patch) = version.tokenize('.')
+          def (int major, int minor, int patch) = packageJson.version.tokenize('.')
 
           bin_npmLeanPublish(
             targetRepo: 'rokas.npm',
@@ -71,8 +69,7 @@ pipeline {
               './dist/journey-maps-client/package.json,' +
               './dist/journey-maps-client-elements/package.json',
             nextReleaseVersion: "${major}.${minor}.${patch + 1}".toString(),
-            releaseVersion: "${major}.${minor}.${patch}".toString(),
-            tag: "${major}.${minor}.${patch}".toString()
+            releaseVersion: "${major}.${minor}.${patch}".toString()
           )
         }
       }
