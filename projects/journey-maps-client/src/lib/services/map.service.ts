@@ -132,15 +132,23 @@ export class MapService {
   }
 
   private addMissingImages(map: mapboxgl.Map, markers: Marker[]): void {
+    const images = new Map<string, Marker>();
+
     (markers ?? [])
       .filter(marker => marker.category === MarkerCategory.CUSTOM)
-      .filter(marker => !map.hasImage(this.buildImageName(marker)))
       .forEach(marker => {
         const imageName = this.buildImageName(marker);
-        this.addMissingImage(map, imageName, marker.icon, marker.iconSelected);
-        // The image will later be loaded by the category name. Therefore we have to map it back.
+        images.set(imageName, marker);
+        // The image will later be loaded by the category name.
+        // Therefore we have to overwrite the category.
         marker.category = imageName;
       });
+
+    for (const [imageName, marker] of images) {
+      if (!map.hasImage(imageName)) {
+        this.addMissingImage(map, imageName, marker.icon, marker.iconSelected);
+      }
+    }
   }
 
   private buildImageName(marker: Marker): string {
