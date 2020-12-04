@@ -24,7 +24,8 @@
     "_testapp-example": "npm run _example-clean && npm run _example-copy-source && npm run _example-rename-source",
     "_example-clean": "trash \"projects/journey-maps-client-testapp/src/assets/example/app.component.*\"",
     "_example-copy-source": "copyfiles -f \"projects/journey-maps-client-testapp/src/app/app.component.*\" projects/journey-maps-client-testapp/src/assets/example",
-    "_example-rename-source": "renamer --force --find '/(app\\.component\\..*)$/' --replace '$1.txt' projects/journey-maps-client-testapp/src/assets/example/*"
+    "_example-rename-source": "renamer --force --find '/(app\\.component\\..*)$/' --replace '$1.txt' projects/journey-maps-client-testapp/src/assets/example/*",
+    "postinstall": "ngcc"
   },
   "private": true,
   "dependencies": {
