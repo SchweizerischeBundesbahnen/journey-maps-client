@@ -6,7 +6,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HIGHLIGHT_OPTIONS, HighlightModule} from 'ngx-highlightjs';
 import {HttpClientModule} from '@angular/common/http';
 import {SourceHighlightComponent} from './components/source-highlight/source-highlight.component';
-import {TabsModule} from '@sbb-esta/angular-public';
+import {SbbTabsModule} from '@sbb-esta/angular-public';
 import {JourneyMapsClientModule} from '../../../journey-maps-client/src/lib/journey-maps-client.module';
 
 @NgModule({
@@ -19,7 +19,7 @@ import {JourneyMapsClientModule} from '../../../journey-maps-client/src/lib/jour
     BrowserAnimationsModule,
     HighlightModule,
     HttpClientModule,
-    TabsModule,
+    SbbTabsModule,
     JourneyMapsClientModule
   ],
   providers: [
