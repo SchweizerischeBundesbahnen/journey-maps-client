@@ -52,12 +52,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /**
    * Overwrite this value if you want to use a custom style id.
    */
-  @Input() styleId = '16bebf72-aee9-4a63-9ae6-018a6615455c';
+  @Input() styleId = 'base_bright_v2_bvi';
   /**
    * Overwrite this value if you want to use a style from a different source.
    * Actually you should not need this.
    */
-  @Input() styleUrl = 'https://api.maptiler.com/maps/{styleId}/style.json?key={apiKey}';
+  @Input() styleUrl = 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}';
 
   private _language = 'de';
   private _markers: Marker[];

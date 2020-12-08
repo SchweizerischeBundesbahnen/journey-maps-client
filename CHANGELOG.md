@@ -1,8 +1,15 @@
 # Change Log
 
 ## [Unreleased] - yyyy-mm-dd
+### IMPORTANT
+You need a new API key when upgrading to this version. Please sign up for `Journey-Maps-Tiles` [here](https://developer.sbb.ch/apis/journey-maps-tiles/information).
 ### Added
 ### Changed
+ * Use internal Tile Server instead of MapTiler.
+ * Use  _Base Bright V2 BVI_ style. 
+ * Update from Angular 10 to Angular 11.
+ * Update various node dependencies.
+ 
 ### Fixed
 
 ## [0.1.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.1.0&sourceBranch=refs%2Ftags%2F0.1.1&targetRepoId=46287) - 2020-11-09

@@ -6,7 +6,6 @@
     "@angular/common": ">=v9",
     "@angular/core": ">=v9",
     "@sbb-esta/angular-core": ">=v9",
-    "@sbb-esta/angular-icons": ">=v9",
     "@sbb-esta/angular-public": ">=v9",
     "@types/mapbox-gl": "^1.12.2",
     "mapbox-gl": "^1.12.0"
