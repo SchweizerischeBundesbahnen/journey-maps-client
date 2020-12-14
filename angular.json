@@ -192,7 +192,8 @@
               "projects/journey-maps-client-elements/src/assets"
             ],
             "styles": [
-              "projects/journey-maps-client-elements/src/styles.scss"
+              "projects/journey-maps-client-elements/src/styles.scss",
+              "node_modules/@sbb-esta/angular-public/typography.css"
             ],
             "scripts": []
           },
@@ -256,7 +257,8 @@
               "projects/journey-maps-client-elements/src/assets"
             ],
             "styles": [
-              "projects/journey-maps-client-elements/src/styles.scss"
+              "projects/journey-maps-client-elements/src/styles.scss",
+              "node_modules/@sbb-esta/angular-public/typography.css"
             ],
             "scripts": []
           }
