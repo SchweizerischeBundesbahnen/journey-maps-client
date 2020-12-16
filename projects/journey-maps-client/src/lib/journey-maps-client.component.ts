@@ -92,6 +92,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private i18n: LocaleService) {
   }
 
+  get language(): string {
+    return this.i18n.language;
+  }
+
   /**
    * The language used for localized labels.
    * Allowed values are <code>de</code>, <code>fr</code>, <code>it</code>, <code>en</code>.

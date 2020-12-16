@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Marker} from '../../model/marker';
 import {FormControl} from '@angular/forms';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
@@ -8,7 +8,8 @@ import {LocaleService} from '../../services/locale.service';
 @Component({
   selector: 'rokas-search-bar',
   templateUrl: './search-bar.component.html',
-  styleUrls: ['./search-bar.component.scss']
+  styleUrls: ['./search-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 // TODO ses: Manual change detection - if Web Component should not use zone.js
 export class SearchBarComponent implements OnInit, OnDestroy {
