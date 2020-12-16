@@ -1,0 +1,24 @@
+<!--
+TODO ses: sbb-search has accessibility problems.
+The screenreader won't read the suggestions from autocomplete.
+See here: https://issues.sbb.ch/browse/CLEW-8522
+ -->
+<sbb-search
+  [placeholder]="placeholderI18n"
+  (search)="searchCallback($event)"
+  [sbbAutocomplete]="autocomplete"
+  [formControl]="searchControl"
+  [attr.aria-label]="ariaLabelI18n"
+>
+</sbb-search>
+<sbb-autocomplete #autocomplete="sbbAutocomplete" [displayWith]="formatMarker">
+  <sbb-option
+    *ngFor="let marker of autoCompleteOptions | async | slice: 0:MAX_AUTOCOMPLETE_RESULTS"
+    [value]="marker"
+  >
+    {{marker.title}}
+  </sbb-option>
+  <sbb-autocomplete-hint *ngIf="(autoCompleteMoreResults | async) > 0">
+    {{autoCompleteMoreResults | async}} {{moreResultsI18n}}
+  </sbb-autocomplete-hint>
+</sbb-autocomplete>

@@ -1,8 +1,9 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef} from '@angular/core';
 import {Marker} from '../../model/marker';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {InfoBlock} from '../../model/infoblock/info-block';
 import {InfoBlockType} from '../../model/infoblock/info-block-type.enum';
+import {LocaleService} from '../../services/locale.service';
 
 @Component({
   selector: 'rokas-info-box',
@@ -27,10 +28,20 @@ export class InfoBoxComponent implements OnInit {
   @Input() infoBoxTemplate?: TemplateRef<any>;
   @Output() closeClicked = new EventEmitter<void>();
 
-  constructor() {
+  closeLabel: string;
+
+  constructor(private i18n: LocaleService) {
+  }
+
+  @HostListener('document:keyup.escape')
+  onEscapePressed(): void {
+    if (this.selectedMarker) {
+      this.closeClicked.next();
+    }
   }
 
   ngOnInit(): void {
+    this.closeLabel = this.i18n.getText('teaser.close');
   }
 
   shouldRender(): boolean {

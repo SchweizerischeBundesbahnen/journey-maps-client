@@ -1,4 +1,6 @@
 export class Constants {
+  static readonly CLUSTER_RADIUS = 50;
+
   static readonly MARKER_SOURCE = 'dev_him_messages';
 
   static readonly LAYERS = [

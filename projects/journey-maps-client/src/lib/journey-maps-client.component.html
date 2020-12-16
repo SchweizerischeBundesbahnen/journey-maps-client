@@ -1,8 +1,14 @@
-<div class="map-container">
-  <div class="map" #map></div>
-  <rokas-info-box
-    [selectedMarker]="selectedMarker"
-    (closeClicked)="onInfoboxCloseClicked()"
-    [infoBoxTemplate]="infoBoxTemplate"
-  ></rokas-info-box>
+<div class="container" lang="{{i18n.language}}">
+  <rokas-search-bar *ngIf="enableSearchBar"
+                    [markers]="markers"
+                    (markerSelected)="onMarkerSelected($event)"
+  ></rokas-search-bar>
+  <div class="map-container">
+    <rokas-info-box
+      [selectedMarker]="selectedMarker"
+      (closeClicked)="onInfoboxCloseClicked()"
+      [infoBoxTemplate]="infoBoxTemplate"
+    ></rokas-info-box>
+    <div class="map" #map></div>
+  </div>
 </div>
