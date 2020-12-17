@@ -45,7 +45,7 @@ export class LocaleService {
       },
       searchbar: {
         placeholder: 'Search',
-        arialabel: 'Input field for searching and filtering map elements..',
+        arialabel: 'Input field for searching and filtering map elements.',
         moreresults: 'more results found.'
       }
     }
