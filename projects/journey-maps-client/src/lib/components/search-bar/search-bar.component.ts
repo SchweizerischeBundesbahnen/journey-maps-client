@@ -75,6 +75,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     return marker?.title;
   }
 
+  // CHECKME ses: Improve filter function? Use locale normalizer? (e.g. for e, é, è, ê)
   private filterMarkers(query: string): Marker[] {
     if (this.markers?.length && query?.length >= this.MIN_QUERY_LENGTH) {
       const regex = new RegExp(query, 'i');
