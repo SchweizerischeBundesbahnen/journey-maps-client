@@ -102,7 +102,7 @@ export class MapInitService {
     const markerSource = style.sources[Constants.MARKER_SOURCE] as any;
     if (markerSource) {
       markerSource.cluster = true;
-      markerSource.clusterRadius = 50;
+      markerSource.clusterRadius = Constants.CLUSTER_RADIUS;
       markerSource.clusterMinPoints = 2;
     }
   }

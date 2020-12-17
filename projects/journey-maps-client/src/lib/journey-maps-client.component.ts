@@ -20,6 +20,7 @@ import {debounceTime, delay, filter, map, take, takeUntil} from 'rxjs/operators'
 import {MapService} from './services/map.service';
 import {Constants} from './services/constants';
 import {Marker} from './model/marker';
+import {LocaleService} from './services/locale.service';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -58,8 +59,11 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * Actually you should not need this.
    */
   @Input() styleUrl = 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}';
+  /**
+   * If the search bar - to filter markers - should be enabled or not.
+   */
+  @Input() enableSearchBar = true;
 
-  private _language = 'de';
   private _markers: Marker[];
   private _zoomLevel?: number;
   private _mapCenter?: LngLatLike;
@@ -84,11 +88,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** @internal */
   constructor(private mapInitService: MapInitService,
               private mapService: MapService,
-              private cd: ChangeDetectorRef) {
+              private cd: ChangeDetectorRef,
+              private i18n: LocaleService) {
   }
 
   get language(): string {
-    return this._language;
+    return this.i18n.language;
   }
 
   /**
@@ -104,7 +109,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
     value = value.toLowerCase();
     if (value === 'de' || value === 'fr' || value === 'it' || value === 'en') {
-      this._language = value;
+      this.i18n.language = value;
     } else {
       throw new TypeError('Illegal value for language. Allowed values are de|fr|it|en.');
     }
@@ -191,7 +196,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       .replace('{apiKey}', this.apiKey);
 
 
-    this.mapInitService.initializeMap(this.mapElementRef.nativeElement, this.language, styleUrl, this.zoomLevel, this.mapCenter).subscribe(
+    this.mapInitService.initializeMap(
+      this.mapElementRef.nativeElement,
+      this.i18n.language,
+      styleUrl,
+      this.zoomLevel,
+      this.mapCenter
+    ).subscribe(
       m => {
         this.map = m;
         this.registerStyleLoadedHandler();
@@ -286,6 +297,16 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private validateInputParameter(): void {
     if (!this.apiKey) {
       throw new Error('Input parameter apiKey is mandatory');
+    }
+  }
+
+  /** @internal */
+  // When a marker has been selected via search bar.
+  onMarkerSelected(marker: Marker): void {
+    if (marker?.id !== this.selectedMarker?.id) {
+      this.selectedMarker = marker;
+      this.mapService.selectMarker(this.map, marker);
+      this.cd.detectChanges();
     }
   }
 }

@@ -61,22 +61,19 @@ export class MapService {
     return map.getSource(Constants.MARKER_SOURCE) as GeoJSONSource;
   }
 
-  onClusterClicked(map: MapboxMap, feature: MapboxGeoJSONFeature): void {
-    this.getMarkerSource(map).getClusterExpansionZoom(
-      feature.properties.cluster_id,
-      (err, zoom) => this.zoomToCluster(map, feature.geometry, err, zoom)
-    );
+  onClusterClicked(map: MapboxMap, cluster: MapboxGeoJSONFeature): void {
+    this.zoomToCluster(map, cluster.properties.cluster_id, this.convertToLngLatLike(cluster.geometry));
   }
 
-  private zoomToCluster(map: MapboxMap, geometry: Geometry, err: any, zoom: number): void {
-    if (err) {
-      return;
-    }
-
-    map.easeTo({
-      center: this.convertToLngLatLike(geometry),
-      zoom: zoom + 0.1
-    });
+  private zoomToCluster(map: MapboxMap, clusterId: any, center: LngLatLike): void {
+    this.getMarkerSource(map).getClusterExpansionZoom(
+      clusterId,
+      (err, zoom) => {
+        if (!err) {
+          map.easeTo({center, zoom: zoom + 0.1});
+        }
+      }
+    );
   }
 
   private convertToLngLatLike(geometry: Geometry): LngLatLike {
@@ -97,6 +94,77 @@ export class MapService {
     }
 
     return selectedFeatureId;
+  }
+
+  selectMarker(map: MapboxMap, marker: Marker): void {
+    this.selectFeature(map, marker.id);
+
+    const features = map.queryRenderedFeatures(
+      map.project(marker.position as LngLatLike),
+      {
+        layers: [Constants.MARKER_LAYER, Constants.MARKER_SELECTED_LAYER],
+        filter: ['in', 'id', marker.id]
+      }
+    );
+
+    if (features && features.length) {
+      // Marker is already visible on map.
+      // Center map to marker.
+      map.flyTo({center: marker.position as LngLatLike});
+    } else {
+      let cluster = this.queryClusterAtPosition(map, marker.position);
+      if (cluster) {
+        this.zoomUntilMarkerVisible(map, cluster, marker);
+      } else {
+        // We have to fly to the marker position first before we can query it.
+        // We add a one-time handler which gets executed after the flyTo() call.
+        map.once('moveend', () => {
+            cluster = this.queryClusterAtPosition(map, marker.position);
+            if (cluster) {
+              // Zooming won't work without the timeout.
+              setTimeout(() => this.zoomUntilMarkerVisible(map, cluster, marker), 250);
+            }
+          }
+        );
+        map.flyTo({center: marker.position as LngLatLike});
+      }
+    }
+  }
+
+  private queryClusterAtPosition(map: MapboxMap, position: GeoJSON.Position): MapboxGeoJSONFeature {
+    const point = map.project(position as LngLatLike);
+    const range = Constants.CLUSTER_RADIUS / 2;
+
+    const clusters = map.queryRenderedFeatures([
+        [point.x - range, point.y - range],
+        [point.x + range, point.y + range]
+      ],
+      {
+        layers: [Constants.CLUSTER_LAYER]
+      }
+    );
+
+    return clusters?.length ? clusters[0] : undefined;
+  }
+
+  private zoomUntilMarkerVisible(map: MapboxMap, cluster: GeoJSON.Feature, marker: Marker, found: boolean[] = []): void {
+    const clusterId = cluster.properties.cluster_id;
+    this.getMarkerSource(map).getClusterChildren(
+      clusterId,
+      (e1, children) => {
+        // Skip processing if marker has been found
+        if (!found.length) {
+          for (const child of children) {
+            if (child.id === marker.id) {
+              found.push(true);
+              this.zoomToCluster(map, clusterId, marker.position as LngLatLike);
+            } else if (child.properties.cluster === true) {
+              this.zoomUntilMarkerVisible(map, child, marker, found);
+            }
+          }
+        }
+      }
+    );
   }
 
   unselectFeature(map: MapboxMap): void {

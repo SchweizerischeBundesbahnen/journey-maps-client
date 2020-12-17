@@ -1,9 +1,15 @@
 # Change Log
 
 ## [Unreleased] - yyyy-mm-dd
+
 ### IMPORTANT
 You need a new API key when upgrading to this version. Please sign up for `Journey-Maps-Tiles` [here](https://developer.sbb.ch/apis/journey-maps-tiles/information).
 ### Added
+
+* We added a search bar to filter the markers on the map. The search bar can be hidden using the input
+  parameter `enableSearchBar`.
+* Teaser/Infobox is now closeable with `ESC` key.
+* ESTA typography CSS to web component version.
 ### Changed
  * Use internal Tile Server instead of MapTiler.
  * Use  _Base Bright V2 BVI_ style. 
@@ -11,6 +17,8 @@ You need a new API key when upgrading to this version. Please sign up for `Journ
  * Update various node dependencies.
  
 ### Fixed
+
+* Various accessibility improvements.
 
 ## [0.1.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.1.0&sourceBranch=refs%2Ftags%2F0.1.1&targetRepoId=46287) - 2020-11-09
 ### Fixed

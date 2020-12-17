@@ -1,10 +1,15 @@
-<div class="infoboxContainer" *ngIf="shouldRender()" @showHideTrigger>
-  <div class="close" (click)="closeClicked.emit()">
-    <sbb-icon svgIcon="kom:circle-cross-medium" class="sbb-icon-fit"></sbb-icon>
-  </div>
+<div class="infoboxContainer" *ngIf="shouldRender()" @showHideTrigger
+     role="presentation"
+     aria-live="polite"
+>
 
   <ng-container
-    *ngTemplateOutlet="infoBoxTemplate ? infoBoxTemplate : defaultTemplate;context:getTemplateContext()"></ng-container>
+    *ngTemplateOutlet="infoBoxTemplate ? infoBoxTemplate : defaultTemplate;context:getTemplateContext()">
+  </ng-container>
+
+  <button class="close" (click)="closeClicked.emit()" [attr.aria-label]="closeLabel">
+    <sbb-icon svgIcon="kom:circle-cross-medium" class="sbb-icon-fit"></sbb-icon>
+  </button>
 </div>
 
 <ng-template #defaultTemplate>
