@@ -1,8 +1,4 @@
-<div class="infoboxContainer" *ngIf="shouldRender()" @showHideTrigger
-     role="presentation"
-     aria-live="polite"
->
-
+<div class="infoboxContainer" *ngIf="shouldRender()" @showHideTrigger>
   <ng-container
     *ngTemplateOutlet="infoBoxTemplate ? infoBoxTemplate : defaultTemplate;context:getTemplateContext()">
   </ng-container>
