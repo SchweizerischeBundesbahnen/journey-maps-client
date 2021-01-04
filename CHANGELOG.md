@@ -2,6 +2,12 @@
 
 ## [Unreleased] - yyyy-mm-dd
 
+### Added
+
+### Changed
+
+### Fixed
+
 ## [0.2.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.1.1&sourceBranch=refs%2Ftags%2F0.2.0&targetRepoId=46287) - 2021-01-04
 
 ### IMPORTANT
@@ -15,6 +21,7 @@ for `Journey-Maps-Tiles` [here](https://developer.sbb.ch/apis/journey-maps-tiles
   parameter `enableSearchBar`.
 * Teaser/Infobox is now closeable with `ESC` key.
 * ESTA typography CSS to web component version.
+
 ### Changed
  * Use internal Tile Server instead of MapTiler.
  * Use  _Base Bright V2 BVI_ style. 
@@ -22,7 +29,6 @@ for `Journey-Maps-Tiles` [here](https://developer.sbb.ch/apis/journey-maps-tiles
  * Update various node dependencies.
  
 ### Fixed
-
 * Various accessibility improvements.
 
 ## [0.1.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.1.0&sourceBranch=refs%2Ftags%2F0.1.1&targetRepoId=46287) - 2020-11-09
