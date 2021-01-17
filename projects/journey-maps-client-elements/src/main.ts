@@ -10,7 +10,6 @@ if (environment.production) {
 
 // TODO ses: At the moment we need zone.js
 //  The ESTA autocomplete component does not work correctly when doing manual change detection.
-//  We have to challenge this with Lukas Spirig.
 // platformBrowserDynamic()
 //   .bootstrapModule(AppModule, {ngZone: 'noop'})
 //   .catch(err => console.error(err));

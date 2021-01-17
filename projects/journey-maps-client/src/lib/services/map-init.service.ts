@@ -8,7 +8,6 @@ import {Constants} from './constants';
 @Injectable({
   providedIn: 'root'
 })
-// TODO ses: Magic numbers as constants
 export class MapInitService {
 
   private readonly defaultZoom = 7.5;
