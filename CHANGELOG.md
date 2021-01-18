@@ -1,12 +1,10 @@
 # Change Log
 
-## [Unreleased] - yyyy-mm-dd
-
-### Added
+## [0.2.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.2.0&sourceBranch=refs%2Ftags%2F0.2.1&targetRepoId=46287) - 2021-01-17
 
 ### Changed
 
-### Fixed
+(Minor) version updates of Node dependencies.
 
 ## [0.2.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.1.1&sourceBranch=refs%2Ftags%2F0.2.0&targetRepoId=46287) - 2021-01-04
 
