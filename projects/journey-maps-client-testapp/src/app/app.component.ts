@@ -2,7 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {Marker} from '../../../journey-maps-client/src/lib/model/marker';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 import {InfoBlockFactoryService} from '../../../journey-maps-client/src/lib/services/info-block-factory.service';
-import {LngLatLike} from 'mapbox-gl';
+import {LngLatBoundsLike, LngLatLike} from 'mapbox-gl';
 import {LoremIpsum} from 'lorem-ipsum';
 import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 
@@ -20,8 +20,16 @@ export class AppComponent {
   loremIpsum = new LoremIpsum();
 
   @ViewChild(JourneyMapsClientComponent) rokasClient: JourneyMapsClientComponent;
+
+  // Initial map position
   zoomLevel = 7.5;
   mapCenter: LngLatLike = [7.4391326448171196, 46.948834547463086];
+
+  // Can be used instead of zoomLevel and mapCenter
+  boundingBox: LngLatBoundsLike = [[-9.97708574059, 51.6693012559], [-6.03298539878, 55.1316222195]];
+
+  // Can be used instead of zoomLevel and mapCenter
+  zoomToMarkers = true;
 
   // Call this.rokasClient.updateMarkers() when markers have been added/removed.
   markers: Marker[] = [
@@ -29,16 +37,13 @@ export class AppComponent {
       id: 'velo',
       title: 'Basel - Bahnhof SBB',
       subtitle: 'Rent a Bike - Ihr Mietvelo',
-      position: [7.5897, 47.5476], // TODO : DKU Position in lon/lat in geops api
-      // icon: 'assets/icons/train.png', // TODO : DKU Veloparking icon
+      position: [7.5897, 47.5476],
       category: MarkerCategory.INFORMATION,
       infoBlocks: [
-        // TODO : DKU Split title and content in geops api
         this.infoBlockFactoryService.createTextInfoBlock(
           'Verfügbare Velotypen',
           'Komfortvelo, Countrybikes, Mountainbikes, E-Bikes City, Tandem, E-Bikes Mountain, Kindervelos, Kindertrailer, Kinderanhänger'
         ),
-        // TODO : DKU Split title and content in geops api
         this.infoBlockFactoryService.createTextInfoBlock(
           'Rückgabe',
           'An allen Mietstationen von Rent a Bike'
@@ -49,7 +54,7 @@ export class AppComponent {
           'Centralbahnstrasse 20<br>4051 Basel <br><a href="tel:+41 (0)61 272 09 10">+41 (0)61 272 09 10</a><br><a href="mailto:veloparking@iss.ch">veloparking@iss.ch</a>'
         ),
         this.infoBlockFactoryService.createButtonInfoBlock(
-          'Zur Velostation', // TODO : DKU Translations
+          'Zur Velostation',
           'https://www.rentabike.ch/stationen?c=152'
         )
       ]
