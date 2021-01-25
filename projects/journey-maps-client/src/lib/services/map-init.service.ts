@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {LngLatLike, Map as MapboxMap, NavigationControl, Style} from 'mapbox-gl';
+import {LngLatLike, LngLatBoundsLike, Map as MapboxMap, NavigationControl, Style, FitBoundsOptions, MapboxOptions} from 'mapbox-gl';
 import {map, tap} from 'rxjs/operators';
 import {Constants} from './constants';
 
@@ -12,6 +12,8 @@ export class MapInitService {
 
   private readonly defaultZoom = 7.5;
   private readonly defaultMapCenter: LngLatLike = [7.299265, 47.072120];
+  private readonly defaultBoundingBox: LngLatBoundsLike = [[5.7, 47.9], [10.6, 45.7]]; // CH bounds;
+  private readonly defaultBoundsPadding: FitBoundsOptions = {padding: 40, duration: 0};
   private readonly controlLabels = {
     de: {
       'NavigationControl.ZoomIn': 'Hineinzoomen',
@@ -39,9 +41,15 @@ export class MapInitService {
     language: string,
     styleUrl: string,
     zoomLevel?: number,
-    mapCenter?: mapboxgl.LngLatLike
+    mapCenter?: mapboxgl.LngLatLike,
+    boundingBox?: LngLatBoundsLike,
+    markersBounds?: LngLatBoundsLike
   ): Observable<mapboxgl.Map> {
-    const mapboxMap = new MapboxMap(this.createOptions(mapNativeElement, zoomLevel, mapCenter));
+    const mapboxMap = new MapboxMap(this.createOptions(mapNativeElement, zoomLevel, mapCenter, boundingBox));
+
+    if (!zoomLevel && !mapCenter && !boundingBox) {
+      this.fitBoundsToMarkers(mapboxMap, markersBounds);
+    }
 
     this.translateControlLabels(mapboxMap, language);
     this.addControls(mapboxMap);
@@ -53,10 +61,10 @@ export class MapInitService {
     );
   }
 
-  private createOptions(container: any, zoomLevel?: number, mapCenter?: mapboxgl.LngLatLike): mapboxgl.MapboxOptions {
+  private createOptions(container: any, zoomLevel?: number, mapCenter?: LngLatLike, boundingBox?: LngLatBoundsLike): MapboxOptions {
     const options: mapboxgl.MapboxOptions = {
       container,
-      minZoom: 5,
+      minZoom: 1,
       maxZoom: 18,
       scrollZoom: true,
       dragRotate: false,
@@ -66,14 +74,19 @@ export class MapInitService {
     if (zoomLevel || mapCenter) {
       options.zoom = zoomLevel ?? this.defaultZoom;
       options.center = mapCenter ?? this.defaultMapCenter;
+    } else if (boundingBox) {
+      options.bounds = boundingBox;
     } else {
-      options.bounds = [
-        [5.7, 47.9],
-        [10.6, 45.7]
-      ]; // CH bounds
+      options.bounds = this.defaultBoundingBox;
     }
 
     return options;
+  }
+
+  private fitBoundsToMarkers(mapboxMap: MapboxMap, markersBounds?: LngLatBoundsLike): void {
+    if (markersBounds) {
+      mapboxMap.fitBounds(markersBounds,  this.defaultBoundsPadding);
+    }
   }
 
   private fetchStyle(styleUrl: string): Observable<Style> {
