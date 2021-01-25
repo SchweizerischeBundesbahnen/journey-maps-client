@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FlyToOptions, GeoJSONSource, LngLat, LngLatLike, Map as MapboxMap, MapboxGeoJSONFeature} from 'mapbox-gl';
+import {FlyToOptions, GeoJSONSource, LngLat, LngLatLike, LngLatBounds, LngLatBoundsLike, Map as MapboxMap, MapboxGeoJSONFeature} from 'mapbox-gl';
 import {Constants} from './constants';
 import {Marker} from '../model/marker';
 import {MarkerConverterService} from './marker-converter.service';
@@ -180,7 +180,23 @@ export class MapService {
     return ['all', ['!has', 'point_count'], [include ? 'in' : '!in', 'id', id]];
   }
 
-  moveMap(map: MapboxMap, center: mapboxgl.LngLatLike, zoomLevel: number): void {
+  /**
+   * Move the map to target according to the following priorities :
+   * 1. zoom + center
+   * 2. bounding box
+   * 3. markes bounds
+   */
+  moveMap(map: MapboxMap, center: LngLatLike, zoomLevel: number, boundingBox: LngLatBoundsLike, markersBounds: LngLatBounds): void {
+    if ( zoomLevel || center) {
+      this.centerMap(map, center, zoomLevel);
+    } else if (boundingBox) {
+       map.fitBounds(boundingBox);
+    } else if (markersBounds) {
+       map.fitBounds(markersBounds, {padding: 40}); // TODO DKU duplicate :-/
+    }
+  }
+
+  private centerMap(map: MapboxMap, center: LngLatLike, zoomLevel: number): void {
     const options: FlyToOptions = {};
     if (zoomLevel && map.getZoom() !== zoomLevel) {
       options.zoom = zoomLevel;
@@ -193,7 +209,6 @@ export class MapService {
         options.center = newCenter;
       }
     }
-
     if (Object.keys(options).length) {
       map.flyTo(options);
     }

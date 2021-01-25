@@ -11,7 +11,7 @@ import {LocaleService} from '../../services/locale.service';
   styleUrls: ['./search-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-// TODO ses: Manual change detection - if Web Component should not use zone.js
+// TODO ses: Manual change detection - if Web Component should not use zone.js (not fesible at the moment)
 export class SearchBarComponent implements OnInit, OnDestroy {
 
   private readonly MIN_QUERY_LENGTH = 3;

@@ -13,7 +13,7 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import {LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
+import {LngLatBounds, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
 import {MapInitService} from './services/map-init.service';
 import {ReplaySubject, Subject} from 'rxjs';
 import {debounceTime, delay, filter, map, take, takeUntil} from 'rxjs/operators';
@@ -67,6 +67,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private _markers: Marker[];
   private _zoomLevel?: number;
   private _mapCenter?: LngLatLike;
+  private _boundingBox?: LngLatBoundsLike;
+  private _zoomToMarkers?: boolean;
 
   /**
    * This event is emitted whenever the zoom level of the map has changed.
@@ -151,6 +153,44 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
+  get boundingBox(): LngLatBoundsLike {
+    return this._boundingBox;
+  }
+
+  /**
+   * The initial bounding box of the map.
+   *
+   * @param value Initial bounding box
+   */
+  @Input()
+  set boundingBox(value: LngLatBoundsLike ) {
+    this._boundingBox = value;
+    if (this.map?.isStyleLoaded() && value) {
+      this.mapParameterChanged.next();
+    }
+  }
+
+  get getMarkersBounds(): LngLatBounds {
+    return this.zoomToMarkers ? this.computeMarkersBounds(this.markers) : undefined;
+  }
+
+  get zoomToMarkers(): boolean {
+    return this._zoomToMarkers;
+  }
+
+  /**
+   * Wrap all markers in view if true.
+   *
+   * @param value Wether or not to wrap the markers
+   */
+  @Input()
+  set zoomToMarkers(value: boolean) {
+    this._zoomToMarkers = value;
+    if (this.map?.isStyleLoaded() && value) {
+      this.mapParameterChanged.next();
+    }
+  }
+
   get zoomLevel(): number {
     return this._zoomLevel;
   }
@@ -203,7 +243,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.i18n.language,
       styleUrl,
       this.zoomLevel,
-      this.mapCenter
+      this.mapCenter,
+      this.boundingBox,
+      this.getMarkersBounds
     ).subscribe(
       m => {
         this.map = m;
@@ -255,7 +297,11 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.mapParameterChanged.pipe(
       debounceTime(200),
       takeUntil(this.destroyed)
-    ).subscribe(() => this.mapService.moveMap(this.map, this.mapCenter, this.zoomLevel));
+    ).subscribe(() => this.mapService.moveMap(this.map,
+      this.mapCenter,
+      this.zoomLevel,
+      this.boundingBox,
+      this.getMarkersBounds));
 
     this.zoomLevelChangeDebouncer.pipe(
       debounceTime(200),
@@ -320,5 +366,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.mapService.selectMarker(this.map, marker);
       this.cd.detectChanges();
     }
+  }
+
+  /** @internal */
+  computeMarkersBounds(markers: Marker[]): LngLatBounds {
+    const bounds = new LngLatBounds();
+    markers.forEach((marker: Marker) => {
+      bounds.extend(marker.position as LngLatLike);
+    });
+    return bounds;
   }
 }
