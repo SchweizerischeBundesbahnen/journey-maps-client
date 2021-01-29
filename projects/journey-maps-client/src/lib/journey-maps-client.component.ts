@@ -74,6 +74,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * This event is emitted whenever the zoom level of the map has changed.
    */
   @Output() zoomLevelChange = new EventEmitter<number>();
+  private zoomLevelChangeDebouncer = new Subject<void>();
   /**
    * This event is emitted whenever the center of the map has changed. (Whenever the map has been moved)
    */
@@ -83,6 +84,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Output() selectedMarkerEmitter = new EventEmitter<Marker>();
 
+  private mapCenterChangeDebouncer = new Subject<void>();
   private windowResized = new Subject<void>();
   private destroyed = new Subject<void>();
   private cursorChanged = new ReplaySubject<boolean>(1);
@@ -313,11 +315,22 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
     this.mapParameterChanged.pipe(
       debounceTime(200),
+      takeUntil(this.destroyed)
     ).subscribe(() => this.mapService.moveMap(this.map,
       this.mapCenter,
       this.zoomLevel,
       this.boundingBox,
       this.getMarkersBounds));
+
+    this.zoomLevelChangeDebouncer.pipe(
+      debounceTime(200),
+      takeUntil(this.destroyed)
+    ).subscribe(() => this.zoomLevelChange.emit(this.map.getZoom()));
+
+    this.mapCenterChangeDebouncer.pipe(
+      debounceTime(200),
+      takeUntil(this.destroyed)
+    ).subscribe(() => this.mapCenterChange.emit(this.map.getCenter()));
   }
 
   @HostListener('window:resize')
@@ -352,8 +365,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
 
     this.map.on('click', Constants.CLUSTER_LAYER, event => this.clusterClicked.next(event));
-    this.map.on('zoomend', () => this.zoomLevelChange.emit(this.map.getZoom()));
-    this.map.on('moveend', () => this.mapCenterChange.emit(this.map.getCenter()));
+    this.map.on('zoomend', () => this.zoomLevelChangeDebouncer.next());
+    this.map.on('moveend', () => this.mapCenterChangeDebouncer.next());
     // CHECKME ses: Handle missing map image
   }
 
