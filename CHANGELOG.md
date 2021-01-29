@@ -4,9 +4,14 @@
 
 ### Added
 
+* Add optional boundingBox input parameter
+* Add optional zoomToMarkers input parameter
+
 ### Changed
 
 ### Fixed
+
+* Map resize if container resize
 
 ## [0.2.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.2.0&sourceBranch=refs%2Ftags%2F0.2.1&targetRepoId=46287) - 2021-01-17
 

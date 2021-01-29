@@ -21,6 +21,7 @@ import {MapService} from './services/map.service';
 import {Constants} from './services/constants';
 import {Marker} from './model/marker';
 import {LocaleService} from './services/locale.service';
+import {ResizedEvent} from 'angular-resize-event';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -303,7 +304,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   @HostListener('window:resize')
   onResize(): void {
+    this.map.resize();
     this.windowResized.next();
+  }
+
+  onResized(event: ResizedEvent): void {
+    this.map.resize();
   }
 
   private registerStyleLoadedHandler(): void {
