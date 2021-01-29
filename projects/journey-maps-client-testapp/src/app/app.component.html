@@ -1,32 +1,35 @@
-<div class="map">
+<div class="page-container">
+  <h2>Journey-Maps-Client</h2>
 
-  <!--  Do not use this API key in production. Contact dlrokas@sbb.ch to get your own.-->
-  <rokas-journey-maps-client
-    language="de"
-    apiKey="e500c71b8c83c1cfb2170608582ae9c8"
-    [markers]="markers"
-    [(zoomLevel)]="zoomLevel"
-    [(mapCenter)]="mapCenter"
-    [infoBoxTemplate]=""
-    (selectedMarkerEmitter)="onSelectedMarker($event)"
-  >
-  </rokas-journey-maps-client>
+  <div class="map">
+    <!--  Do not use this API key in production. Contact dlrokas@sbb.ch to get your own.-->
+    <rokas-journey-maps-client
+      language="de"
+      apiKey="e500c71b8c83c1cfb2170608582ae9c8"
+      [markers]="markers"
+      [(zoomLevel)]="zoomLevel"
+      [(mapCenter)]="mapCenter"
+      [infoBoxTemplate]=""
+      (selectedMarkerEmitter)="onSelectedMarker($event)"
+    >
+    </rokas-journey-maps-client>
 
-  <!--  Set [infoBoxTemplate]="infoBoxTemplate" to overwrite default template. Example. -->
-  <ng-template #infoBoxTemplate let-marker>
-    <h1 style="color: red">{{marker.title}}</h1>
-    <div>{{marker.subtitle}}</div>
-  </ng-template>
-</div>
+    <!--  Set [infoBoxTemplate]="infoBoxTemplate" to overwrite default template. Example. -->
+    <ng-template #infoBoxTemplate let-marker>
+      <h1 style="color: red">{{marker.title}}</h1>
+      <div>{{marker.subtitle}}</div>
+    </ng-template>
+  </div>
 
-<div>
-  <ul>
-    <li>Selected Marker: <span *ngIf="selectedMarker">{{selectedMarker.title}}</span></li>
-    <li>Zoom Level: {{zoomLevel}}</li>
-    <li>Map center: {{mapCenter}}</li>
-  </ul>
-</div>
+  <div>
+    <ul>
+      <li>Selected Marker: <span *ngIf="selectedMarker">{{selectedMarker.title}}</span></li>
+      <li>Zoom Level: {{zoomLevel}}</li>
+      <li>Map center: {{mapCenter}}</li>
+    </ul>
+  </div>
 
-<div class="source">
-  <app-source-highlight></app-source-highlight>
+  <div class="source">
+    <app-source-highlight></app-source-highlight>
+  </div>
 </div>

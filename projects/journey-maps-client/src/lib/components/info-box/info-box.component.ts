@@ -13,11 +13,11 @@ import {LocaleService} from '../../services/locale.service';
   animations: [
     trigger('showHideTrigger', [
       transition(':enter', [
-        style({transform: 'translateX(100%)'}),
+        style({transform: 'translateX(-100%)'}),
         animate('500ms', style({transform: 'translateX(0%)'})),
       ]),
       transition(':leave', [
-        animate('500ms', style({transform: 'translateX(100%)'}))
+        animate('500ms', style({transform: 'translateX(-100%)'}))
       ])
     ]),
   ]
