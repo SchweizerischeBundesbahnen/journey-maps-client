@@ -53,6 +53,7 @@ export class MapInitService {
 
     this.translateControlLabels(mapboxMap, language);
     this.addControls(mapboxMap);
+    this.toggleInteractions(mapboxMap);
 
     return this.fetchStyle(styleUrl).pipe(
       tap(style => this.defineClusterSettings(style)),
@@ -101,6 +102,10 @@ export class MapInitService {
       (mapboxMap as any)._locale,
       this.controlLabels[language]
     );
+  }
+
+  private toggleInteractions(mapboxMap: mapboxgl.Map): void {
+    mapboxMap.scrollZoom.disable();
   }
 
   private addControls(mapboxMap: mapboxgl.Map): void {
