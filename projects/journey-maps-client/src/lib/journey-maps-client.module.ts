@@ -36,7 +36,10 @@ import { AngularResizedEventModule } from 'angular-resize-event';
     ReactiveFormsModule,
     AngularResizedEventModule,
   ],
-  providers: [SBB_ICON_REGISTRY_PROVIDER],
+  providers: [
+    SBB_ICON_REGISTRY_PROVIDER,
+    { provide: Window, useValue: window }
+    ],
   exports: [JourneyMapsClientComponent],
 })
 export class JourneyMapsClientModule {

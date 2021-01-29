@@ -33,7 +33,7 @@ export class MapInitService {
     }
   };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private window: Window) {
   }
 
   initializeMap(
@@ -105,7 +105,9 @@ export class MapInitService {
   }
 
   private toggleInteractions(mapboxMap: mapboxgl.Map): void {
-    mapboxMap.scrollZoom.disable();
+    window.addEventListener('touchstart', () => {
+      mapboxMap.scrollZoom.disable();
+    });
   }
 
   private addControls(mapboxMap: mapboxgl.Map): void {
