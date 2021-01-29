@@ -12,6 +12,8 @@
 
 ### Changed
 
+* Deactivate scroll zoom if user touch the touch display
+
 ### Fixed
 
 * Map resize if container resize
