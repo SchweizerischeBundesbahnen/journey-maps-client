@@ -304,7 +304,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   @HostListener('window:resize')
   onResize(): void {
-    this.map.resize();
     this.windowResized.next();
   }
 
