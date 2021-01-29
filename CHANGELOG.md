@@ -6,6 +6,7 @@
 
 * Add optional boundingBox input parameter
 * Add optional zoomToMarkers input parameter
+* Add optional markerUrl input parameter
 
 ### Changed
 

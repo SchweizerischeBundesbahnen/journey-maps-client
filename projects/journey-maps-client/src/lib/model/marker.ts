@@ -35,4 +35,8 @@ export interface Marker {
    * List of info blocks that will be displayed in the overlay when the marker is selected.
    */
   infoBlocks?: InfoBlock[];
+  /**
+   * Url that will be opened if the marker is selected instead of the overlay.
+   */
+  markerUrl?: string;
 }

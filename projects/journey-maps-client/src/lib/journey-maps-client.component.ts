@@ -35,8 +35,6 @@ import {ResizedEvent} from 'angular-resize-event';
 })
 export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  /** @internal */ selectedMarker: Marker = undefined;
-
   private map: MapboxMap;
   @ViewChild('map') private mapElementRef: ElementRef;
 
@@ -66,6 +64,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Input() enableSearchBar = true;
 
   private _markers: Marker[];
+  private _selectedMarker: Marker;
   private _zoomLevel?: number;
   private _mapCenter?: LngLatLike;
   private _boundingBox?: LngLatBoundsLike;
@@ -131,6 +130,18 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   set markers(value: Marker[]) {
     this._markers = value;
     this.updateMarkers();
+  }
+
+  public set selectedMarker(value: Marker) {
+    if (value && value.markerUrl) {
+      open(value.markerUrl, '_self'); // Do we need to make target configurable ?
+    } else {
+      this._selectedMarker = value;
+    }
+  }
+
+  public get selectedMarker(): Marker {
+    return this._selectedMarker;
   }
 
   /** @internal */

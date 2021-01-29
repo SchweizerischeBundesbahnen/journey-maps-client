@@ -78,6 +78,13 @@ export class AppComponent {
       ]
     },
     {
+      id: 'biel',
+      title: 'Biel, my town, my rules !',
+      position: [7.2468, 47.1368],
+      category: MarkerCategory.INFORMATION,
+      markerUrl: 'https://www.biel-bienne.ch/'
+    },
+    {
       id: 'playground',
       title: 'Playground',
       subtitle: 'Sun, fun and nothing to do',
