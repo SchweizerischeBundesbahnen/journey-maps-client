@@ -106,7 +106,7 @@ export class MapInitService {
   private addControls(mapboxMap: mapboxgl.Map): void {
     mapboxMap.addControl(
       new NavigationControl({showCompass: false}),
-      'top-left'
+      'top-right'
     );
   }
 
