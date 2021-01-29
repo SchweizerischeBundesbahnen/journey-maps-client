@@ -7,6 +7,8 @@
 * Add optional boundingBox input parameter
 * Add optional zoomToMarkers input parameter
 * Add optional markerUrl input parameter
+* Add optional emitOnSelect to Marker
+* Add selectedMarkerChange output parameter
 
 ### Changed
 

@@ -8,6 +8,7 @@
     [(zoomLevel)]="zoomLevel"
     [(mapCenter)]="mapCenter"
     [infoBoxTemplate]=""
+    (selectedMarkerEmitter)="onSelectedMarker($event)"
   >
   </rokas-journey-maps-client>
 
@@ -20,6 +21,7 @@
 
 <div>
   <ul>
+    <li>Selected Marker: <span *ngIf="selectedMarker">{{selectedMarker.title}}</span></li>
     <li>Zoom Level: {{zoomLevel}}</li>
     <li>Map center: {{mapCenter}}</li>
   </ul>

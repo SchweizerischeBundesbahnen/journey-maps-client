@@ -78,6 +78,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * This event is emitted whenever the center of the map has changed. (Whenever the map has been moved)
    */
   @Output() mapCenterChange = new EventEmitter<LngLatLike>();
+  /**
+   * This event is emitted whenever a marker, with property emitOnSelect, is selected.
+   */
+  @Output() selectedMarkerEmitter = new EventEmitter<Marker>();
 
   private windowResized = new Subject<void>();
   private destroyed = new Subject<void>();
@@ -133,6 +137,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public set selectedMarker(value: Marker) {
+    if (value && value.emitOnSelect) {
+      this.selectedMarkerEmitter.emit(value);
+    }
     if (value && value.markerUrl) {
       open(value.markerUrl, '_self'); // Do we need to make target configurable ?
     } else {
@@ -319,7 +326,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   onResized(event: ResizedEvent): void {
-    this.map.resize();
+    if (this.map) {
+      this.map.resize();
+    }
   }
 
   private registerStyleLoadedHandler(): void {

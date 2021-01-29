@@ -39,4 +39,8 @@ export interface Marker {
    * Url that will be opened if the marker is selected instead of the overlay.
    */
   markerUrl?: string;
+  /**
+   * If true the module will emit an event in output parameter selectedMarkerEmitter:Marker when this marker is selected.
+   */
+  emitOnSelect?: boolean;
 }
