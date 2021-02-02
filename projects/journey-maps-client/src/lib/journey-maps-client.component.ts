@@ -136,7 +136,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   /** @internal */
   updateMarkers(): void {
-    this.selectedMarker = this.markers.find(({id}) => this.selectedMarker?.id === id);
+    this.selectedMarker = this.markers.find((marker) => this.selectedMarker?.id === marker.id);
 
     if (this.map && this.map.isStyleLoaded()) {
       this.mapService.updateMarkers(this.map, this.markers);
