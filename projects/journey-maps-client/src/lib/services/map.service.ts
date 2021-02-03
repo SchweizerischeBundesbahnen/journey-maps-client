@@ -228,8 +228,13 @@ export class MapService {
       });
 
     for (const [imageName, marker] of images) {
-      if (!map.hasImage(imageName)) {
-        this.addMissingImage(map, imageName, marker.icon, marker.iconSelected);
+      const iconName = `sbb_${imageName}_red`;
+      if (!map.hasImage(iconName)) {
+        this.addMissingImage(map, iconName, marker.icon);
+      }
+      const iconSelectedName = `sbb_${imageName}_black`;
+      if (!map.hasImage(iconSelectedName)) {
+        this.addMissingImage(map, iconSelectedName, marker.iconSelected);
       }
     }
   }
@@ -252,12 +257,10 @@ export class MapService {
         `Marker with id ${invalidMarker.id} and category CUSTOM is missing the required 'icon' or 'iconSelected' definition.`
       );
     }
-
   }
 
-  private addMissingImage(map: mapboxgl.Map, name: string, icon: string, iconSelected: string): void {
-    map.loadImage(icon, (error, image) => this.imageLoadedCallback(map, `sbb_${name}_red`, error, image));
-    map.loadImage(iconSelected, (error, image) => this.imageLoadedCallback(map, `sbb_${name}_black`, error, image));
+  private addMissingImage(map: mapboxgl.Map, name: string, icon: string): void {
+    map.loadImage(icon, (error, image) => this.imageLoadedCallback(map, name, error, image));
   }
 
   private imageLoadedCallback(map: mapboxgl.Map, name: string, error: any, image: any): void {
