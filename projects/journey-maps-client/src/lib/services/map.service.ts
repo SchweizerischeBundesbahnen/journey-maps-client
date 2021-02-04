@@ -228,7 +228,7 @@ export class MapService {
       });
 
     for (const [imageName, marker] of images) {
-      // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/prod/partials/bvi.json
+      // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/184754aee94c82b3511be07e2a93474a61025068/partials/bvi.json#L18
       const iconName = `sbb_${imageName}_red`;
       const iconSelectedName = `sbb_${imageName}_black`;
 
