@@ -228,11 +228,13 @@ export class MapService {
       });
 
     for (const [imageName, marker] of images) {
+      // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/prod/partials/bvi.json
       const iconName = `sbb_${imageName}_red`;
+      const iconSelectedName = `sbb_${imageName}_black`;
+
       if (!map.hasImage(iconName)) {
         this.addMissingImage(map, iconName, marker.icon);
       }
-      const iconSelectedName = `sbb_${imageName}_black`;
       if (!map.hasImage(iconSelectedName)) {
         this.addMissingImage(map, iconSelectedName, marker.iconSelected);
       }
