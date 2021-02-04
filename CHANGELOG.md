@@ -8,10 +8,6 @@
 
 ### Fixed
 
-## [0.2.2](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.2.1&sourceBranch=refs%2Ftags%2F0.2.2&targetRepoId=46287) - 2021-02-03
-
-### Fixed
-
  * DUSP-1260 Preserve selected marker and teaser when adding new markers
  * DUSP-1261 Use the correct image name when checking if custom images have already been added
 
