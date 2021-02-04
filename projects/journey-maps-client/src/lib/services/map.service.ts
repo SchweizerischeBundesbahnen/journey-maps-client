@@ -36,9 +36,11 @@ export class MapService {
     }
   }
 
-  updateMarkers(map: MapboxMap, markers: Marker[]): void {
+  updateMarkers(map: MapboxMap, markers: Marker[], selectedMarker: Marker): void {
     this.verifyMarkers(markers);
-    this.unselectFeature(map);
+    if (!selectedMarker) {
+      this.unselectFeature(map);
+    }
     this.addMissingImages(map, markers);
 
     const markerSource = this.getMarkerSource(map);
@@ -53,8 +55,6 @@ export class MapService {
     const newData = {...this.emptyFeatureCollection};
     newData.features = features;
     markerSource.setData(newData);
-
-    return undefined; // => No Feature is currently selected
   }
 
   private getMarkerSource(map: MapboxMap): GeoJSONSource {
