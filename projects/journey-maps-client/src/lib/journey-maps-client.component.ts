@@ -92,6 +92,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private layerClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private styleLoaded = new ReplaySubject(1);
   private mapParameterChanged = new Subject<void>();
+  showTouchOverlay = '';
 
   /** @internal */
   constructor(private mapInitService: MapInitService,
@@ -99,6 +100,25 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private cd: ChangeDetectorRef,
               private i18n: LocaleService) {
   }
+
+  @HostListener('touchstart', ['$event']) onTouchStart(event) {
+    this.map.scrollZoom.disable();
+    this.map.dragPan.disable();
+    if (event.targetTouches.length === 1) { // the user lay down only one finger
+      // wait 200ms if a new event arrived then we have 2 fingers
+      if (!this.showTouchOverlay) {
+        console.log('overlay on');
+        this.showTouchOverlay = 'is_visible';
+      }
+    }
+  }
+  @HostListener('touchend', ['$event']) onTouchStop(event) {
+    if (this.showTouchOverlay) {
+      console.log('overlay off');
+      this.showTouchOverlay = '';
+    }
+  }
+
 
   get language(): string {
     return this.i18n.language;

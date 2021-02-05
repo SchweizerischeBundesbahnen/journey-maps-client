@@ -21,3 +21,47 @@ rokas-search-bar {
   display: block;
   margin-bottom: 2em;
 }
+
+.mod_map_container_mobile_overlay {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transition: opacity .3s ease-in-out;
+  opacity: 0;
+  background-color: rgba(0,0,0,.6);
+  z-index: 1;
+}
+
+.mod_map_container_mobile_overlay.is_visible {
+  opacity: .9999;
+}
+
+.mod_map_container_mobile_overlay_text {
+  color: #fff;
+  font-family: SBBWeb Bold,Helvetica Neue,Helvetica,Arial,sans-serif;
+  font-size: 1.4em;
+  line-height: 1.4;
+  text-align: center;
+  padding: 0 1.6em;
+  margin-top: .66667em;
+  text-shadow: 0 0.06667em 0.53333em rgba(0,0,0,.4);
+}
+
+.mod_map_container_mobile_overlay_icon_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 4.26667em;
+  height: 4.26667em;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0.06667em 0.53333em rgba(0,0,0,.4);
+}

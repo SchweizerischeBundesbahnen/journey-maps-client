@@ -3,7 +3,16 @@
                     [markers]="markers"
                     (markerSelected)="onMarkerSelected($event)"
   ></rokas-search-bar>
+
   <div class="map-container">
+    <div class="mod_map_container_mobile_overlay" [ngClass]="showTouchOverlay" data-mapboxmap="overlay_mobile" >
+					<span class="mod_map_container_mobile_overlay_icon_wrapper">
+						<svg class="mod_svgsprite_icon mod_map_container_mobile_overlay_icon" focusable="false">
+							<use xlink:href="#SBB_40_touch"></use>
+						</svg>
+					</span>
+      <p class="mod_map_container_mobile_overlay_text">Benutzen Sie 2 Finger um die Karte zu bedienen.</p>
+    </div>
     <rokas-info-box
       [selectedMarker]="selectedMarker"
       (closeClicked)="onInfoboxCloseClicked()"
