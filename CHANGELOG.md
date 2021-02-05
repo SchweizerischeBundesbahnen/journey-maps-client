@@ -4,6 +4,7 @@
 
 ### Added
 
+* DUSP-1177 Unless infoBoxTemplate is defined, don't show teasers on selected markers lacking infoBlocks
 * Add optional boundingBox input parameter
 * Add optional zoomToMarkers input parameter
 * Add optional markerUrl input parameter
