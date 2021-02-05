@@ -252,18 +252,17 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   /**
-   * A marker with this ID must be present in the current list of {@link markers}
+   * If providing an ID, a marker with this ID must be present in the list of {@link markers}
    *
-   * @param value the ID of the marker to be displayed as selected
+   * @param value the ID of the marker to select or undefined to unselect the marker
    */
   @Input()
   set selectedMarkerId(value: string) {
-    const selectedMarker = this.markers?.find(marker => marker.id === value);
-    if (!!selectedMarker) {
+    if (!!value) {
+      const selectedMarker = this.markers?.find(marker => marker.id === value);
       this.onMarkerSelected(selectedMarker);
     } else {
-      this.selectedMarker = selectedMarker;
-      this.updateMarkers();
+      this.onMarkerUnselected();
     }
   }
 
@@ -393,7 +392,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   /** @internal */
-  onInfoboxCloseClicked(): void {
+  // When a marker has been unselected from outside the map.
+  onMarkerUnselected(): void {
     this.selectedMarker = undefined;
     this.mapService.unselectFeature(this.map);
     this.cd.detectChanges();
