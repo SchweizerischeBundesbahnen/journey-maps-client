@@ -242,11 +242,20 @@ export class MapService {
   }
 
   private buildImageName(marker: Marker): string {
-    return `${this.convertToImageName(marker.icon)}_${this.convertToImageName(marker.iconSelected)}`;
+    const simpleHash = this.simpleHash(`${marker.icon}${marker.iconSelected}`);
+    return `${this.convertToImageName(marker.icon)}_${this.convertToImageName(marker.iconSelected)}_${simpleHash}`;
   }
 
   private convertToImageName(iconPath: string): string {
     return iconPath.substring(iconPath.lastIndexOf('/') + 1, iconPath.lastIndexOf('.'));
+  }
+
+  private simpleHash(value: string): string {
+    return String(Math.abs(
+      // https://stackoverflow.com/a/34842797/349169
+      // tslint:disable-next-line:no-bitwise
+      value.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0))
+    );
   }
 
   private verifyMarkers(markers: Marker[]): void {
