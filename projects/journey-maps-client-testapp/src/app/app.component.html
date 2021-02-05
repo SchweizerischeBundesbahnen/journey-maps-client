@@ -10,7 +10,7 @@
       [(zoomLevel)]="zoomLevel"
       [(mapCenter)]="mapCenter"
       [infoBoxTemplate]=""
-      [(selectedMarkerId)]="selectedMarkerId"
+      (selectedMarkerEmitter)="onSelectedMarker($event)"
     >
     </rokas-journey-maps-client>
 
@@ -23,15 +23,9 @@
 
   <div>
     <ul>
-      <li>Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span></li>
+      <li>Selected Marker: <span *ngIf="selectedMarker">{{selectedMarker.title}}</span></li>
       <li>Zoom Level: {{zoomLevel}}</li>
       <li>Map center: {{mapCenter}}</li>
-      <li>
-        <button (click)="setSelecteMarkerId('playground')">select Playground Marker</button>
-      </li>
-      <li>
-        <button (click)="setSelecteMarkerId(undefined)">unselect selected Marker</button>
-      </li>
     </ul>
   </div>
 
