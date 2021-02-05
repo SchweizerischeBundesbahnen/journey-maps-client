@@ -24,7 +24,7 @@ export class AppComponent {
   // Initial map position
   zoomLevel = 7.5;
   mapCenter: LngLatLike = [7.4391326448171196, 46.948834547463086];
-  selectedMarker: Marker;
+  selectedMarkerId: string;
 
   // Can be used instead of zoomLevel and mapCenter
   boundingBox: LngLatBoundsLike = [[-9.97708574059, 51.6693012559], [-6.03298539878, 55.1316222195]];
@@ -122,8 +122,4 @@ export class AppComponent {
       ]
     },
   ];
-
-  onSelectedMarker(event): void {
-    this.selectedMarker = event;
-  }
 }
