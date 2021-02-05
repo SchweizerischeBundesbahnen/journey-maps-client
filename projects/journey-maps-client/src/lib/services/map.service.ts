@@ -250,12 +250,12 @@ export class MapService {
     return iconPath.substring(iconPath.lastIndexOf('/') + 1, iconPath.lastIndexOf('.'));
   }
 
-  private simpleHash(value: string): string {
-    return String(Math.abs(
-      // https://stackoverflow.com/a/34842797/349169
-      // tslint:disable-next-line:no-bitwise
-      value.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0))
-    );
+  private simpleHash(value: string): number {
+    // https://stackoverflow.com/a/34842797/349169
+    // tslint:disable-next-line:no-bitwise
+    return value.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0)
+      // prevent negative results (bitwise operations are performed on signed base 32 integers)
+      + Math.pow(2, 31);
   }
 
   private verifyMarkers(markers: Marker[]): void {
