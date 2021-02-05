@@ -92,7 +92,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private layerClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private styleLoaded = new ReplaySubject(1);
   private mapParameterChanged = new Subject<void>();
-  showTouchOverlay = '';
+  public touchOverlayText: string;
+  public showTouchOverlay = '';
+  private panStartX = 0;
+  private panStartY = 0;
 
   /** @internal */
   constructor(private mapInitService: MapInitService,
@@ -101,24 +104,20 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private i18n: LocaleService) {
   }
 
-  @HostListener('touchstart', ['$event']) onTouchStart(event) {
-    this.map.scrollZoom.disable();
+  @HostListener('touchstart', ['$event']) onTouchStart(event): void {
+    // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
     this.map.dragPan.disable();
-    if (event.targetTouches.length === 1) { // the user lay down only one finger
-      // wait 200ms if a new event arrived then we have 2 fingers
+    if (event.targetTouches.length !== 2) {
       if (!this.showTouchOverlay) {
-        console.log('overlay on');
         this.showTouchOverlay = 'is_visible';
       }
     }
   }
-  @HostListener('touchend', ['$event']) onTouchStop(event) {
+  @HostListener('touchend', ['$event']) onTouchStop(): void {
     if (this.showTouchOverlay) {
-      console.log('overlay off');
       this.showTouchOverlay = '';
     }
   }
-
 
   get language(): string {
     return this.i18n.language;
@@ -276,7 +275,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       .replace('{styleId}', this.styleId)
       .replace('{apiKey}', this.apiKey);
 
-
+    this.touchOverlayText = this.i18n.getText('touchOverlay.tip');
     this.mapInitService.initializeMap(
       this.mapElementRef.nativeElement,
       this.i18n.language,
@@ -289,6 +288,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       m => {
         this.map = m;
         this.registerStyleLoadedHandler();
+        // MapBox WebGL has no two finger panning : https://github.com/mapbox/mapbox-gl-js/issues/2618
+        // https://github.com/Pitbi/mapbox-gl-multitouch
+        // import MultiTouch from 'mapbox-gl-multitouch';
+        // this.map.addControl(new MultiTouch());
+        this.map.getContainer().addEventListener('touchstart', this.mapTouchStart, false);
+        this.map.getContainer().addEventListener('touchmove', this.mapTouchMove, false);
       }
     );
   }
@@ -296,6 +301,52 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   ngOnDestroy(): void {
     this.destroyed.next();
     this.destroyed.complete();
+  }
+
+  mapTouchStart(event: TouchEvent): void {
+    if (event.touches.length === 2) {
+      event.stopImmediatePropagation();
+      event.preventDefault();
+
+      let x = 0;
+      let y = 0;
+
+      for (const touch of Array.from(event.touches)) {
+        x += touch.screenX;
+        y += touch.screenY;
+      }
+
+      this.panStartX = x / event.touches.length;
+      this.panStartY = y / event.touches.length;
+    }
+  }
+
+  mapTouchMove(event: TouchEvent): void {
+    if (event.touches.length === 2) {
+      console.log('panning 2 fingers');
+      let x = 0;
+      let y = 0;
+
+      for (const touch of Array.from(event.touches)) {
+        x += touch.screenX;
+        y += touch.screenY;
+      }
+
+      const movex = (x / event.touches.length) - this.panStartX;
+      const movey = (y / event.touches.length) - this.panStartY;
+
+      this.panStartX = x / event.touches.length;
+      this.panStartY = y / event.touches.length;
+
+      this.map.panBy(
+        [
+          (movex * 1) / -1,
+          (movey * 1) / -1
+        ], {
+          animate: false
+        }
+      );
+    }
   }
 
   private setupSubjects(): void {
