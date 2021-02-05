@@ -251,11 +251,11 @@ export class MapService {
   }
 
   private simpleHash(value: string): number {
-    // https://stackoverflow.com/a/34842797/349169
-    // tslint:disable-next-line:no-bitwise
-    return value.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0)
-      // prevent negative results (bitwise operations are performed on signed base 32 integers)
-      + Math.pow(2, 31);
+    return Math.abs(
+      // https://stackoverflow.com/a/34842797/349169
+      // tslint:disable-next-line:no-bitwise
+      value.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0)
+    );
   }
 
   private verifyMarkers(markers: Marker[]): void {
