@@ -80,9 +80,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Output() mapCenterChange = new EventEmitter<LngLatLike>();
   /**
-   * This event is emitted whenever a marker, with property emitOnSelect, is selected.
+   * This event is emitted whenever a marker, with property emitOnSelect, is selected or unselected.
    */
-  @Output() selectedMarkerEmitter = new EventEmitter<Marker>();
+  @Output() selectedMarkerIdChange = new EventEmitter<string>();
 
   private mapCenterChangeDebouncer = new Subject<void>();
   private windowResized = new Subject<void>();
@@ -140,7 +140,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   public set selectedMarker(value: Marker) {
     if (value && value.emitOnSelect) {
-      this.selectedMarkerEmitter.emit(value);
+      this.selectedMarkerIdChange.emit(value.id);
+    } else {
+      this.selectedMarkerIdChange.emit(undefined);
     }
     if (value && value.markerUrl) {
       open(value.markerUrl, '_self'); // Do we need to make target configurable ?
@@ -242,6 +244,26 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this._mapCenter = value;
     if (this.map?.isStyleLoaded() && value) {
       this.mapParameterChanged.next();
+    }
+  }
+
+  get selectedMarkerId(): string {
+    return this._selectedMarker.id;
+  }
+
+  /**
+   * A marker with this ID must be present in the current list of {@link markers}
+   *
+   * @param value the ID of the marker to be displayed as selected
+   */
+  @Input()
+  set selectedMarkerId(value: string) {
+    const selectedMarker = this.markers?.find(marker => marker.id === value);
+    if (!!selectedMarker) {
+      this.onMarkerSelected(selectedMarker);
+    } else {
+      this.selectedMarker = selectedMarker;
+      this.updateMarkers();
     }
   }
 
@@ -384,7 +406,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   /** @internal */
-  // When a marker has been selected via search bar.
+  // When a marker has been selected from outside the map.
   onMarkerSelected(marker: Marker): void {
     if (marker?.id !== this.selectedMarker?.id) {
       this.selectedMarker = marker;

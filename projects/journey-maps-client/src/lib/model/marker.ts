@@ -40,7 +40,7 @@ export interface Marker {
    */
   markerUrl?: string;
   /**
-   * If true the module will emit an event in output parameter selectedMarkerEmitter:Marker when this marker is selected.
+   * If true the module will emit an event in output parameter selectedMarkerId:string when this marker is selected.
    */
   emitOnSelect?: boolean;
 }

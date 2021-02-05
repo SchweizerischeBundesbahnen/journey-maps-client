@@ -5,11 +5,11 @@
 ### Added
 
 * DUSP-1177 Unless infoBoxTemplate is defined, don't show teasers on selected markers lacking infoBlocks
+* DUSP-1177 Clients of this component can select/unselect markers and receive events of same.
 * Add optional boundingBox input parameter
 * Add optional zoomToMarkers input parameter
 * Add optional markerUrl input parameter
 * Add optional emitOnSelect to Marker
-* Add selectedMarkerChange output parameter
 
 ### Changed
 
