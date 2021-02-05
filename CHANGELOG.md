@@ -13,6 +13,7 @@
 
 ### Changed
 
+* DUSP-1260 Preserve selected marker and teaser when adding new markers
 * Deactivate scroll zoom if user touch the touch display
 
 ### Fixed
