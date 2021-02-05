@@ -36,9 +36,11 @@ export class MapService {
     }
   }
 
-  updateMarkers(map: MapboxMap, markers: Marker[]): void {
+  updateMarkers(map: MapboxMap, markers: Marker[], selectedMarker: Marker): void {
     this.verifyMarkers(markers);
-    this.unselectFeature(map);
+    if (!selectedMarker) {
+      this.unselectFeature(map);
+    }
     this.addMissingImages(map, markers);
 
     const markerSource = this.getMarkerSource(map);
@@ -53,8 +55,6 @@ export class MapService {
     const newData = {...this.emptyFeatureCollection};
     newData.features = features;
     markerSource.setData(newData);
-
-    return undefined; // => No Feature is currently selected
   }
 
   private getMarkerSource(map: MapboxMap): GeoJSONSource {
@@ -228,18 +228,34 @@ export class MapService {
       });
 
     for (const [imageName, marker] of images) {
-      if (!map.hasImage(imageName)) {
-        this.addMissingImage(map, imageName, marker.icon, marker.iconSelected);
+      // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/184754aee94c82b3511be07e2a93474a61025068/partials/bvi.json#L18
+      const iconName = `sbb_${imageName}_red`;
+      const iconSelectedName = `sbb_${imageName}_black`;
+
+      if (!map.hasImage(iconName)) {
+        this.addMissingImage(map, iconName, marker.icon);
+      }
+      if (!map.hasImage(iconSelectedName)) {
+        this.addMissingImage(map, iconSelectedName, marker.iconSelected);
       }
     }
   }
 
   private buildImageName(marker: Marker): string {
-    return `${this.convertToImageName(marker.icon)}_${this.convertToImageName(marker.iconSelected)}`;
+    const simpleHash = this.simpleHash(`${marker.icon}${marker.iconSelected}`);
+    return `${this.convertToImageName(marker.icon)}_${this.convertToImageName(marker.iconSelected)}_${simpleHash}`;
   }
 
   private convertToImageName(iconPath: string): string {
     return iconPath.substring(iconPath.lastIndexOf('/') + 1, iconPath.lastIndexOf('.'));
+  }
+
+  private simpleHash(value: string): number {
+    return Math.abs(
+      // https://stackoverflow.com/a/34842797/349169
+      // tslint:disable-next-line:no-bitwise
+      value.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0)
+    );
   }
 
   private verifyMarkers(markers: Marker[]): void {
@@ -252,12 +268,10 @@ export class MapService {
         `Marker with id ${invalidMarker.id} and category CUSTOM is missing the required 'icon' or 'iconSelected' definition.`
       );
     }
-
   }
 
-  private addMissingImage(map: mapboxgl.Map, name: string, icon: string, iconSelected: string): void {
-    map.loadImage(icon, (error, image) => this.imageLoadedCallback(map, `sbb_${name}_red`, error, image));
-    map.loadImage(iconSelected, (error, image) => this.imageLoadedCallback(map, `sbb_${name}_black`, error, image));
+  private addMissingImage(map: mapboxgl.Map, name: string, icon: string): void {
+    map.loadImage(icon, (error, image) => this.imageLoadedCallback(map, name, error, image));
   }
 
   private imageLoadedCallback(map: mapboxgl.Map, name: string, error: any, image: any): void {
