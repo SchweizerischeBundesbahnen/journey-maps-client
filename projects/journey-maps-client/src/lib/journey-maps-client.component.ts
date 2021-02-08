@@ -395,7 +395,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   // When a marker has been unselected from outside the map.
   onMarkerUnselected(): void {
     this.selectedMarker = undefined;
-    this.mapService.unselectFeature(this.map);
+    if (this.map) {
+      this.mapService.unselectFeature(this.map);
+    }
     this.cd.detectChanges();
   }
 
