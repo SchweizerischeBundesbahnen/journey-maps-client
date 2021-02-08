@@ -54,6 +54,9 @@ export class MapInitService {
     this.translateControlLabels(mapboxMap, language);
     this.addControls(mapboxMap);
 
+    mapboxMap.dragRotate.disable();
+    mapboxMap.touchPitch.disable();
+
     return this.fetchStyle(styleUrl).pipe(
       tap(style => this.defineClusterSettings(style)),
       tap(style => mapboxMap.setStyle(style)),

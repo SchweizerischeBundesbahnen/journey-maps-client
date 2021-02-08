@@ -37,7 +37,7 @@ rokas-search-bar {
   transition: opacity .3s ease-in-out;
   opacity: 0;
   background-color: rgba(0,0,0,.6);
-  z-index: 1;
+  z-index: 4;
 }
 
 .mod_map_container_mobile_overlay.is_visible {

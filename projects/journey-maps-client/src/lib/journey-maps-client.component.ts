@@ -16,12 +16,13 @@ import {
 import {LngLatBounds, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
 import {MapInitService} from './services/map-init.service';
 import {ReplaySubject, Subject} from 'rxjs';
-import {debounceTime, delay, filter, map, take, takeUntil} from 'rxjs/operators';
+import {count, debounceTime, delay, filter, map, take, takeUntil, windowTime} from 'rxjs/operators';
 import {MapService} from './services/map.service';
 import {Constants} from './services/constants';
 import {Marker} from './model/marker';
 import {LocaleService} from './services/locale.service';
 import {ResizedEvent} from 'angular-resize-event';
+import {MultiTouchSupport} from './services/multiTouchSupport';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -92,6 +93,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private layerClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private styleLoaded = new ReplaySubject(1);
   private mapParameterChanged = new Subject<void>();
+
+  private touchOverlayEventDebouncer = new Subject<TouchEvent>();
   public touchOverlayText: string;
   public showTouchOverlay = '';
   private panStartX = 0;
@@ -104,15 +107,21 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private i18n: LocaleService) {
   }
 
-  @HostListener('touchstart', ['$event']) onTouchStart(event): void {
+  @HostListener('touchstart', ['$event']) onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
     this.map.dragPan.disable();
     if (event.targetTouches.length !== 2) {
-      if (!this.showTouchOverlay) {
-        this.showTouchOverlay = 'is_visible';
-      }
+      this.touchOverlayEventDebouncer.next(event);
     }
   }
+
+  enableTouchOverlay(singleTouchCount: number): void {
+    console.log(singleTouchCount);
+    if (!this.showTouchOverlay && singleTouchCount === 1) {
+      this.showTouchOverlay = 'is_visible';
+    }
+  }
+
   @HostListener('touchend', ['$event']) onTouchStop(): void {
     if (this.showTouchOverlay) {
       this.showTouchOverlay = '';
@@ -288,65 +297,26 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       m => {
         this.map = m;
         this.registerStyleLoadedHandler();
-        // MapBox WebGL has no two finger panning : https://github.com/mapbox/mapbox-gl-js/issues/2618
-        // https://github.com/Pitbi/mapbox-gl-multitouch
-        // import MultiTouch from 'mapbox-gl-multitouch';
-        // this.map.addControl(new MultiTouch());
-        this.map.getContainer().addEventListener('touchstart', this.mapTouchStart, false);
-        this.map.getContainer().addEventListener('touchmove', this.mapTouchMove, false);
+        this.map.addControl(new MultiTouchSupport());
       }
     );
+    this.touchOverlayEventDebouncer.pipe(
+      takeUntil(this.destroyed),
+      windowTime(200), // TODO DKU triggert an event every 200ms :-/
+      map(window => window.pipe(count())),
+    ).subscribe(singleTouchCountObs => {
+      singleTouchCountObs.subscribe(singleTouchCount => {
+        // console.log(singleTouchCount);
+        if (singleTouchCount === 1) {
+          this.showTouchOverlay = 'is_visible';
+        }
+      });
+    });
   }
 
   ngOnDestroy(): void {
     this.destroyed.next();
     this.destroyed.complete();
-  }
-
-  mapTouchStart(event: TouchEvent): void {
-    if (event.touches.length === 2) {
-      event.stopImmediatePropagation();
-      event.preventDefault();
-
-      let x = 0;
-      let y = 0;
-
-      for (const touch of Array.from(event.touches)) {
-        x += touch.screenX;
-        y += touch.screenY;
-      }
-
-      this.panStartX = x / event.touches.length;
-      this.panStartY = y / event.touches.length;
-    }
-  }
-
-  mapTouchMove(event: TouchEvent): void {
-    if (event.touches.length === 2) {
-      console.log('panning 2 fingers');
-      let x = 0;
-      let y = 0;
-
-      for (const touch of Array.from(event.touches)) {
-        x += touch.screenX;
-        y += touch.screenY;
-      }
-
-      const movex = (x / event.touches.length) - this.panStartX;
-      const movey = (y / event.touches.length) - this.panStartY;
-
-      this.panStartX = x / event.touches.length;
-      this.panStartY = y / event.touches.length;
-
-      this.map.panBy(
-        [
-          (movex * 1) / -1,
-          (movey * 1) / -1
-        ], {
-          animate: false
-        }
-      );
-    }
   }
 
   private setupSubjects(): void {

@@ -1,0 +1,95 @@
+// https://www.npmjs.com/package/mapbox-gl-multitouch
+// https://github.com/mapbox/mapbox-gl-js/issues/2618
+export class MultiTouchSupport {
+
+  private state: any;
+  private map: any;
+  private container: any;
+  private TOUCH_ZOOM_FACTOR = 0.007;
+
+  constructor() {
+    this.state = {
+      panStart: { x: 0, y: 0 },
+      distanceStart: 0,
+      scale: 1,
+    };
+    this.touchStart = this.touchStart.bind(this);
+    this.touchMove = this.touchMove.bind(this);
+  }
+
+  touchStart(event): void {
+    if (event.touches.length !== 2) return;
+    event.stopImmediatePropagation();
+    event.preventDefault();
+
+    let x = 0;
+    let y = 0;
+
+    [].forEach.call(event.touches, (touch) => {
+      x += touch.screenX;
+      y += touch.screenY;
+    });
+
+    this.state.distanceStart = this.distance(event.touches[0], event.touches[1]);
+
+    this.state.panStart.x = x / event.touches.length;
+    this.state.panStart.y = y / event.touches.length;
+  }
+
+  touchMove(event): void {
+    if (event.touches.length !== 2) return;
+    if (this.state.scale === event.scale) {
+      event.stopImmediatePropagation();
+      event.preventDefault();
+    }
+
+    this.state.scale = event.scale;
+
+    let x = 0;
+    let y = 0;
+
+    [].forEach.call(event.touches, (touch) => {
+      x += touch.screenX;
+      y += touch.screenY;
+    });
+
+    const movex = (x / event.touches.length) - this.state.panStart.x;
+    const movey = (y / event.touches.length) - this.state.panStart.y;
+
+    const distanceEnd = this.distance(event.touches[0], event.touches[1]);
+    let distanceRatio = distanceEnd / this.state.distanceStart;
+
+    this.state.panStart.x = x / event.touches.length;
+    this.state.panStart.y = y / event.touches.length;
+    this.map.panBy([movex / -1, movey / -1], { animate: false });
+    if ( distanceRatio > 1) {
+      distanceRatio = ((distanceRatio - 1) * this.TOUCH_ZOOM_FACTOR ) + 1;
+    } else if (distanceRatio < 1) {
+      distanceRatio = 1 - ((1 - distanceRatio) * this.TOUCH_ZOOM_FACTOR );
+    }
+    this.map.setZoom(this.map.getZoom() * distanceRatio);
+  }
+
+  onAdd(map): HTMLDivElement {
+    this.map = map;
+    this.container = document.createElement('div');
+    this.map.getContainer().addEventListener('touchstart', this.touchStart, false);
+    this.map.getContainer().addEventListener('touchmove', this.touchMove, false);
+    if ('ontouchstart' in document.documentElement) map.dragPan.disable();
+    return this.container;
+  }
+
+  onRemove(): void {
+    this.map.getContainer().removeEventListener('touchstart', this.touchStart);
+    this.map.getContainer().removeEventListener('touchmove', this.touchMove);
+    this.map = undefined;
+  }
+
+  distance(pointOne, pointTwo): number {
+    const x1 = pointOne.screenX;
+    const y1 = pointOne.screenY;
+    const x2 = pointTwo.screenX;
+    const y2 = pointTwo.screenY;
+    return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2) );
+  }
+}
