@@ -247,10 +247,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  get selectedMarkerId(): string {
-    return this._selectedMarker.id;
-  }
-
   /**
    * If providing an ID, a marker with this ID must be present in the list of {@link markers}
    *
@@ -395,9 +391,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   // When a marker has been unselected from outside the map.
   onMarkerUnselected(): void {
     this.selectedMarker = undefined;
-    if (this.map) {
-      this.mapService.unselectFeature(this.map);
-    }
+    this.mapService.unselectFeature(this.map);
     this.cd.detectChanges();
   }
 
