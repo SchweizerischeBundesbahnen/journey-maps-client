@@ -22,7 +22,7 @@ See example code here: https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-
 
 * The custom element is named `journey-maps-client`.
 * You have to include `main-es2015.js` and/or `main-es5.js` in your application to get the custom element working. 
-* We recommend declaring and initializing the custom element in Javascript (`document.createElement('journey-maps-client')`) rather than HTML (`<journey-maps-client>`). 
+* We recommend declaring and initializing the custom element in Javascript `document.createElement('journey-maps-client')` rather than HTML `<journey-maps-client>`. 
 * Angular `@Input` properties can be set on the created element directly (See sample code for example).
 * Angular `@Output` are dispatched as HTML custom events. (See sample code for example).
 * See the API Documentation link above for details on Inputs and Outputs.
