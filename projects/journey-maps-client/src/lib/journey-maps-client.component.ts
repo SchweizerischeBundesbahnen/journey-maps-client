@@ -107,13 +107,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private i18n: LocaleService) {
   }
 
-  @HostListener('touchstart', ['$event']) onTouchStart(event: TouchEvent): void {
+  onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
     this.map.dragPan.disable();
     this.touchOverlayEventDebouncer.next(event);
   }
 
-  @HostListener('touchend', ['$event']) onTouchStop(event: TouchEvent): void {
+  onTouchStop(event: TouchEvent): void {
     this.showTouchOverlay = '';
     this.touchOverlayEventDebouncer.next(event);
   }
@@ -296,11 +296,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       bufferDebounce(200)
     ).subscribe(touchEvents => {
 
+
       const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
       const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
 
       if (!(containsTwoFingerTouch || containsTouchEnd)) {
         this.showTouchOverlay = 'is_visible';
+        this.cd.detectChanges();
       }
     });
   }
