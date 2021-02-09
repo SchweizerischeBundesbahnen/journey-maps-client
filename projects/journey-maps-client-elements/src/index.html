@@ -21,6 +21,7 @@
         subtitle: 'My home is my castle',
         position: [7.296515, 47.069815],
         category: 'INFORMATION', // or WARNING or CUSTOM
+        emitOnSelect: true,
         infoBlocks: [
           {
             type: 'TEXT',
@@ -44,12 +45,22 @@
       document.addEventListener('DOMContentLoaded', function (event) {
         document.getElementById('container').appendChild(map);
         document.getElementById('zoom-level').appendChild(document.createTextNode(map.zoomLevel));
+        document.getElementById('selected-marker-id').appendChild(document.createTextNode(null));
       });
 
       map.addEventListener('zoomLevelChange', function (event) {
         const zoomLevelSpan = document.getElementById('zoom-level');
         zoomLevelSpan.replaceChild(document.createTextNode(event.detail), zoomLevelSpan.firstChild);
       });
+
+      map.addEventListener('selectedMarkerIdChange', function (event) {
+        const selectedMarkerId = document.getElementById('selected-marker-id');
+        selectedMarkerId.replaceChild(document.createTextNode(event.detail), selectedMarkerId.firstChild);
+      });
+
+      function setSelecteMarkerId(id) {
+        map.selectedMarkerId = id;
+      }
     </script>
 
     <div id="container"></div>
@@ -57,8 +68,11 @@
     <div>
       <ul>
         <li>
-          Zoom Level: <span id="zoom-level"></span>
+          <button onclick="setSelecteMarkerId('home')">select 'Home Office' Marker</button>
+          <button onclick="setSelecteMarkerId(null)">unselect all Markers</button>
         </li>
+        <li>Selected Marker ID: <span id="selected-marker-id"></span></li>
+        <li>Zoom Level: <span id="zoom-level"></span></li>
       </ul>
     </div>
   </body>

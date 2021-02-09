@@ -33,6 +33,8 @@ export interface Marker {
   subtitle?: string;
   /**
    * List of info blocks that will be displayed in the overlay when the marker is selected.
+   *
+   * Alternatively, you can define an {@link JourneyMapsClientComponent#infoBoxTemplate}
    */
   infoBlocks?: InfoBlock[];
   /**
