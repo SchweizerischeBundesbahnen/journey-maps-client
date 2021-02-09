@@ -18,7 +18,7 @@ export class MultiTouchSupport {
   }
 
   touchStart(event): void {
-    if (event.touches.length !== 2) return;
+    if (event.touches.length !== 2) { return; }
 
     let x = 0;
     let y = 0;
@@ -35,7 +35,7 @@ export class MultiTouchSupport {
   }
 
   touchMove(event): void {
-    if (event.touches.length !== 2) return;
+    if (event.touches.length !== 2) { return; }
 
     this.handleTouchPan(event);
     this.handleTouchZoom(event);
@@ -83,7 +83,7 @@ export class MultiTouchSupport {
     this.container = document.createElement('div');
     this.map.getContainer().addEventListener('touchstart', this.touchStart, false);
     this.map.getContainer().addEventListener('touchmove', this.touchMove, false);
-    if ('ontouchstart' in document.documentElement) map.dragPan.disable();
+    if ('ontouchstart' in document.documentElement) { map.dragPan.disable(); }
     return this.container;
   }
 
