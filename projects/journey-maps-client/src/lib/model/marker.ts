@@ -33,6 +33,8 @@ export interface Marker {
   subtitle?: string;
   /**
    * List of info blocks that will be displayed in the overlay when the marker is selected.
+   *
+   * Alternatively, you can define an {@link JourneyMapsClientComponent#infoBoxTemplate}
    */
   infoBlocks?: InfoBlock[];
   /**
@@ -40,7 +42,7 @@ export interface Marker {
    */
   markerUrl?: string;
   /**
-   * If true the module will emit an event in output parameter selectedMarkerEmitter:Marker when this marker is selected.
+   * If true the module will emit an event in output parameter selectedMarkerId:string when this marker is selected.
    */
   emitOnSelect?: boolean;
 }

@@ -1,58 +1,89 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>JourneyMapsClientElements</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
-<script>
-  var map = document.createElement('journey-maps-client');
-  map.language = 'de';
-  map.apiKey = 'e500c71b8c83c1cfb2170608582ae9c8';
-  map.zoomLevel = 7.5;
-  map.mapCenter = [7.4391326448171196, 46.948834547463086];
+  <head>
+    <meta charset="utf-8">
+    <title>JourneyMapsClientElements</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+  </head>
+  <body>
+    <script>
+      var map = document.createElement('journey-maps-client');
+      map.language = 'de';
+      map.apiKey = 'e500c71b8c83c1cfb2170608582ae9c8';
+      map.zoomLevel = 7.5;
+      map.mapCenter = [7.4391326448171196, 46.948834547463086];
+      map.markers = [
+        {
+          id: 'home',
+          title: 'Home Office',
+          subtitle: 'My home is my castle',
+          position: [7.296515, 47.069815],
+          category: 'INFORMATION', // or MISSED_CONNECTION or CUSTOM
+          emitOnSelect: true,
+          infoBlocks: [
+            {
+              type: 'TEXT',
+              title: 'Lorem Ipsum',
+              content: 'Lorem ipsum dolor sit amet, consectetur adipisici elit'
+            },
+            {
+              type: 'BUTTON',
+              title: 'Bavaria Ipsum',
+              url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+            },
+          ]
+        },
+        {
+          id: 'work',
+          title: 'Office',
+          subtitle: 'SBB Wylerpark',
+          position: [7.446450, 46.961409],
+          category: 'MISSED_CONNECTION',
+          emitOnSelect: true,
+          infoBlocks: [
+            {
+              type: 'BUTTON',
+              title: 'Show menu plan',
+              url: 'https://zfv.ch/en/microsites/sbb-restaurant-wylerpark/menu-plan'
+            },
+          ]
+        },
+      ];
 
-  var marker = {
-    id: 'home',
-    title: 'Home Office',
-    subtitle: 'My home is my castle',
-    position: [7.296515, 47.069815],
-    category: 'INFORMATION', // or WARNING or CUSTOM
-    infoBlocks: [
-      {
-        type: 'TEXT',
-        title: 'Lorem Ipsum',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipisici elit'
-      },
-      {
-        type: 'HTML',
-        title: 'Cupcake Ipsum',
-        html: '<ul><li>Chocolate bar</li><li>lemon drops</li><li>Candy canes</li></ul>'
-      },
-      {
-        type: 'BUTTON',
-        title: 'Bavaria Ipsum',
-        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-      },
-    ]
-  }
-  map.markers = [marker];
+      document.addEventListener('DOMContentLoaded', function (event) {
+        document.getElementById('container').appendChild(map);
+        document.getElementById('zoom-level').appendChild(document.createTextNode(map.zoomLevel));
+        document.getElementById('selected-marker-id').appendChild(document.createTextNode(undefined));
+      });
 
-  document.addEventListener('DOMContentLoaded', function (event) {
-    document
-      .getElementById('container')
-      .appendChild(map);
-  });
+      map.addEventListener('zoomLevelChange', function (event) {
+        const zoomLevelSpan = document.getElementById('zoom-level');
+        zoomLevelSpan.replaceChild(document.createTextNode(event.detail), zoomLevelSpan.firstChild);
+      });
 
-  map.addEventListener('zoomLevelChange', function (event) {
-    console.log(event);
-  })
-</script>
+      map.addEventListener('selectedMarkerIdChange', function (event) {
+        const selectedMarkerId = document.getElementById('selected-marker-id');
+        selectedMarkerId.replaceChild(document.createTextNode(event.detail), selectedMarkerId.firstChild);
+      });
 
+      function setSelecteMarkerId(id) {
+        map.selectedMarkerId = id;
+      }
+    </script>
 
-<div id="container"></div>
-</body>
+    <div id="container"></div>
+
+    <div>
+      <ul>
+        <li>
+          <button onclick="setSelecteMarkerId('home')">select 'Home Office' Marker</button>
+          <button onclick="setSelecteMarkerId(undefined)">unselect all Markers</button>
+        </li>
+        <li>Selected Marker ID: <span id="selected-marker-id"></span></li>
+        <li>Zoom Level: <span id="zoom-level"></span></li>
+      </ul>
+    </div>
+  </body>
 </html>

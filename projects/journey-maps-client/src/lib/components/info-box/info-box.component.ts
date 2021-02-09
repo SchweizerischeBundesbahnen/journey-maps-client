@@ -45,7 +45,10 @@ export class InfoBoxComponent implements OnInit {
   }
 
   shouldRender(): boolean {
-    return !!this.selectedMarker;
+    return !!this.selectedMarker && (
+      !!this.selectedMarker.infoBlocks?.length ||
+      !!this.infoBoxTemplate
+    );
   }
 
   getInfoBlocks(): InfoBlock[] {

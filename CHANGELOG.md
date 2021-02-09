@@ -4,14 +4,17 @@
 
 ### Added
 
+* DUSP-1177 Unless infoBoxTemplate is defined, only show teasers for markers containing infoBlocks
+* DUSP-1177 Clients of this component can select/unselect markers and receive events of same.
+* DUSP-1177 Hidden overflow for teaser transitions
 * Add optional boundingBox input parameter
 * Add optional zoomToMarkers input parameter
 * Add optional markerUrl input parameter
 * Add optional emitOnSelect to Marker
-* Add selectedMarkerChange output parameter
 
 ### Changed
 
+* DUSP-1260 Preserve selected marker and teaser when adding new markers
 * Deactivate scroll zoom if user touch the touch display
 
 ### Fixed

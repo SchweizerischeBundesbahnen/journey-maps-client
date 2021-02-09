@@ -21,7 +21,7 @@
     </div>
     <rokas-info-box
       [selectedMarker]="selectedMarker"
-      (closeClicked)="onInfoboxCloseClicked()"
+      (closeClicked)="onMarkerUnselected()"
       [infoBoxTemplate]="infoBoxTemplate"
       [attr.aria-live]="'polite'"
     ></rokas-info-box>
