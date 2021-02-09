@@ -14,7 +14,8 @@ describe('JourneyMapsClientComponent', () => {
       declarations: [
         JourneyMapsClientComponent,
         InfoBoxComponent
-      ]
+      ],
+      providers: [Window]
     })
       .compileComponents();
   });

@@ -98,7 +98,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private touchEventCollector = new Subject<TouchEvent>();
   public touchOverlayText: string;
   public touchOverlayStyleClass = '';
-  public movestartCancelsMobileOverlay = false;
 
   /** @internal */
   constructor(private mapInitService: MapInitService,
