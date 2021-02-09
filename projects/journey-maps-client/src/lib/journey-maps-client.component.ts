@@ -23,7 +23,7 @@ import {Marker} from './model/marker';
 import {LocaleService} from './services/locale.service';
 import {ResizedEvent} from 'angular-resize-event';
 import {MultiTouchSupport} from './services/multiTouchSupport';
-import {bufferDebounce} from './services/bufferDebounce';
+import {bufferTimeOnValue} from './services/bufferTimeOnValue';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -95,9 +95,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private styleLoaded = new ReplaySubject(1);
   private mapParameterChanged = new Subject<void>();
 
-  private touchOverlayEventDebouncer = new Subject<TouchEvent>();
+  private touchEventCollector = new Subject<TouchEvent>();
   public touchOverlayText: string;
-  public showTouchOverlay = '';
+  public touchOverlayStyleClass = '';
   public movestartCancelsMobileOverlay = false;
 
   /** @internal */
@@ -110,12 +110,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
     this.map.dragPan.disable();
-    this.touchOverlayEventDebouncer.next(event);
+    this.touchEventCollector.next(event);
   }
 
-  onTouchStop(event: TouchEvent): void {
-    this.showTouchOverlay = '';
-    this.touchOverlayEventDebouncer.next(event);
+  onTouchEnd(event: TouchEvent): void {
+    this.touchOverlayStyleClass = '';
+    this.touchEventCollector.next(event);
   }
 
   get language(): string {
@@ -291,17 +291,16 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       }
     );
 
-    this.touchOverlayEventDebouncer.pipe(
-      takeUntil(this.destroyed),
-      bufferDebounce(200)
+    this.touchEventCollector.pipe(
+      bufferTimeOnValue(200),
+      takeUntil(this.destroyed)
     ).subscribe(touchEvents => {
-
 
       const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
       const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
 
       if (!(containsTwoFingerTouch || containsTouchEnd)) {
-        this.showTouchOverlay = 'is_visible';
+        this.touchOverlayStyleClass = 'is_visible';
         this.cd.detectChanges();
       }
     });

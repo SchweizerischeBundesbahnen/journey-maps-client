@@ -4,8 +4,8 @@
                     (markerSelected)="onMarkerSelected($event)"
   ></rokas-search-bar>
 
-  <div class="map-container" (touchstart)="onTouchStart($event)" (touchend)="onTouchStop($event)">
-    <div class="mod_map_container_mobile_overlay" [ngClass]="showTouchOverlay" data-mapboxmap="overlay_mobile">
+  <div class="map-container" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+    <div class="mod_map_container_mobile_overlay" [ngClass]="touchOverlayStyleClass" data-mapboxmap="overlay_mobile">
 					<span class="mod_map_container_mobile_overlay_icon_wrapper">
 						<svg class="mod_svgsprite_icon mod_map_container_mobile_overlay_icon" focusable="false">
               <g transform="scale(2)">
