@@ -1,58 +1,65 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>JourneyMapsClientElements</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
-<script>
-  var map = document.createElement('journey-maps-client');
-  map.language = 'de';
-  map.apiKey = 'e500c71b8c83c1cfb2170608582ae9c8';
-  map.zoomLevel = 7.5;
-  map.mapCenter = [7.4391326448171196, 46.948834547463086];
+  <head>
+    <meta charset="utf-8">
+    <title>JourneyMapsClientElements</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+  </head>
+  <body>
+    <script>
+      var map = document.createElement('journey-maps-client');
+      map.language = 'de';
+      map.apiKey = 'e500c71b8c83c1cfb2170608582ae9c8';
+      map.zoomLevel = 7.5;
+      map.mapCenter = [7.4391326448171196, 46.948834547463086];
 
-  var marker = {
-    id: 'home',
-    title: 'Home Office',
-    subtitle: 'My home is my castle',
-    position: [7.296515, 47.069815],
-    category: 'INFORMATION', // or WARNING or CUSTOM
-    infoBlocks: [
-      {
-        type: 'TEXT',
-        title: 'Lorem Ipsum',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipisici elit'
-      },
-      {
-        type: 'HTML',
-        title: 'Cupcake Ipsum',
-        html: '<ul><li>Chocolate bar</li><li>lemon drops</li><li>Candy canes</li></ul>'
-      },
-      {
-        type: 'BUTTON',
-        title: 'Bavaria Ipsum',
-        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-      },
-    ]
-  }
-  map.markers = [marker];
+      var marker = {
+        id: 'home',
+        title: 'Home Office',
+        subtitle: 'My home is my castle',
+        position: [7.296515, 47.069815],
+        category: 'INFORMATION', // or WARNING or CUSTOM
+        infoBlocks: [
+          {
+            type: 'TEXT',
+            title: 'Lorem Ipsum',
+            content: 'Lorem ipsum dolor sit amet, consectetur adipisici elit'
+          },
+          {
+            type: 'HTML',
+            title: 'Cupcake Ipsum',
+            html: '<ul><li>Chocolate bar</li><li>lemon drops</li><li>Candy canes</li></ul>'
+          },
+          {
+            type: 'BUTTON',
+            title: 'Bavaria Ipsum',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+          },
+        ]
+      }
+      map.markers = [marker];
 
-  document.addEventListener('DOMContentLoaded', function (event) {
-    document
-      .getElementById('container')
-      .appendChild(map);
-  });
+      document.addEventListener('DOMContentLoaded', function (event) {
+        document.getElementById('container').appendChild(map);
+        document.getElementById('zoom-level').appendChild(document.createTextNode(map.zoomLevel));
+      });
 
-  map.addEventListener('zoomLevelChange', function (event) {
-    console.log(event);
-  })
-</script>
+      map.addEventListener('zoomLevelChange', function (event) {
+        const zoomLevelSpan = document.getElementById('zoom-level');
+        zoomLevelSpan.replaceChild(document.createTextNode(event.detail), zoomLevelSpan.firstChild);
+      });
+    </script>
 
+    <div id="container"></div>
 
-<div id="container"></div>
-</body>
+    <div>
+      <ul>
+        <li>
+          Zoom Level: <span id="zoom-level"></span>
+        </li>
+      </ul>
+    </div>
+  </body>
 </html>
