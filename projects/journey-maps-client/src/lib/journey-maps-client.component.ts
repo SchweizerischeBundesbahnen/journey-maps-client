@@ -15,13 +15,28 @@ import {
 } from '@angular/core';
 import {LngLatBounds, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
 import {MapInitService} from './services/map-init.service';
-import {ReplaySubject, Subject} from 'rxjs';
-import {debounceTime, delay, filter, map, take, takeUntil} from 'rxjs/operators';
+import {Observable, OperatorFunction, ReplaySubject, Subject} from 'rxjs';
+import {
+  buffer,
+  bufferTime,
+  count,
+  debounceTime,
+  delay,
+  filter,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  windowCount,
+  windowTime
+} from 'rxjs/operators';
 import {MapService} from './services/map.service';
 import {Constants} from './services/constants';
 import {Marker} from './model/marker';
 import {LocaleService} from './services/locale.service';
 import {ResizedEvent} from 'angular-resize-event';
+import {MultiTouchSupport} from './services/multiTouchSupport';
+import {bufferDebounce} from './services/bufferDebounce';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -93,11 +108,30 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private styleLoaded = new ReplaySubject(1);
   private mapParameterChanged = new Subject<void>();
 
+  private touchOverlayEventDebouncer = new Subject<TouchEvent>();
+  public touchOverlayText: string;
+  public showTouchOverlay = '';
+  public movestartCancelsMobileOverlay = false;
+
   /** @internal */
   constructor(private mapInitService: MapInitService,
               private mapService: MapService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService) {
+  }
+
+  @HostListener('touchstart', ['$event']) onTouchStart(event: TouchEvent): void {
+    // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
+    this.map.dragPan.disable();
+    // if (event.targetTouches.length !== 2) {
+    this.touchOverlayEventDebouncer.next(event);
+    // }
+  }
+
+  @HostListener('touchend', ['$event']) onTouchStop(): void {
+    if (this.showTouchOverlay) {
+      this.showTouchOverlay = '';
+    }
   }
 
   get language(): string {
@@ -273,7 +307,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       .replace('{styleId}', this.styleId)
       .replace('{apiKey}', this.apiKey);
 
-
+    this.touchOverlayText = this.i18n.getText('touchOverlay.tip');
     this.mapInitService.initializeMap(
       this.mapElementRef.nativeElement,
       this.i18n.language,
@@ -286,8 +320,20 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       m => {
         this.map = m;
         this.registerStyleLoadedHandler();
+        this.map.addControl(new MultiTouchSupport());
       }
     );
+
+    this.touchOverlayEventDebouncer.pipe(
+      takeUntil(this.destroyed),
+      bufferDebounce(200)
+    ).subscribe(singleTouchEvents => {
+        console.log(singleTouchEvents.length);
+        const hasSomeTwoFingerEvents = singleTouchEvents.some(touchEvent => touchEvent.touches.length === 2);
+        if (!hasSomeTwoFingerEvents) {
+          this.showTouchOverlay = 'is_visible';
+        }
+      });
   }
 
   ngOnDestroy(): void {
