@@ -122,4 +122,8 @@ export class AppComponent {
       ]
     },
   ];
+
+  setSelecteMarkerId(selectedMarkerId: string): void {
+    this.selectedMarkerId = selectedMarkerId;
+  }
 }

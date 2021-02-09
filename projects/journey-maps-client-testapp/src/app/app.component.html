@@ -23,6 +23,10 @@
 
   <div>
     <ul>
+      <li>
+        <button (click)="setSelecteMarkerId('playground')">select Playground Marker</button>
+        <button (click)="setSelecteMarkerId(undefined)">unselect selected Marker</button>
+      </li>
       <li>Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span></li>
       <li>Zoom Level: {{zoomLevel}}</li>
       <li>Map center: {{mapCenter}}</li>
