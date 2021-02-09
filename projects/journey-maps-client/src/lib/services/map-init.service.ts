@@ -33,7 +33,7 @@ export class MapInitService {
     }
   };
 
-  constructor(private http: HttpClient, private window: Window) {
+  constructor(private http: HttpClient) {
   }
 
   initializeMap(
