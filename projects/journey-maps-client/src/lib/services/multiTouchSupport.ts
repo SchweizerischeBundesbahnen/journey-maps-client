@@ -5,7 +5,8 @@ export class MultiTouchSupport {
   private state: any;
   private map: any;
   private container: any;
-  private TOUCH_ZOOM_FACTOR = 0.007;
+  private TOUCH_ZOOM_FACTOR = 0.3; // zoom sensibility
+  private TOUCH_ZOOM_THRESHOLD = 0.05; // zoom activation
 
   constructor() {
     this.state = {
@@ -42,9 +43,31 @@ export class MultiTouchSupport {
       event.stopImmediatePropagation();
       event.preventDefault();
     }
-
     this.state.scale = event.scale;
 
+    this.handleTouchPan(event);
+    this.handleTouchZoom(event);
+  }
+
+  private handleTouchZoom(event): void {
+    const lastDistance = this.state.distanceStart;
+    const actualDistance = this.distance(event.touches[0], event.touches[1]);
+    this.state.distanceStart = actualDistance;
+
+    let distanceRatio = actualDistance / lastDistance;
+    distanceRatio = Math.min(Math.max(distanceRatio, 0.000001), 1.999999); // keep ratio in ]0;2[
+
+    if (distanceRatio > 1 + this.TOUCH_ZOOM_THRESHOLD) { // zoom in
+      distanceRatio = ((distanceRatio - 1) * this.TOUCH_ZOOM_FACTOR) + 1;
+    } else if (distanceRatio < 1 - this.TOUCH_ZOOM_THRESHOLD) { // zoom out
+      distanceRatio = 1 - ((1 - distanceRatio) * this.TOUCH_ZOOM_FACTOR);
+    } else { // no zoom
+      distanceRatio = 1;
+    }
+    this.map.setZoom(this.map.getZoom() * distanceRatio);
+  }
+
+  private handleTouchPan(event): void {
     let x = 0;
     let y = 0;
 
@@ -56,18 +79,9 @@ export class MultiTouchSupport {
     const movex = (x / event.touches.length) - this.state.panStart.x;
     const movey = (y / event.touches.length) - this.state.panStart.y;
 
-    const distanceEnd = this.distance(event.touches[0], event.touches[1]);
-    let distanceRatio = distanceEnd / this.state.distanceStart;
-
     this.state.panStart.x = x / event.touches.length;
     this.state.panStart.y = y / event.touches.length;
-    this.map.panBy([movex / -1, movey / -1], { animate: false });
-    if ( distanceRatio > 1) {
-      distanceRatio = ((distanceRatio - 1) * this.TOUCH_ZOOM_FACTOR ) + 1;
-    } else if (distanceRatio < 1) {
-      distanceRatio = 1 - ((1 - distanceRatio) * this.TOUCH_ZOOM_FACTOR );
-    }
-    this.map.setZoom(this.map.getZoom() * distanceRatio);
+    this.map.panBy([movex / -1, movey / -1], {animate: false});
   }
 
   onAdd(map): HTMLDivElement {
