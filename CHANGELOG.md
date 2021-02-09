@@ -12,10 +12,12 @@
 * Add optional markerUrl input parameter
 * Add optional emitOnSelect to Marker
 
+
 ### Changed
 
 * DUSP-1260 Preserve selected marker and teaser when adding new markers
 * Deactivate scroll zoom if user touch the touch display
+* Replace default touch zoom and pan implementation with custom two fingers interaction
 
 ### Fixed
 
