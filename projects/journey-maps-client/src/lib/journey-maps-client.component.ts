@@ -15,21 +15,8 @@ import {
 } from '@angular/core';
 import {LngLatBounds, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
 import {MapInitService} from './services/map-init.service';
-import {Observable, OperatorFunction, ReplaySubject, Subject} from 'rxjs';
-import {
-  buffer,
-  bufferTime,
-  count,
-  debounceTime,
-  delay,
-  filter,
-  map,
-  switchMap,
-  take,
-  takeUntil,
-  windowCount,
-  windowTime
-} from 'rxjs/operators';
+import {ReplaySubject, Subject} from 'rxjs';
+import {debounceTime, delay, filter, map, take, takeUntil} from 'rxjs/operators';
 import {MapService} from './services/map.service';
 import {Constants} from './services/constants';
 import {Marker} from './model/marker';
@@ -123,15 +110,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @HostListener('touchstart', ['$event']) onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
     this.map.dragPan.disable();
-    // if (event.targetTouches.length !== 2) {
     this.touchOverlayEventDebouncer.next(event);
-    // }
   }
 
-  @HostListener('touchend', ['$event']) onTouchStop(): void {
-    if (this.showTouchOverlay) {
-      this.showTouchOverlay = '';
-    }
+  @HostListener('touchend', ['$event']) onTouchStop(event: TouchEvent): void {
+    this.showTouchOverlay = '';
+    this.touchOverlayEventDebouncer.next(event);
   }
 
   get language(): string {
@@ -216,7 +200,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * @param value Initial bounding box
    */
   @Input()
-  set boundingBox(value: LngLatBoundsLike ) {
+  set boundingBox(value: LngLatBoundsLike) {
     this._boundingBox = value;
     if (this.map?.isStyleLoaded() && value) {
       this.mapParameterChanged.next();
@@ -310,13 +294,15 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.touchOverlayEventDebouncer.pipe(
       takeUntil(this.destroyed),
       bufferDebounce(200)
-    ).subscribe(singleTouchEvents => {
-        console.log(singleTouchEvents.length);
-        const hasSomeTwoFingerEvents = singleTouchEvents.some(touchEvent => touchEvent.touches.length === 2);
-        if (!hasSomeTwoFingerEvents) {
-          this.showTouchOverlay = 'is_visible';
-        }
-      });
+    ).subscribe(touchEvents => {
+
+      const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
+      const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
+
+      if (!(containsTwoFingerTouch || containsTouchEnd)) {
+        this.showTouchOverlay = 'is_visible';
+      }
+    });
   }
 
   ngOnDestroy(): void {
