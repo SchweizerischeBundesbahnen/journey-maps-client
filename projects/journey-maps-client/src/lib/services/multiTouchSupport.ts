@@ -5,14 +5,13 @@ export class MultiTouchSupport {
   private state: any;
   private map: any;
   private container: any;
-  private TOUCH_ZOOM_FACTOR = 0.3; // zoom sensibility
-  private TOUCH_ZOOM_THRESHOLD = 0.05; // zoom activation
+  private TOUCH_ZOOM_FACTOR = 0.6; // zoom sensibility
+  private TOUCH_ZOOM_THRESHOLD = 0.01; // zoom activation
 
   constructor() {
     this.state = {
       panStart: { x: 0, y: 0 },
       distanceStart: 0,
-      scale: 1,
     };
     this.touchStart = this.touchStart.bind(this);
     this.touchMove = this.touchMove.bind(this);
@@ -20,8 +19,6 @@ export class MultiTouchSupport {
 
   touchStart(event): void {
     if (event.touches.length !== 2) return;
-    event.stopImmediatePropagation();
-    event.preventDefault();
 
     let x = 0;
     let y = 0;
@@ -39,11 +36,6 @@ export class MultiTouchSupport {
 
   touchMove(event): void {
     if (event.touches.length !== 2) return;
-    if (this.state.scale === event.scale) {
-      event.stopImmediatePropagation();
-      event.preventDefault();
-    }
-    this.state.scale = event.scale;
 
     this.handleTouchPan(event);
     this.handleTouchZoom(event);
@@ -64,6 +56,7 @@ export class MultiTouchSupport {
     } else { // no zoom
       distanceRatio = 1;
     }
+
     this.map.setZoom(this.map.getZoom() * distanceRatio);
   }
 
@@ -81,6 +74,7 @@ export class MultiTouchSupport {
 
     this.state.panStart.x = x / event.touches.length;
     this.state.panStart.y = y / event.touches.length;
+
     this.map.panBy([movex / -1, movey / -1], {animate: false});
   }
 
@@ -105,5 +99,13 @@ export class MultiTouchSupport {
     const x2 = pointTwo.screenX;
     const y2 = pointTwo.screenY;
     return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2) );
+  }
+
+  midpoint(pointOne, pointTwo): number[] {
+    const x1 = pointOne.screenX;
+    const y1 = pointOne.screenY;
+    const x2 = pointTwo.screenX;
+    const y2 = pointTwo.screenY;
+    return [(x1 + x2) / 2, (y1 + y2) / 2];
   }
 }
