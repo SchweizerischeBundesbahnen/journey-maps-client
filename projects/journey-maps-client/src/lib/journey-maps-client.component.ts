@@ -176,7 +176,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     if (value && value.emitOnSelect) {
       this.selectedMarkerIdChange.emit(value.id);
     } else {
-      this.selectedMarkerIdChange.emit(null);
+      this.selectedMarkerIdChange.emit(undefined);
     }
     if (value && value.markerUrl) {
       open(value.markerUrl, '_self'); // Do we need to make target configurable ?
@@ -284,7 +284,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /**
    * If providing an ID, a marker with this ID must be present in the list of {@link markers}
    *
-   * @param value the ID of the marker to select or <code>null</code> to unselect the marker
+   * @param value the ID of the marker to select or <code>undefined</code> to unselect the marker
    */
   @Input()
   set selectedMarkerId(value: string) {
@@ -294,6 +294,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     } else if (!!this.selectedMarker){
       this.onMarkerUnselected();
     }
+  }
+
+  get selectedMarkerId(): string {
+    return this._selectedMarker?.id;
   }
 
   ngOnInit(): void {

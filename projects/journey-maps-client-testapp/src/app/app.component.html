@@ -25,7 +25,7 @@
     <ul>
       <li>
         <button (click)="setSelecteMarkerId('home')">select 'Home Office' Marker</button>
-        <button (click)="setSelecteMarkerId(null)">unselect all Markers</button>
+        <button (click)="setSelecteMarkerId(undefined)">unselect all Markers</button>
       </li>
       <li>Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span></li>
       <li>Zoom Level: {{zoomLevel}}</li>

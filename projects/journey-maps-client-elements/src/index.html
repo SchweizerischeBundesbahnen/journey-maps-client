@@ -55,7 +55,7 @@
       document.addEventListener('DOMContentLoaded', function (event) {
         document.getElementById('container').appendChild(map);
         document.getElementById('zoom-level').appendChild(document.createTextNode(map.zoomLevel));
-        document.getElementById('selected-marker-id').appendChild(document.createTextNode(null));
+        document.getElementById('selected-marker-id').appendChild(document.createTextNode(undefined));
       });
 
       map.addEventListener('zoomLevelChange', function (event) {
@@ -79,7 +79,7 @@
       <ul>
         <li>
           <button onclick="setSelecteMarkerId('home')">select 'Home Office' Marker</button>
-          <button onclick="setSelecteMarkerId(null)">unselect all Markers</button>
+          <button onclick="setSelecteMarkerId(undefined)">unselect all Markers</button>
         </li>
         <li>Selected Marker ID: <span id="selected-marker-id"></span></li>
         <li>Zoom Level: <span id="zoom-level"></span></li>
