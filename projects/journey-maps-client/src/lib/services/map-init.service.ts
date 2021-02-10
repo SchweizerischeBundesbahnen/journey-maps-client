@@ -54,6 +54,7 @@ export class MapInitService {
     this.translateControlLabels(mapboxMap, language);
     this.addControls(mapboxMap);
 
+    // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
     mapboxMap.dragRotate.disable();
     mapboxMap.touchPitch.disable();
 
