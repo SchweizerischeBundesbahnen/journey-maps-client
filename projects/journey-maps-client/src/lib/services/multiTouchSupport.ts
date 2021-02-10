@@ -83,7 +83,6 @@ export class MultiTouchSupport {
     this.container = document.createElement('div');
     this.map.getContainer().addEventListener('touchstart', this.touchStart, false);
     this.map.getContainer().addEventListener('touchmove', this.touchMove, false);
-    if ('ontouchstart' in document.documentElement) { map.dragPan.disable(); }
     return this.container;
   }
 

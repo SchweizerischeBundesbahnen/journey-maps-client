@@ -40,7 +40,6 @@ export class AppComponent {
       subtitle: 'Rent a Bike - Ihr Mietvelo',
       position: [7.5897, 47.5476],
       category: MarkerCategory.INFORMATION,
-      emitOnSelect: true,
       infoBlocks: [
         this.infoBlockFactoryService.createTextInfoBlock(
           'Verfügbare Velotypen',
@@ -67,7 +66,6 @@ export class AppComponent {
       subtitle: 'My home is my castle',
       position: [7.296515, 47.069815],
       category: MarkerCategory.INFORMATION,
-      emitOnSelect: true,
       infoBlocks: [
         this.infoBlockFactoryService.createTextInfoBlock(
           this.loremIpsum.generateWords(3),
@@ -85,7 +83,8 @@ export class AppComponent {
       title: 'Biel, my town, my rules !',
       position: [7.2468, 47.1368],
       category: MarkerCategory.INFORMATION,
-      markerUrl: 'https://www.biel-bienne.ch/'
+      markerUrl: 'https://www.biel-bienne.ch/',
+      triggerEvent: false
     },
     {
       id: 'playground',
@@ -95,7 +94,6 @@ export class AppComponent {
       category: MarkerCategory.CUSTOM,
       icon: 'assets/icons/train.png',
       iconSelected: 'assets/icons/train_selected.png',
-      emitOnSelect: true,
       infoBlocks: [
         this.infoBlockFactoryService.createHtmlInfoBlock(
           'Cupcake Ipsum',
@@ -113,7 +111,6 @@ export class AppComponent {
       subtitle: 'SBB Wylerpark',
       position: [7.446450, 46.961409],
       category: MarkerCategory.WARNING,
-      emitOnSelect: true,
       infoBlocks: [
         this.infoBlockFactoryService.createButtonInfoBlock(
           'Show menu plan',
