@@ -158,6 +158,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   public set selectedMarker(value: Marker) {
     if (value && (value.triggerEvent || value.triggerEvent === undefined)) {
       this.selectedMarkerIdChange.emit(value.id);
+    } else {
+      this.selectedMarkerIdChange.emit(undefined);
     }
     if (value && value.markerUrl) {
       open(value.markerUrl, '_self'); // Do we need to make target configurable ?
