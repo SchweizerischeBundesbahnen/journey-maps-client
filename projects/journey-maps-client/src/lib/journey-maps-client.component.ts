@@ -21,6 +21,9 @@ import {MapService} from './services/map.service';
 import {Constants} from './services/constants';
 import {Marker} from './model/marker';
 import {LocaleService} from './services/locale.service';
+import {ResizedEvent} from 'angular-resize-event';
+import {MultiTouchSupport} from './services/multiTouchSupport';
+import {bufferTimeOnValue} from './services/bufferTimeOnValue';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -33,8 +36,6 @@ import {LocaleService} from './services/locale.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDestroy {
-
-  /** @internal */ selectedMarker: Marker = undefined;
 
   private map: MapboxMap;
   @ViewChild('map') private mapElementRef: ElementRef;
@@ -65,6 +66,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Input() enableSearchBar = true;
 
   private _markers: Marker[];
+  private _selectedMarker: Marker;
   private _zoomLevel?: number;
   private _mapCenter?: LngLatLike;
   private _boundingBox?: LngLatBoundsLike;
@@ -79,8 +81,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * This event is emitted whenever the center of the map has changed. (Whenever the map has been moved)
    */
   @Output() mapCenterChange = new EventEmitter<LngLatLike>();
-  private mapCenterChangeDebouncer = new Subject<void>();
+  /**
+   * This event is emitted whenever a marker, with property triggerEvent, is selected or unselected.
+   */
+  @Output() selectedMarkerIdChange = new EventEmitter<string>();
 
+  private mapCenterChangeDebouncer = new Subject<void>();
   private windowResized = new Subject<void>();
   private destroyed = new Subject<void>();
   private cursorChanged = new ReplaySubject<boolean>(1);
@@ -89,11 +95,26 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private styleLoaded = new ReplaySubject(1);
   private mapParameterChanged = new Subject<void>();
 
+  private touchEventCollector = new Subject<TouchEvent>();
+  public touchOverlayText: string;
+  public touchOverlayStyleClass = '';
+
   /** @internal */
   constructor(private mapInitService: MapInitService,
               private mapService: MapService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService) {
+  }
+
+  onTouchStart(event: TouchEvent): void {
+    // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
+    this.map.dragPan.disable();
+    this.touchEventCollector.next(event);
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    this.touchOverlayStyleClass = '';
+    this.touchEventCollector.next(event);
   }
 
   get language(): string {
@@ -134,6 +155,21 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.updateMarkers();
   }
 
+  public set selectedMarker(value: Marker) {
+    if (value && (value.triggerEvent || value.triggerEvent === undefined)) {
+      this.selectedMarkerIdChange.emit(value.id);
+    }
+    if (value && value.markerUrl) {
+      open(value.markerUrl, '_self'); // Do we need to make target configurable ?
+    } else {
+      this._selectedMarker = value;
+    }
+  }
+
+  public get selectedMarker(): Marker {
+    return this._selectedMarker;
+  }
+
   /** @internal */
   updateMarkers(): void {
     this.selectedMarker = this.markers?.find(marker => this.selectedMarker?.id === marker.id);
@@ -163,7 +199,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * @param value Initial bounding box
    */
   @Input()
-  set boundingBox(value: LngLatBoundsLike ) {
+  set boundingBox(value: LngLatBoundsLike) {
     this._boundingBox = value;
     if (this.map?.isStyleLoaded() && value) {
       this.mapParameterChanged.next();
@@ -226,6 +262,25 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
+  /**
+   * If providing an ID, a marker with this ID must be present in the list of {@link markers}
+   *
+   * @param value the ID of the marker to select or <code>undefined</code> to unselect the marker
+   */
+  @Input()
+  set selectedMarkerId(value: string) {
+    if (!!value) {
+      const selectedMarker = this.markers?.find(marker => marker.id === value);
+      this.onMarkerSelected(selectedMarker);
+    } else if (!!this.selectedMarker){
+      this.onMarkerUnselected();
+    }
+  }
+
+  get selectedMarkerId(): string {
+    return this._selectedMarker?.id;
+  }
+
   ngOnInit(): void {
     this.validateInputParameter();
     this.setupSubjects();
@@ -237,7 +292,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       .replace('{styleId}', this.styleId)
       .replace('{apiKey}', this.apiKey);
 
-
+    this.touchOverlayText = this.i18n.getText('touchOverlay.tip');
     this.mapInitService.initializeMap(
       this.mapElementRef.nativeElement,
       this.i18n.language,
@@ -250,8 +305,23 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       m => {
         this.map = m;
         this.registerStyleLoadedHandler();
+        this.map.addControl(new MultiTouchSupport());
       }
     );
+
+    this.touchEventCollector.pipe(
+      bufferTimeOnValue(200),
+      takeUntil(this.destroyed)
+    ).subscribe(touchEvents => {
+
+      const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
+      const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
+
+      if (!(containsTwoFingerTouch || containsTouchEnd)) {
+        this.touchOverlayStyleClass = 'is_visible';
+        this.cd.detectChanges();
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -319,6 +389,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.windowResized.next();
   }
 
+  onResized(event: ResizedEvent): void {
+    if (this.map) {
+      this.map.resize();
+    }
+  }
+
   private registerStyleLoadedHandler(): void {
     if (this.map.isStyleLoaded()) {
       this.styleLoaded.next();
@@ -346,7 +422,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   /** @internal */
-  onInfoboxCloseClicked(): void {
+  // When a marker has been unselected from outside the map.
+  onMarkerUnselected(): void {
     this.selectedMarker = undefined;
     this.mapService.unselectFeature(this.map);
     this.cd.detectChanges();
@@ -359,7 +436,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   /** @internal */
-  // When a marker has been selected via search bar.
+  // When a marker has been selected from outside the map.
   onMarkerSelected(marker: Marker): void {
     if (marker?.id !== this.selectedMarker?.id) {
       this.selectedMarker = marker;

@@ -12,6 +12,7 @@ import {HtmlInfoBoxComponent} from './components/info-box/components/html-info-b
 import {SbbAutocompleteModule, SbbButtonModule, SbbSearchModule} from '@sbb-esta/angular-public';
 import {SearchBarComponent} from './components/search-bar/search-bar.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { AngularResizedEventModule } from 'angular-resize-event';
 
 
 @NgModule({
@@ -33,8 +34,12 @@ import {ReactiveFormsModule} from '@angular/forms';
     SbbAutocompleteModule,
     SbbSearchModule,
     ReactiveFormsModule,
+    AngularResizedEventModule,
   ],
-  providers: [SBB_ICON_REGISTRY_PROVIDER],
+  providers: [
+    SBB_ICON_REGISTRY_PROVIDER,
+    { provide: Window, useValue: window }
+    ],
   exports: [JourneyMapsClientComponent],
 })
 export class JourneyMapsClientModule {

@@ -54,6 +54,10 @@ export class MapInitService {
     this.translateControlLabels(mapboxMap, language);
     this.addControls(mapboxMap);
 
+    // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
+    mapboxMap.dragRotate.disable();
+    mapboxMap.touchPitch.disable();
+
     return this.fetchStyle(styleUrl).pipe(
       tap(style => this.defineClusterSettings(style)),
       tap(style => mapboxMap.setStyle(style)),
@@ -106,7 +110,7 @@ export class MapInitService {
   private addControls(mapboxMap: mapboxgl.Map): void {
     mapboxMap.addControl(
       new NavigationControl({showCompass: false}),
-      'top-left'
+      'top-right'
     );
   }
 

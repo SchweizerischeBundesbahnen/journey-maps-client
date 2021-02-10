@@ -24,6 +24,7 @@ export class AppComponent {
   // Initial map position
   zoomLevel = 7.5;
   mapCenter: LngLatLike = [7.4391326448171196, 46.948834547463086];
+  selectedMarkerId: string;
 
   // Can be used instead of zoomLevel and mapCenter
   boundingBox: LngLatBoundsLike = [[-9.97708574059, 51.6693012559], [-6.03298539878, 55.1316222195]];
@@ -78,6 +79,14 @@ export class AppComponent {
       ]
     },
     {
+      id: 'biel',
+      title: 'Biel, my town, my rules !',
+      position: [7.2468, 47.1368],
+      category: MarkerCategory.INFORMATION,
+      markerUrl: 'https://www.biel-bienne.ch/',
+      triggerEvent: false
+    },
+    {
       id: 'playground',
       title: 'Playground',
       subtitle: 'Sun, fun and nothing to do',
@@ -85,16 +94,7 @@ export class AppComponent {
       category: MarkerCategory.CUSTOM,
       icon: 'assets/icons/train.png',
       iconSelected: 'assets/icons/train_selected.png',
-      infoBlocks: [
-        this.infoBlockFactoryService.createHtmlInfoBlock(
-          'Cupcake Ipsum',
-          `<ul style="margin-top: 0">
-                    <li style="margin-top: 0; color: green">Donut fruitcake</li>
-                    <li style="margin-top: 0; color: deeppink">Cotton Candy</li>
-                    <li style="margin-top: 0; color: orange">Tart jelly</li>
-                </ul>`
-        )
-      ]
+      infoBlocks: [/* no teaser/overlay will be shown unless infoBoxTemplate is defined on the component */]
     },
     {
       id: 'work',
@@ -110,4 +110,8 @@ export class AppComponent {
       ]
     },
   ];
+
+  setSelecteMarkerId(selectedMarkerId: string): void {
+    this.selectedMarkerId = selectedMarkerId;
+  }
 }

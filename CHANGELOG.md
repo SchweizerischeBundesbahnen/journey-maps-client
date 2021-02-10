@@ -4,12 +4,27 @@
 
 ### Added
 
+* DUSP-1177 Unless infoBoxTemplate is defined, only show teasers for markers containing infoBlocks
+* DUSP-1177 Clients of this component can select/unselect markers and receive events of same.
+* DUSP-1177 Hidden overflow for teaser transitions
+* DUSP-1179 Add optional boundingBox input parameter
+* DUSP-1179 Add optional zoomToMarkers input parameter
+* DUSP-1179 Add optional markerUrl to Marker
+* DUSP-1179 Add optional triggerEvent to Marker
+
+
 ### Changed
+
+* DUSP-1260 Preserve selected marker and teaser when adding new markers
+* DUSP-1179 Deactivate scroll zoom if user touch the touch display
+* DUSP-1179 Replace default touch zoom and pan implementation with custom two fingers interaction
+* DUSP-1179 Move teaser to the left side
 
 ### Fixed
 
- * DUSP-1260 Preserve selected marker and teaser when adding new markers
- * DUSP-1261 Use the correct image name when checking if custom images have already been added
+* DUSP-1260 Preserve selected marker and teaser when adding new markers
+* DUSP-1261 Use the correct image name when checking if custom images have already been added
+* DUSP-1179 Map resize if container resize
 
 ## [0.2.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.2.0&sourceBranch=refs%2Ftags%2F0.2.1&targetRepoId=46287) - 2021-01-17
 

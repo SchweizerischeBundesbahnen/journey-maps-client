@@ -17,6 +17,9 @@ export class LocaleService {
         placeholder: 'Suchen',
         arialabel: 'Eingabefeld zum Suchen und Filtern von Kartenelementen.',
         moreresults: 'weitere Resultate gefunden.'
+      },
+      touchOverlay: {
+        tip: 'Benutzen Sie 2 Finger um die Karte zu bedienen.'
       }
     },
     fr: {
@@ -27,6 +30,9 @@ export class LocaleService {
         placeholder: 'Rechercher',
         arialabel: 'Champ de saisie pour la recherche et le filtrage des éléments de la carte.',
         moreresults: 'autres résultats trouvés.'
+      },
+      touchOverlay: {
+        tip: 'Utilisez deux doigts pour consulter la carte.'
       }
     },
     it: {
@@ -37,6 +43,9 @@ export class LocaleService {
         placeholder: 'Ricerca',
         arialabel: 'Campo di inserimento per la ricerca e il filtraggio degli elementi della mappa.',
         moreresults: 'altri risultati trovati.'
+      },
+      touchOverlay: {
+        tip: 'Utilizzate due dita per muovervi nella mappa.'
       }
     },
     en: {
@@ -47,6 +56,9 @@ export class LocaleService {
         placeholder: 'Search',
         arialabel: 'Input field for searching and filtering map elements.',
         moreresults: 'more results found.'
+      },
+      touchOverlay: {
+        tip: 'Use two fingers to operate the map.'
       }
     }
   };
