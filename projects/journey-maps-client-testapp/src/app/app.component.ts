@@ -94,16 +94,7 @@ export class AppComponent {
       category: MarkerCategory.CUSTOM,
       icon: 'assets/icons/train.png',
       iconSelected: 'assets/icons/train_selected.png',
-      infoBlocks: [
-        this.infoBlockFactoryService.createHtmlInfoBlock(
-          'Cupcake Ipsum',
-          `<ul style="margin-top: 0">
-                    <li style="margin-top: 0; color: green">Donut fruitcake</li>
-                    <li style="margin-top: 0; color: deeppink">Cotton Candy</li>
-                    <li style="margin-top: 0; color: orange">Tart jelly</li>
-                </ul>`
-        )
-      ]
+      infoBlocks: [/* no teaser/overlay will be shown unless infoBoxTemplate is defined on the component */]
     },
     {
       id: 'work',
