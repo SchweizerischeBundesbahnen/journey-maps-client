@@ -265,12 +265,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   /**
-   * If providing an ID, a marker with this ID must be present in the list of {@link markers}
+   * If providing an ID, a marker with this ID must be present in the list of {@link JourneyMapsClientComponent#markers}
    *
    * @param value the ID of the marker to select or <code>undefined</code> to unselect the marker
    */
   @Input()
-  set selectedMarkerId(value: string) {
+  set selectedMarkerId(value: string | undefined) {
     if (!!value) {
       const selectedMarker = this.markers?.find(marker => marker.id === value);
       this.onMarkerSelected(selectedMarker);
