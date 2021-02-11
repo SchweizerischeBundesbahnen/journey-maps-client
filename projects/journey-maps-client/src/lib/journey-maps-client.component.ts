@@ -265,7 +265,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   /**
-   * If providing an ID, a marker with this ID must be present in the list of {@link JourneyMapsClientComponent#markers}
+   * Select one of the markers contained in {@link JourneyMapsClientComponent#markers}
+   * Allowed values are either the ID of a marker to select or <code>undefined</code> to unselect.
    *
    * @param value the ID of the marker to select or <code>undefined</code> to unselect the marker
    */
