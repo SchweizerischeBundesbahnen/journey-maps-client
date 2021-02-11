@@ -29,6 +29,7 @@ describe('InfoBoxComponent#shouldRender', () => {
     // @ts-ignore
     cut.selectedMarker = createMarkerWithoutInfoBlocks();
     // TODO
+    fail();
     // cut.infoBoxTemplate = {};
     expect(cut.shouldRender()).toBeTrue();
   });
