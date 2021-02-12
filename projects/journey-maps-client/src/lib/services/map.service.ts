@@ -5,6 +5,7 @@ import {Marker} from '../model/marker';
 import {MarkerConverterService} from './marker-converter.service';
 import {Geometry, Point} from 'geojson';
 import {MarkerCategory} from '../model/marker-category.enum';
+import {buildImageName} from './util/imageNames';
 
 
 @Injectable({
@@ -220,7 +221,7 @@ export class MapService {
     (markers ?? [])
       .filter(marker => marker.category === MarkerCategory.CUSTOM)
       .forEach(marker => {
-        const imageName = this.buildImageName(marker);
+        const imageName = buildImageName(marker);
         images.set(imageName, marker);
         // The image will later be loaded by the category name.
         // Therefore we have to overwrite the category.
@@ -239,23 +240,6 @@ export class MapService {
         this.addMissingImage(map, iconSelectedName, marker.iconSelected);
       }
     }
-  }
-
-  private buildImageName(marker: Marker): string {
-    const simpleHash = this.simpleHash(`${marker.icon}${marker.iconSelected}`);
-    return `${this.convertToImageName(marker.icon)}_${this.convertToImageName(marker.iconSelected)}_${simpleHash}`;
-  }
-
-  private convertToImageName(iconPath: string): string {
-    return iconPath.substring(iconPath.lastIndexOf('/') + 1, iconPath.lastIndexOf('.'));
-  }
-
-  private simpleHash(value: string): number {
-    return Math.abs(
-      // https://stackoverflow.com/a/34842797/349169
-      // tslint:disable-next-line:no-bitwise
-      value.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0)
-    );
   }
 
   private verifyMarkers(markers: Marker[]): void {
