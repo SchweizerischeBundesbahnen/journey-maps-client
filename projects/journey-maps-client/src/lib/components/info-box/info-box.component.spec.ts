@@ -1,9 +1,14 @@
 import {InfoBoxComponent} from './info-box.component';
 import {InfoBlockType} from '../../model/infoblock/info-block-type.enum';
 import {TextInfoBlock} from '../../model/infoblock/text-info-block';
+import {TemplateRef} from '@angular/core';
 
 describe('InfoBoxComponent#shouldRender', () => {
   const cut = new InfoBoxComponent(null);
+
+  beforeEach(() => {
+    cut.infoBoxTemplate = undefined;
+  });
 
   it('should return false if !selectedMarker', () => {
     [null, undefined, null].forEach(selectedMarker => {
@@ -28,9 +33,8 @@ describe('InfoBoxComponent#shouldRender', () => {
   it('should return true if infoBoxTemplate', () => {
     // @ts-ignore
     cut.selectedMarker = createMarkerWithoutInfoBlocks();
-    // TODO
-    fail();
-    // cut.infoBoxTemplate = {};
+    // dirty hack
+    cut.infoBoxTemplate = 1 as unknown as TemplateRef<any>;
     expect(cut.shouldRender()).toBeTrue();
   });
 
