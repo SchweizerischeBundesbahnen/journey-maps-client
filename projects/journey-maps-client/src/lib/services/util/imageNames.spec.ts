@@ -7,7 +7,7 @@ describe('simpleHash', () => {
 });
 
 describe('buildImageName', () => {
-  it('should build different image names if at least onen image path is different', () => {
+  it('should build different image names if at least one image path is different', () => {
     // @ts-ignore
     const imagePath = buildImageName({
       icon: 'some/path/train.png',
