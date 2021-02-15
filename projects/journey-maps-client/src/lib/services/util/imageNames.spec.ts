@@ -9,17 +9,15 @@ describe('simpleHash', () => {
 describe('buildImageName', () => {
   it('should build different image names if at least one image path is different', () => {
     // @ts-ignore
-    const imagePath = buildImageName({
-      icon: 'some/path/train.png',
-      iconSelected: 'some/path/train_selected.png',
-    });
+    const icon = 'some/path/train.png';
+    const similarIcon = 'some/OTHER/path/train.png';
+    const iconSelected = 'some/path/train_selected.png';
     // @ts-ignore
-    const similarPath = buildImageName({
-      icon: 'some/other/path/train.png',
-      iconSelected: 'some/path/train_selected.png',
-    });
+    const imagePath = buildImageName({icon, iconSelected});
+    // @ts-ignore
+    const similarPath = buildImageName({icon: similarIcon, iconSelected});
 
     expect(imagePath).toBe('train_train_selected_1872940144');
-    expect(similarPath).toBe('train_train_selected_1780488111');
+    expect(similarPath).toBe('train_train_selected_1594891313');
   });
 });
