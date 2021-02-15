@@ -12,7 +12,8 @@ import {HtmlInfoBoxComponent} from './components/info-box/components/html-info-b
 import {SbbAutocompleteModule, SbbButtonModule, SbbSearchModule} from '@sbb-esta/angular-public';
 import {SearchBarComponent} from './components/search-bar/search-bar.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import { AngularResizedEventModule } from 'angular-resize-event';
+import {AngularResizedEventModule} from 'angular-resize-event';
+import {GlobalStylesComponent} from './components/global-styles/global-styles.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { AngularResizedEventModule } from 'angular-resize-event';
     TextInfoBoxComponent,
     ButtonInfoBoxComponent,
     HtmlInfoBoxComponent,
-    SearchBarComponent
+    SearchBarComponent,
+    GlobalStylesComponent
   ],
   imports: [
     CommonModule,
