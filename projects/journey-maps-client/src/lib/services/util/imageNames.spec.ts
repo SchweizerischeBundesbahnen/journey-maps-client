@@ -1,18 +1,25 @@
 import {buildImageName, simpleHash} from './imageNames';
 
-describe('map.service#simpleHash', () => {
+describe('simpleHash', () => {
   it('should hash strings', () => {
     expect(simpleHash('test')).toBe(3556498);
   });
 });
 
-describe('map.service#buildImageName', () => {
-  it('should build image names', () => {
+describe('buildImageName', () => {
+  it('should build different image names if at least onen image path is different', () => {
     // @ts-ignore
-    const imageName = buildImageName({
+    const imagePath = buildImageName({
       icon: 'some/path/train.png',
       iconSelected: 'some/path/train_selected.png',
     });
-    expect(imageName).toBe('train_train_selected_1872940144');
+    // @ts-ignore
+    const similarPath = buildImageName({
+      icon: 'some/other/path/train.png',
+      iconSelected: 'some/path/train_selected.png',
+    });
+
+    expect(imagePath).toBe('train_train_selected_1872940144');
+    expect(similarPath).toBe('train_train_selected_1780488111');
   });
 });
