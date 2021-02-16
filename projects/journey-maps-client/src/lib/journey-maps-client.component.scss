@@ -1,14 +1,20 @@
 @import 'https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css';
 @import '~@sbb-esta/angular-public/styles.scss';
 
-:host, .map, .map-container, .container {
+:host, .map, .container {
   height: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
 }
 
 .map-container {
   position: relative;
-  min-height: 300px;
+  min-height: 100px;
   overflow: hidden;
+  flex: 1 0 auto;
 }
 
 .map {
@@ -21,6 +27,7 @@
 rokas-search-bar {
   display: block;
   margin-bottom: 2em;
+  flex: 0 0 auto;
 }
 
 .mod_map_container_mobile_overlay {
