@@ -5,7 +5,6 @@ import {Marker} from '../model/marker';
 import {MarkerConverterService} from './marker-converter.service';
 import {Geometry, Point} from 'geojson';
 import {MarkerCategory} from '../model/marker-category.enum';
-import {buildImageName} from './util/imageNames';
 
 
 @Injectable({
@@ -227,7 +226,7 @@ export class MapService {
         // We also need to use the same naming convention that geOps uses
         // when they load the images from the category.
         // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/184754aee94c82b3511be07e2a93474a61025068/partials/bvi.json#L18
-        const imageName = buildImageName(marker);
+        const imageName = this.buildImageName(marker);
         marker.category = imageName;
         images.set(`sbb_${imageName}_red`, marker.icon);
         images.set(`sbb_${imageName}_black`, marker.iconSelected);
@@ -238,6 +237,23 @@ export class MapService {
         this.addMissingImage(map, imageName, icon);
       }
     }
+  }
+
+  private buildImageName(marker: Marker): string {
+    const simpleHash = this.simpleHash(`${marker.icon}${marker.iconSelected}`);
+    return `${this.convertToImageName(marker.icon)}_${this.convertToImageName(marker.iconSelected)}_${simpleHash}`;
+  }
+
+  private convertToImageName(iconPath: string): string {
+    return iconPath.substring(iconPath.lastIndexOf('/') + 1, iconPath.lastIndexOf('.'));
+  }
+
+  private simpleHash(value: string): number {
+    return Math.abs(
+      // https://stackoverflow.com/a/34842797/349169
+      // tslint:disable-next-line:no-bitwise
+      value.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0)
+    );
   }
 
   private verifyMarkers(markers: Marker[]): void {
