@@ -76,6 +76,7 @@
     "protractor": "~7.0.0",
     "puppeteer": "^5.5.0",
     "renamer": "^2.0.1",
+    "shallow-render": "^11.0.2",
     "trash-cli": "~4.0.0",
     "ts-node": "~9.1.1",
     "tslint": "~6.1.0",
