@@ -21,14 +21,14 @@ describe('JourneyMapsClientComponent shallow-render', () => {
       .replaceModule(BrowserAnimationsModule, NoopAnimationsModule);
   });
 
-  it('should emit selectedMarkerId when selecting a marker', async () => {
-    const { fixture, outputs, bindings } = await shallow
+  const shallowRender = async (selectedMarkerId: string): Promise<any> => {
+    return await shallow
       .mock(MapInitService, {
         initializeMap: () => of({
           isStyleLoaded: () => false,
           on: () => {},
           addControl: () => {},
-        } as unknown as mapboxgl.Map)
+        } as unknown as mapboxgl.Map),
       }).mock(MapService, {
         selectMarker: () => {},
         onMapLoaded: () => {},
@@ -36,28 +36,40 @@ describe('JourneyMapsClientComponent shallow-render', () => {
       })
       .render({
         bind: {
-          language: 'en',
           apiKey: 'e500c71b8c83c1cfb2170608582ae9c8',
           markers,
-          selectedMarkerId: undefined,
-        }
+          selectedMarkerId,
+        },
       });
+  };
 
-    (outputs.selectedMarkerIdChange.emit as jasmine.Spy).calls.reset();
+  const resetSpyCalls = (emit: jasmine.Spy) => {
+    emit.calls.reset();
+  };
 
-    bindings.selectedMarkerId = 'work';
-    fixture.detectChanges();
+  it('should emit selectedMarkerId when (un-)selecting a marker', async () => {
+    const { fixture, outputs, bindings } = await shallowRender(undefined);
 
-    expect(outputs.selectedMarkerIdChange.emit).toHaveBeenCalledTimes(1);
-    expect(outputs.selectedMarkerIdChange.emit).toHaveBeenCalledWith('work');
+    const emit = outputs.selectedMarkerIdChange.emit;
 
-    (outputs.selectedMarkerIdChange.emit as jasmine.Spy).calls.reset();
+    function setSelectedMarkerId(markerId: string): void {
+      bindings.selectedMarkerId = markerId;
+      fixture.detectChanges();
+    }
 
-    bindings.selectedMarkerId = undefined;
-    fixture.detectChanges();
+    // change from 'undefined' to 'work'
+    resetSpyCalls(emit);
+    setSelectedMarkerId('work');
 
-    expect(outputs.selectedMarkerIdChange.emit).toHaveBeenCalledTimes(1);
-    expect(outputs.selectedMarkerIdChange.emit).toHaveBeenCalledWith(undefined);
+    expect(emit).toHaveBeenCalledTimes(1);
+    expect(emit).toHaveBeenCalledWith('work');
+
+    // change from 'work' to 'undefined'
+    resetSpyCalls(emit);
+    setSelectedMarkerId(undefined);
+
+    expect(emit).toHaveBeenCalledTimes(1);
+    expect(emit).toHaveBeenCalledWith(undefined);
   });
 });
 
