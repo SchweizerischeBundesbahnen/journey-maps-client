@@ -3,12 +3,8 @@ import {TextInfoBlock} from '../../model/infoblock/text-info-block';
 import {TemplateRef} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ButtonInfoBlock} from '../../model/infoblock/button-info-block';
-import {SbbIcon} from '@sbb-esta/angular-core';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {TextInfoBoxComponent} from './components/text-info-box/text-info-box.component';
-import {ButtonInfoBoxComponent} from './components/button-info-box/button-info-box.component';
-import {SbbIconTestingModule} from '@sbb-esta/angular-core/icon/testing';
 import {By} from '@angular/platform-browser';
+import {JourneyMapsClientModule} from '../../journey-maps-client.module';
 
 describe('InfoBoxComponent', () => {
   let component: InfoBoxComponent;
@@ -17,16 +13,7 @@ describe('InfoBoxComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        InfoBoxComponent,
-        SbbIcon,
-        TextInfoBoxComponent,
-        ButtonInfoBoxComponent,
-      ],
-      imports: [
-        BrowserAnimationsModule,
-        SbbIconTestingModule,
-      ],
+      imports: [JourneyMapsClientModule],
     });
     fixture = TestBed.createComponent(InfoBoxComponent);
     component = fixture.componentInstance;
