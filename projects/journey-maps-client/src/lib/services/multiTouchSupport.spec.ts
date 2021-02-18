@@ -19,18 +19,18 @@ describe('MultiTouchSupport', () => {
     service.onAdd(map);
   });
 
-  const expectPanByToHaveBeenCalledWithNearly = ([expectedX, expectedY]) => {
+  const expectPanByToHaveBeenCalledWithNearly = ([expectedX, expectedY], precision) => {
     const panByArgs = map.panBy.calls.mostRecent().args;
     const coordinates = panByArgs[0];
     const actualX = coordinates[0];
     const actualY = coordinates[1];
     const actualOptions = panByArgs[1];
-    expect(actualX).toBeCloseTo(expectedX, 2);
-    expect(actualY).toBeCloseTo(expectedY, 2);
+    expect(actualX).toBeCloseTo(expectedX, precision);
+    expect(actualY).toBeCloseTo(expectedY, precision);
     expect(actualOptions).toEqual(jasmine.anything());
   };
 
-  const expectSetZoomToHaveBeenCalledWithNearly = (expectedZoomLevel, precision = 2) => {
+  const expectSetZoomToHaveBeenCalledWithNearly = (expectedZoomLevel, precision) => {
     const setZoomArg = map.setZoom.calls.mostRecent().args[0];
     expect(setZoomArg).toBeCloseTo(expectedZoomLevel, precision);
   };
@@ -45,7 +45,7 @@ describe('MultiTouchSupport', () => {
     service.touchMove(moveEvent);
 
     // then
-    expectPanByToHaveBeenCalledWithNearly([-0.01, 0.01]);
+    expectPanByToHaveBeenCalledWithNearly([-0.01, 0.01], 2);
     expect(map.setZoom).toHaveBeenCalledOnceWith(initialZoom);
   });
 
@@ -73,7 +73,35 @@ describe('MultiTouchSupport', () => {
     service.touchMove(moveEvent);
 
     // then
-    expectPanByToHaveBeenCalledWithNearly([-0.02, -0.02]); // the average of finger 1 and finger 2 moves
+    expectPanByToHaveBeenCalledWithNearly([-0.02, -0.02], 2); // the average of finger 1 and finger 2 moves
     expectSetZoomToHaveBeenCalledWithNearly(11.132, 3);
+  });
+
+  it('DOESN\'T zoom beneath the TOUCH_ZOOM_THRESHOLD', () => {
+    // given
+    const startEvent = {touches: [{screenX: 2, screenY: 2}, {screenX: 3, screenY: 3}]};
+    const moveEvent = {touches: [{screenX: 2.02, screenY: 2.02}, {screenX: 3.03, screenY: 3.03}]};
+
+    // when
+    service.touchStart(startEvent);
+    service.touchMove(moveEvent);
+
+    // then
+    expectPanByToHaveBeenCalledWithNearly([-0.025, -0.025], 3); // the average of finger 1 and finger 2 moves
+    expect(map.setZoom).toHaveBeenCalledOnceWith(initialZoom);
+  });
+
+  it('DOES zoom above the TOUCH_ZOOM_THRESHOLD', () => {
+    // given
+    const startEvent = {touches: [{screenX: 2, screenY: 2}, {screenX: 3, screenY: 3}]};
+    const moveEvent = {touches: [{screenX: 2.02, screenY: 2.02}, {screenX: 3.031, screenY: 3.031}]};
+
+    // when
+    service.touchStart(startEvent);
+    service.touchMove(moveEvent);
+
+    // then
+    expectPanByToHaveBeenCalledWithNearly([-0.0255, -0.0255], 4); // the average of finger 1 and finger 2 moves
+    expectSetZoomToHaveBeenCalledWithNearly(11.0726, 4);
   });
 });
