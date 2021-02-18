@@ -19,7 +19,7 @@ describe('MultiTouchSupport', () => {
     service.onAdd(map);
   });
 
-  const expectPanByToHaveBeenCalledWithNearly = ([expectedX, expectedY], precision) => {
+  const expectPanByToHaveBeenCalledWithNearly = ([expectedX, expectedY], precision, options = {}) => {
     const panByArgs = map.panBy.calls.mostRecent().args;
     const coordinates = panByArgs[0];
     const actualX = coordinates[0];
@@ -27,12 +27,11 @@ describe('MultiTouchSupport', () => {
     const actualOptions = panByArgs[1];
     expect(actualX).toBeCloseTo(expectedX, precision);
     expect(actualY).toBeCloseTo(expectedY, precision);
-    expect(actualOptions).toEqual(jasmine.anything());
+    expect(actualOptions).toEqual({animate: false, ...options});
   };
 
   const expectSetZoomToHaveBeenCalledWithNearly = (expectedZoomLevel, precision) => {
-    const setZoomArg = map.setZoom.calls.mostRecent().args[0];
-    expect(setZoomArg).toBeCloseTo(expectedZoomLevel, precision);
+    expect(map.setZoom.calls.mostRecent().args[0]).toBeCloseTo(expectedZoomLevel, precision);
   };
 
   it('pans correctly', () => {
