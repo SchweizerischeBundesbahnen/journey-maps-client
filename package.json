@@ -15,6 +15,7 @@
     "lint": "ng lint",
     "test-headless": "concurrently npm:test-lib npm:test-testapp",
     "test-lib": "ng test journey-maps-client --watch=false --browsers=ChromeHeadless",
+    "test-lib-watch": "ng test journey-maps-client --watch=true --browsers=ChromeHeadless",
     "test-testapp": "ng test journey-maps-client-testapp --watch=false --browsers=ChromeHeadless",
     "test-elements": "ng test journey-maps-client-elements --watch=false --browsers=ChromeHeadless",
     "e2e": "ng e2e",
