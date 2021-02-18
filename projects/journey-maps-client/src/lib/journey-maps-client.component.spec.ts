@@ -1,71 +1,69 @@
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+
 import {JourneyMapsClientComponent} from './journey-maps-client.component';
-import {Shallow} from 'shallow-render';
-import {JourneyMapsClientModule} from './journey-maps-client.module';
 import {Marker} from './model/marker';
 import {TextInfoBlock} from './model/infoblock/text-info-block';
 import {ButtonInfoBlock} from './model/infoblock/button-info-block';
-import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {MapService} from './services/map.service';
 import {MapInitService} from './services/map-init.service';
 import {of} from 'rxjs';
-import {MapService} from './services/map.service';
+import {JourneyMapsClientModule} from './journey-maps-client.module';
 
-describe('JourneyMapsClientComponent shallow-render', () => {
-  let shallow: Shallow<JourneyMapsClientComponent>;
+describe('JourneyMapsClientComponent', () => {
+  let component: JourneyMapsClientComponent;
+  let fixture: ComponentFixture<JourneyMapsClientComponent>;
+  let selectedMarkerIdChange;
 
-  beforeEach(() => {
-    shallow = new Shallow(JourneyMapsClientComponent, JourneyMapsClientModule)
-      .replaceModule(BrowserAnimationsModule, NoopAnimationsModule);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [JourneyMapsClientModule],
+      declarations: [JourneyMapsClientComponent],
+      providers: [
+        Window,
+        {
+          provide: MapService,
+          useValue: {
+            selectMarker: () => {},
+            unselectFeature: () => {},
+          }
+        },
+        {
+          provide: MapInitService,
+          useValue: {
+            initializeMap: () => of({
+              isStyleLoaded: () => false,
+              on: () => {},
+              addControl: () => {},
+              resize: () => {},
+            } as unknown as mapboxgl.Map),
+          }
+        },
+      ]
+    })
+      .compileComponents();
   });
 
-  const shallowRender = async (selectedMarkerId: string): Promise<any> => {
-    return await shallow
-      .mock(MapInitService, {
-        initializeMap: () => of({
-          isStyleLoaded: () => false,
-          on: () => {},
-          addControl: () => {},
-        } as unknown as mapboxgl.Map),
-      }).mock(MapService, {
-        selectMarker: () => {},
-        onMapLoaded: () => {},
-        unselectFeature: () => {},
-      })
-      .render({
-        bind: {
-          apiKey: 'e500c71b8c83c1cfb2170608582ae9c8',
-          markers,
-          selectedMarkerId,
-        },
-      });
-  };
-
-  const resetSpyCalls = (emit: jasmine.Spy) => {
-    emit.calls.reset();
-  };
+  beforeEach(() => {
+    fixture = TestBed.createComponent(JourneyMapsClientComponent);
+    component = fixture.componentInstance;
+    component.apiKey = 'apiKey';
+    component.markers = markers;
+    fixture.detectChanges();
+  });
 
   it('should emit selectedMarkerId when (un-)selecting a marker', async () => {
-    const { fixture, outputs, bindings } = await shallowRender(undefined);
-
-    const emit = outputs.selectedMarkerIdChange.emit;
-
     function setSelectedMarkerId(markerId: string): void {
-      bindings.selectedMarkerId = markerId;
+      component.selectedMarkerId = markerId;
       fixture.detectChanges();
     }
 
-    // change from 'undefined' to 'work'
-    resetSpyCalls(emit);
+    component.selectedMarkerIdChange.subscribe((id: string) => selectedMarkerIdChange = id);
+
     setSelectedMarkerId('work');
+    expect(selectedMarkerIdChange).toBe('work');
 
-    expect(emit).toHaveBeenCalledTimes(1);
-    expect(emit).toHaveBeenCalledWith('work');
-
-    // change from 'work' to 'undefined'
-    resetSpyCalls(emit);
     setSelectedMarkerId(undefined);
-
-    expect(emit).toHaveBeenCalledTimes(1);
-    expect(emit).toHaveBeenCalledWith(undefined);
+    expect(selectedMarkerIdChange).toBe(undefined);
   });
 });
 
