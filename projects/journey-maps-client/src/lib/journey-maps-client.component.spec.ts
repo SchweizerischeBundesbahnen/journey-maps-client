@@ -59,6 +59,8 @@ describe('JourneyMapsClientComponent', () => {
 
     component.selectedMarkerIdChange.subscribe((id: string) => selectedMarkerIdChange = id);
 
+    expect(selectedMarkerIdChange).toBe(undefined);
+
     setSelectedMarkerId('work');
     expect(selectedMarkerIdChange).toBe('work');
 
