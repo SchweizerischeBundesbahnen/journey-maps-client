@@ -215,7 +215,7 @@ export class MapService {
   }
 
   // visible for testing
-  protected addMissingImages(map: mapboxgl.Map, markers: Marker[]): void {
+  addMissingImages(map: mapboxgl.Map, markers: Marker[]): void {
     const images = new Map<string, string>();
 
     (markers ?? [])
@@ -269,7 +269,7 @@ export class MapService {
   }
 
   // visible for testing
-  protected addMissingImage(map: mapboxgl.Map, name: string, icon: string): void {
+  addMissingImage(map: mapboxgl.Map, name: string, icon: string): void {
     map.loadImage(icon, (error, image) => this.imageLoadedCallback(map, name, error, image));
   }
 

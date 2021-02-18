@@ -1,17 +1,6 @@
 import {MapService} from './map.service';
-import {Marker} from '../model/marker';
 import {Map} from 'mapbox-gl';
 import {MarkerCategory} from '../model/marker-category.enum';
-
-class MapServiceExtended extends MapService {
-  addMissingImages(map: mapboxgl.Map, markers: Marker[]): void {
-    super.addMissingImages(map, markers);
-  }
-
-  addMissingImage(map: mapboxgl.Map, name: string, icon: string): void {
-    super.addMissingImage(map, name, icon);
-  }
-}
 
 const createMarker = (
   {
@@ -33,7 +22,7 @@ describe('MapService#addMissingImages', () => {
   const icon = 'some/icon/path/train.jpg';
   const similarIcon = 'some/OTHER/path/train.jpg';
   const iconSelected = 'some/icon/path/train_selected.jpg';
-  let service: MapServiceExtended;
+  let service: MapService;
   let mapSpyObj: Map;
 
   beforeEach(() => {
@@ -41,7 +30,7 @@ describe('MapService#addMissingImages', () => {
       'mapSpyObj',
       ['hasImage', 'loadImage']
     );
-    service = new MapServiceExtended(null);
+    service = new MapService(null);
     spyOn(service, 'addMissingImage');
   });
 
