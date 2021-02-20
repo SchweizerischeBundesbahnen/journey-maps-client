@@ -23,7 +23,7 @@ export class MultiTouchSupport {
     let x = 0;
     let y = 0;
 
-    [].forEach.call(event.touches, (touch) => {
+    event.touches.forEach((touch) => {
       x += touch.screenX;
       y += touch.screenY;
     });
@@ -64,7 +64,7 @@ export class MultiTouchSupport {
     let x = 0;
     let y = 0;
 
-    [].forEach.call(event.touches, (touch) => {
+    event.touches.forEach((touch) => {
       x += touch.screenX;
       y += touch.screenY;
     });
@@ -75,7 +75,7 @@ export class MultiTouchSupport {
     this.state.panStart.x = x / event.touches.length;
     this.state.panStart.y = y / event.touches.length;
 
-    this.map.panBy([movex / -1, movey / -1], {animate: false});
+    this.map.panBy([-movex, -movey], {animate: false});
   }
 
   onAdd(map): HTMLDivElement {
