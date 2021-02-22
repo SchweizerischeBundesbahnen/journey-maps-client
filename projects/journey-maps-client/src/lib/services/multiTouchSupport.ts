@@ -23,7 +23,7 @@ export class MultiTouchSupport {
     let x = 0;
     let y = 0;
 
-    event.touches.forEach((touch) => {
+    event.touches.forEach(touch => {
       x += touch.screenX;
       y += touch.screenY;
     });
@@ -64,7 +64,7 @@ export class MultiTouchSupport {
     let x = 0;
     let y = 0;
 
-    event.touches.forEach((touch) => {
+    event.touches.forEach(touch => {
       x += touch.screenX;
       y += touch.screenY;
     });
