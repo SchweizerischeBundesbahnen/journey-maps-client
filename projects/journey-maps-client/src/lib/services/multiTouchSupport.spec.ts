@@ -45,7 +45,7 @@ describe('MultiTouchSupport', () => {
 
     // then
     expectPanByToHaveBeenCalledWithNearly([-0.01, 0.01], 2);
-    expect(map.setZoom).toHaveBeenCalledOnceWith(initialZoom);
+    expectSetZoomToHaveBeenCalledWithNearly(initialZoom, 0);
   });
 
   it('zooms correctly', () => {
@@ -58,7 +58,7 @@ describe('MultiTouchSupport', () => {
     service.touchMove(moveEvent);
 
     // then
-    expect(map.panBy).toHaveBeenCalledOnceWith([-0, -0], jasmine.anything());
+    expectPanByToHaveBeenCalledWithNearly([0, 0], 0);
     expectSetZoomToHaveBeenCalledWithNearly(11.132, 3);
   });
 
@@ -88,7 +88,7 @@ describe('MultiTouchSupport', () => {
 
     // then
     expectPanByToHaveBeenCalledWithNearly([-0.01, -0.01], 2);
-    expect(map.setZoom).toHaveBeenCalledOnceWith(initialZoom);
+    expectSetZoomToHaveBeenCalledWithNearly(initialZoom, 0);
 
     // when
     service.touchMove(moveEvent2);
@@ -108,8 +108,8 @@ describe('MultiTouchSupport', () => {
     service.touchMove(moveEvent);
 
     // then
-    expect(map.panBy).toHaveBeenCalledOnceWith([-0, -0], jasmine.anything());
-    expect(map.setZoom).toHaveBeenCalledOnceWith(initialZoom);
+    expectPanByToHaveBeenCalledWithNearly([0, 0], 0);
+    expectSetZoomToHaveBeenCalledWithNearly(initialZoom, 0);
   });
 
   it('DOESN\'T zoom beneath the TOUCH_ZOOM_THRESHOLD', () => {
@@ -123,7 +123,7 @@ describe('MultiTouchSupport', () => {
 
     // then
     expectPanByToHaveBeenCalledWithNearly([-0.025, -0.025], 3); // the average of finger 1 and finger 2 moves
-    expect(map.setZoom).toHaveBeenCalledOnceWith(initialZoom);
+    expectSetZoomToHaveBeenCalledWithNearly(initialZoom, 0);
   });
 
   it('DOES zoom above the TOUCH_ZOOM_THRESHOLD', () => {
