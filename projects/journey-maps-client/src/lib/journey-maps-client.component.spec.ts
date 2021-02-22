@@ -6,7 +6,7 @@ import {TextInfoBlock} from './model/infoblock/text-info-block';
 import {ButtonInfoBlock} from './model/infoblock/button-info-block';
 import {MapService} from './services/map.service';
 import {MapInitService} from './services/map-init.service';
-import {asyncScheduler, of, scheduled} from 'rxjs';
+import {asyncScheduler, Observable, of, scheduled} from 'rxjs';
 import {JourneyMapsClientModule} from './journey-maps-client.module';
 
 describe('JourneyMapsClientComponent', () => {
@@ -50,6 +50,11 @@ describe('JourneyMapsClientComponent', () => {
     fixture.detectChanges();
   });
 
+  const oneFinger = new Touch({
+    identifier: 123,
+    target: new EventTarget(),
+  });
+
   it('should emit selectedMarkerId when (un-)selecting a marker', async () => {
     function setSelectedMarkerId(markerId: string): void {
       component.selectedMarkerId = markerId;
@@ -67,18 +72,9 @@ describe('JourneyMapsClientComponent', () => {
     expect(selectedMarkerId).toBe(undefined);
   });
 
-  it('should set the appropriate touch overlay style class', fakeAsync(() => {
-    // given
-    const oneFinger = new Touch({
-      identifier: 123,
-      target: new EventTarget(),
-    });
+  it('should set the touch overlay style class when only one finger used', fakeAsync(() => {
     // @ts-ignore
-    const touchEvent1: TouchEvent = new TouchEvent('touchstart', {
-      touches: [oneFinger],
-    });
-    // @ts-ignore
-    component.touchEventCollector = scheduled([touchEvent1], asyncScheduler);
+    component.touchEventCollector = createTouchEventsObservable([createTouchEventWith([oneFinger])]);
 
     expect(component.touchOverlayStyleClass).toBeFalsy();
 
@@ -86,12 +82,25 @@ describe('JourneyMapsClientComponent', () => {
     tick();
 
     expect(component.touchOverlayStyleClass).toBeTruthy();
+  }));
 
-    // remove the overlay again - use marbles and tick() ...
+  it('should NOT set the touch overlay style class when two fingers used', fakeAsync(() => {
+    // @ts-ignore
+    component.touchEventCollector = createTouchEventsObservable([createTouchEventWith([oneFinger, oneFinger])]);
+
+    expect(component.touchOverlayStyleClass).toBeFalsy();
+
+    component.ngAfterViewInit();
+    tick();
 
     expect(component.touchOverlayStyleClass).toBeFalsy();
   }));
 });
+
+const createTouchEventsObservable = (touchEvents: TouchEvent[]): Observable<TouchEvent> =>
+  scheduled(touchEvents, asyncScheduler);
+
+const createTouchEventWith = (touches: Touch[]): TouchEvent => new TouchEvent('touchstart', {touches});
 
 const markers: Marker[] = [
   {
