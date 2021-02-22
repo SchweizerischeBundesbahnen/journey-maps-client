@@ -1,4 +1,4 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 
 import {JourneyMapsClientComponent} from './journey-maps-client.component';
 import {Marker} from './model/marker';
@@ -6,13 +6,13 @@ import {TextInfoBlock} from './model/infoblock/text-info-block';
 import {ButtonInfoBlock} from './model/infoblock/button-info-block';
 import {MapService} from './services/map.service';
 import {MapInitService} from './services/map-init.service';
-import {of} from 'rxjs';
+import {asyncScheduler, of, scheduled} from 'rxjs';
 import {JourneyMapsClientModule} from './journey-maps-client.module';
 
 describe('JourneyMapsClientComponent', () => {
   let component: JourneyMapsClientComponent;
   let fixture: ComponentFixture<JourneyMapsClientComponent>;
-  let selectedMarkerIdChange;
+  let selectedMarkerId: string;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -39,8 +39,7 @@ describe('JourneyMapsClientComponent', () => {
           }
         },
       ]
-    })
-      .compileComponents();
+    });
   });
 
   beforeEach(() => {
@@ -57,16 +56,41 @@ describe('JourneyMapsClientComponent', () => {
       fixture.detectChanges();
     }
 
-    component.selectedMarkerIdChange.subscribe((id: string) => selectedMarkerIdChange = id);
+    component.selectedMarkerIdChange.subscribe((id: string) => selectedMarkerId = id);
 
-    expect(selectedMarkerIdChange).toBe(undefined);
+    expect(selectedMarkerId).toBe(undefined);
 
     setSelectedMarkerId('work');
-    expect(selectedMarkerIdChange).toBe('work');
+    expect(selectedMarkerId).toBe('work');
 
     setSelectedMarkerId(undefined);
-    expect(selectedMarkerIdChange).toBe(undefined);
+    expect(selectedMarkerId).toBe(undefined);
   });
+
+  it('should set the appropriate touch overlay style class', fakeAsync(() => {
+    // given
+    const oneFinger = new Touch({
+      identifier: 123,
+      target: new EventTarget(),
+    });
+    // @ts-ignore
+    const touchEvent1: TouchEvent = new TouchEvent('touchstart', {
+      touches: [oneFinger],
+    });
+    // @ts-ignore
+    component.touchEventCollector = scheduled([touchEvent1], asyncScheduler);
+
+    expect(component.touchOverlayStyleClass).toBeFalsy();
+
+    component.ngAfterViewInit();
+    tick();
+
+    expect(component.touchOverlayStyleClass).toBeTruthy();
+
+    // remove the overlay again - use marbles and tick() ...
+
+    expect(component.touchOverlayStyleClass).toBeFalsy();
+  }));
 });
 
 const markers: Marker[] = [

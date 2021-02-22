@@ -95,7 +95,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private styleLoaded = new ReplaySubject(1);
   private mapParameterChanged = new Subject<void>();
 
-  private touchEventCollector = new Subject<TouchEvent>();
+  // visible for testing
+  touchEventCollector = new Subject<TouchEvent>();
   public touchOverlayText: string;
   public touchOverlayStyleClass = '';
 
