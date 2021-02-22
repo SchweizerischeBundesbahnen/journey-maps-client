@@ -74,7 +74,10 @@ describe('JourneyMapsClientComponent', () => {
 
   it('should set the touch overlay style class when only one finger used', fakeAsync(() => {
     // @ts-ignore
-    component.touchEventCollector = createTouchEventsObservable([createTouchEventWith([oneFinger])]);
+    component.touchEventCollector = createTouchEventsObservable([
+      createTouchEventWith([oneFinger]),
+      createTouchEventWith([oneFinger]),
+    ]);
 
     expect(component.touchOverlayStyleClass).toBeFalsy();
 
@@ -86,7 +89,27 @@ describe('JourneyMapsClientComponent', () => {
 
   it('should NOT set the touch overlay style class when two fingers used', fakeAsync(() => {
     // @ts-ignore
-    component.touchEventCollector = createTouchEventsObservable([createTouchEventWith([oneFinger, oneFinger])]);
+    component.touchEventCollector = createTouchEventsObservable([
+      createTouchEventWith([oneFinger]),
+      createTouchEventWith([oneFinger, oneFinger]),
+      createTouchEventWith([oneFinger]),
+    ]);
+
+    expect(component.touchOverlayStyleClass).toBeFalsy();
+
+    component.ngAfterViewInit();
+    tick();
+
+    expect(component.touchOverlayStyleClass).toBeFalsy();
+  }));
+
+  it('should NOT set the touch overlay style class when touch events contain \'touchend\' event', fakeAsync(() => {
+    // @ts-ignore
+    component.touchEventCollector = createTouchEventsObservable([
+      createTouchEventWith([oneFinger]),
+      createTouchEventWith([oneFinger], 'touchend'),
+      createTouchEventWith([oneFinger]),
+    ]);
 
     expect(component.touchOverlayStyleClass).toBeFalsy();
 
@@ -100,7 +123,7 @@ describe('JourneyMapsClientComponent', () => {
 const createTouchEventsObservable = (touchEvents: TouchEvent[]): Observable<TouchEvent> =>
   scheduled(touchEvents, asyncScheduler);
 
-const createTouchEventWith = (touches: Touch[]): TouchEvent => new TouchEvent('touchstart', {touches});
+const createTouchEventWith = (touches: Touch[], type = 'touchstart'): TouchEvent => new TouchEvent(type, {touches});
 
 const markers: Marker[] = [
   {
