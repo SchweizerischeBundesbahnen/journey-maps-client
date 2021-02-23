@@ -9,58 +9,25 @@ import {MapInitService} from './services/map-init.service';
 import {asyncScheduler, Observable, of, scheduled} from 'rxjs';
 import {JourneyMapsClientModule} from './journey-maps-client.module';
 
-describe('JourneyMapsClientComponent', () => {
-  let component: JourneyMapsClientComponent;
-  let fixture: ComponentFixture<JourneyMapsClientComponent>;
-  let selectedMarkerId: string;
+let component: JourneyMapsClientComponent;
+let fixture: ComponentFixture<JourneyMapsClientComponent>;
 
+describe('JourneyMapsClientComponent#selectedMarkerId', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [JourneyMapsClientModule],
-      declarations: [JourneyMapsClientComponent],
-      providers: [
-        Window,
-        {
-          provide: MapService,
-          useValue: {
-            selectMarker: () => {},
-            unselectFeature: () => {},
-          }
-        },
-        {
-          provide: MapInitService,
-          useValue: {
-            initializeMap: () => of({
-              isStyleLoaded: () => false,
-              on: () => {},
-              addControl: () => {},
-              resize: () => {},
-            } as unknown as mapboxgl.Map),
-          }
-        },
-      ]
-    });
+    await configureTestingModule();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(JourneyMapsClientComponent);
-    component = fixture.componentInstance;
-    component.apiKey = 'apiKey';
-    component.markers = markers;
+    setupFixtureAndComponent();
+  });
+
+  function setSelectedMarkerId(markerId: string): void {
+    component.selectedMarkerId = markerId;
     fixture.detectChanges();
-  });
+  }
 
-  const oneFinger = new Touch({
-    identifier: 123,
-    target: new EventTarget(),
-  });
-
-  it('should emit selectedMarkerId when (un-)selecting a marker', async () => {
-    function setSelectedMarkerId(markerId: string): void {
-      component.selectedMarkerId = markerId;
-      fixture.detectChanges();
-    }
-
+  it('should emit when (un-)selecting a marker', async () => {
+    let selectedMarkerId: string;
     component.selectedMarkerIdChange.subscribe((id: string) => selectedMarkerId = id);
 
     expect(selectedMarkerId).toBe(undefined);
@@ -71,15 +38,33 @@ describe('JourneyMapsClientComponent', () => {
     setSelectedMarkerId(undefined);
     expect(selectedMarkerId).toBe(undefined);
   });
+});
+
+describe('JourneyMapsClientComponent#touchEventCollector', () => {
+  beforeEach(async () => {
+    await configureTestingModule();
+  });
+
+  beforeEach(() => {
+    setupFixtureAndComponent();
+  });
+
+  const oneFinger = new Touch({
+    identifier: 123,
+    target: new EventTarget(),
+  });
+
+  const createTouchEventsObservable = (touchEvents: TouchEvent[]): Observable<TouchEvent> =>
+    scheduled(touchEvents, asyncScheduler);
+
+  const createTouchEvent = (touches: Touch[], type = 'touchstart'): TouchEvent => new TouchEvent(type, {touches});
 
   it('should set the touch overlay style class when only one finger used', fakeAsync(() => {
     // @ts-ignore
     component.touchEventCollector = createTouchEventsObservable([
-      createTouchEventWith([oneFinger]),
-      createTouchEventWith([oneFinger]),
+      createTouchEvent([oneFinger]),
+      createTouchEvent([oneFinger]),
     ]);
-
-    expect(component.touchOverlayStyleClass).toBeFalsy();
 
     component.ngAfterViewInit();
     tick();
@@ -90,12 +75,10 @@ describe('JourneyMapsClientComponent', () => {
   it('should NOT set the touch overlay style class when two fingers used', fakeAsync(() => {
     // @ts-ignore
     component.touchEventCollector = createTouchEventsObservable([
-      createTouchEventWith([oneFinger]),
-      createTouchEventWith([oneFinger, oneFinger]),
-      createTouchEventWith([oneFinger]),
+      createTouchEvent([oneFinger]),
+      createTouchEvent([oneFinger, oneFinger]),
+      createTouchEvent([oneFinger]),
     ]);
-
-    expect(component.touchOverlayStyleClass).toBeFalsy();
 
     component.ngAfterViewInit();
     tick();
@@ -106,12 +89,10 @@ describe('JourneyMapsClientComponent', () => {
   it('should NOT set the touch overlay style class when touch events contain \'touchend\' event', fakeAsync(() => {
     // @ts-ignore
     component.touchEventCollector = createTouchEventsObservable([
-      createTouchEventWith([oneFinger]),
-      createTouchEventWith([oneFinger], 'touchend'),
-      createTouchEventWith([oneFinger]),
+      createTouchEvent([oneFinger]),
+      createTouchEvent([oneFinger], 'touchend'),
+      createTouchEvent([oneFinger]),
     ]);
-
-    expect(component.touchOverlayStyleClass).toBeFalsy();
 
     component.ngAfterViewInit();
     tick();
@@ -120,10 +101,39 @@ describe('JourneyMapsClientComponent', () => {
   }));
 });
 
-const createTouchEventsObservable = (touchEvents: TouchEvent[]): Observable<TouchEvent> =>
-  scheduled(touchEvents, asyncScheduler);
+const configureTestingModule = () => TestBed.configureTestingModule({
+  imports: [JourneyMapsClientModule],
+  declarations: [JourneyMapsClientComponent],
+  providers: [
+    Window,
+    {
+      provide: MapService,
+      useValue: {
+        selectMarker: () => {},
+        unselectFeature: () => {},
+      }
+    },
+    {
+      provide: MapInitService,
+      useValue: {
+        initializeMap: () => of({
+          isStyleLoaded: () => false,
+          on: () => {},
+          addControl: () => {},
+          resize: () => {},
+        } as unknown as mapboxgl.Map),
+      }
+    },
+  ]
+});
 
-const createTouchEventWith = (touches: Touch[], type = 'touchstart'): TouchEvent => new TouchEvent(type, {touches});
+const setupFixtureAndComponent = () => {
+  fixture = TestBed.createComponent(JourneyMapsClientComponent);
+  component = fixture.componentInstance;
+  component.apiKey = 'apiKey';
+  component.markers = markers;
+  fixture.detectChanges();
+};
 
 const markers: Marker[] = [
   {
