@@ -115,8 +115,8 @@ describe('bufferTimeOnValue', () => {
   it('should emit in groups of {x}ms', () => {
     getTestScheduler().run(({ cold, expectObservable }) => {
       const time = 2;
-      const actual   = 'abcdef---|';
-      const expected = '--x--y---|';
+      const actual   = 'abcdef-----|';
+      const expected = '--x--y-----|';
       const values = {
         x: ['a', 'b', 'c'],
         y: ['d', 'e', 'f'],
