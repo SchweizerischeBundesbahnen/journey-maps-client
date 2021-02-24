@@ -98,18 +98,41 @@ describe('marbles testing', () => {
       expectObservable(o$.pipe(buffer(o$.pipe(throttleTime(time), debounceTime(time))))).toBe(expected, values);
     });
   });
+
+  it('should NOT emit with buffer with throttleTime and debounceTime if source has no events', () => {
+    getTestScheduler().run(({ cold, expectObservable }) => {
+      const time = 2;
+      const actual   = '-------|';
+      const expected = '-------|';
+
+      const o$ = cold(actual);
+      expectObservable(o$.pipe(buffer(o$.pipe(throttleTime(time), debounceTime(time))))).toBe(expected);
+    });
+  });
 });
 
 describe('bufferTimeOnValue', () => {
-  // it('should emit in groups of {delay}ms', () => {
-  //   fail();
-  //   getTestScheduler().run(({ cold, expectObservable }) => {
-  //     const operation = bufferTimeOnValue;
-  //     const time = 2;
-  //     const actual   = 'abcdef--|';
-  //     const expected = '-------f|';
-  //
-  //     expectObservable(cold(actual).pipe(operation(time))).toBe(expected);
-  //   });
-  // });
+  it('should emit in groups of {x}ms', () => {
+    getTestScheduler().run(({ cold, expectObservable }) => {
+      const time = 2;
+      const actual   = 'abcdef---|';
+      const expected = '--x--y---|';
+      const values = {
+        x: ['a', 'b', 'c'],
+        y: ['d', 'e', 'f'],
+      };
+
+      expectObservable(cold(actual).pipe(bufferTimeOnValue(time))).toBe(expected, values);
+    });
+  });
+
+  it('should NOT emit if no source events', () => {
+    getTestScheduler().run(({ cold, expectObservable }) => {
+      const time = 2;
+      const actual   = '-------|';
+      const expected = '-------|';
+
+      expectObservable(cold(actual).pipe(bufferTimeOnValue(time))).toBe(expected);
+    });
+  });
 });
