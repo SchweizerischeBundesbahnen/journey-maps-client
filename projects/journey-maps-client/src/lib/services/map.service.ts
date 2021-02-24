@@ -216,25 +216,28 @@ export class MapService {
 
   // visible for testing
   addMissingImages(map: mapboxgl.Map, markers: Marker[]): void {
-    const images = new Map<string, string>();
+    const images = new Map<string, Marker>();
 
     (markers ?? [])
       .filter(marker => marker.category === MarkerCategory.CUSTOM)
       .forEach(marker => {
+        const imageName = this.buildImageName(marker);
+        images.set(imageName, marker);
         // The image will later be loaded by the category name.
         // Therefore we have to overwrite the category.
-        // We also need to use the same naming convention that geOps uses
-        // when they load the images from the category.
-        // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/184754aee94c82b3511be07e2a93474a61025068/partials/bvi.json#L18
-        const imageName = this.buildImageName(marker);
         marker.category = imageName;
-        images.set(`sbb_${imageName}_red`, marker.icon);
-        images.set(`sbb_${imageName}_black`, marker.iconSelected);
       });
 
-    for (const [imageName, icon] of images) {
-      if (!map.hasImage(imageName)) {
-        this.addMissingImage(map, imageName, icon);
+    for (const [imageName, marker] of images) {
+      // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/184754aee94c82b3511be07e2a93474a61025068/partials/bvi.json#L18
+      const iconName = `sbb_${imageName}_red`;
+      const iconSelectedName = `sbb_${imageName}_black`;
+
+      if (!map.hasImage(iconName)) {
+        this.addMissingImage(map, iconName, marker.icon);
+      }
+      if (!map.hasImage(iconSelectedName)) {
+        this.addMissingImage(map, iconSelectedName, marker.iconSelected);
       }
     }
   }
