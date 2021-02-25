@@ -23,19 +23,19 @@
 
   <div>
     <ul>
-      <li>
+      <li style="list-style: circle;">
         <button
-          style="background-color: white; border-width: 1px; border-radius: 5px;"
+          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
           (click)="setSelecteMarkerId('home')"
         >select 'Home Office' Marker</button>
         <button
-          style="background-color: white; border-width: 1px; border-radius: 5px;"
+          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
           (click)="setSelecteMarkerId(undefined)"
         >unselect all Markers</button>
       </li>
-      <li>Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span></li>
-      <li>Zoom Level: {{zoomLevel}}</li>
-      <li>Map center: {{mapCenter}}</li>
+      <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span></li>
+      <li style="list-style: circle;">Zoom Level: {{zoomLevel}}</li>
+      <li style="list-style: circle;">Map center: {{mapCenter}}</li>
     </ul>
   </div>
 
