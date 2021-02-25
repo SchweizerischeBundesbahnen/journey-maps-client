@@ -4,6 +4,7 @@ import 'zone.js/dist/zone';
 import 'zone.js/dist/zone-testing';
 import {getTestBed} from '@angular/core/testing';
 import {BrowserDynamicTestingModule, platformBrowserDynamicTesting} from '@angular/platform-browser-dynamic/testing';
+import '@angular/localize/init';
 
 declare const require: {
   context(path: string, deep?: boolean, filter?: RegExp): {
