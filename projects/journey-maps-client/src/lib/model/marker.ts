@@ -1,6 +1,7 @@
 import {Position} from 'geojson';
 import {MarkerCategory} from './marker-category.enum';
 import {InfoBlock} from './infoblock/info-block';
+import {MarkerPriority} from './marker-priority.enum';
 
 /**
  * Defines a marker (point) that will be displayed on the map.
@@ -18,6 +19,12 @@ export interface Marker {
    * Use <code>CUSTOM</code> if you want to use a custom icon.
    */
   category: MarkerCategory | string;
+
+  /**
+   * The priority of the marker. It can be used to customize the styling of clustered markers.
+   */
+  priority?: MarkerPriority | number;
+
   /**
    * URL of the custom marker icon. Only relevant for category <code>CUSTOM</code>.
    */
