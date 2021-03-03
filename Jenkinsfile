@@ -68,7 +68,7 @@ pipeline {
             publishablePackageJsons:
               './dist/journey-maps-client/package.json,' +
               './dist/journey-maps-client-elements/package.json',
-            nextReleaseVersion: "${major}.${minor}.${patch + 1}".toString(),
+            nextReleaseVersion: "${major}.${minor + 1}.0".toString(),
             releaseVersion: "${major}.${minor}.${patch}".toString()
           )
         }

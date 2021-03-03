@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {LngLatLike, LngLatBoundsLike, Map as MapboxMap, NavigationControl, Style, FitBoundsOptions, MapboxOptions} from 'mapbox-gl';
+import {FitBoundsOptions, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapboxOptions, NavigationControl, Style} from 'mapbox-gl';
 import {map, tap} from 'rxjs/operators';
 import {Constants} from './constants';
+import {MarkerPriority} from '../model/marker-priority.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -89,7 +90,7 @@ export class MapInitService {
 
   private fitBoundsToMarkers(mapboxMap: MapboxMap, markersBounds?: LngLatBoundsLike): void {
     if (markersBounds) {
-      mapboxMap.fitBounds(markersBounds,  this.defaultBoundsPadding);
+      mapboxMap.fitBounds(markersBounds, this.defaultBoundsPadding);
     }
   }
 
@@ -116,10 +117,17 @@ export class MapInitService {
 
   private defineClusterSettings(style: Style): void {
     const markerSource = style.sources[Constants.MARKER_SOURCE] as any;
+
     if (markerSource) {
       markerSource.cluster = true;
       markerSource.clusterRadius = Constants.CLUSTER_RADIUS;
       markerSource.clusterMinPoints = 2;
+      markerSource.clusterProperties = {
+        // Maximum priority of the markers inside the cluster.
+        // Can be used in the map style for a custom cluster styling.
+        // See e.g: https://gitlab.geops.de/sbb/sbb-styles/-/blob/dev/partials/parkandrail.json#L21
+        priority: ['max', ['case', ['has', 'priority'], ['get', 'priority'], MarkerPriority.REGULAR]],
+      };
     }
   }
 }

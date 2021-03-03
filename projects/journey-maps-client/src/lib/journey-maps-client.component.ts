@@ -7,9 +7,11 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
   TemplateRef,
   ViewChild
 } from '@angular/core';
@@ -35,7 +37,7 @@ import {bufferTimeOnValue} from './services/bufferTimeOnValue';
   styleUrls: ['./journey-maps-client.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDestroy {
+export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
   private map: MapboxMap;
   @ViewChild('map') private mapElementRef: ElementRef;
@@ -65,12 +67,37 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Input() enableSearchBar = true;
 
+  /**
+   * The initial center of the map. You should pass an array with two numbers.
+   * The first one is the longitude and the second one the latitude.
+   *
+   * @param value Initial map center
+   */
+  @Input() mapCenter?: LngLatLike;
+
+  /**
+   * The initial zoom level of the map.
+   *
+   * @param value Initial zoom level
+   */
+  @Input() zoomLevel?: number;
+
+  /**
+   * The initial bounding box of the map.
+   *
+   * @param value Initial bounding box
+   */
+  @Input() boundingBox?: LngLatBoundsLike;
+
+  /**
+   * Wrap all markers in view if true.
+   *
+   * @param value Wether or not to wrap the markers
+   */
+  @Input() zoomToMarkers?: boolean;
+
   private _markers: Marker[];
   private _selectedMarker: Marker;
-  private _zoomLevel?: number;
-  private _mapCenter?: LngLatLike;
-  private _boundingBox?: LngLatBoundsLike;
-  private _zoomToMarkers?: boolean;
 
   /**
    * This event is emitted whenever the zoom level of the map has changed.
@@ -192,77 +219,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  get boundingBox(): LngLatBoundsLike {
-    return this._boundingBox;
-  }
-
-  /**
-   * The initial bounding box of the map.
-   *
-   * @param value Initial bounding box
-   */
-  @Input()
-  set boundingBox(value: LngLatBoundsLike) {
-    this._boundingBox = value;
-    if (this.map?.isStyleLoaded() && value) {
-      this.mapParameterChanged.next();
-    }
-  }
-
   get getMarkersBounds(): LngLatBounds {
     return this.zoomToMarkers ? this.computeMarkersBounds(this.markers) : undefined;
-  }
-
-  get zoomToMarkers(): boolean {
-    return this._zoomToMarkers;
-  }
-
-  /**
-   * Wrap all markers in view if true.
-   *
-   * @param value Wether or not to wrap the markers
-   */
-  @Input()
-  set zoomToMarkers(value: boolean) {
-    this._zoomToMarkers = value;
-    if (this.map?.isStyleLoaded() && value) {
-      this.mapParameterChanged.next();
-    }
-  }
-
-  get zoomLevel(): number {
-    return this._zoomLevel;
-  }
-
-  /**
-   * The initial zoom level of the map.
-   *
-   * @param value Initial zoom level
-   */
-  @Input()
-  set zoomLevel(value: number) {
-    this._zoomLevel = value;
-    if (this.map?.isStyleLoaded() && value) {
-      this.mapParameterChanged.next();
-    }
-  }
-
-  get mapCenter(): mapboxgl.LngLatLike {
-    return this._mapCenter;
-  }
-
-  /**
-   * The initial center of the map. You should pass an array with two numbers.
-   * The first one is the longitude and the second one the latitude.
-   *
-   * @param value Initial map center
-   */
-  @Input()
-  set mapCenter(value: mapboxgl.LngLatLike) {
-    this._mapCenter = value;
-    if (this.map?.isStyleLoaded() && value) {
-      this.mapParameterChanged.next();
-    }
   }
 
   /**
@@ -277,7 +235,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     if (!!value) {
       const selectedMarker = this.markers?.find(marker => marker.id === value);
       this.onMarkerSelected(selectedMarker);
-    } else if (!!this.selectedMarker){
+    } else if (!!this.selectedMarker) {
       this.onMarkerUnselected();
     }
   }
@@ -289,6 +247,16 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   ngOnInit(): void {
     this.validateInputParameter();
     this.setupSubjects();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!this.map?.isStyleLoaded()) {
+      return;
+    }
+
+    if (changes.mapCenter || changes.zoomLevel || changes.boundingBox || changes.zoomToMarkers) {
+      this.mapParameterChanged.next();
+    }
   }
 
   ngAfterViewInit(): void {
