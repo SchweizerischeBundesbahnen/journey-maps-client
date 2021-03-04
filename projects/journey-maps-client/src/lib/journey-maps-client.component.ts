@@ -56,7 +56,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /**
    * Overwrite this value if you want to use a custom style id.
    */
-  @Input() styleId = 'base_bright_v2_bvi';
+  @Input() styleId = 'base_bright_v2_ki';
   /**
    * Overwrite this value if you want to use a style from a different source.
    * Actually you should not need this.
@@ -379,7 +379,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private onStyleLoaded(): void {
     this.mapService.onMapLoaded(this.map);
     for (const layer of Constants.LAYERS) {
-      this.map.setLayoutProperty(layer, 'visibility', 'visible');
       this.map.on('mouseenter', layer, () => this.cursorChanged.next(true));
       this.map.on('mouseleave', layer, () => this.cursorChanged.next(false));
     }

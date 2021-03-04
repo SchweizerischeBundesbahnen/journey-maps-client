@@ -1,5 +1,14 @@
 import {Injectable} from '@angular/core';
-import {FlyToOptions, GeoJSONSource, LngLat, LngLatLike, LngLatBounds, LngLatBoundsLike, Map as MapboxMap, MapboxGeoJSONFeature} from 'mapbox-gl';
+import {
+  FlyToOptions,
+  GeoJSONSource,
+  LngLat,
+  LngLatBounds,
+  LngLatBoundsLike,
+  LngLatLike,
+  Map as MapboxMap,
+  MapboxGeoJSONFeature
+} from 'mapbox-gl';
 import {Constants} from './constants';
 import {Marker} from '../model/marker';
 import {MarkerConverterService} from './marker-converter.service';
@@ -223,13 +232,12 @@ export class MapService {
       .forEach(marker => {
         // The image will later be loaded by the category name.
         // Therefore we have to overwrite the category.
-        // We also need to use the same naming convention that geOps uses
-        // when they load the images from the category.
-        // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/184754aee94c82b3511be07e2a93474a61025068/partials/bvi.json#L18
+        // We also need to use the same naming convention that we use in the map style.
+        // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/dev/partials/_ki.json#L28
         const imageName = this.buildImageName(marker);
         marker.category = imageName;
-        images.set(`sbb_${imageName}_red`, marker.icon);
-        images.set(`sbb_${imageName}_black`, marker.iconSelected);
+        images.set(`marker_${imageName}`, marker.icon);
+        images.set(`marker_${imageName}_selected`, marker.iconSelected);
       });
 
     for (const [imageName, icon] of images) {

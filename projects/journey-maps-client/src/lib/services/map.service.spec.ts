@@ -43,9 +43,9 @@ describe('MapService#addMissingImages', () => {
 
     expect(service.addMissingImage).toHaveBeenCalledTimes(2);
     expect(service.addMissingImage)
-      .toHaveBeenCalledWith(mapSpyObj, 'sbb_train_train_selected_2033534440_red', icon);
+      .toHaveBeenCalledWith(mapSpyObj, 'marker_train_train_selected_2033534440', icon);
     expect(service.addMissingImage)
-      .toHaveBeenCalledWith(mapSpyObj, 'sbb_train_train_selected_2033534440_black', iconSelected);
+      .toHaveBeenCalledWith(mapSpyObj, 'marker_train_train_selected_2033534440_selected', iconSelected);
   });
 
   it('should add missing images with similar paths separately', () => {
@@ -57,12 +57,12 @@ describe('MapService#addMissingImages', () => {
 
     expect(service.addMissingImage).toHaveBeenCalledTimes(4);
     expect(service.addMissingImage)
-      .toHaveBeenCalledWith(mapSpyObj, 'sbb_train_train_selected_2033534440_red', icon);
+      .toHaveBeenCalledWith(mapSpyObj, 'marker_train_train_selected_2033534440', icon);
     expect(service.addMissingImage)
-      .toHaveBeenCalledWith(mapSpyObj, 'sbb_train_train_selected_2033534440_black', iconSelected);
+      .toHaveBeenCalledWith(mapSpyObj, 'marker_train_train_selected_2033534440_selected', iconSelected);
     expect(service.addMissingImage)
-      .toHaveBeenCalledWith(mapSpyObj, 'sbb_train_train_selected_1903310519_red', similarIcon);
+      .toHaveBeenCalledWith(mapSpyObj, 'marker_train_train_selected_1903310519', similarIcon);
     expect(service.addMissingImage)
-      .toHaveBeenCalledWith(mapSpyObj, 'sbb_train_train_selected_1903310519_black', iconSelected);
+      .toHaveBeenCalledWith(mapSpyObj, 'marker_train_train_selected_1903310519_selected', iconSelected);
   });
 });

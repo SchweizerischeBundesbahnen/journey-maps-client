@@ -141,7 +141,7 @@ const markers: Marker[] = [
     title: 'Home Office',
     subtitle: 'My home is my castle',
     position: [7.296515, 47.069815],
-    category: 'INFORMATION', // or MISSED_CONNECTION or CUSTOM
+    category: 'INFORMATION', // or WARNING or CUSTOM
     infoBlocks: [
       {
         type: 'TEXT',
@@ -160,7 +160,7 @@ const markers: Marker[] = [
     title: 'Office',
     subtitle: 'SBB Wylerpark',
     position: [7.446450, 46.961409],
-    category: 'MISSED_CONNECTION',
+    category: 'WARNING',
     infoBlocks: [
       {
         type: 'BUTTON',

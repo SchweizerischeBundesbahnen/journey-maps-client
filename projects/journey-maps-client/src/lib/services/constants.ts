@@ -1,24 +1,24 @@
 export class Constants {
   static readonly CLUSTER_RADIUS = 50;
 
-  static readonly MARKER_SOURCE = 'dev_him_messages';
+  static readonly MARKER_SOURCE = 'rokas-marker-source';
 
   static readonly LAYERS = [
-    'him-messages-circle',
-    'him-messages-cluster',
-    'him-messages-cluster-text',
-    'him-messages-markers',
-    'him-messages-markers-selected'
+    'rokas-marker-circle',
+    'rokas-marker-cluster',
+    'rokas-marker-cluster-text',
+    'rokas-marker',
+    'rokas-marker-selected'
   ];
 
   static readonly INFO_LAYERS = [
-    'him-messages-circle',
-    'him-messages-markers',
-    'him-messages-markers-selected'
+    'rokas-marker-circle',
+    'rokas-marker',
+    'rokas-marker-selected'
   ];
 
-  static readonly CLUSTER_LAYER = 'him-messages-cluster';
-  static readonly MARKER_LAYER = 'him-messages-markers';
-  static readonly MARKER_SELECTED_LAYER = 'him-messages-markers-selected';
+  static readonly CLUSTER_LAYER = 'rokas-marker-cluster';
+  static readonly MARKER_LAYER = 'rokas-marker';
+  static readonly MARKER_SELECTED_LAYER = 'rokas-marker-selected';
 
 }
