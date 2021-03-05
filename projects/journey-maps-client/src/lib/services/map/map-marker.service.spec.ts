@@ -1,6 +1,7 @@
-import {MapService} from './map.service';
+import {MapMarkerService} from './map-marker.service';
 import {Map} from 'mapbox-gl';
-import {MarkerCategory} from '../model/marker-category.enum';
+import {MarkerCategory} from '../../model/marker-category.enum';
+import {MapService} from './map.service';
 
 const createMarker = (
   {
@@ -18,20 +19,21 @@ const createMarker = (
 });
 
 
-describe('MapService#addMissingImages', () => {
+describe('MapMarkerService#addMissingImages', () => {
   const icon = 'some/icon/path/train.jpg';
   const similarIcon = 'some/OTHER/path/train.jpg';
   const iconSelected = 'some/icon/path/train_selected.jpg';
-  let service: MapService;
+  let sut: MapMarkerService;
   let mapSpyObj: Map;
+  let mapServiceSpyObj: MapService;
 
   beforeEach(() => {
     mapSpyObj = jasmine.createSpyObj(
       'mapSpyObj',
       ['hasImage', 'loadImage']
     );
-    service = new MapService(null);
-    spyOn(service, 'addMissingImage');
+    mapServiceSpyObj = jasmine.createSpyObj(['addMissingImage']);
+    sut = new MapMarkerService(null, mapServiceSpyObj);
   });
 
   it('should add missing images with identical paths only once', () => {
@@ -39,12 +41,12 @@ describe('MapService#addMissingImages', () => {
       createMarker({icon, iconSelected}),
       createMarker({icon, iconSelected}),
     ];
-    service.addMissingImages(mapSpyObj, markers);
+    sut.addMissingImages(mapSpyObj, markers);
 
-    expect(service.addMissingImage).toHaveBeenCalledTimes(2);
-    expect(service.addMissingImage)
+    expect(mapServiceSpyObj.addMissingImage).toHaveBeenCalledTimes(2);
+    expect(mapServiceSpyObj.addMissingImage)
       .toHaveBeenCalledWith(mapSpyObj, 'marker_train_train_selected_2033534440', icon);
-    expect(service.addMissingImage)
+    expect(mapServiceSpyObj.addMissingImage)
       .toHaveBeenCalledWith(mapSpyObj, 'marker_train_train_selected_2033534440_selected', iconSelected);
   });
 
@@ -53,16 +55,16 @@ describe('MapService#addMissingImages', () => {
       createMarker({icon, iconSelected}),
       createMarker({icon: similarIcon, iconSelected}),
     ];
-    service.addMissingImages(mapSpyObj, markers);
+    sut.addMissingImages(mapSpyObj, markers);
 
-    expect(service.addMissingImage).toHaveBeenCalledTimes(4);
-    expect(service.addMissingImage)
+    expect(mapServiceSpyObj.addMissingImage).toHaveBeenCalledTimes(4);
+    expect(mapServiceSpyObj.addMissingImage)
       .toHaveBeenCalledWith(mapSpyObj, 'marker_train_train_selected_2033534440', icon);
-    expect(service.addMissingImage)
+    expect(mapServiceSpyObj.addMissingImage)
       .toHaveBeenCalledWith(mapSpyObj, 'marker_train_train_selected_2033534440_selected', iconSelected);
-    expect(service.addMissingImage)
+    expect(mapServiceSpyObj.addMissingImage)
       .toHaveBeenCalledWith(mapSpyObj, 'marker_train_train_selected_1903310519', similarIcon);
-    expect(service.addMissingImage)
+    expect(mapServiceSpyObj.addMissingImage)
       .toHaveBeenCalledWith(mapSpyObj, 'marker_train_train_selected_1903310519_selected', iconSelected);
   });
 });

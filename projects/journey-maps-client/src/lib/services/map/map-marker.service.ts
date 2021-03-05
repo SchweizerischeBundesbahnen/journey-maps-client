@@ -1,48 +1,17 @@
 import {Injectable} from '@angular/core';
-import {
-  FlyToOptions,
-  GeoJSONSource,
-  LngLat,
-  LngLatBounds,
-  LngLatBoundsLike,
-  LngLatLike,
-  Map as MapboxMap,
-  MapboxGeoJSONFeature
-} from 'mapbox-gl';
-import {Constants} from './constants';
-import {Marker} from '../model/marker';
-import {MarkerConverterService} from './marker-converter.service';
-import {Geometry, Point} from 'geojson';
-import {MarkerCategory} from '../model/marker-category.enum';
+import {GeoJSONSource, LngLatLike, Map as MapboxMap, MapboxGeoJSONFeature} from 'mapbox-gl';
+import {Constants} from '../constants';
+import {Marker} from '../../model/marker';
+import {MarkerConverterService} from '../marker-converter.service';
+import {MarkerCategory} from '../../model/marker-category.enum';
+import {MapService} from './map.service';
 
 
-@Injectable({
-  providedIn: 'root'
-})
-export class MapService {
+@Injectable({providedIn: 'root'})
+export class MapMarkerService {
 
-  readonly emptyFeatureCollection: GeoJSON.FeatureCollection = {
-    type: 'FeatureCollection',
-    features: []
-  };
-
-  constructor(private markerConverter: MarkerConverterService) {
-  }
-
-  onMapLoaded(map: MapboxMap): void {
-    this.verifySources(map);
-
-    map.resize();
-
-    const markerSource = this.getMarkerSource(map);
-    markerSource.setData(this.emptyFeatureCollection);
-  }
-
-  private verifySources(map: MapboxMap): void {
-    const markerSource = this.getMarkerSource(map);
-    if (!markerSource) {
-      throw new Error(`${Constants.MARKER_SOURCE} was not found in map definition!`);
-    }
+  constructor(private markerConverter: MarkerConverterService,
+              private mapService: MapService) {
   }
 
   updateMarkers(map: MapboxMap, markers: Marker[], selectedMarker: Marker): void {
@@ -61,7 +30,7 @@ export class MapService {
       features = markers.map(this.markerConverter.convertToFeature);
     }
 
-    const newData = {...this.emptyFeatureCollection};
+    const newData = {...this.mapService.emptyFeatureCollection};
     newData.features = features;
     markerSource.setData(newData);
   }
@@ -71,7 +40,7 @@ export class MapService {
   }
 
   onClusterClicked(map: MapboxMap, cluster: MapboxGeoJSONFeature): void {
-    this.zoomToCluster(map, cluster.properties.cluster_id, this.convertToLngLatLike(cluster.geometry));
+    this.zoomToCluster(map, cluster.properties.cluster_id, this.mapService.convertToLngLatLike(cluster.geometry));
   }
 
   private zoomToCluster(map: MapboxMap, clusterId: any, center: LngLatLike): void {
@@ -85,10 +54,6 @@ export class MapService {
     );
   }
 
-  private convertToLngLatLike(geometry: Geometry): LngLatLike {
-    return (geometry as Point).coordinates as LngLatLike;
-  }
-
   onLayerClicked(map: MapboxMap, feature: MapboxGeoJSONFeature, oldSelectedFeatureId: string): string {
     const selectedFeatureId = feature.properties?.id;
     if (!selectedFeatureId || selectedFeatureId === oldSelectedFeatureId) {
@@ -99,7 +64,7 @@ export class MapService {
     this.selectFeature(map, selectedFeatureId);
     const geometry = feature.geometry;
     if (geometry?.type === 'Point') {
-      map.flyTo({center: this.convertToLngLatLike(geometry)});
+      map.flyTo({center: this.mapService.convertToLngLatLike(geometry)});
     }
 
     return selectedFeatureId;
@@ -111,7 +76,7 @@ export class MapService {
     const features = map.queryRenderedFeatures(
       map.project(marker.position as LngLatLike),
       {
-        layers: [Constants.MARKER_LAYER, Constants.MARKER_SELECTED_LAYER],
+        layers: [Constants.MARKER_LAYER, Constants.MARKER_LAYER_SELECTED],
         filter: ['in', 'id', marker.id]
       }
     );
@@ -182,45 +147,11 @@ export class MapService {
 
   private selectFeature(map: MapboxMap, selectedFeatureId: string): void {
     map.setFilter(Constants.MARKER_LAYER, this.createMarkerFilter(selectedFeatureId ?? '', false));
-    map.setFilter(Constants.MARKER_SELECTED_LAYER, this.createMarkerFilter(selectedFeatureId ?? ''));
+    map.setFilter(Constants.MARKER_LAYER_SELECTED, this.createMarkerFilter(selectedFeatureId ?? ''));
   }
 
   private createMarkerFilter(id: string, include = true): Array<any> {
     return ['all', ['!has', 'point_count'], [include ? 'in' : '!in', 'id', id]];
-  }
-
-  /**
-   * Move the map to target according to the following priorities :
-   * 1. zoom + center
-   * 2. bounding box
-   * 3. markes bounds
-   */
-  moveMap(map: MapboxMap, center: LngLatLike, zoomLevel: number, boundingBox: LngLatBoundsLike, markersBounds: LngLatBounds): void {
-    if ( zoomLevel || center) {
-      this.centerMap(map, center, zoomLevel);
-    } else if (boundingBox) {
-       map.fitBounds(boundingBox);
-    } else if (markersBounds) {
-       map.fitBounds(markersBounds, {padding: 40}); // TODO DKU duplicate :-/
-    }
-  }
-
-  private centerMap(map: MapboxMap, center: LngLatLike, zoomLevel: number): void {
-    const options: FlyToOptions = {};
-    if (zoomLevel && map.getZoom() !== zoomLevel) {
-      options.zoom = zoomLevel;
-    }
-    if (center) {
-      const oldCenter = map.getCenter();
-      const newCenter = LngLat.convert(center);
-      const distance = oldCenter.distanceTo(newCenter);
-      if (distance > 1) {
-        options.center = newCenter;
-      }
-    }
-    if (Object.keys(options).length) {
-      map.flyTo(options);
-    }
   }
 
   // visible for testing
@@ -242,7 +173,7 @@ export class MapService {
 
     for (const [imageName, icon] of images) {
       if (!map.hasImage(imageName)) {
-        this.addMissingImage(map, imageName, icon);
+        this.mapService.addMissingImage(map, imageName, icon);
       }
     }
   }
@@ -273,19 +204,6 @@ export class MapService {
       throw new Error(
         `Marker with id ${invalidMarker.id} and category CUSTOM is missing the required 'icon' or 'iconSelected' definition.`
       );
-    }
-  }
-
-  // visible for testing
-  addMissingImage(map: mapboxgl.Map, name: string, icon: string): void {
-    map.loadImage(icon, (error, image) => this.imageLoadedCallback(map, name, error, image));
-  }
-
-  private imageLoadedCallback(map: mapboxgl.Map, name: string, error: any, image: any): void {
-    if (error) {
-      console.error(error);
-    } else {
-      map.addImage(name, image, {pixelRatio: 2});
     }
   }
 }

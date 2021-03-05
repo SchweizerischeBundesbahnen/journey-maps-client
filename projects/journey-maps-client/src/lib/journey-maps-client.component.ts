@@ -16,16 +16,17 @@ import {
   ViewChild
 } from '@angular/core';
 import {LngLatBounds, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
-import {MapInitService} from './services/map-init.service';
+import {MapInitService} from './services/map/map-init.service';
 import {ReplaySubject, Subject} from 'rxjs';
 import {debounceTime, delay, filter, map, take, takeUntil} from 'rxjs/operators';
-import {MapService} from './services/map.service';
+import {MapMarkerService} from './services/map/map-marker.service';
 import {Constants} from './services/constants';
 import {Marker} from './model/marker';
 import {LocaleService} from './services/locale.service';
 import {ResizedEvent} from 'angular-resize-event';
 import {MultiTouchSupport} from './services/multiTouchSupport';
 import {bufferTimeOnValue} from './services/bufferTimeOnValue';
+import {MapService} from './services/map/map.service';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -130,6 +131,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** @internal */
   constructor(private mapInitService: MapInitService,
               private mapService: MapService,
+              private mapMarkerService: MapMarkerService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService) {
   }
@@ -205,15 +207,15 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.selectedMarker = this.markers?.find(marker => this.selectedMarker?.id === marker.id);
 
     if (this.map && this.map.isStyleLoaded()) {
-      this.mapService.updateMarkers(this.map, this.markers, this.selectedMarker);
+      this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker);
       this.cd.detectChanges();
     } else {
       this.styleLoaded.pipe(
         take(1),
         delay(500)
       ).subscribe(() => {
-          this.mapService.updateMarkers(this.map, this.markers, this.selectedMarker);
-          this.cd.detectChanges();
+        this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker);
+        this.cd.detectChanges();
         }
       );
     }
@@ -324,7 +326,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       debounceTime(200),
       takeUntil(this.destroyed)
     ).subscribe(features => {
-      const selectedMarkerId = this.mapService.onLayerClicked(this.map, features[0], this.selectedMarker?.id);
+      const selectedMarkerId = this.mapMarkerService.onLayerClicked(this.map, features[0], this.selectedMarker?.id);
       this.selectedMarker = this.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
       this.cd.detectChanges();
     });
@@ -335,7 +337,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       map(e => this.map.queryRenderedFeatures(e.point, {layers: [Constants.CLUSTER_LAYER]})),
       filter(features => features != null && features.length > 0),
       takeUntil(this.destroyed)
-    ).subscribe(features => this.mapService.onClusterClicked(this.map, features[0]));
+    ).subscribe(features => this.mapMarkerService.onClusterClicked(this.map, features[0]));
 
     this.mapParameterChanged.pipe(
       debounceTime(200),
@@ -377,13 +379,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private onStyleLoaded(): void {
-    this.mapService.onMapLoaded(this.map);
-    for (const layer of Constants.LAYERS) {
+    this.map.resize();
+    this.mapService.verifySources(this.map);
+    for (const layer of Constants.MARKER_AND_CLUSTER_LAYERS) {
       this.map.on('mouseenter', layer, () => this.cursorChanged.next(true));
       this.map.on('mouseleave', layer, () => this.cursorChanged.next(false));
     }
 
-    for (const infoLayer of Constants.INFO_LAYERS) {
+    for (const infoLayer of Constants.MARKER_LAYERS) {
       this.map.on('click', infoLayer, event => this.layerClicked.next(event));
     }
 
@@ -397,7 +400,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   // When a marker has been unselected from outside the map.
   onMarkerUnselected(): void {
     this.selectedMarker = undefined;
-    this.mapService.unselectFeature(this.map);
+    this.mapMarkerService.unselectFeature(this.map);
     this.cd.detectChanges();
   }
 
@@ -412,7 +415,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   onMarkerSelected(marker: Marker): void {
     if (marker?.id !== this.selectedMarker?.id) {
       this.selectedMarker = marker;
-      this.mapService.selectMarker(this.map, marker);
+      this.mapMarkerService.selectMarker(this.map, marker);
       this.cd.detectChanges();
     }
   }

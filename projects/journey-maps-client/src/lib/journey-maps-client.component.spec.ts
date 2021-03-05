@@ -4,8 +4,8 @@ import {JourneyMapsClientComponent} from './journey-maps-client.component';
 import {Marker} from './model/marker';
 import {TextInfoBlock} from './model/infoblock/text-info-block';
 import {ButtonInfoBlock} from './model/infoblock/button-info-block';
-import {MapService} from './services/map.service';
-import {MapInitService} from './services/map-init.service';
+import {MapMarkerService} from './services/map/map-marker.service';
+import {MapInitService} from './services/map/map-init.service';
 import {asyncScheduler, Observable, of, scheduled} from 'rxjs';
 import {JourneyMapsClientModule} from './journey-maps-client.module';
 
@@ -107,10 +107,12 @@ const configureTestingModule = () => TestBed.configureTestingModule({
   providers: [
     Window,
     {
-      provide: MapService,
+      provide: MapMarkerService,
       useValue: {
-        selectMarker: () => {},
-        unselectFeature: () => {},
+        selectMarker: () => {
+        },
+        unselectFeature: () => {
+        },
       }
     },
     {
