@@ -5,6 +5,7 @@ import {FitBoundsOptions, LngLatBoundsLike, LngLatLike, Map as MapboxMap, Mapbox
 import {map, tap} from 'rxjs/operators';
 import {Constants} from '../constants';
 import {MarkerPriority} from '../../model/marker-priority.enum';
+import {MultiTouchSupport} from '../multiTouchSupport';
 
 @Injectable({
   providedIn: 'root'
@@ -113,6 +114,7 @@ export class MapInitService {
       new NavigationControl({showCompass: false}),
       'top-right'
     );
+    mapboxMap.addControl(new MultiTouchSupport());
   }
 
   private defineClusterSettings(style: Style): void {

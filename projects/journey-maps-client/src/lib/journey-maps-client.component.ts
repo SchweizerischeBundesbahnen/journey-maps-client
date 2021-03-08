@@ -24,9 +24,9 @@ import {Constants} from './services/constants';
 import {Marker} from './model/marker';
 import {LocaleService} from './services/locale.service';
 import {ResizedEvent} from 'angular-resize-event';
-import {MultiTouchSupport} from './services/multiTouchSupport';
 import {bufferTimeOnValue} from './services/bufferTimeOnValue';
 import {MapService} from './services/map/map.service';
+import {MapJourneyService} from './services/map/map-journey.service';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -50,54 +50,41 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * <b>NOTE:</b> This does not work - at the moment - when using the Web Component version of the library.
    */
   @Input() infoBoxTemplate?: TemplateRef<any>;
-  /**
-   * Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one.
-   */
+
+  /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
-  /**
-   * Overwrite this value if you want to use a custom style id.
-   */
+
+  /** Overwrite this value if you want to use a custom style id. */
   @Input() styleId = 'base_bright_v2_ki';
+
   /**
    * Overwrite this value if you want to use a style from a different source.
    * Actually you should not need this.
    */
   @Input() styleUrl = 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}';
-  /**
-   * If the search bar - to filter markers - should be enabled or not.
-   */
+
+  /** If the search bar - to filter markers - should be enabled or not. */
   @Input() enableSearchBar = true;
 
   /**
    * The initial center of the map. You should pass an array with two numbers.
    * The first one is the longitude and the second one the latitude.
-   *
-   * @param value Initial map center
    */
   @Input() mapCenter?: LngLatLike;
 
-  /**
-   * The initial zoom level of the map.
-   *
-   * @param value Initial zoom level
-   */
+  /** The initial zoom level of the map. */
   @Input() zoomLevel?: number;
 
-  /**
-   * The initial bounding box of the map.
-   *
-   * @param value Initial bounding box
-   */
+  /** The initial bounding box of the map. */
   @Input() boundingBox?: LngLatBoundsLike;
 
-  /**
-   * Wrap all markers in view if true.
-   *
-   * @param value Wether or not to wrap the markers
-   */
+  /** Wrap all markers in view if true. */
   @Input() zoomToMarkers?: boolean;
 
-  private _markers: Marker[];
+  @Input() journeyGeoJSON: string;
+
+  /** The list of markers (points) that will be displayed on the map. */
+  @Input() markers: Marker[];
   private _selectedMarker: Marker;
 
   /**
@@ -132,6 +119,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   constructor(private mapInitService: MapInitService,
               private mapService: MapService,
               private mapMarkerService: MapMarkerService,
+              private mapJourneyService: MapJourneyService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService) {
   }
@@ -170,21 +158,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  get markers(): Marker[] {
-    return this._markers;
-  }
-
-  /**
-   * The list of markers (points) that will be displayed on the map.
-   *
-   * @param value Markers to display
-   */
-  @Input()
-  set markers(value: Marker[]) {
-    this._markers = value;
-    this.updateMarkers();
-  }
-
   public set selectedMarker(value: Marker) {
     if (value && (value.triggerEvent || value.triggerEvent === undefined)) {
       this.selectedMarkerIdChange.emit(value.id);
@@ -202,22 +175,23 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     return this._selectedMarker;
   }
 
-  /** @internal */
-  updateMarkers(): void {
+  private updateMarkers(): void {
     this.selectedMarker = this.markers?.find(marker => this.selectedMarker?.id === marker.id);
 
-    if (this.map && this.map.isStyleLoaded()) {
+    this.executeWhenMapStyleLoaded(() => {
       this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker);
       this.cd.detectChanges();
+    });
+  }
+
+  private executeWhenMapStyleLoaded(callback: () => void): void {
+    if (this.map?.isStyleLoaded()) {
+      callback();
     } else {
       this.styleLoaded.pipe(
         take(1),
         delay(500)
-      ).subscribe(() => {
-        this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker);
-        this.cd.detectChanges();
-        }
-      );
+      ).subscribe(() => callback());
     }
   }
 
@@ -252,6 +226,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes.markers) {
+      this.updateMarkers();
+    }
+
+    if (changes.journeyGeoJSON) {
+      this.executeWhenMapStyleLoaded(() => this.mapJourneyService.updateJourney(this.map, this.journeyGeoJSON));
+    }
+
     if (!this.map?.isStyleLoaded()) {
       return;
     }
@@ -279,8 +261,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     ).subscribe(
       m => {
         this.map = m;
-        this.registerStyleLoadedHandler();
-        this.map.addControl(new MultiTouchSupport());
+        if (this.map.isStyleLoaded()) {
+          this.styleLoaded.next();
+        } else {
+          this.map.on('style.load', () => this.styleLoaded.next());
+        }
+        this.executeWhenMapStyleLoaded(() => this.onStyleLoaded());
       }
     );
 
@@ -314,10 +300,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       debounceTime(50),
       takeUntil(this.destroyed)
     ).subscribe(isEnter => this.map.getCanvas().style.cursor = isEnter ? 'pointer' : '');
-
-    this.styleLoaded.pipe(
-      takeUntil(this.destroyed)
-    ).subscribe(() => this.onStyleLoaded());
 
     this.layerClicked.pipe(
       filter(e => e?.features != null && e.features.length > 0),
@@ -367,14 +349,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   onResized(event: ResizedEvent): void {
     if (this.map) {
       this.map.resize();
-    }
-  }
-
-  private registerStyleLoadedHandler(): void {
-    if (this.map.isStyleLoaded()) {
-      this.styleLoaded.next();
-    } else {
-      this.map.on('style.load', () => this.styleLoaded.next());
     }
   }
 

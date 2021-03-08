@@ -12,6 +12,8 @@
 * DUSP-1179 Add optional `markerUrl` to Marker
 * DUSP-1179 Add optional `triggerEvent` to Marker
 * DUSP-1274 Add optional `priority` to Marker
+* DUSP-1112 Add optional `journeyGeoJSON` input parameter to display a journey on the map.\
+  (The GeoJSON is the response as returend by the `/journey` operation of Journey-Maps)
 
 
 ### Changed

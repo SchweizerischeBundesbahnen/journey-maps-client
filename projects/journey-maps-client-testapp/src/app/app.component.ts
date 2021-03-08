@@ -1,19 +1,21 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Marker} from '../../../journey-maps-client/src/lib/model/marker';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 import {InfoBlockFactoryService} from '../../../journey-maps-client/src/lib/services/info-block-factory.service';
 import {LngLatBoundsLike, LngLatLike} from 'mapbox-gl';
 import {LoremIpsum} from 'lorem-ipsum';
 import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
+import {AssetReaderService} from './services/asset-reader.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  constructor(private infoBlockFactoryService: InfoBlockFactoryService) {
+  constructor(private infoBlockFactoryService: InfoBlockFactoryService,
+              private assetReaderService: AssetReaderService) {
   }
 
   title = 'journey-maps-client-testapp';
@@ -110,6 +112,13 @@ export class AppComponent {
       ]
     },
   ];
+
+  journeyGeoJson: string;
+
+  ngOnInit(): void {
+    this.assetReaderService.loadAssetAsString('journey/zh-bielmett.json')
+      .subscribe(txt => this.journeyGeoJson = txt);
+  }
 
   setSelecteMarkerId(selectedMarkerId: string): void {
     this.selectedMarkerId = selectedMarkerId;
