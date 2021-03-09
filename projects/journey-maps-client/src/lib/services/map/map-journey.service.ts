@@ -14,12 +14,14 @@ export class MapJourneyService {
   ) {
   }
 
-  updateJourney(map: mapboxgl.Map, journeyGeoJSON: string): void {
-    if (!journeyGeoJSON?.length) {
-      return;
+  updateJourneyRaw(map: mapboxgl.Map, journeyGeoJSON: string): void {
+    let featureCollection: GeoJSON.FeatureCollection;
+    if (journeyGeoJSON?.length) {
+      featureCollection = JSON.parse(journeyGeoJSON) as GeoJSON.FeatureCollection;
+    } else {
+      featureCollection = this.mapService.emptyFeatureCollection;
     }
 
-    const featureCollection = JSON.parse(journeyGeoJSON) as GeoJSON.FeatureCollection;
     const routeFeatures: GeoJSON.Feature[] = [];
     const transferFeatures: GeoJSON.Feature[] = [];
 

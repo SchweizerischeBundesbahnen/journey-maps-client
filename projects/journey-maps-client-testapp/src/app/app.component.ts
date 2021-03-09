@@ -113,11 +113,15 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  journeyGeoJson: string;
+  journeyGeoJSON: string;
+  transferGeoJSON: string;
 
   ngOnInit(): void {
-    this.assetReaderService.loadAssetAsString('journey/zh-bielmett.json')
-      .subscribe(txt => this.journeyGeoJson = txt);
+    this.assetReaderService.loadAssetAsString('journey/zh-sh_waldfriedhof.json')
+      .subscribe(json => this.journeyGeoJSON = json);
+
+    this.assetReaderService.loadAssetAsString('transfer/luzern4-j.json')
+      .subscribe(json => this.transferGeoJSON = json);
   }
 
   setSelecteMarkerId(selectedMarkerId: string): void {

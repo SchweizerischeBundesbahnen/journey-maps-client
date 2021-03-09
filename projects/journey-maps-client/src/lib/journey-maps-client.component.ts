@@ -27,6 +27,7 @@ import {ResizedEvent} from 'angular-resize-event';
 import {bufferTimeOnValue} from './services/bufferTimeOnValue';
 import {MapService} from './services/map/map.service';
 import {MapJourneyService} from './services/map/map-journey.service';
+import {MapTransferService} from './services/map/map-transfer.service';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -81,7 +82,19 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Wrap all markers in view if true. */
   @Input() zoomToMarkers?: boolean;
 
+  /**
+   * GeoJSON as returned by the <code>/journey</code> operation of Journey Maps.
+   * All routes and transfers will be displayed on the map.
+   * Indoor routing is not (yet) supported.
+   */
   @Input() journeyGeoJSON: string;
+
+  /**
+   * GeoJSON as returned by the <code>/transfer</code> operation of Journey Maps.
+   * The transfer will be displayed on the map.
+   * Indoor routing is not (yet) supported.
+   */
+  @Input() transferGeoJSON: string;
 
   /** The list of markers (points) that will be displayed on the map. */
   @Input() markers: Marker[];
@@ -120,6 +133,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapService: MapService,
               private mapMarkerService: MapMarkerService,
               private mapJourneyService: MapJourneyService,
+              private mapTransferService: MapTransferService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService) {
   }
@@ -231,7 +245,15 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
 
     if (changes.journeyGeoJSON) {
-      this.executeWhenMapStyleLoaded(() => this.mapJourneyService.updateJourney(this.map, this.journeyGeoJSON));
+      this.executeWhenMapStyleLoaded(() => this.mapJourneyService.updateJourneyRaw(this.map, this.journeyGeoJSON));
+    }
+
+    if (changes.transferGeoJSON) {
+      this.executeWhenMapStyleLoaded(() => this.mapTransferService.updateTransferRaw(this.map, this.transferGeoJSON));
+    }
+
+    if (this.transferGeoJSON && this.journeyGeoJSON) {
+      console.warn('Use either transferGeoJSON or journeyGeoJSON. It does not work correctly when both properties are set.');
     }
 
     if (!this.map?.isStyleLoaded()) {
