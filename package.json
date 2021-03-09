@@ -1,7 +1,7 @@
 {
   "name": "journey-maps-client",
-  "version": "0.3.0",
-  "scripts": {
+  "version": "0.4.0",
+  "scripts":   {
     "ng": "ng",
     "start-testapp": "npm run _testapp-example && ng serve journey-maps-client-testapp",
     "start-testapp-with-remote-access": "npm run _testapp-example && ng serve journey-maps-client-testapp --host 0.0.0.0 --disable-host-check",
@@ -28,7 +28,7 @@
     "postinstall": "ngcc"
   },
   "private": true,
-  "dependencies": {
+  "dependencies":   {
     "@angular/animations": "~11.0.9",
     "@angular/cdk": "^11.0.4",
     "@angular/common": "~11.0.9",
@@ -53,7 +53,7 @@
     "tslib": "^2.1.0",
     "zone.js": "~0.10.2"
   },
-  "devDependencies": {
+  "devDependencies":   {
     "@angular-devkit/build-angular": "~0.1100.7",
     "@angular/cli": "~11.0.7",
     "@angular/compiler-cli": "~11.0.9",
