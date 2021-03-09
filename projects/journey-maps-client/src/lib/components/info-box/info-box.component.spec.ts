@@ -88,7 +88,7 @@ const createMarkerWithoutInfoBlocks = () => ({
   id: 'work',
   title: 'Office',
   position: [7.446450, 46.961409],
-  category: 'MISSED_CONNECTION',
+  category: 'WARNING',
 });
 
 const createMarkerWithInfoBlocks = () => ({

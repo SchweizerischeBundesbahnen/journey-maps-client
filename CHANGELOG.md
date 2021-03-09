@@ -4,6 +4,14 @@
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [0.3.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.2.1&sourceBranch=refs%2Ftags%2F0.3.0&targetRepoId=46287) - 2021-03-09
+
+### Added
+
 * DUSP-1177 Unless `infoBoxTemplate` is defined, only show teasers for markers containing infoBlocks
 * DUSP-1177 Clients of this component can select/unselect markers and receive events of same.
 * DUSP-1177 Hidden overflow for teaser transitions
@@ -12,6 +20,11 @@
 * DUSP-1179 Add optional `markerUrl` to Marker
 * DUSP-1179 Add optional `triggerEvent` to Marker
 * DUSP-1274 Add optional `priority` to Marker
+* DUSP-1112 Add optional `journeyGeoJSON` input parameter to display a journey on the map.\
+  (The GeoJSON is the response as returend by the `/journey` operation of Journey-Maps)
+* DUSP-1112 Add optional `transferGeoJSON` input parameter to display a transfer on the map.\
+  (The GeoJSON is the response as returend by the `/transfer` operation of Journey-Maps)
+* DUSP-1112 Use new KI map style
 
 
 ### Changed

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {AssetReaderService} from '../../services/asset-reader.service';
 
 @Component({
   selector: 'app-source-highlight',
@@ -8,19 +8,23 @@ import {HttpClient} from '@angular/common/http';
 })
 export class SourceHighlightComponent implements OnInit {
 
+  readonly sourceFiles = [
+    'example/app.component.ts.txt',
+    'example/app.component.html.txt'
+  ];
+
   sources = new Map<string, string>();
 
-  constructor(private http: HttpClient) {
+  constructor(private assetReaderService: AssetReaderService) {
   }
 
   ngOnInit(): void {
-    this.readSourceFile('app.component.html');
-    this.readSourceFile('app.component.ts');
-  }
-
-  readSourceFile(filename): void {
-    this.http.get(`assets/example/${filename}.txt`, {responseType: 'text'})
-      .subscribe(data => this.sources.set(filename, data));
+    for (const path of this.sourceFiles) {
+      this.assetReaderService.loadAssetAsString(path).subscribe(txt => {
+        const filename = path.substring(path.lastIndexOf('/') + 1, path.length - 4);
+        this.sources.set(filename, txt);
+      });
+    }
   }
 
   showTabs(): boolean {

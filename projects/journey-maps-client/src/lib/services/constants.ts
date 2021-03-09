@@ -1,24 +1,32 @@
 export class Constants {
   static readonly CLUSTER_RADIUS = 50;
 
-  static readonly MARKER_SOURCE = 'dev_him_messages';
+  static readonly MARKER_SOURCE = 'rokas-marker-source';
+  static readonly ROUTE_SOURCE = 'rokas-route-source';
+  static readonly WALK_SOURCE = 'rokas-walk-source';
 
-  static readonly LAYERS = [
-    'him-messages-circle',
-    'him-messages-cluster',
-    'him-messages-cluster-text',
-    'him-messages-markers',
-    'him-messages-markers-selected'
+  static readonly SOURCES = [
+    Constants.MARKER_SOURCE,
+    Constants.ROUTE_SOURCE,
+    Constants.WALK_SOURCE,
   ];
 
-  static readonly INFO_LAYERS = [
-    'him-messages-circle',
-    'him-messages-markers',
-    'him-messages-markers-selected'
+  static readonly MARKER_AND_CLUSTER_LAYERS = [
+    'rokas-marker-circle',
+    'rokas-marker-cluster',
+    'rokas-marker-cluster-text',
+    'rokas-marker',
+    'rokas-marker-selected'
   ];
 
-  static readonly CLUSTER_LAYER = 'him-messages-cluster';
-  static readonly MARKER_LAYER = 'him-messages-markers';
-  static readonly MARKER_SELECTED_LAYER = 'him-messages-markers-selected';
+  static readonly MARKER_LAYERS = [
+    'rokas-marker-circle',
+    'rokas-marker',
+    'rokas-marker-selected'
+  ];
+
+  static readonly CLUSTER_LAYER = 'rokas-marker-cluster';
+  static readonly MARKER_LAYER = 'rokas-marker';
+  static readonly MARKER_LAYER_SELECTED = 'rokas-marker-selected';
 
 }

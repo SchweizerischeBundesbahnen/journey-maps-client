@@ -3,8 +3,9 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {FitBoundsOptions, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapboxOptions, NavigationControl, Style} from 'mapbox-gl';
 import {map, tap} from 'rxjs/operators';
-import {Constants} from './constants';
-import {MarkerPriority} from '../model/marker-priority.enum';
+import {Constants} from '../constants';
+import {MarkerPriority} from '../../model/marker-priority.enum';
+import {MultiTouchSupport} from '../multiTouchSupport';
 
 @Injectable({
   providedIn: 'root'
@@ -113,6 +114,7 @@ export class MapInitService {
       new NavigationControl({showCompass: false}),
       'top-right'
     );
+    mapboxMap.addControl(new MultiTouchSupport());
   }
 
   private defineClusterSettings(style: Style): void {
