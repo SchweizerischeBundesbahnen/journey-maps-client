@@ -38,10 +38,7 @@ import {GlobalStylesComponent} from './components/global-styles/global-styles.co
     ReactiveFormsModule,
     AngularResizedEventModule,
   ],
-  providers: [
-    SBB_ICON_REGISTRY_PROVIDER,
-    { provide: Window, useValue: window }
-    ],
+  providers: [SBB_ICON_REGISTRY_PROVIDER],
   exports: [JourneyMapsClientComponent],
 })
 export class JourneyMapsClientModule {
