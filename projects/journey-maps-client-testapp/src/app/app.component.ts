@@ -131,4 +131,8 @@ export class AppComponent implements OnInit {
   setMapCenter(mapCenter: LngLatLike): void {
     this.mapCenter = mapCenter;
   }
+
+  setZoomLevel(zoomLevel: number): void {
+    this.zoomLevel = zoomLevel;
+  }
 }
