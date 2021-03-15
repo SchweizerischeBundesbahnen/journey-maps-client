@@ -127,4 +127,8 @@ export class AppComponent implements OnInit {
   setSelecteMarkerId(selectedMarkerId: string): void {
     this.selectedMarkerId = selectedMarkerId;
   }
+
+  setMapCenter(mapCenter: LngLatLike): void {
+    this.mapCenter = mapCenter;
+  }
 }

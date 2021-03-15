@@ -9,7 +9,8 @@
       [markers]="markers"
       [journeyGeoJSON]="journeyGeoJSON"
       [(zoomLevel)]="zoomLevel"
-      [(mapCenter)]="mapCenter"
+      [mapCenter]="mapCenter"
+      (mapCenterChange)="setMapCenter($event)"
       [infoBoxTemplate]=""
       [(selectedMarkerId)]="selectedMarkerId"
     >
