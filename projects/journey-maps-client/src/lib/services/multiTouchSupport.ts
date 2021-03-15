@@ -8,18 +8,19 @@ export class MultiTouchSupport {
   private TOUCH_ZOOM_FACTOR = 0.6; // zoom sensibility
   private TOUCH_ZOOM_THRESHOLD = 0.01; // zoom activation
 
-  constructor() {
+  constructor(private allowOneFingerPan?: boolean) {
     this.state = {
       panStart: { x: 0, y: 0 },
       distanceStart: 0,
     };
     this.touchStart = this.touchStart.bind(this);
     this.touchMove = this.touchMove.bind(this);
+    this.allowOneFingerPan = allowOneFingerPan;
   }
 
   touchStart(event): void {
     if (event.touches.length !== 2) {
-      if (event.touches.length === 1) {
+      if (event.touches.length === 1 && this.allowOneFingerPan) {
         event.touches[1] = event.touches[0]; // make 2 fingers out of 1
       } else {
         return;
@@ -42,7 +43,7 @@ export class MultiTouchSupport {
 
   touchMove(event): void {
     if (event.touches.length !== 2) {
-      if (event.touches.length === 1) {
+      if (event.touches.length === 1 && this.allowOneFingerPan) {
         event.touches[1] = event.touches[0]; // make 2 fingers out of 1
       } else {
         return;

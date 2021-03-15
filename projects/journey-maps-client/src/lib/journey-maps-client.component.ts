@@ -143,7 +143,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
-    this.map.dragPan.disable();
+    if (!this.allowOneFingerPan) {
+      this.map.dragPan.disable();
+    }
     this.touchEventCollector.next(event);
   }
 
@@ -282,7 +284,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.zoomLevel,
       this.mapCenter,
       this.boundingBox,
-      this.getMarkersBounds
+      this.getMarkersBounds,
+      this.allowOneFingerPan,
     ).subscribe(
       m => {
         this.map = m;
@@ -295,21 +298,19 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       }
     );
 
-    if (!this.allowOneFingerPan) {
-      this.touchEventCollector.pipe(
-        bufferTimeOnValue(200),
-        takeUntil(this.destroyed)
-      ).subscribe(touchEvents => {
+    this.touchEventCollector.pipe(
+      bufferTimeOnValue(200),
+      takeUntil(this.destroyed)
+    ).subscribe(touchEvents => {
 
-        const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
-        const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
+      const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
+      const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
 
-        if (!(containsTwoFingerTouch || containsTouchEnd)) {
-          this.touchOverlayStyleClass = 'is_visible';
-          this.cd.detectChanges();
-        }
-      });
-    }
+      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.allowOneFingerPan) {
+        this.touchOverlayStyleClass = 'is_visible';
+        this.cd.detectChanges();
+      }
+    });
   }
 
   ngOnDestroy(): void {
