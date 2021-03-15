@@ -46,7 +46,6 @@ export class MapInitService {
     mapCenter?: mapboxgl.LngLatLike,
     boundingBox?: LngLatBoundsLike,
     markersBounds?: LngLatBoundsLike,
-    allowOneFingerPan?: boolean,
   ): Observable<mapboxgl.Map> {
     const mapboxMap = new MapboxMap(this.createOptions(mapNativeElement, zoomLevel, mapCenter, boundingBox));
 
@@ -55,7 +54,7 @@ export class MapInitService {
     }
 
     this.translateControlLabels(mapboxMap, language);
-    this.addControls(mapboxMap, allowOneFingerPan);
+    this.addControls(mapboxMap);
 
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
     mapboxMap.dragRotate.disable();
@@ -110,14 +109,12 @@ export class MapInitService {
     );
   }
 
-  private addControls(mapboxMap: mapboxgl.Map, allowOneFingerPan: boolean): void {
+  private addControls(mapboxMap: mapboxgl.Map): void {
     mapboxMap.addControl(
       new NavigationControl({showCompass: false}),
       'top-right'
     );
-    if (!allowOneFingerPan) {
-      mapboxMap.addControl(new MultiTouchSupport());
-    }
+    mapboxMap.addControl(new MultiTouchSupport());
   }
 
   private defineClusterSettings(style: Style): void {

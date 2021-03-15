@@ -143,9 +143,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
-    if (!this.allowOneFingerPan) {
-      this.map.dragPan.disable();
-    }
+    this.map.dragPan.disable();
     this.touchEventCollector.next(event);
   }
 

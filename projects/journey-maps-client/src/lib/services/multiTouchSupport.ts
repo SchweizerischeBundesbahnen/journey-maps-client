@@ -18,7 +18,13 @@ export class MultiTouchSupport {
   }
 
   touchStart(event): void {
-    if (event.touches.length !== 2) { return; }
+    if (event.touches.length !== 2) {
+      if (event.touches.length === 1) {
+        event.touches[1] = event.touches[0]; // make 2 fingers out of 1
+      } else {
+        return;
+      }
+    }
 
     let x = 0;
     let y = 0;
@@ -35,7 +41,13 @@ export class MultiTouchSupport {
   }
 
   touchMove(event): void {
-    if (event.touches.length !== 2) { return; }
+    if (event.touches.length !== 2) {
+      if (event.touches.length === 1) {
+        event.touches[1] = event.touches[0]; // make 2 fingers out of 1
+      } else {
+        return;
+      }
+    }
 
     this.handleTouchPan(event);
     this.handleTouchZoom(event);
