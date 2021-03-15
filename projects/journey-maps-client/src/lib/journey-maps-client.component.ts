@@ -100,6 +100,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Input() markers: Marker[];
   private _selectedMarker: Marker;
 
+  /** By default, you get a message-overlay if you try to pan with one finger */
+  @Input() allowOneFingerPan = false;
+
   /**
    * This event is emitted whenever the zoom level of the map has changed.
    */
@@ -140,7 +143,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
-    // this.map.dragPan.disable();
+    if (!this.allowOneFingerPan) {
+      this.map.dragPan.disable();
+    }
     this.touchEventCollector.next(event);
   }
 
@@ -292,19 +297,21 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       }
     );
 
-    // this.touchEventCollector.pipe(
-    //   bufferTimeOnValue(200),
-    //   takeUntil(this.destroyed)
-    // ).subscribe(touchEvents => {
-    //
-    //   const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
-    //   const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
-    //
-    //   if (!(containsTwoFingerTouch || containsTouchEnd)) {
-    //     this.touchOverlayStyleClass = 'is_visible';
-    //     this.cd.detectChanges();
-    //   }
-    // });
+    if (!this.allowOneFingerPan) {
+      this.touchEventCollector.pipe(
+        bufferTimeOnValue(200),
+        takeUntil(this.destroyed)
+      ).subscribe(touchEvents => {
+
+        const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
+        const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
+
+        if (!(containsTwoFingerTouch || containsTouchEnd)) {
+          this.touchOverlayStyleClass = 'is_visible';
+          this.cd.detectChanges();
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {

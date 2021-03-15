@@ -34,6 +34,9 @@ export class AppComponent implements OnInit {
   // Can be used instead of zoomLevel and mapCenter
   zoomToMarkers = true;
 
+  // Can be used to disable message overlay enforcing two-finger panning of map
+  allowOneFingerPan = false;
+
   // Call this.rokasClient.updateMarkers() when markers have been added/removed.
   markers: Marker[] = [
     {
