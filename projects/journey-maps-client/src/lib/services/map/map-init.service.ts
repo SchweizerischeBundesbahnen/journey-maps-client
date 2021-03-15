@@ -45,7 +45,7 @@ export class MapInitService {
     zoomLevel?: number,
     mapCenter?: mapboxgl.LngLatLike,
     boundingBox?: LngLatBoundsLike,
-    markersBounds?: LngLatBoundsLike,
+    markersBounds?: LngLatBoundsLike
   ): Observable<mapboxgl.Map> {
     const mapboxMap = new MapboxMap(this.createOptions(mapNativeElement, zoomLevel, mapCenter, boundingBox));
 

@@ -130,12 +130,4 @@ export class AppComponent implements OnInit {
   setSelecteMarkerId(selectedMarkerId: string): void {
     this.selectedMarkerId = selectedMarkerId;
   }
-
-  setMapCenter(mapCenter: LngLatLike): void {
-    this.mapCenter = mapCenter;
-  }
-
-  setZoomLevel(zoomLevel: number): void {
-    this.zoomLevel = zoomLevel;
-  }
 }

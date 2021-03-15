@@ -8,10 +8,8 @@
       apiKey="e500c71b8c83c1cfb2170608582ae9c8"
       [markers]="markers"
       [journeyGeoJSON]="journeyGeoJSON"
-      [zoomLevel]="zoomLevel"
-      (zoomLevelChange)="setZoomLevel($event)"
-      [mapCenter]="mapCenter"
-      (mapCenterChange)="setMapCenter($event)"
+      [(zoomLevel)]="zoomLevel"
+      [(mapCenter)]="mapCenter"
       [infoBoxTemplate]=""
       [(selectedMarkerId)]="selectedMarkerId"
     >
