@@ -4,6 +4,8 @@
 
 ### Added
 
+* DUSP-1112 Add optional `boundingBoxPadding` input parameter
+
 ### Changed
 
 ### Fixed

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Geometry, Point} from 'geojson';
-import {FlyToOptions, LngLat, LngLatBounds, LngLatBoundsLike, LngLatLike, Map as MapboxMap} from 'mapbox-gl';
+import {FlyToOptions, LngLat, LngLatBoundsLike, LngLatLike, Map as MapboxMap} from 'mapbox-gl';
 import {Constants} from '../constants';
 
 @Injectable({providedIn: 'root'})
@@ -14,13 +14,11 @@ export class MapService {
   constructor() {
   }
 
-  moveMap(map: MapboxMap, center: LngLatLike, zoomLevel: number, boundingBox: LngLatBoundsLike, markersBounds: LngLatBounds): void {
+  moveMap(map: MapboxMap, center: LngLatLike, zoomLevel: number, boundingBox: LngLatBoundsLike, boundingBoxPadding: number): void {
     if (zoomLevel || center) {
       this.centerMap(map, center, zoomLevel);
     } else if (boundingBox) {
-      map.fitBounds(boundingBox);
-    } else if (markersBounds) {
-      map.fitBounds(markersBounds, {padding: 40}); // TODO DKU duplicate :-/
+      map.fitBounds(boundingBox, {padding: boundingBoxPadding});
     }
   }
 

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {FitBoundsOptions, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapboxOptions, NavigationControl, Style} from 'mapbox-gl';
+import {LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapboxOptions, NavigationControl, Style} from 'mapbox-gl';
 import {map, tap} from 'rxjs/operators';
 import {Constants} from '../constants';
 import {MarkerPriority} from '../../model/marker-priority.enum';
@@ -15,7 +15,6 @@ export class MapInitService {
   private readonly defaultZoom = 7.5;
   private readonly defaultMapCenter: LngLatLike = [7.299265, 47.072120];
   private readonly defaultBoundingBox: LngLatBoundsLike = [[5.7, 47.9], [10.6, 45.7]]; // CH bounds;
-  private readonly defaultBoundsPadding: FitBoundsOptions = {padding: 40, duration: 0};
   private readonly controlLabels = {
     de: {
       'NavigationControl.ZoomIn': 'Hineinzoomen',
@@ -45,13 +44,9 @@ export class MapInitService {
     zoomLevel?: number,
     mapCenter?: mapboxgl.LngLatLike,
     boundingBox?: LngLatBoundsLike,
-    markersBounds?: LngLatBoundsLike
+    boundingBoxPadding?: number
   ): Observable<mapboxgl.Map> {
-    const mapboxMap = new MapboxMap(this.createOptions(mapNativeElement, zoomLevel, mapCenter, boundingBox));
-
-    if (!zoomLevel && !mapCenter && !boundingBox) {
-      this.fitBoundsToMarkers(mapboxMap, markersBounds);
-    }
+    const mapboxMap = new MapboxMap(this.createOptions(mapNativeElement, zoomLevel, mapCenter, boundingBox, boundingBoxPadding));
 
     this.translateControlLabels(mapboxMap, language);
     this.addControls(mapboxMap);
@@ -67,7 +62,12 @@ export class MapInitService {
     );
   }
 
-  private createOptions(container: any, zoomLevel?: number, mapCenter?: LngLatLike, boundingBox?: LngLatBoundsLike): MapboxOptions {
+  private createOptions(
+    container: any,
+    zoomLevel?: number,
+    mapCenter?: LngLatLike,
+    boundingBox?: LngLatBoundsLike,
+    boundingBoxPadding?: number): MapboxOptions {
     const options: mapboxgl.MapboxOptions = {
       container,
       minZoom: 1,
@@ -82,17 +82,12 @@ export class MapInitService {
       options.center = mapCenter ?? this.defaultMapCenter;
     } else if (boundingBox) {
       options.bounds = boundingBox;
+      options.fitBoundsOptions = {padding: boundingBoxPadding};
     } else {
       options.bounds = this.defaultBoundingBox;
     }
 
     return options;
-  }
-
-  private fitBoundsToMarkers(mapboxMap: MapboxMap, markersBounds?: LngLatBoundsLike): void {
-    if (markersBounds) {
-      mapboxMap.fitBounds(markersBounds, this.defaultBoundsPadding);
-    }
   }
 
   private fetchStyle(styleUrl: string): Observable<Style> {
