@@ -51,6 +51,7 @@
           ]
         },
       ];
+      map.allowOneFingerPan = true; // prevent overlay asking for the use of two fingers
 
       document.addEventListener('DOMContentLoaded', function (event) {
         document.getElementById('container').appendChild(map);
@@ -58,7 +59,7 @@
         document.getElementById('selected-marker-id').appendChild(document.createTextNode(undefined));
       });
 
-      map.addEventListener('zoomLevelChange', function (event) {
+      map.addEventListener('zoomLevelChanged', function (event) {
         const zoomLevelSpan = document.getElementById('zoom-level');
         zoomLevelSpan.replaceChild(document.createTextNode(event.detail), zoomLevelSpan.firstChild);
       });

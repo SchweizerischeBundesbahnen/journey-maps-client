@@ -25,7 +25,9 @@ export class AppComponent implements OnInit {
 
   // Initial map position
   zoomLevel = 7.5;
+  zoomLevelChanged: number;
   mapCenter: LngLatLike = [7.4391326448171196, 46.948834547463086];
+  mapCenterChanged: LngLatLike;
   selectedMarkerId: string;
 
   // Can be used instead of zoomLevel and mapCenter
@@ -33,6 +35,9 @@ export class AppComponent implements OnInit {
 
   // Can be used instead of zoomLevel and mapCenter
   zoomToMarkers = true;
+
+  // Can be used to disable message overlay enforcing two-finger panning of map
+  allowOneFingerPan = false;
 
   // Call this.rokasClient.updateMarkers() when markers have been added/removed.
   markers: Marker[] = [
@@ -122,6 +127,9 @@ export class AppComponent implements OnInit {
 
     this.assetReaderService.loadAssetAsString('transfer/luzern4-j.json')
       .subscribe(json => this.transferGeoJSON = json);
+
+    this.zoomLevelChanged = this.zoomLevel;
+    this.mapCenterChanged = this.mapCenter;
   }
 
   setSelecteMarkerId(selectedMarkerId: string): void {

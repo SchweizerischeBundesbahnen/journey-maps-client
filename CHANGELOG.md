@@ -17,6 +17,8 @@
 ### Changed
 
 ### Fixed
+* DUSP-1314 Make 1-Finger panning or overlay configurable
+* DUSP-1314 Fix disco effect where map jumps with multiple map pan/zoom events in succession by disabling two-way binding.
 
 * Lazy loading of JourneyMapsClientModule. (No imports of BrowserModule & BrowserAnimationsModule)
 

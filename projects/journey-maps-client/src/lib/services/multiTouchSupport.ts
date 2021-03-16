@@ -1,5 +1,6 @@
 // https://www.npmjs.com/package/mapbox-gl-multitouch
 // https://github.com/mapbox/mapbox-gl-js/issues/2618
+// https://github.com/Pitbi/mapbox-gl-multitouch
 export class MultiTouchSupport {
 
   private state: any;
