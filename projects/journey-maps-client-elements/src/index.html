@@ -58,7 +58,7 @@
         document.getElementById('selected-marker-id').appendChild(document.createTextNode(undefined));
       });
 
-      map.addEventListener('zoomLevelChange', function (event) {
+      map.addEventListener('zoomLevelChanged', function (event) {
         const zoomLevelSpan = document.getElementById('zoom-level');
         zoomLevelSpan.replaceChild(document.createTextNode(event.detail), zoomLevelSpan.firstChild);
       });

@@ -9,9 +9,9 @@
       [markers]="markers"
       [journeyGeoJSON]="journeyGeoJSON"
       [zoomLevel]="zoomLevel"
-      (zoomLevelChange)="setZoomLevelChange($event)"
+      (zoomLevelChanged)="setZoomLevelChanged($event)"
       [mapCenter]="mapCenter"
-      (mapCenterChange)="setMapCenterChange($event)"
+      (mapCenterChanged)="setMapCenterChanged($event)"
       [infoBoxTemplate]=""
       [(selectedMarkerId)]="selectedMarkerId"
       [allowOneFingerPan]="allowOneFingerPan"
@@ -38,8 +38,8 @@
         >unselect all Markers</button>
       </li>
       <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span></li>
-      <li style="list-style: circle;">Zoom Level: {{zoomLevelChange}}</li>
-      <li style="list-style: circle;">Map center: {{mapCenterChange}}</li>
+      <li style="list-style: circle;">Zoom Level: {{zoomLevelChanged}}</li>
+      <li style="list-style: circle;">Map center: {{mapCenterChanged}}</li>
       <li style="list-style: circle;">Allow moving the map with one finger: {{allowOneFingerPan}}</li>
     </ul>
   </div>

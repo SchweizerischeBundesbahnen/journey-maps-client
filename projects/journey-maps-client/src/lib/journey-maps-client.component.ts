@@ -106,12 +106,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /**
    * This event is emitted whenever the zoom level of the map has changed.
    */
-  @Output() zoomLevelChange = new EventEmitter<number>();
+  @Output() zoomLevelChanged = new EventEmitter<number>();
   private zoomLevelChangeDebouncer = new Subject<void>();
   /**
    * This event is emitted whenever the center of the map has changed. (Whenever the map has been moved)
    */
-  @Output() mapCenterChange = new EventEmitter<LngLatLike>();
+  @Output() mapCenterChanged = new EventEmitter<LngLatLike>();
   /**
    * This event is emitted whenever a marker, with property triggerEvent, is selected or unselected.
    */
@@ -360,12 +360,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.zoomLevelChangeDebouncer.pipe(
       debounceTime(200),
       takeUntil(this.destroyed)
-    ).subscribe(() => this.zoomLevelChange.emit(this.map.getZoom()));
+    ).subscribe(() => this.zoomLevelChanged.emit(this.map.getZoom()));
 
     this.mapCenterChangeDebouncer.pipe(
       debounceTime(200),
       takeUntil(this.destroyed)
-    ).subscribe(() => this.mapCenterChange.emit(this.map.getCenter()));
+    ).subscribe(() => this.mapCenterChanged.emit(this.map.getCenter()));
   }
 
   @HostListener('window:resize')
