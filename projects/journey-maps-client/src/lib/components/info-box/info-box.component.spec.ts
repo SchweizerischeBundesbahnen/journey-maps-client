@@ -5,6 +5,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ButtonInfoBlock} from '../../model/infoblock/button-info-block';
 import {By} from '@angular/platform-browser';
 import {JourneyMapsClientModule} from '../../journey-maps-client.module';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('InfoBoxComponent', () => {
   let component: InfoBoxComponent;
@@ -13,7 +14,7 @@ describe('InfoBoxComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [JourneyMapsClientModule],
+      imports: [JourneyMapsClientModule, NoopAnimationsModule],
     });
     fixture = TestBed.createComponent(InfoBoxComponent);
     component = fixture.componentInstance;
