@@ -115,7 +115,9 @@ export class MapInitService {
       new NavigationControl({showCompass: false}),
       'top-right'
     );
-    mapboxMap.addControl(new MultiTouchSupport(allowOneFingerPan));
+    if (!allowOneFingerPan) {
+      mapboxMap.addControl(new MultiTouchSupport());
+    }
   }
 
   private defineClusterSettings(style: Style): void {

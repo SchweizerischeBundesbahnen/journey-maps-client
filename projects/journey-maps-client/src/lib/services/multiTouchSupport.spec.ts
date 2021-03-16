@@ -7,7 +7,7 @@ describe('MultiTouchSupport', () => {
   const initialZoom = 11;
 
   beforeEach(() => {
-    service = new MultiTouchSupport(false);
+    service = new MultiTouchSupport();
     map = {
       panBy: jasmine.createSpy(),
       setZoom: jasmine.createSpy(),

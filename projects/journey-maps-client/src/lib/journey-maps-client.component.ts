@@ -284,8 +284,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.zoomLevel,
       this.mapCenter,
       this.boundingBox,
-      this.getMarkersBounds,
-      this.allowOneFingerPan,
+      this.getMarkersBounds
     ).subscribe(
       m => {
         this.map = m;
