@@ -78,6 +78,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   /** The initial bounding box of the map. */
   @Input() boundingBox?: LngLatBoundsLike;
+  /** The amount of padding in pixels to add to the given boundingBox. */
+  @Input() boundingBoxPadding = 0;
 
   /** Wrap all markers in view if true. */
   @Input() zoomToMarkers?: boolean;
@@ -283,8 +285,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       styleUrl,
       this.zoomLevel,
       this.mapCenter,
-      this.boundingBox,
-      this.getMarkersBounds
+      this.boundingBox ?? this.getMarkersBounds,
+      this.boundingBox ? this.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING
     ).subscribe(
       m => {
         this.map = m;
@@ -354,8 +356,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     ).subscribe(() => this.mapService.moveMap(this.map,
       this.mapCenter,
       this.zoomLevel,
-      this.boundingBox,
-      this.getMarkersBounds));
+      this.boundingBox ?? this.getMarkersBounds,
+      this.boundingBox ? this.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING));
 
     this.zoomLevelChangeDebouncer.pipe(
       debounceTime(200),

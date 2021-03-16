@@ -4,11 +4,21 @@
 
 ### Added
 
+* DUSP-1112 Add optional `boundingBoxPadding` input parameter
+
 ### Changed
 
 ### Fixed
 * DUSP-1314 Make 1-Finger panning or overlay configurable
 * DUSP-1314 Fix disco effect where map jumps with multiple map pan/zoom events in succession by disabling two-way binding.
+
+* Lazy loading of JourneyMapsClientModule. (No imports of BrowserModule & BrowserAnimationsModule)
+
+## [0.3.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.3.0&sourceBranch=refs%2Ftags%2F0.3.1&targetRepoId=46287) - 2021-03-15
+
+### Fixed
+
+* Panning with two fingers
 
 ## [0.3.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.2.1&sourceBranch=refs%2Ftags%2F0.3.0&targetRepoId=46287) - 2021-03-09
 
