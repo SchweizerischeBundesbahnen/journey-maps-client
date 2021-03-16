@@ -4,6 +4,14 @@
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [0.4.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.3.1&sourceBranch=refs%2Ftags%2F0.4.0&targetRepoId=46287) - 2021-03-16
+
+### Added
+
 * DUSP-1112 Add optional `boundingBoxPadding` input parameter
 
 ### Changed
