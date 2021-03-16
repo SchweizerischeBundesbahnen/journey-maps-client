@@ -1,5 +1,6 @@
 export class Constants {
   static readonly CLUSTER_RADIUS = 50;
+  static readonly MARKER_BOUNDS_PADDING = 40;
 
   static readonly MARKER_SOURCE = 'rokas-marker-source';
   static readonly ROUTE_SOURCE = 'rokas-route-source';
