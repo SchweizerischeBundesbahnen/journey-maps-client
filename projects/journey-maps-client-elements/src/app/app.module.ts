@@ -1,14 +1,14 @@
-import {BrowserModule} from '@angular/platform-browser';
 import {CUSTOM_ELEMENTS_SCHEMA, Injector, NgModule} from '@angular/core';
 import {JourneyMapsClientModule} from '../../../journey-maps-client/src/lib/journey-maps-client.module';
 import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 import {createCustomElement} from '@angular/elements';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 @NgModule({
   declarations: [],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     JourneyMapsClientModule,
   ],
   providers: [],
