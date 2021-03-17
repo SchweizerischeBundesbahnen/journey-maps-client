@@ -6,7 +6,7 @@ export class MultiTouchSupport {
   private state: any;
   private map: any;
   private container: any;
-  private TOUCH_ZOOM_FACTOR = 0.6; // zoom sensibility
+  private TOUCH_ZOOM_FACTOR = 0.2; // zoom sensibility
   private TOUCH_ZOOM_THRESHOLD = 0.01; // zoom activation
 
   constructor() {
