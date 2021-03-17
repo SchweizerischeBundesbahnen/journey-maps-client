@@ -1,6 +1,3 @@
-@import 'https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css';
-@import '~@sbb-esta/angular-public/styles.scss';
-
 :host, .map, .container {
   height: 100%;
 }
@@ -18,7 +15,8 @@
 }
 
 .map {
-  position: absolute;
+  // important is necessary for Safari
+  position: absolute !important;
   top: 0;
   left: 0;
   width: 100%;
@@ -43,24 +41,24 @@ rokas-search-bar {
   height: 100%;
   pointer-events: none;
   transition: opacity .3s ease-in-out;
-  opacity: 0;
-  background-color: rgba(0,0,0,.6);
+  opacity: 0 !important;
+  background-color: rgba(0, 0, 0, .6);
   z-index: 4;
 }
 
 .mod_map_container_mobile_overlay.is_visible {
-  opacity: .9999;
+  opacity: .9999 !important;
 }
 
 .mod_map_container_mobile_overlay_text {
   color: #fff;
-  font-family: SBBWeb Bold,Helvetica Neue,Helvetica,Arial,sans-serif;
+  font-family: SBBWeb Bold, Helvetica Neue, Helvetica, Arial, sans-serif;
   font-size: 1.4em;
   line-height: 1.4;
   text-align: center;
   padding: 0 1.6em;
   margin-top: .66667em;
-  text-shadow: 0 0.06667em 0.53333em rgba(0,0,0,.4);
+  text-shadow: 0 0.06667em 0.53333em rgba(0, 0, 0, .4);
 }
 
 .mod_map_container_mobile_overlay_icon_wrapper {
@@ -71,7 +69,7 @@ rokas-search-bar {
   height: 4.26667em;
   background: #fff;
   border-radius: 50%;
-  box-shadow: 0 0.06667em 0.53333em rgba(0,0,0,.4);
+  box-shadow: 0 0.06667em 0.53333em rgba(0, 0, 0, .4);
 }
 
 svg.mod_map_container_mobile_overlay_icon {
