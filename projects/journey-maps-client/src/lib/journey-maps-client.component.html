@@ -5,7 +5,7 @@
   ></rokas-search-bar>
 
   <div class="map-container" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
-    <div class="mod_map_container_mobile_overlay" [ngClass]="touchOverlayStyleClass">
+    <div class="mod_map_container_mobile_overlay" [ngClass]="touchOverlayStyleClass" style="opacity: 0">
 					<span class="mod_map_container_mobile_overlay_icon_wrapper">
 						<svg class="mod_svgsprite_icon mod_map_container_mobile_overlay_icon" focusable="false">
               <g transform="scale(2)">

@@ -44,13 +44,13 @@ rokas-search-bar {
   height: 100%;
   pointer-events: none;
   transition: opacity .3s ease-in-out;
-  opacity: 0;
+  opacity: 0 !important;
   background-color: rgba(0, 0, 0, .6);
   z-index: 4;
 }
 
 .mod_map_container_mobile_overlay.is_visible {
-  opacity: .9999;
+  opacity: .9999 !important;
 }
 
 .mod_map_container_mobile_overlay_text {
