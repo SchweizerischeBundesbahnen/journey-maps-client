@@ -8,7 +8,14 @@
 
 ### Fixed
 
-* DUSP-1314 Make 1-Finger panning or overlay configurable
+## [0.5.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.4.0&sourceBranch=refs%2Ftags%2F0.5.0&targetRepoId=46287) - 2021-03-17
+
+### Added
+
+* DUSP-1314 Make 1-Finger panning or overlay configurable (`allowOneFingerPan` input parameter)
+
+### Fixed
+
 * DUSP-1314 Fix disco effect where map jumps with multiple map pan/zoom events in succession by disabling two-way
   binding.
 * Initial rendering in Safari
@@ -18,8 +25,6 @@
 ### Added
 
 * DUSP-1112 Add optional `boundingBoxPadding` input parameter
-
-### Changed
 
 ### Fixed
 
