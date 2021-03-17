@@ -8,6 +8,11 @@
 
 ### Fixed
 
+* DUSP-1314 Make 1-Finger panning or overlay configurable
+* DUSP-1314 Fix disco effect where map jumps with multiple map pan/zoom events in succession by disabling two-way
+  binding.
+* Initial rendering in Safari
+
 ## [0.4.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.3.1&sourceBranch=refs%2Ftags%2F0.4.0&targetRepoId=46287) - 2021-03-16
 
 ### Added
@@ -17,8 +22,6 @@
 ### Changed
 
 ### Fixed
-* DUSP-1314 Make 1-Finger panning or overlay configurable
-* DUSP-1314 Fix disco effect where map jumps with multiple map pan/zoom events in succession by disabling two-way binding.
 
 * Lazy loading of JourneyMapsClientModule. (No imports of BrowserModule & BrowserAnimationsModule)
 
