@@ -8,6 +8,11 @@
 
 ### Fixed
 
+## [0.5.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.5.0&sourceBranch=refs%2Ftags%2F0.5.1&targetRepoId=46287) - 2021-03-17
+
+### Fixed
+* DUSP-1314 only use multiTouchSupport.ts when overlay is active.
+
 ## [0.5.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.4.0&sourceBranch=refs%2Ftags%2F0.5.0&targetRepoId=46287) - 2021-03-17
 
 ### Added
