@@ -59,7 +59,7 @@ describe('MultiTouchSupport', () => {
 
     // then
     expectPanByToHaveBeenCalledWithNearly([0, 0], 0);
-    expectSetZoomToHaveBeenCalledWithNearly(11.132, 3);
+    expectSetZoomToHaveBeenCalledWithNearly(11.044, 3);
   });
 
   it('pans and zooms correctly', () => {
@@ -73,7 +73,7 @@ describe('MultiTouchSupport', () => {
 
     // then
     expectPanByToHaveBeenCalledWithNearly([-0.02, -0.02], 2); // the average of finger 1 and finger 2 moves
-    expectSetZoomToHaveBeenCalledWithNearly(11.132, 3);
+    expectSetZoomToHaveBeenCalledWithNearly(11.044, 3);
   });
 
   it('pans and zooms correctly in multiple steps', () => {
@@ -95,7 +95,7 @@ describe('MultiTouchSupport', () => {
 
     // then
     expectPanByToHaveBeenCalledWithNearly([0.01, 0.01], 2); // the average of finger 1 and finger 2 moves
-    expectSetZoomToHaveBeenCalledWithNearly(11.132, 3);
+    expectSetZoomToHaveBeenCalledWithNearly(11.044, 3);
   });
 
   it('doesn\'t pan or zoom if fingers only rotate', () => {
@@ -137,6 +137,6 @@ describe('MultiTouchSupport', () => {
 
     // then
     expectPanByToHaveBeenCalledWithNearly([-0.0255, -0.0255], 4); // the average of finger 1 and finger 2 moves
-    expectSetZoomToHaveBeenCalledWithNearly(11.0726, 4);
+    expectSetZoomToHaveBeenCalledWithNearly(11.0242, 4);
   });
 });
