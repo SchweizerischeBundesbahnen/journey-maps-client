@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Map as MapboxMap} from 'mapbox-gl';
 import {Subject} from 'rxjs';
-  import {takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'rokas-level-switch',
@@ -30,5 +30,9 @@ export class LevelSwitchComponent implements OnInit, OnDestroy {
   private onMapReady(map: MapboxMap): void {
     this.map = map;
     console.log('map style was loaded:', this.map.getStyle());
+  }
+
+  switchLevel(level: number): void {
+    console.log('level switch:', level);
   }
 }
