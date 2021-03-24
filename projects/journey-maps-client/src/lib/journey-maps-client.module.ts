@@ -12,6 +12,7 @@ import {SearchBarComponent} from './components/search-bar/search-bar.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {AngularResizedEventModule} from 'angular-resize-event';
 import {GlobalStylesComponent} from './components/global-styles/global-styles.component';
+import { LevelSwitchComponent } from './components/level-switch/level-switch.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {GlobalStylesComponent} from './components/global-styles/global-styles.co
     ButtonInfoBoxComponent,
     HtmlInfoBoxComponent,
     SearchBarComponent,
-    GlobalStylesComponent
+    GlobalStylesComponent,
+    LevelSwitchComponent
   ],
   imports: [
     CommonModule,

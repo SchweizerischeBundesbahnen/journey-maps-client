@@ -77,3 +77,10 @@ svg.mod_map_container_mobile_overlay_icon {
   height: 3.4em;
   fill: #767676;
 }
+
+.map-widgets {
+  position: absolute;
+  top: 80px;
+  right: 0;
+  z-index: 2;
+}

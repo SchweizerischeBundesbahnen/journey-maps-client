@@ -127,6 +127,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private layerClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private styleLoaded = new ReplaySubject(1);
   private mapParameterChanged = new Subject<void>();
+  mapReady = new ReplaySubject<MapboxMap>(1);
 
   // visible for testing
   touchEventCollector = new Subject<TouchEvent>();
@@ -294,7 +295,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         if (this.map.isStyleLoaded()) {
           this.styleLoaded.next();
         } else {
-          this.map.on('style.load', () => this.styleLoaded.next());
+          this.map.on('styledata', () => this.styleLoaded.next());
         }
         this.executeWhenMapStyleLoaded(() => this.onStyleLoaded());
       }
@@ -383,6 +384,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private onStyleLoaded(): void {
+    this.mapReady.next(this.map);
+
     this.map.resize();
     this.mapService.verifySources(this.map);
     for (const layer of Constants.MARKER_AND_CLUSTER_LAYERS) {

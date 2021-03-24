@@ -27,6 +27,12 @@
       [infoBoxTemplate]="infoBoxTemplate"
       [attr.aria-live]="'polite'"
     ></rokas-info-box>
-    <div class="map" (resized)="onResized($event)" #map></div>
+      <div class="map-widgets">
+          <rokas-level-switch
+                  [levels]="[2,1,0,-1,-2,-4]"
+                  [mapReady]="mapReady"
+          ></rokas-level-switch>
+      </div>
+      <div class="map" (resized)="onResized($event)" #map></div>
   </div>
 </div>
