@@ -62,7 +62,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * Overwrite this value if you want to use a style from a different source.
    * Actually you should not need this.
    */
-  @Input() styleUrl = 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}';
+  // @Input() styleUrl = 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}';
+  @Input() styleUrl = 'https://maps.style-dev-rokas.geops.io/styles/base_bright_v2_ki/style.json?key=tu3yoodayei9ohx3Ohze';
 
   /** If the search bar - to filter markers - should be enabled or not. */
   @Input() enableSearchBar = true;

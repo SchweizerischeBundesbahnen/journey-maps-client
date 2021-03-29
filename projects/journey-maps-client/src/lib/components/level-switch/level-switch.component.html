@@ -1,4 +1,4 @@
-<div class="level-switch-buttons-container" *ngIf="levels?.length>0">
+<div class="level-switch-buttons-container" *ngIf="mapIsReady" @fade>
     <ng-container *ngFor="let level of levels">
         <div class="level-switch-button">
             <div (click)="switchLevel(level)" class="level-switch-button-content">{{level}}</div>
