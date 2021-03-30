@@ -72,7 +72,7 @@ export class MapInitService {
     const options: mapboxgl.MapboxOptions = {
       container,
       minZoom: 1,
-      maxZoom: 18,
+      maxZoom: 23, /* same as in mobile-clients */
       scrollZoom: true,
       dragRotate: false,
       fadeDuration: 10
