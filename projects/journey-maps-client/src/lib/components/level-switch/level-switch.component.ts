@@ -24,11 +24,13 @@ import {MapLayerFilterService} from './services/map-layer-filter.service';
 })
 export class LevelSwitchComponent implements OnInit, OnDestroy {
   @Input() mapReady: Subject<MapboxMap> = new ReplaySubject<mapboxgl.Map>(1);
+  // levels could be configurable or dynamically calculated by current map-extent in the future
   levels = [2, 1, 0, -1, -2, -4];
   selectedLevel: number;
-  private defaultLevel = 0;
+  private readonly defaultLevel = 0;
+  // same minZoom as in Android and iOS map
+  private readonly levelButtonMinMapZoom = 15;
   private zoomChanged = new Subject<number>();
-  private LEVEL_BUTTON_MIN_MAP_ZOOM = 15;
   private mapIsReady: boolean;
   private destroyed = new Subject<void>();
   private map?: mapboxgl.Map;
@@ -65,7 +67,7 @@ export class LevelSwitchComponent implements OnInit, OnDestroy {
   }
 
   get isVisible(): boolean {
-    return this.mapIsReady && this.map?.getZoom() >= this.LEVEL_BUTTON_MIN_MAP_ZOOM;
+    return this.mapIsReady && this.map?.getZoom() >= this.levelButtonMinMapZoom;
   }
 
   private onMapReady(map: MapboxMap): void {
@@ -81,7 +83,7 @@ export class LevelSwitchComponent implements OnInit, OnDestroy {
   }
 
   private onZoomChanged(newZoom: number): void {
-    if (!this.isVisible) {
+    if (!this.isVisible && this.selectedLevel !== this.defaultLevel) {
       this.switchLevel(this.defaultLevel);
     }
     this.ref.markForCheck();
