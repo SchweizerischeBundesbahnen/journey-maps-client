@@ -46,12 +46,18 @@ export class LevelSwitchComponent implements OnInit, OnDestroy {
     }
     this.mapReady
       .pipe(takeUntil(this.destroyed))
-      .subscribe((map) => this.onMapReady(map));
+      .subscribe((map) => {
+        this.onMapReady(map);
+        // call outside component-zone, trigger detect changes manually
+        this.ref.detectChanges();
+      });
 
     this.zoomChanged
       .pipe(takeUntil(this.destroyed))
       .subscribe((newZoom) => {
         this.onZoomChanged(newZoom);
+        // call outside component-zone, trigger detect changes manually
+        this.ref.detectChanges();
       });
   }
 
@@ -63,7 +69,6 @@ export class LevelSwitchComponent implements OnInit, OnDestroy {
   switchLevel(level: number): void {
     this.selectedLevel = level;
     this.mapLayerFilterService.setLevelFilter(level);
-    this.ref.markForCheck();
   }
 
   get isVisible(): boolean {
@@ -79,13 +84,11 @@ export class LevelSwitchComponent implements OnInit, OnDestroy {
 
   private setMapReady(isReady: boolean): void {
     this.mapIsReady = isReady;
-    this.ref.markForCheck();
   }
 
   private onZoomChanged(newZoom: number): void {
     if (!this.isVisible && this.selectedLevel !== this.defaultLevel) {
       this.switchLevel(this.defaultLevel);
     }
-    this.ref.markForCheck();
   }
 }
