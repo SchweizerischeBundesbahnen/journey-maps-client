@@ -84,6 +84,6 @@ export class LevelSwitchComponent implements OnInit, OnDestroy {
     if (!this.isVisible) {
       this.switchLevel(this.defaultLevel);
     }
-    this.ref.detectChanges();
+    this.ref.markForCheck();
   }
 }
