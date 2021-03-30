@@ -38,7 +38,7 @@ export class MapLayerFilterService {
   }
 
   private calculateLayerFilter(oldFilter: any[], level: number): any[] {
-    if (!oldFilter || oldFilter.length < 1) {
+    if (oldFilter == null || oldFilter.length < 1) {
       return oldFilter;
     }
 
