@@ -37,7 +37,7 @@ export class MapLayerFilterService {
     this.setLayerVisibility('rokas_background_mask', level < 0);
   }
 
-  calculateLayerFilter(oldFilter: any[], level: number): any[] {
+  private calculateLayerFilter(oldFilter: any[], level: number): any[] {
     if (!oldFilter || oldFilter.length < 1) {
       return oldFilter;
     }
