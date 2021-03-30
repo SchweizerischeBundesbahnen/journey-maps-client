@@ -78,7 +78,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Input() zoomLevel?: number;
 
   /** Should show level switch control or not. */
-  @Input() showLevelSwitch = false;
+  @Input() showLevelSwitch = true;
 
   /** The initial bounding box of the map. */
   @Input() boundingBox?: LngLatBoundsLike;
