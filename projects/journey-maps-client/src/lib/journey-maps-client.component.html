@@ -28,7 +28,10 @@
       [attr.aria-live]="'polite'"
     ></rokas-info-box>
       <div class="map-widgets">
-          <rokas-level-switch [mapReady]="mapReady"></rokas-level-switch>
+          <rokas-level-switch
+                  *ngIf="showLevelSwitch"
+                  [mapReady]="mapReady"
+          ></rokas-level-switch>
       </div>
       <div class="map" (resized)="onResized($event)" #map></div>
   </div>
