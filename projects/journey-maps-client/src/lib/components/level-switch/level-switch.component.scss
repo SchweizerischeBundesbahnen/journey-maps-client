@@ -28,7 +28,9 @@
   vertical-align: middle;
 }
 
-.level-switch-button-content:hover {
+.level-switch-button-content:hover,
+.level-switch-button-content-selected {
+  @extend .level-switch-button-content;
   background-color: #212121;
   color: white;
 }

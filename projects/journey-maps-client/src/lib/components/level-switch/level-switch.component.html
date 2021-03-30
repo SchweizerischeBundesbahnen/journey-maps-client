@@ -1,7 +1,11 @@
-<div class="level-switch-buttons-container" *ngIf="mapIsReady" @fade>
+<div class="level-switch-buttons-container" *ngIf="isVisible" @fade>
     <ng-container *ngFor="let level of levels">
         <div class="level-switch-button">
-            <div (click)="switchLevel(level)" class="level-switch-button-content">{{level}}</div>
+            <div (click)="switchLevel(level)"
+                 [ngClass]="{
+                 'level-switch-button-content-selected':level === selectedLevel,
+                 'level-switch-button-content':level !== selectedLevel
+                 }">{{level}}</div>
         </div>
     </ng-container>
 

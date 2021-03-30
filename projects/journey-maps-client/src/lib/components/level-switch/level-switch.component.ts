@@ -1,15 +1,14 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Map as MapboxMap} from 'mapbox-gl';
-import {Subject} from 'rxjs';
+import {ReplaySubject, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {MapLayerFilterService} from '../info-box/services/map-layer-filter.service';
+import {MapLayerFilterService} from './services/map-layer-filter.service';
 
 @Component({
   selector: 'rokas-level-switch',
   templateUrl: './level-switch.component.html',
   styleUrls: ['./level-switch.component.scss'],
-  providers: [MapLayerFilterService],
   animations: [
     // the fade-in/fade-out animation.
     trigger('fade', [
@@ -24,19 +23,34 @@ import {MapLayerFilterService} from '../info-box/services/map-layer-filter.servi
   ]
 })
 export class LevelSwitchComponent implements OnInit, OnDestroy {
-  @Input() mapReady: Subject<MapboxMap>;
+  @Input() mapReady: Subject<MapboxMap> = new ReplaySubject<mapboxgl.Map>(1);
   levels = [2, 1, 0, -1, -2, -4];
-  public mapIsReady: boolean;
+  selectedLevel: number;
+  private defaultLevel = 0;
+  private zoomChanged = new Subject<number>();
+  private LEVEL_BUTTON_MIN_MAP_ZOOM = 15;
+  private mapIsReady: boolean;
   private destroyed = new Subject<void>();
+  private map?: mapboxgl.Map;
 
   constructor(private ref: ChangeDetectorRef, private mapLayerFilterService: MapLayerFilterService) {
     this.setMapReady(false);
+    this.selectedLevel = this.defaultLevel;
   }
 
   ngOnInit(): void {
+    if (this.mapReady == null) {
+      throw new Error('mapReady input parameter must not be null');
+    }
     this.mapReady
       .pipe(takeUntil(this.destroyed))
       .subscribe((map) => this.onMapReady(map));
+
+    this.zoomChanged
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((newZoom) => {
+        this.onZoomChanged(newZoom);
+      });
   }
 
   ngOnDestroy(): void {
@@ -44,17 +58,32 @@ export class LevelSwitchComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
+  switchLevel(level: number): void {
+    this.selectedLevel = level;
+    this.mapLayerFilterService.setLevelFilter(level);
+    this.ref.markForCheck();
+  }
+
+  get isVisible(): boolean {
+    return this.mapIsReady && this.map?.getZoom() >= this.LEVEL_BUTTON_MIN_MAP_ZOOM;
+  }
+
   private onMapReady(map: MapboxMap): void {
+    this.map = map;
+    this.map.on('zoomend', () => this.zoomChanged.next(this.map?.getZoom()));
     this.mapLayerFilterService.setMap(map);
     this.setMapReady(true);
   }
 
-  switchLevel(level: number): void {
-    this.mapLayerFilterService.setLevelFilter(level);
-  }
-
-  setMapReady(isReady: boolean): void {
+  private setMapReady(isReady: boolean): void {
     this.mapIsReady = isReady;
     this.ref.markForCheck();
+  }
+
+  private onZoomChanged(newZoom: number): void {
+    if (!this.isVisible) {
+      this.switchLevel(this.defaultLevel);
+    }
+    this.ref.detectChanges();
   }
 }
