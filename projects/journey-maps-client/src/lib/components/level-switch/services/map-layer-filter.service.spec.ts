@@ -11,6 +11,13 @@ describe('MapLayerFilterService', () => {
     expect(service).toBeTruthy();
   });
 
+  it('should not change filter if nothing to do', () => {
+    const oldFilter = ['all', ['==', ['geometry-type'], 'Point'], ['==', 'lorem-ipsum', '1234567890']];
+    const level = 1;
+    const newFilter = service.calculateLayerFilter(oldFilter, level);
+    expect(newFilter).toEqual(oldFilter);
+  });
+
   it('should set new floor - simple', () => {
     const oldFilter = ['==', 'floor', '0'];
     const level = 1;
