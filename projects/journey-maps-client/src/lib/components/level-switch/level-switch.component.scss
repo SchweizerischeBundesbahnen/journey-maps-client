@@ -7,13 +7,6 @@
   border-radius: 24px;
 }
 
-.level-switch-button {
-  padding: 6px;
-  width: 48px;
-  line-height: 35px;
-  border-bottom: 1px solid #e5e5e5;
-}
-
 .level-switch-button-content {
   cursor: pointer;
   border-radius: 8px;
@@ -28,11 +21,17 @@
   color: white;
 }
 
+.level-switch-button {
+  padding: 6px;
+  width: 48px;
+  line-height: 35px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
 .level-switch-button:first-child {
   border-radius: 24px 24px 0px 0px;
 
   .level-switch-button-content {
-    @extend .level-switch-button-content;
     border-radius: 24px 24px 8px 8px;
   }
 }
@@ -42,7 +41,6 @@
   border-bottom-width: 0px;
 
   .level-switch-button-content {
-    @extend .level-switch-button-content;
     border-radius: 8px 8px 24px 24px;
   }
 }
