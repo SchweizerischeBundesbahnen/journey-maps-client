@@ -1,0 +1,46 @@
+@import '~@sbb-esta/angular-public/styles.scss';
+
+.level-switch-buttons-container {
+  margin: 8px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 24px;
+}
+
+.level-switch-button-content {
+  cursor: pointer;
+  border-radius: 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.level-switch-button-content:hover,
+.level-switch-button-content-selected {
+  @extend .level-switch-button-content;
+  background-color: #212121;
+  color: white;
+}
+
+.level-switch-button {
+  padding: 6px;
+  width: 48px;
+  line-height: 35px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.level-switch-button:first-child {
+  border-radius: 24px 24px 0px 0px;
+
+  .level-switch-button-content {
+    border-radius: 24px 24px 8px 8px;
+  }
+}
+
+.level-switch-button:last-child {
+  border-radius: 0px 0px 24px 24px;
+  border-bottom-width: 0px;
+
+  .level-switch-button-content {
+    border-radius: 8px 8px 24px 24px;
+  }
+}

@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
 
   // Initial map position
   zoomLevel = 7.5;
+  showLevelSwitch = true;
   zoomLevelChanged: number;
   mapCenter: LngLatLike = [7.4391326448171196, 46.948834547463086];
   mapCenterChanged: LngLatLike;
