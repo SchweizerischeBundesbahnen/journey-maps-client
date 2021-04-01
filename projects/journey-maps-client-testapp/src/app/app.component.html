@@ -13,14 +13,15 @@
       (zoomLevelChanged)="zoomLevelChanged=$event"
       [mapCenter]="mapCenter"
       (mapCenterChanged)="mapCenterChanged=$event"
-      [infoBoxTemplate]=""
+      [markerDetailsTemplate]=""
       [(selectedMarkerId)]="selectedMarkerId"
       [allowOneFingerPan]="allowOneFingerPan"
+      [popup]="false"
     >
     </rokas-journey-maps-client>
 
-    <!--  Set [infoBoxTemplate]="infoBoxTemplate" to overwrite default template. Example. -->
-    <ng-template #infoBoxTemplate let-marker>
+    <!--  Set [markerDetailsTemplate]="markerDetailsTemplate" to overwrite default template. Example. -->
+    <ng-template #markerDetailsTemplate let-marker>
       <h1 style="color: red">{{marker.title}}</h1>
       <div>{{marker.subtitle}}</div>
     </ng-template>

@@ -102,7 +102,7 @@ export class AppComponent implements OnInit {
       category: MarkerCategory.CUSTOM,
       icon: 'assets/icons/train.png',
       iconSelected: 'assets/icons/train_selected.png',
-      infoBlocks: [/* no teaser/overlay will be shown unless infoBoxTemplate is defined on the component */]
+      infoBlocks: [/* no teaser/overlay will be shown unless markerDetailsTemplate is defined on the component */]
     },
     {
       id: 'work',

@@ -1,0 +1,10 @@
+<div #popupContent>
+  <ng-container
+    *ngTemplateOutlet="template ? template : defaultTemplate;context:getTemplateContext()">
+  </ng-container>
+</div>
+
+<ng-template #defaultTemplate>
+  <rokas-info-block-renderer [infoBlocks]="selectedMarker.infoBlocks">
+  </rokas-info-block-renderer>
+</ng-template>

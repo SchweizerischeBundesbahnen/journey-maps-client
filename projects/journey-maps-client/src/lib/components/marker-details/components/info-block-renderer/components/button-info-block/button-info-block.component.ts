@@ -1,13 +1,13 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {ButtonInfoBlock} from '../../../../model/infoblock/button-info-block';
+import {ButtonInfoBlock} from '../../../../../../model/infoblock/button-info-block';
 
 @Component({
-  selector: 'rokas-button-info-box',
-  templateUrl: './button-info-box.component.html',
-  styleUrls: ['./button-info-box.component.scss'],
+  selector: 'rokas-button-info-block',
+  templateUrl: './button-info-block.component.html',
+  styleUrls: ['./button-info-block.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ButtonInfoBoxComponent implements OnInit {
+export class ButtonInfoBlockComponent implements OnInit {
 
   @Input() infoBlock: ButtonInfoBlock;
 

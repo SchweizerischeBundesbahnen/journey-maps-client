@@ -4,7 +4,15 @@
 
 ### Added
 
+* DUSP-1240 adds an optional `showLevelSwitch` input parameter. The level switch allows you to switch floors/levels on a
+  station map.
+
+* DUSP-1239 adds an optional `popup` input parameter. When `true`marker details will be shown in a popup instead of a
+  teaser.
+
 ### Changed
+
+* **BREAKING**: `infoBoxTemplate` input parameter has been renamed to `markerDetailsTemplate`
 
 ### Fixed
 
