@@ -68,7 +68,9 @@
 
       map.addEventListener('selectedMarkerIdChange', function (event) {
         const selectedMarkerId = document.getElementById('selected-marker-id');
-        selectedMarkerId.replaceChild(document.createTextNode(event.detail), selectedMarkerId.firstChild);
+        if (selectedMarkerId.firstChild) {
+          selectedMarkerId.replaceChild(document.createTextNode(event.detail), selectedMarkerId.firstChild);
+        }
       });
 
       function setSelecteMarkerId(id) {
