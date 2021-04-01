@@ -121,6 +121,7 @@ export class AppComponent implements OnInit {
 
   journeyGeoJSON: string;
   transferGeoJSON: string;
+  routesGeoJSONs: string;
 
   ngOnInit(): void {
     this.assetReaderService.loadAssetAsString('journey/zh-sh_waldfriedhof.json')
@@ -128,6 +129,9 @@ export class AppComponent implements OnInit {
 
     this.assetReaderService.loadAssetAsString('transfer/luzern4-j.json')
       .subscribe(json => this.transferGeoJSON = json);
+
+    this.assetReaderService.loadAssetAsString('routes/engelberg-und-thun.json')
+      .subscribe(json => this.routesGeoJSONs = json);
 
     this.zoomLevelChanged = this.zoomLevel;
     this.mapCenterChanged = this.mapCenter;
