@@ -55,19 +55,27 @@
 
   &.mapboxgl-popup-anchor- {
     &bottom-left .mapboxgl-popup-content {
-      border-bottom-left-radius: 0 !important;
+      @include mq($from: tabletPortrait) {
+        border-bottom-left-radius: 0 !important;
+      }
     }
 
     &bottom-right .mapboxgl-popup-content {
-      border-bottom-right-radius: 0 !important;
+      @include mq($from: tabletPortrait) {
+        border-bottom-right-radius: 0 !important;
+      }
     }
 
     &top-left .mapboxgl-popup-content {
-      border-top-left-radius: 0 !important;
+      @include mq($from: tabletPortrait) {
+        border-top-left-radius: 0 !important;
+      }
     }
 
     &top-right .mapboxgl-popup-content {
-      border-top-right-radius: 0 !important;
+      @include mq($from: tabletPortrait) {
+        border-top-right-radius: 0 !important;
+      }
     }
   }
 }
