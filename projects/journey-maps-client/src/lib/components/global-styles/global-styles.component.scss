@@ -4,3 +4,78 @@
 .mapboxgl-ctrl-attrib-button {
   display: none;
 }
+
+.mapboxgl-popup.rokas {
+
+  $closeIconSize: 24px;
+
+  max-width: 400px !important;
+  max-height: 75%;
+  z-index: 3;
+
+  @include mq($to: tabletPortrait) {
+    max-width: 100% !important;
+    transform: none !important;
+
+    $mobileSpacing: 10px;
+    left: $mobileSpacing;
+    bottom: $mobileSpacing;
+    right: $mobileSpacing;
+    top: unset;
+  }
+
+  .mapboxgl-popup-content {
+    font-family: $fontSbbRoman;
+    box-shadow: 0 0 20px rgb(0 0 0 / 25%);
+    border-radius: 8px;
+    overflow-y: auto;
+
+    > div {
+      padding: $closeIconSize;
+    }
+  }
+
+  .mapboxgl-popup-tip {
+    @include mq($to: tabletPortrait) {
+      display: none;
+    }
+  }
+
+  .mapboxgl-popup-close-button {
+    // Inline SVG :-P
+    // Therefore we don't have to care where to load the asset from.
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path fill='none' stroke='%23000' d='M6,17.9997 L18,5.9997 M18,17.9997 L6,5.9997'/></svg>");
+    background-color: white;
+    font-size: 0;
+    height: $closeIconSize;
+    width: $closeIconSize;
+    margin-top: 10px;
+    margin-right: 10px;
+  }
+
+  &.mapboxgl-popup-anchor- {
+    &bottom-left .mapboxgl-popup-content {
+      @include mq($from: tabletPortrait) {
+        border-bottom-left-radius: 0 !important;
+      }
+    }
+
+    &bottom-right .mapboxgl-popup-content {
+      @include mq($from: tabletPortrait) {
+        border-bottom-right-radius: 0 !important;
+      }
+    }
+
+    &top-left .mapboxgl-popup-content {
+      @include mq($from: tabletPortrait) {
+        border-top-left-radius: 0 !important;
+      }
+    }
+
+    &top-right .mapboxgl-popup-content {
+      @include mq($from: tabletPortrait) {
+        border-top-right-radius: 0 !important;
+      }
+    }
+  }
+}

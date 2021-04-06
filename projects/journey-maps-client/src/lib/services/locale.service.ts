@@ -10,9 +10,7 @@ export class LocaleService {
   // CHECKME ses: "Professional translations needed?
   private i18n = {
     de: {
-      teaser: {
-        close: 'Schliessen'
-      },
+      close: 'Schliessen',
       searchbar: {
         placeholder: 'Suchen',
         arialabel: 'Eingabefeld zum Suchen und Filtern von Kartenelementen.',
@@ -23,9 +21,7 @@ export class LocaleService {
       }
     },
     fr: {
-      teaser: {
-        close: 'Fermer'
-      },
+      close: 'Fermer',
       searchbar: {
         placeholder: 'Rechercher',
         arialabel: 'Champ de saisie pour la recherche et le filtrage des éléments de la carte.',
@@ -36,9 +32,7 @@ export class LocaleService {
       }
     },
     it: {
-      teaser: {
-        close: 'Chiudere'
-      },
+      close: 'Chiudere',
       searchbar: {
         placeholder: 'Ricerca',
         arialabel: 'Campo di inserimento per la ricerca e il filtraggio degli elementi della mappa.',
@@ -49,9 +43,7 @@ export class LocaleService {
       }
     },
     en: {
-      teaser: {
-        close: 'Close'
-      },
+      close: 'Close',
       searchbar: {
         placeholder: 'Search',
         arialabel: 'Input field for searching and filtering map elements.',

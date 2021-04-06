@@ -28,6 +28,7 @@ import {bufferTimeOnValue} from './services/bufferTimeOnValue';
 import {MapService} from './services/map/map.service';
 import {MapJourneyService} from './services/map/map-journey.service';
 import {MapTransferService} from './services/map/map-transfer.service';
+import {MapRoutesService} from './services/map/map-routes.service';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -45,12 +46,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @ViewChild('map') private mapElementRef: ElementRef;
 
   /**
-   * If you want to completely render the infobox (overlay that opens when you click a marker) yourself
-   * you can define a <code>ng-template</code> and pass it to the component. See examples for details.
+   * Custom <code>ng-template</code> for the marker details. (Popup or Teaser)
+   * See examples for details.
    *
    * <b>NOTE:</b> This does not work - at the moment - when using the Web Component version of the library.
    */
-  @Input() infoBoxTemplate?: TemplateRef<any>;
+  @Input() markerDetailsTemplate?: TemplateRef<any>;
 
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
@@ -91,15 +92,25 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * GeoJSON as returned by the <code>/journey</code> operation of Journey Maps.
    * All routes and transfers will be displayed on the map.
    * Indoor routing is not (yet) supported.
+   * Note: journey, transfer and routes cannot be displayed at the same time
    */
-  @Input() journeyGeoJSON: string;
+  @Input() journey: GeoJSON.FeatureCollection;
 
   /**
    * GeoJSON as returned by the <code>/transfer</code> operation of Journey Maps.
    * The transfer will be displayed on the map.
    * Indoor routing is not (yet) supported.
+   * Note: journey, transfer and routes cannot be displayed at the same time
    */
-  @Input() transferGeoJSON: string;
+  @Input() transfer: GeoJSON.FeatureCollection;
+
+  /**
+   * An array of GeoJSON objects as returned by the <code>/route</code> and <code>/routes</code> operation of Journey Maps.
+   * All routes will be displayed on the map.
+   * Indoor routing is not (yet) supported.
+   * Note: journey, transfer and routes cannot be displayed at the same time
+   */
+  @Input() routes: GeoJSON.FeatureCollection[];
 
   /** The list of markers (points) that will be displayed on the map. */
   @Input() markers: Marker[];
@@ -107,6 +118,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   /** By default, you get a message-overlay if you try to pan with one finger */
   @Input() allowOneFingerPan = false;
+
+  /** Open a popup - instead of the teaser - when selecting a marker. */
+  @Input() popup = false;
 
   /**
    * This event is emitted whenever the zoom level of the map has changed.
@@ -143,6 +157,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapMarkerService: MapMarkerService,
               private mapJourneyService: MapJourneyService,
               private mapTransferService: MapTransferService,
+              private mapRoutesService: MapRoutesService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService) {
   }
@@ -255,16 +270,28 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.updateMarkers();
     }
 
-    if (changes.journeyGeoJSON) {
-      this.executeWhenMapStyleLoaded(() => this.mapJourneyService.updateJourneyRaw(this.map, this.journeyGeoJSON));
+    // handle journey and transfer together, otherwise they will overwrite each other's transfer data
+    if ([changes.journey, changes.transfer, changes.routes].map(Boolean).length) {
+      this.executeWhenMapStyleLoaded(() => {
+        // remove previous data from map
+        this.mapJourneyService.updateJourney(this.map, undefined);
+        this.mapTransferService.updateTransfer(this.map, undefined);
+        this.mapRoutesService.updateRoutes(this.map, undefined);
+        // only add new data if we have some
+        if (changes.journey?.currentValue) {
+          this.mapJourneyService.updateJourney(this.map, this.journey);
+        }
+        if (changes.transfer?.currentValue) {
+          this.mapJourneyService.updateJourney(this.map, this.transfer);
+        }
+        if (changes.routes?.currentValue) {
+          this.mapRoutesService.updateRoutes(this.map, this.routes);
+        }
+      });
     }
 
-    if (changes.transferGeoJSON) {
-      this.executeWhenMapStyleLoaded(() => this.mapTransferService.updateTransferRaw(this.map, this.transferGeoJSON));
-    }
-
-    if (this.transferGeoJSON && this.journeyGeoJSON) {
-      console.warn('Use either transferGeoJSON or journeyGeoJSON. It does not work correctly when both properties are set.');
+    if ([this.transfer, this.journey, this.routes].filter(Boolean).length > 1) {
+      console.warn('Use either transfer or journey or routes. It does not work correctly when more than one of these properties is set.');
     }
 
     if (!this.map?.isStyleLoaded()) {

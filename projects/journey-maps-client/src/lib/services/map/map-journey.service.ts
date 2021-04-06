@@ -14,18 +14,11 @@ export class MapJourneyService {
   ) {
   }
 
-  updateJourneyRaw(map: mapboxgl.Map, journeyGeoJSON: string): void {
-    let featureCollection: GeoJSON.FeatureCollection;
-    if (journeyGeoJSON?.length) {
-      featureCollection = JSON.parse(journeyGeoJSON) as GeoJSON.FeatureCollection;
-    } else {
-      featureCollection = this.mapService.emptyFeatureCollection;
-    }
-
+  updateJourney(map: mapboxgl.Map, journey: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
     const routeFeatures: GeoJSON.Feature[] = [];
     const transferFeatures: GeoJSON.Feature[] = [];
 
-    for (const feature of featureCollection.features) {
+    for (const feature of journey.features) {
       const properties = feature.properties;
       const type = properties.type;
       const pathType = properties.pathType;

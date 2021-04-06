@@ -1,6 +1,6 @@
-import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {Map as MapboxMap} from 'mapbox-gl';
-import {ReplaySubject, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {MapLayerFilterService} from './services/map-layer-filter.service';
@@ -22,43 +22,39 @@ import {MapLayerFilterService} from './services/map-layer-filter.service';
     ])
   ]
 })
-export class LevelSwitchComponent implements OnInit, OnDestroy {
-  @Input() mapReady: Subject<MapboxMap> = new ReplaySubject<mapboxgl.Map>(1);
+export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() map: MapboxMap;
+
   // levels could be configurable or dynamically calculated by current map-extent in the future
   levels = [2, 1, 0, -1, -2, -4];
   selectedLevel: number;
   private readonly defaultLevel = 0;
   // same minZoom as in Android and iOS map
   private readonly levelButtonMinMapZoom = 15;
-  private zoomChanged = new Subject<number>();
-  private mapIsReady: boolean;
+  private lastZoom: number;
+  private zoomChanged = new Subject<void>();
   private destroyed = new Subject<void>();
-  private map?: mapboxgl.Map;
 
   constructor(private ref: ChangeDetectorRef, private mapLayerFilterService: MapLayerFilterService) {
-    this.setMapReady(false);
     this.selectedLevel = this.defaultLevel;
   }
 
   ngOnInit(): void {
-    if (this.mapReady == null) {
-      throw new Error('mapReady input parameter must not be null');
-    }
-    this.mapReady
-      .pipe(takeUntil(this.destroyed))
-      .subscribe((map) => {
-        this.onMapReady(map);
-        // call outside component-zone, trigger detect changes manually
-        this.ref.detectChanges();
-      });
-
     this.zoomChanged
       .pipe(takeUntil(this.destroyed))
-      .subscribe((newZoom) => {
-        this.onZoomChanged(newZoom);
-        // call outside component-zone, trigger detect changes manually
-        this.ref.detectChanges();
+      .subscribe(() => {
+        this.onZoomChanged();
       });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.map?.currentValue) {
+      this.lastZoom = this.map.getZoom();
+      this.map.on('zoomend', () => this.zoomChanged.next());
+      this.mapLayerFilterService.setMap(this.map);
+      // call outside component-zone, trigger detect changes manually
+      this.ref.detectChanges();
+    }
   }
 
   ngOnDestroy(): void {
@@ -72,23 +68,23 @@ export class LevelSwitchComponent implements OnInit, OnDestroy {
   }
 
   get isVisible(): boolean {
-    return this.mapIsReady && this.map?.getZoom() >= this.levelButtonMinMapZoom;
+    return this.map?.getZoom() >= this.levelButtonMinMapZoom;
   }
 
-  private onMapReady(map: MapboxMap): void {
-    this.map = map;
-    this.map.on('zoomend', () => this.zoomChanged.next(this.map?.getZoom()));
-    this.mapLayerFilterService.setMap(map);
-    this.setMapReady(true);
-  }
+  private onZoomChanged(): void {
+    // diff <= 0 means that we passed the threshold to display the level switch component.
+    const diff = (this.levelButtonMinMapZoom - this.lastZoom) * (this.levelButtonMinMapZoom - this.map.getZoom());
+    // Set default level when level switch is not visible
+    const shouldSetDefaultLevel = !this.isVisible && this.selectedLevel !== this.defaultLevel;
 
-  private setMapReady(isReady: boolean): void {
-    this.mapIsReady = isReady;
-  }
-
-  private onZoomChanged(newZoom: number): void {
-    if (!this.isVisible && this.selectedLevel !== this.defaultLevel) {
+    if (shouldSetDefaultLevel) {
       this.switchLevel(this.defaultLevel);
     }
+    if (shouldSetDefaultLevel || diff <= 0) {
+      // call outside component-zone, trigger detect changes manually
+      this.ref.detectChanges();
+    }
+
+    this.lastZoom = this.map.getZoom();
   }
 }

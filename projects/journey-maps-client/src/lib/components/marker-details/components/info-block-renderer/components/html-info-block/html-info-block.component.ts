@@ -1,14 +1,14 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {HtmlInfoBlock} from '../../../../model/infoblock/html-info-block';
 import {DomSanitizer} from '@angular/platform-browser';
+import {HtmlInfoBlock} from '../../../../../../model/infoblock/html-info-block';
 
 @Component({
-  selector: 'rokas-html-info-box',
-  templateUrl: './html-info-box.component.html',
-  styleUrls: ['./html-info-box.component.scss'],
+  selector: 'rokas-html-info-block',
+  templateUrl: './html-info-block.component.html',
+  styleUrls: ['./html-info-block.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HtmlInfoBoxComponent implements OnInit {
+export class HtmlInfoBlockComponent implements OnInit {
 
   private _infoBlock: HtmlInfoBlock;
   html: any;
