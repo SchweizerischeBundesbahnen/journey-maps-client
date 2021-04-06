@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Marker} from '../model/marker';
 import {Feature} from 'geojson';
+import {MarkerCategory} from '../model/marker-category.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,9 @@ import {Feature} from 'geojson';
 export class MarkerConverterService {
 
   convertToFeature(marker: Marker): Feature {
+    if (marker.category === MarkerCategory.CUSTOM) { // TODO Wieso geht den CUSTOM nicht mit den neuen style >_<'
+      (marker as any).marker_type = 'sbb-marker'; // Activate new markers, remove when old markers are no more.
+    }
     return {
       id: marker.id,
       geometry: {

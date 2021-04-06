@@ -6,6 +6,10 @@ export class Constants {
   static readonly ROUTE_SOURCE = 'rokas-route-source';
   static readonly WALK_SOURCE = 'rokas-walk-source';
 
+  static readonly CLUSTER_LAYER = 'rokas-marker-cluster';
+  static readonly MARKER_LAYER = 'sbb-marker';
+  static readonly MARKER_LAYER_SELECTED = 'sbb-marker-selected';
+
   static readonly SOURCES = [
     Constants.MARKER_SOURCE,
     Constants.ROUTE_SOURCE,
@@ -13,21 +17,15 @@ export class Constants {
   ];
 
   static readonly MARKER_AND_CLUSTER_LAYERS = [
-    'rokas-marker-circle',
     'rokas-marker-cluster',
     'rokas-marker-cluster-text',
-    'rokas-marker',
-    'rokas-marker-selected'
+    Constants.MARKER_LAYER,
+    Constants.MARKER_LAYER_SELECTED
   ];
 
   static readonly MARKER_LAYERS = [
     'rokas-marker-circle',
-    'rokas-marker',
-    'rokas-marker-selected'
+    Constants.MARKER_LAYER,
+    Constants.MARKER_LAYER_SELECTED
   ];
-
-  static readonly CLUSTER_LAYER = 'rokas-marker-cluster';
-  static readonly MARKER_LAYER = 'rokas-marker';
-  static readonly MARKER_LAYER_SELECTED = 'rokas-marker-selected';
-
 }
