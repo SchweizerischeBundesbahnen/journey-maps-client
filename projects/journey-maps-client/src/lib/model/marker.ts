@@ -41,7 +41,7 @@ export interface Marker {
   /**
    * List of info blocks that will be displayed in the overlay when the marker is selected.
    *
-   * Unless you have defined a {@link JourneyMapsClientComponent#infoBoxTemplate},
+   * Unless you have defined a {@link JourneyMapsClientComponent#markerDetailsTemplate},
    * the overlay will only appear if this field is set and contains at least one infoBlock.
    */
   infoBlocks?: InfoBlock[];

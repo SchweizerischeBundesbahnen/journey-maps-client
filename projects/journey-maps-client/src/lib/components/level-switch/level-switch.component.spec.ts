@@ -2,7 +2,7 @@ import {TestBed} from '@angular/core/testing';
 
 import {LevelSwitchComponent} from './level-switch.component';
 import {MapLayerFilterService} from './services/map-layer-filter.service';
-import {ChangeDetectorRef} from '@angular/core';
+import {ChangeDetectorRef, SimpleChange} from '@angular/core';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('LevelSwitchComponent', () => {
@@ -110,8 +110,9 @@ describe('LevelSwitchComponent', () => {
 
     setMapZoom(initialMapZoom);
 
-    levelSwitchComponent.mapReady.next(mapMock);
-    expect(onZoomChangedCallbackFn).toBeTruthy();
+    levelSwitchComponent.map = mapMock;
+    // ngOnChanges is not called when setting @Input programmatically
+    levelSwitchComponent.ngOnChanges({map: new SimpleChange(undefined, mapMock, true)});
     expect(serviceSpy.setMap).toHaveBeenCalledWith(mapMock);
   }
 

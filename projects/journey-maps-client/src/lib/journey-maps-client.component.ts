@@ -46,12 +46,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @ViewChild('map') private mapElementRef: ElementRef;
 
   /**
-   * If you want to completely render the infobox (overlay that opens when you click a marker) yourself
-   * you can define a <code>ng-template</code> and pass it to the component. See examples for details.
+   * Custom <code>ng-template</code> for the marker details. (Popup or Teaser)
+   * See examples for details.
    *
    * <b>NOTE:</b> This does not work - at the moment - when using the Web Component version of the library.
    */
-  @Input() infoBoxTemplate?: TemplateRef<any>;
+  @Input() markerDetailsTemplate?: TemplateRef<any>;
 
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
@@ -118,6 +118,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   /** By default, you get a message-overlay if you try to pan with one finger */
   @Input() allowOneFingerPan = false;
+
+  /** Open a popup - instead of the teaser - when selecting a marker. */
+  @Input() popup = false;
 
   /**
    * This event is emitted whenever the zoom level of the map has changed.
