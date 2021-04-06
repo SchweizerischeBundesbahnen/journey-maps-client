@@ -14,7 +14,8 @@
 
 ### Changed
 
-* **BREAKING**: DUSP-1357 Rename journeyGeoJSON and transferGeoJSON to journey and transfer and the type from string to GeoJSON.FeatureCollection
+* **BREAKING**: DUSP-1357 Rename `journeyGeoJSON` and `transferGeoJSON` to `journey` and `transfer` and change the type
+  from `string` to `GeoJSON.FeatureCollection`
 
 * **BREAKING**: DUSP-1239 `infoBoxTemplate` input parameter has been renamed to `markerDetailsTemplate`
 
