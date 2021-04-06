@@ -28,6 +28,7 @@ import {bufferTimeOnValue} from './services/bufferTimeOnValue';
 import {MapService} from './services/map/map.service';
 import {MapJourneyService} from './services/map/map-journey.service';
 import {MapTransferService} from './services/map/map-transfer.service';
+import {MapRoutesService} from './services/map/map-routes.service';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -91,15 +92,25 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * GeoJSON as returned by the <code>/journey</code> operation of Journey Maps.
    * All routes and transfers will be displayed on the map.
    * Indoor routing is not (yet) supported.
+   * Note: journey, transfer and routes cannot be displayed at the same time
    */
-  @Input() journeyGeoJSON: string;
+  @Input() journey: GeoJSON.FeatureCollection;
 
   /**
    * GeoJSON as returned by the <code>/transfer</code> operation of Journey Maps.
    * The transfer will be displayed on the map.
    * Indoor routing is not (yet) supported.
+   * Note: journey, transfer and routes cannot be displayed at the same time
    */
-  @Input() transferGeoJSON: string;
+  @Input() transfer: GeoJSON.FeatureCollection;
+
+  /**
+   * An array of GeoJSON objects as returned by the <code>/route</code> and <code>/routes</code> operation of Journey Maps.
+   * All routes will be displayed on the map.
+   * Indoor routing is not (yet) supported.
+   * Note: journey, transfer and routes cannot be displayed at the same time
+   */
+  @Input() routes: GeoJSON.FeatureCollection[];
 
   /** The list of markers (points) that will be displayed on the map. */
   @Input() markers: Marker[];
@@ -146,6 +157,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapMarkerService: MapMarkerService,
               private mapJourneyService: MapJourneyService,
               private mapTransferService: MapTransferService,
+              private mapRoutesService: MapRoutesService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService) {
   }
@@ -258,16 +270,20 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.updateMarkers();
     }
 
-    if (changes.journeyGeoJSON) {
-      this.executeWhenMapStyleLoaded(() => this.mapJourneyService.updateJourneyRaw(this.map, this.journeyGeoJSON));
+    if (changes.journey) {
+      this.executeWhenMapStyleLoaded(() => this.mapJourneyService.updateJourney(this.map, this.journey));
     }
 
-    if (changes.transferGeoJSON) {
-      this.executeWhenMapStyleLoaded(() => this.mapTransferService.updateTransferRaw(this.map, this.transferGeoJSON));
+    if (changes.transfer) {
+      this.executeWhenMapStyleLoaded(() => this.mapTransferService.updateTransfer(this.map, this.transfer));
     }
 
-    if (this.transferGeoJSON && this.journeyGeoJSON) {
-      console.warn('Use either transferGeoJSON or journeyGeoJSON. It does not work correctly when both properties are set.');
+    if (changes.routes) {
+      this.executeWhenMapStyleLoaded(() => this.mapRoutesService.updateRoutes(this.map, this.routes));
+    }
+
+    if ([this.transfer, this.journey, this.routes].filter(Boolean).length > 1) {
+      console.warn('Use either transfer or journey or routes. It does not work correctly when more than one of these properties is set.');
     }
 
     if (!this.map?.isStyleLoaded()) {

@@ -4,6 +4,8 @@
 
 ### Added
 
+* DUSP-1357 Add optional `routes` input parameter to display a list of routes on the map
+
 * DUSP-1240 adds an optional `showLevelSwitch` input parameter. The level switch allows you to switch floors/levels on a
   station map.
 
@@ -12,7 +14,9 @@
 
 ### Changed
 
-* **BREAKING**: `infoBoxTemplate` input parameter has been renamed to `markerDetailsTemplate`
+* **BREAKING**: DUSP-1357 Rename journeyGeoJSON and transferGeoJSON to journey and transfer and the type from string to GeoJSON.FeatureCollection
+
+* **BREAKING**: DUSP-1239 `infoBoxTemplate` input parameter has been renamed to `markerDetailsTemplate`
 
 ### Fixed
 

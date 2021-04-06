@@ -119,15 +119,19 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  journeyGeoJSON: string;
-  transferGeoJSON: string;
+  journey: GeoJSON.FeatureCollection;
+  transfer: GeoJSON.FeatureCollection;
+  routes: GeoJSON.FeatureCollection[] = [];
 
   ngOnInit(): void {
-    this.assetReaderService.loadAssetAsString('journey/zh-sh_waldfriedhof.json')
-      .subscribe(json => this.journeyGeoJSON = json);
+    this.assetReaderService.loadAssetAsJSON('journey/zh-sh_waldfriedhof.json')
+      .subscribe(json => this.journey = json);
 
-    this.assetReaderService.loadAssetAsString('transfer/luzern4-j.json')
-      .subscribe(json => this.transferGeoJSON = json);
+    this.assetReaderService.loadAssetAsJSON('transfer/luzern4-j.json')
+      .subscribe(json => this.transfer = json);
+
+    this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
+      .subscribe(json => this.routes = json);
 
     this.zoomLevelChanged = this.zoomLevel;
     this.mapCenterChanged = this.mapCenter;
