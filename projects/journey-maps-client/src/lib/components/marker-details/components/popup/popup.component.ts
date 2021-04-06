@@ -95,7 +95,11 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
       .setDOMContent(this.popupContent.nativeElement as HTMLElement)
       .addTo(this.map);
 
-    (this.popup as any)._closeButton.ariaLabel = this.i18n.getText('close');
+    try {
+      (this.popup as any)._closeButton.ariaLabel = this.i18n.getText('close');
+    } catch (e) {
+      console.warn('Cannot modify label of popup close button: ', e);
+    }
 
     this.popup.on('close', () => this.closeClicked.emit());
   }
