@@ -11,4 +11,8 @@ export class AssetReaderService {
   loadAssetAsString(filename): Observable<string> {
     return this.http.get(`assets/${filename}`, {responseType: 'text'});
   }
+
+  loadAssetAsJSON(filename): Observable<any> {
+    return this.http.get(`assets/${filename}`, {responseType: 'json'});
+  }
 }
