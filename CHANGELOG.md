@@ -4,7 +4,11 @@
 
 ### Added
 
+* DUSP-1357 Add optional `routes` input parameter to display a list of routes on the map
+
 ### Changed
+
+* DUSP-1357 Rename journeyGeoJSON and transferGeoJSON to journey and transfer and the type from string to GeoJSON.FeatureCollection
 
 ### Fixed
 
