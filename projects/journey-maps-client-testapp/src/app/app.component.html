@@ -8,6 +8,8 @@
       apiKey="e500c71b8c83c1cfb2170608582ae9c8"
       [markers]="markers"
       [journey]="journey"
+      [transfer]="transfer"
+      [routes]="routes"
       [zoomLevel]="zoomLevel"
       [showLevelSwitch]="showLevelSwitch"
       (zoomLevelChanged)="zoomLevelChanged=$event"
@@ -42,6 +44,18 @@
       <li style="list-style: circle;">Zoom Level: {{zoomLevelChanged}}</li>
       <li style="list-style: circle;">Map center: {{mapCenterChanged}}</li>
       <li style="list-style: circle;">Allow moving the map with one finger: {{allowOneFingerPan}}</li>
+      <li style="list-style: circle;">
+        <label for="geo-json-select">
+          Display GeoJSON data for:
+          <select id="geo-json-select"
+            style="width: 200px; min-height: 10px; padding: 0 5px; background-position: right; color: black;"
+            (change)="setGeoJsonInput($event)"
+          >
+            <option [value]="" (change)="setGeoJsonInput($event)">(none)</option>
+            <option *ngFor="let input of geoJsonInputs" [value]="input" (change)="setGeoJsonInput($event)">{{input}}</option>
+          </select>
+        </label>
+      </li>
     </ul>
   </div>
 

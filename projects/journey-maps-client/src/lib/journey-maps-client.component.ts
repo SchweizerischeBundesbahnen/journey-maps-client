@@ -267,16 +267,24 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.updateMarkers();
     }
 
-    if (changes.journey) {
-      this.executeWhenMapStyleLoaded(() => this.mapJourneyService.updateJourney(this.map, this.journey));
-    }
-
-    if (changes.transfer) {
-      this.executeWhenMapStyleLoaded(() => this.mapTransferService.updateTransfer(this.map, this.transfer));
-    }
-
-    if (changes.routes) {
-      this.executeWhenMapStyleLoaded(() => this.mapRoutesService.updateRoutes(this.map, this.routes));
+    // handle journey and transfer together, otherwise they will overwrite each other's transfer data
+    if ([changes.journey, changes.transfer, changes.routes].map(Boolean).length) {
+      this.executeWhenMapStyleLoaded(() => {
+        // remove previous data from map
+        this.mapJourneyService.updateJourney(this.map, undefined);
+        this.mapTransferService.updateTransfer(this.map, undefined);
+        this.mapRoutesService.updateRoutes(this.map, undefined);
+        // only add new data if we have some
+        if (changes.journey?.currentValue) {
+          this.mapJourneyService.updateJourney(this.map, this.journey);
+        }
+        if (changes.transfer?.currentValue) {
+          this.mapJourneyService.updateJourney(this.map, this.transfer);
+        }
+        if (changes.routes?.currentValue) {
+          this.mapRoutesService.updateRoutes(this.map, this.routes);
+        }
+      });
     }
 
     if ([this.transfer, this.journey, this.routes].filter(Boolean).length > 1) {

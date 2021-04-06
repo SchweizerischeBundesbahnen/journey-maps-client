@@ -119,19 +119,25 @@ export class AppComponent implements OnInit {
     },
   ];
 
+  geoJsonInputs = ['journey', 'transfer', 'routes'];
   journey: GeoJSON.FeatureCollection;
   transfer: GeoJSON.FeatureCollection;
   routes: GeoJSON.FeatureCollection[] = [];
 
+  // preload example data into these fields
+  _journey: GeoJSON.FeatureCollection;
+  _transfer: GeoJSON.FeatureCollection;
+  _routes: GeoJSON.FeatureCollection[] = [];
+
   ngOnInit(): void {
     this.assetReaderService.loadAssetAsJSON('journey/zh-sh_waldfriedhof.json')
-      .subscribe(json => this.journey = json);
+      .subscribe(json => this._journey = json);
 
     this.assetReaderService.loadAssetAsJSON('transfer/luzern4-j.json')
-      .subscribe(json => this.transfer = json);
+      .subscribe(json => this._transfer = json);
 
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
-      .subscribe(json => this.routes = json);
+      .subscribe(json => this._routes = json);
 
     this.zoomLevelChanged = this.zoomLevel;
     this.mapCenterChanged = this.mapCenter;
@@ -139,5 +145,20 @@ export class AppComponent implements OnInit {
 
   setSelecteMarkerId(selectedMarkerId: string): void {
     this.selectedMarkerId = selectedMarkerId;
+  }
+
+  setGeoJsonInput(event: Event): void {
+    this.journey = undefined;
+    this.transfer = undefined;
+    this.routes = undefined;
+    if ((event.target as HTMLOptionElement).value === 'journey') {
+      this.journey = this._journey;
+    }
+    if ((event.target as HTMLOptionElement).value === 'transfer') {
+      this.transfer = this._transfer;
+    }
+    if ((event.target as HTMLOptionElement).value === 'routes') {
+      this.routes = this._routes;
+    }
   }
 }
