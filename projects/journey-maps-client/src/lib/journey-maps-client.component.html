@@ -33,7 +33,7 @@
     <div class="map-widgets">
       <rokas-level-switch
         *ngIf="showLevelSwitch"
-        [mapReady]="mapReady"
+        [map]="mapReady | async"
       ></rokas-level-switch>
     </div>
     <div class="map" (resized)="onResized($event)" #map></div>
