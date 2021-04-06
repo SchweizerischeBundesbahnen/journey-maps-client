@@ -92,25 +92,25 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * GeoJSON as returned by the <code>/journey</code> operation of Journey Maps.
    * All routes and transfers will be displayed on the map.
    * Indoor routing is not (yet) supported.
-   * Note: journeyGeoJSON, transferGeoJSON and routesGeoJSONs cannot be displayed at the same time
+   * Note: journey, transfer and routes cannot be displayed at the same time
    */
-  @Input() journeyGeoJSON: GeoJSON.FeatureCollection;
+  @Input() journey: GeoJSON.FeatureCollection;
 
   /**
    * GeoJSON as returned by the <code>/transfer</code> operation of Journey Maps.
    * The transfer will be displayed on the map.
    * Indoor routing is not (yet) supported.
-   * Note: journeyGeoJSON, transferGeoJSON and routesGeoJSONs cannot be displayed at the same time
+   * Note: journey, transfer and routes cannot be displayed at the same time
    */
-  @Input() transferGeoJSON: GeoJSON.FeatureCollection;
+  @Input() transfer: GeoJSON.FeatureCollection;
 
   /**
    * An array of GeoJSON objects as returned by the <code>/route</code> and <code>/routes</code> operation of Journey Maps.
    * All routes will be displayed on the map.
    * Indoor routing is not (yet) supported.
-   * Note: journeyGeoJSON, transferGeoJSON and routesGeoJSONs cannot be displayed at the same time
+   * Note: journey, transfer and routes cannot be displayed at the same time
    */
-  @Input() routesGeoJSONs: GeoJSON.FeatureCollection[];
+  @Input() routes: GeoJSON.FeatureCollection[];
 
   /** The list of markers (points) that will be displayed on the map. */
   @Input() markers: Marker[];
@@ -267,20 +267,20 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.updateMarkers();
     }
 
-    if (changes.journeyGeoJSON) {
-      this.executeWhenMapStyleLoaded(() => this.mapJourneyService.updateJourneyRaw(this.map, this.journeyGeoJSON));
+    if (changes.journey) {
+      this.executeWhenMapStyleLoaded(() => this.mapJourneyService.updateJourney(this.map, this.journey));
     }
 
-    if (changes.transferGeoJSON) {
-      this.executeWhenMapStyleLoaded(() => this.mapTransferService.updateTransferRaw(this.map, this.transferGeoJSON));
+    if (changes.transfer) {
+      this.executeWhenMapStyleLoaded(() => this.mapTransferService.updateTransfer(this.map, this.transfer));
     }
 
-    if (changes.routesGeoJSONs) {
-      this.executeWhenMapStyleLoaded(() => this.mapRoutesService.updateRoutesRaw(this.map, this.routesGeoJSONs));
+    if (changes.routes) {
+      this.executeWhenMapStyleLoaded(() => this.mapRoutesService.updateRoutes(this.map, this.routes));
     }
 
-    if ([this.transferGeoJSON, this.journeyGeoJSON, this.routesGeoJSONs].filter(Boolean).length > 1) {
-      console.warn('Use either transferGeoJSON or journeyGeoJSON or routesGeoJSONs. It does not work correctly when more than one of these properties is set.');
+    if ([this.transfer, this.journey, this.routes].filter(Boolean).length > 1) {
+      console.warn('Use either transfer or journey or routes. It does not work correctly when more than one of these properties is set.');
     }
 
     if (!this.map?.isStyleLoaded()) {
