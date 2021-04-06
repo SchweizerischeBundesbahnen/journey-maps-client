@@ -10,15 +10,12 @@ export class MapTransferService {
   }
 
 
-  updateTransferRaw(map: mapboxgl.Map, transferGeoJSON: string): void {
-    let featureCollection;
-    if (transferGeoJSON?.length) {
-      featureCollection = JSON.parse(transferGeoJSON) as GeoJSON.FeatureCollection;
-    } else {
-      featureCollection = undefined;
+  updateTransferRaw(map: mapboxgl.Map, transferGeoJSON: GeoJSON.FeatureCollection): void {
+    if (!transferGeoJSON) {
+      return;
     }
 
-    this.updateTransfer(map, featureCollection);
+    this.updateTransfer(map, transferGeoJSON);
   }
 
   updateTransfer(map: mapboxgl.Map, featureCollection: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {

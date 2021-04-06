@@ -94,7 +94,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * Indoor routing is not (yet) supported.
    * Note: journeyGeoJSON, transferGeoJSON and routesGeoJSONs cannot be displayed at the same time
    */
-  @Input() journeyGeoJSON: string;
+  @Input() journeyGeoJSON: GeoJSON.FeatureCollection;
 
   /**
    * GeoJSON as returned by the <code>/transfer</code> operation of Journey Maps.
@@ -102,7 +102,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * Indoor routing is not (yet) supported.
    * Note: journeyGeoJSON, transferGeoJSON and routesGeoJSONs cannot be displayed at the same time
    */
-  @Input() transferGeoJSON: string;
+  @Input() transferGeoJSON: GeoJSON.FeatureCollection;
 
   /**
    * An array of GeoJSON objects as returned by the <code>/route</code> and <code>/routes</code> operation of Journey Maps.
@@ -110,7 +110,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * Indoor routing is not (yet) supported.
    * Note: journeyGeoJSON, transferGeoJSON and routesGeoJSONs cannot be displayed at the same time
    */
-  @Input() routesGeoJSONs: string;
+  @Input() routesGeoJSONs: GeoJSON.FeatureCollection[];
 
   /** The list of markers (points) that will be displayed on the map. */
   @Input() markers: Marker[];

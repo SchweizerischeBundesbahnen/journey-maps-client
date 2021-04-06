@@ -10,11 +10,15 @@ export class MapRoutesService {
     private mapRouteService: MapRouteService,
   ) {}
 
-  updateRoutesRaw(map: mapboxgl.Map, routesGeoJSONs: string): void {
-    const featureCollections: GeoJSON.FeatureCollection[] = routesGeoJSONs?.length ? JSON.parse(routesGeoJSONs) : [];
+  updateRoutesRaw(map: mapboxgl.Map, routesGeoJSONs: GeoJSON.FeatureCollection[]): void {
+    if (!routesGeoJSONs?.length) {
+      return;
+    }
+
     this.mapRouteService.updateRoute(map, {
       type: 'FeatureCollection',
-      features: featureCollections.reduce((accumulatedFeatures, next) => [...accumulatedFeatures, ...next.features], []),
+      // With ES2019 we can replace this with routesGeoJSONs.flatMap(({features}) => features)
+      features: routesGeoJSONs.reduce((accumulatedFeatures, next) => accumulatedFeatures.concat(next.features), []),
     });
   }
 }
