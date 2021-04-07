@@ -57,10 +57,13 @@ export class AppComponent implements OnInit {
           'Rückgabe',
           'An allen Mietstationen von Rent a Bike'
         ),
-        // TODO : DKU ContactInfoBlock
-        this.infoBlockFactoryService.createHtmlInfoBlock(
-          'Kontakt', // TODO : DKU Translations
-          'Centralbahnstrasse 20<br>4051 Basel <br><a href="tel:+41 (0)61 272 09 10">+41 (0)61 272 09 10</a><br><a href="mailto:veloparking@iss.ch">veloparking@iss.ch</a>'
+        this.infoBlockFactoryService.createAddressInfoBlock(
+          'Kontakt',
+          'Centralbahnstrasse 20',
+          '4051',
+          'Basel',
+          'veloparking@iss.ch',
+          '+41 (0)61 272 09 10',
         ),
         this.infoBlockFactoryService.createButtonInfoBlock(
           'Zur Velostation',
