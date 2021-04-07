@@ -80,11 +80,11 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
     options.className = 'rokas text-copy';
     // CHECKME ses: Verify with new markers
     options.offset = {
-      right: [-5, -15],
-      left: [5, -15],
-      bottom: [0, -50],
-      'bottom-left': [0, -50],
-      'bottom-right': [0, -50],
+      right: [-15, -15],
+      left: [15, -15],
+      bottom: [0, -70],
+      'bottom-left': [0, -70],
+      'bottom-right': [0, -70],
       top: [0, -10],
       'top-left': [0, -10],
       'top-right': [0, -10],
