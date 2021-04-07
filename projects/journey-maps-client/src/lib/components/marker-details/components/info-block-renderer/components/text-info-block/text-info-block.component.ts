@@ -1,13 +1,13 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {TextInfoBlock} from '../../../../model/infoblock/text-info-block';
+import {TextInfoBlock} from '../../../../../../model/infoblock/text-info-block';
 
 @Component({
-  selector: 'rokas-text-info-box',
-  templateUrl: './text-info-box.component.html',
-  styleUrls: ['./text-info-box.component.scss'],
+  selector: 'rokas-text-info-block',
+  templateUrl: './text-info-block.component.html',
+  styleUrls: ['./text-info-block.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TextInfoBoxComponent implements OnInit {
+export class TextInfoBlockComponent implements OnInit {
 
   @Input() infoBlock: TextInfoBlock;
 

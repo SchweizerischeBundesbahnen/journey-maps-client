@@ -30,14 +30,11 @@
 
   .subtitle {
     font-size: large;
+    margin-bottom: 1rem;
   }
 
   width: 100%;
   @include mq($from: tabletPortrait) {
     width: 20rem;
   }
-}
-
-.infobox {
-  margin-top: 1em;
 }

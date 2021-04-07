@@ -106,7 +106,7 @@ export class AppComponent implements OnInit {
       category: MarkerCategory.CUSTOM,
       icon: 'assets/icons/train.png',
       iconSelected: 'assets/icons/train_selected.png',
-      infoBlocks: [/* no teaser/overlay will be shown unless infoBoxTemplate is defined on the component */]
+      infoBlocks: [/* no teaser/overlay will be shown unless markerDetailsTemplate is defined on the component */]
     },
     {
       id: 'work',
@@ -124,15 +124,25 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  journeyGeoJSON: string;
-  transferGeoJSON: string;
+  geoJsonInputs = ['journey', 'transfer', 'routes'];
+  journey: GeoJSON.FeatureCollection;
+  transfer: GeoJSON.FeatureCollection;
+  routes: GeoJSON.FeatureCollection[] = [];
+
+  // preload example data into these fields
+  _journey: GeoJSON.FeatureCollection;
+  _transfer: GeoJSON.FeatureCollection;
+  _routes: GeoJSON.FeatureCollection[] = [];
 
   ngOnInit(): void {
-    this.assetReaderService.loadAssetAsString('journey/zh-sh_waldfriedhof.json')
-      .subscribe(json => this.journeyGeoJSON = json);
+    this.assetReaderService.loadAssetAsJSON('journey/zh-sh_waldfriedhof.json')
+      .subscribe(json => this._journey = json);
 
-    this.assetReaderService.loadAssetAsString('transfer/luzern4-j.json')
-      .subscribe(json => this.transferGeoJSON = json);
+    this.assetReaderService.loadAssetAsJSON('transfer/luzern4-j.json')
+      .subscribe(json => this._transfer = json);
+
+    this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
+      .subscribe(json => this._routes = json);
 
     this.zoomLevelChanged = this.zoomLevel;
     this.mapCenterChanged = this.mapCenter;
@@ -140,5 +150,20 @@ export class AppComponent implements OnInit {
 
   setSelecteMarkerId(selectedMarkerId: string): void {
     this.selectedMarkerId = selectedMarkerId;
+  }
+
+  setGeoJsonInput(event: Event): void {
+    this.journey = undefined;
+    this.transfer = undefined;
+    this.routes = undefined;
+    if ((event.target as HTMLOptionElement).value === 'journey') {
+      this.journey = this._journey;
+    }
+    if ((event.target as HTMLOptionElement).value === 'transfer') {
+      this.transfer = this._transfer;
+    }
+    if ((event.target as HTMLOptionElement).value === 'routes') {
+      this.routes = this._routes;
+    }
   }
 }
