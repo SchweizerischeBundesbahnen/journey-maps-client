@@ -9,9 +9,7 @@ import {MarkerCategory} from '../model/marker-category.enum';
 export class MarkerConverterService {
 
   convertToFeature(marker: Marker): Feature {
-    if (marker.category === MarkerCategory.CUSTOM) { // TODO Wieso geht den CUSTOM nicht mit den neuen style >_<'
-      (marker as any).marker_type = 'sbb-marker'; // Activate new markers, remove when old markers are no more.
-    }
+    (marker as any).marker_type = 'sbb-marker'; // Activate new markers, remove when old markers are no more.
     return {
       id: marker.id,
       geometry: {

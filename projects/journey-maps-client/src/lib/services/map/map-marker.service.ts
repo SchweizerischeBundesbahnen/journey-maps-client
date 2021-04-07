@@ -167,8 +167,9 @@ export class MapMarkerService {
         // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/dev/partials/_ki.json#L28
         const imageName = this.buildImageName(marker);
         marker.category = imageName;
-        images.set(`marker_${imageName}`, marker.icon);
-        images.set(`marker_${imageName}_selected`, marker.iconSelected);
+        // TODO Dark mode support ?
+        images.set(`sbb-marker_bright-inactive-black_${imageName}`, marker.icon);
+        images.set(`sbb-marker_bright-active-red_${imageName}`, marker.iconSelected);
       });
 
     for (const [imageName, icon] of images) {
