@@ -6,6 +6,7 @@ import {LngLatBoundsLike, LngLatLike} from 'mapbox-gl';
 import {LoremIpsum} from 'lorem-ipsum';
 import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 import {AssetReaderService} from './services/asset-reader.service';
+import {MarkerColor} from '../../../journey-maps-client/src/lib/model/marker-color.enum';
 
 @Component({
   selector: 'app-root',
@@ -47,7 +48,8 @@ export class AppComponent implements OnInit {
       title: 'Basel - Bahnhof SBB',
       subtitle: 'Rent a Bike - Ihr Mietvelo',
       position: [7.5897, 47.5476],
-      category: MarkerCategory.INFORMATION,
+      category: MarkerCategory.BICYCLEPARKING,
+      color: MarkerColor.BLACK,
       infoBlocks: [
         this.infoBlockFactoryService.createTextInfoBlock(
           'Verfügbare Velotypen',
@@ -73,7 +75,8 @@ export class AppComponent implements OnInit {
       title: 'Home Office',
       subtitle: 'My home is my castle',
       position: [7.296515, 47.069815],
-      category: MarkerCategory.INFORMATION,
+      category: MarkerCategory.WARNING,
+      color: MarkerColor.RED,
       infoBlocks: [
         this.infoBlockFactoryService.createTextInfoBlock(
           this.loremIpsum.generateWords(3),
@@ -90,7 +93,8 @@ export class AppComponent implements OnInit {
       id: 'biel',
       title: 'Biel, my town, my rules !',
       position: [7.2468, 47.1368],
-      category: MarkerCategory.INFORMATION,
+      category: MarkerCategory.DISRUPTION,
+      color: MarkerColor.RED,
       markerUrl: 'https://www.biel-bienne.ch/',
       triggerEvent: false
     },
@@ -109,7 +113,8 @@ export class AppComponent implements OnInit {
       title: 'Office',
       subtitle: 'SBB Wylerpark',
       position: [7.446450, 46.961409],
-      category: MarkerCategory.WARNING,
+      category: MarkerCategory.RAIL,
+      color: MarkerColor.DARKBLUE,
       infoBlocks: [
         this.infoBlockFactoryService.createButtonInfoBlock(
           'Show menu plan',
