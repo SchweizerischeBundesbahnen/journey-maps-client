@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ButtonInfoBlock} from '../../../../../../model/infoblock/button-info-block';
 
 @Component({
@@ -7,15 +7,12 @@ import {ButtonInfoBlock} from '../../../../../../model/infoblock/button-info-blo
   styleUrls: ['./button-info-block.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ButtonInfoBlockComponent implements OnInit {
+export class ButtonInfoBlockComponent {
 
   @Input() infoBlock: ButtonInfoBlock;
 
 
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
   onButtonClicked(): void {

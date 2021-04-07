@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {TextInfoBlock} from '../model/infoblock/text-info-block';
 import {InfoBlockType} from '../model/infoblock/info-block-type.enum';
 import {ButtonInfoBlock} from '../model/infoblock/button-info-block';
-import {HtmlInfoBlock} from '../model/infoblock/html-info-block';
+import {AddressInfoBlock} from '../model/infoblock/address-info-block';
 
 /**
  * Helper class to easily generate {@link InfoBlock}s.
@@ -42,15 +42,23 @@ export class InfoBlockFactoryService {
   }
 
   /**
-   * Creates a html info block.
-   * @param title Title
-   * @param html HTML as string
+   * Creates an address info block
    */
-  createHtmlInfoBlock(title: string, html: string): HtmlInfoBlock {
+  createAddressInfoBlock(
+    title: string,
+    street: string,
+    zipCode: string,
+    city: string,
+    email: string,
+    phoneNumber: string): AddressInfoBlock {
     return {
-      type: InfoBlockType.HTML,
+      type: InfoBlockType.ADDRESS,
       title,
-      html
+      street,
+      zipCode,
+      city,
+      email,
+      phoneNumber
     };
   }
 }

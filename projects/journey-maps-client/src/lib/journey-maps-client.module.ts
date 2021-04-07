@@ -12,10 +12,10 @@ import {MarkerDetailsComponent} from './components/marker-details/marker-details
 import {LevelSwitchComponent} from './components/level-switch/level-switch.component';
 import {TextInfoBlockComponent} from './components/marker-details/components/info-block-renderer/components/text-info-block/text-info-block.component';
 import {ButtonInfoBlockComponent} from './components/marker-details/components/info-block-renderer/components/button-info-block/button-info-block.component';
-import {HtmlInfoBlockComponent} from './components/marker-details/components/info-block-renderer/components/html-info-block/html-info-block.component';
 import {PopupComponent} from './components/marker-details/components/popup/popup.component';
 import {TeaserComponent} from './components/marker-details/components/teaser/teaser.component';
 import {InfoBlockRendererComponent} from './components/marker-details/components/info-block-renderer/info-block-renderer.component';
+import {AddressInfoBlockComponent} from './components/marker-details/components/info-block-renderer/components/address-info-block/address-info-block.component';
 
 
 @NgModule({
@@ -24,13 +24,13 @@ import {InfoBlockRendererComponent} from './components/marker-details/components
     TeaserComponent,
     TextInfoBlockComponent,
     ButtonInfoBlockComponent,
-    HtmlInfoBlockComponent,
     SearchBarComponent,
     GlobalStylesComponent,
     LevelSwitchComponent,
     PopupComponent,
     MarkerDetailsComponent,
-    InfoBlockRendererComponent
+    InfoBlockRendererComponent,
+    AddressInfoBlockComponent
   ],
   imports: [
     CommonModule,

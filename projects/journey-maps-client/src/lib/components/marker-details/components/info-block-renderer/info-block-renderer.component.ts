@@ -26,8 +26,7 @@ export class InfoBlockRendererComponent {
     return infoBlock.type === InfoBlockType.BUTTON;
   }
 
-  isHtmlInfoBlock(infoBlock: InfoBlock): boolean {
-    return infoBlock.type === InfoBlockType.HTML;
+  isAddressInfoBlock(infoBlock: InfoBlock): boolean {
+    return infoBlock.type === InfoBlockType.ADDRESS;
   }
-
 }
