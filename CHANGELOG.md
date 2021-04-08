@@ -8,6 +8,10 @@
 
 ### Fixed
 
+## [0.6.2](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.6.1&sourceBranch=refs%2Ftags%2F0.6.2&targetRepoId=46287) - 2021-04-08
+
+### Fixed
+
 ## [0.6.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.6.0&sourceBranch=refs%2Ftags%2F0.6.1&targetRepoId=46287) - 2021-04-08
 
 ### Fixed
