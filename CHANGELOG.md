@@ -4,6 +4,14 @@
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [0.6.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.5.2&sourceBranch=refs%2Ftags%2F0.6.0&targetRepoId=46287) - 2021-04-07
+
+### Added
+
 * DUSP-1357 Add optional `routes` input parameter to display a list of routes on the map
 
 * DUSP-1240 adds an optional `showLevelSwitch` input parameter. The level switch allows you to switch floors/levels on a
@@ -18,8 +26,6 @@
   from `string` to `GeoJSON.FeatureCollection`
 
 * **BREAKING**: DUSP-1239 `infoBoxTemplate` input parameter has been renamed to `markerDetailsTemplate`
-
-### Fixed
 
 ## [0.5.2](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.5.1&sourceBranch=refs%2Ftags%2F0.5.2&targetRepoId=46287) - 2021-03-17
 
