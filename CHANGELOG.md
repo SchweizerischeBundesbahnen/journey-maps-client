@@ -8,6 +8,12 @@
 
 ### Fixed
 
+## [0.6.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.6.0&sourceBranch=refs%2Ftags%2F0.6.1&targetRepoId=46287) - 2021-04-07
+
+### Fixed
+
+* only update journey, transfer and routes if there are changes to one of these 3.
+
 ## [0.6.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.5.2&sourceBranch=refs%2Ftags%2F0.6.0&targetRepoId=46287) - 2021-04-07
 
 ### Added
