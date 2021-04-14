@@ -9,6 +9,7 @@ import {MapInitService} from './services/map/map-init.service';
 import {asyncScheduler, Observable, of, scheduled} from 'rxjs';
 import {JourneyMapsClientModule} from './journey-maps-client.module';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {HttpClientModule} from '@angular/common/http';
 
 let component: JourneyMapsClientComponent;
 let fixture: ComponentFixture<JourneyMapsClientComponent>;
@@ -103,7 +104,7 @@ describe('JourneyMapsClientComponent#touchEventCollector', () => {
 });
 
 const configureTestingModule = () => TestBed.configureTestingModule({
-  imports: [JourneyMapsClientModule, NoopAnimationsModule],
+  imports: [JourneyMapsClientModule, NoopAnimationsModule, HttpClientModule],
   declarations: [JourneyMapsClientComponent],
   providers: [
     Window,

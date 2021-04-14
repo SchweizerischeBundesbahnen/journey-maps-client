@@ -1,12 +1,11 @@
 # Change Log
 
-## [Unreleased] - yyyy-mm-dd
-
-### Added
+## [0.7.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.6.3&sourceBranch=refs%2Ftags%2F0.7.0&targetRepoId=46287) - 2021-04-14
 
 ### Changed
 
-### Fixed
+* `JourneyMapsClientModule` no longer imports `HttpClientModule` to avoid the creation of multiple instances of it.
+  Applications using Journey Maps Client have to import `HttpClientModule` itself.
 
 ## [0.6.3](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.6.2&sourceBranch=refs%2Ftags%2F0.6.3&targetRepoId=46287) - 2021-04-12
 
