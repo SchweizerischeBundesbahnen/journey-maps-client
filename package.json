@@ -1,6 +1,6 @@
 {
   "name": "journey-maps-client",
-  "version": "0.8.0",
+  "version": "0.7.1",
   "scripts":   {
     "ng": "ng",
     "start-testapp": "npm run _testapp-example && ng serve journey-maps-client-testapp",

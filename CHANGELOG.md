@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.7.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.7.0&sourceBranch=refs%2Ftags%2F0.7.1&targetRepoId=46287) - 2021-04-14
+
+### Changed
+
+* moved the import of mapbox-gl.css outside of the library. it should be included by the encompassing app.
+
 ## [0.7.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.6.3&sourceBranch=refs%2Ftags%2F0.7.0&targetRepoId=46287) - 2021-04-14
 
 ### Changed
