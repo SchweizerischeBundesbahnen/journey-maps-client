@@ -4,6 +4,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TeaserComponent} from './teaser.component';
 import {JourneyMapsClientModule} from '../../../../journey-maps-client.module';
 import {TestDataService} from '../../../../services/test-data.service';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('TeaserComponent', () => {
   const testData = new TestDataService();
@@ -14,7 +15,7 @@ describe('TeaserComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [JourneyMapsClientModule, NoopAnimationsModule],
+      imports: [JourneyMapsClientModule, NoopAnimationsModule, HttpClientModule],
     });
     fixture = TestBed.createComponent(TeaserComponent);
     component = fixture.componentInstance;
