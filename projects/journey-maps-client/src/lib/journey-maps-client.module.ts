@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {JourneyMapsClientComponent} from './journey-maps-client.component';
-import {HttpClientModule} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
 import {SBB_ICON_REGISTRY_PROVIDER, SbbIconModule} from '@sbb-esta/angular-core';
 import {SbbAutocompleteModule, SbbButtonModule, SbbSearchModule} from '@sbb-esta/angular-public';
@@ -34,7 +33,6 @@ import {AddressInfoBlockComponent} from './components/marker-details/components/
   ],
   imports: [
     CommonModule,
-    HttpClientModule,
     SbbIconModule,
     SbbButtonModule,
     SbbAutocompleteModule,
