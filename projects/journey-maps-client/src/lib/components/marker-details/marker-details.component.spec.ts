@@ -4,6 +4,7 @@ import {TestDataService} from '../../services/test-data.service';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {JourneyMapsClientModule} from '../../journey-maps-client.module';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {HttpClientModule} from '@angular/common/http';
 
 
 describe('MarkerDetailsComponent', () => {
@@ -16,7 +17,7 @@ describe('MarkerDetailsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [JourneyMapsClientModule, NoopAnimationsModule],
+      imports: [JourneyMapsClientModule, NoopAnimationsModule, HttpClientModule],
     });
     fixture = TestBed.createComponent(MarkerDetailsComponent);
     component = fixture.componentInstance;

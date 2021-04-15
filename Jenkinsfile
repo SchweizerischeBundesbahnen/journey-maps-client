@@ -74,6 +74,24 @@ pipeline {
         }
       }
     }
+    stage('Publish to Github-Packages') {
+      when {
+        allOf {
+          branch 'master'
+          expression { return params.RELEASE }
+        }
+      }
+      environment {
+        GITHUB_ACCESS = credentials('35c4fe78-0d7d-4f6a-91c7-99a512b47665')
+      }
+      steps {
+        sh 'cat dist/journey-maps-client/package.json | jq \'.version = "0.0.7"\' > tmp.json && mv tmp.json dist/journey-maps-client/package.json'
+        sh 'cat dist/journey-maps-client-elements/package.json | jq \'.version = "0.0.7"\' > tmp.json && mv tmp.json dist/journey-maps-client-elements/package.json'
+        sh 'npm set //npm.pkg.github.com/:_authToken $GITHUB_ACCESS'
+        sh 'npm publish dist/journey-maps-client/ --registry=https://npm.pkg.github.com'
+        sh 'npm publish dist/journey-maps-client-elements/ --registry=https://npm.pkg.github.com'
+      }
+    }
     stage('Create & deploy testapp docker') {
       when {
         branch 'master'

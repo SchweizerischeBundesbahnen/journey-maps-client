@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
         ),
         this.infoBlockFactoryService.createTextInfoBlock(
           'Rückgabe',
-          'An allen Mietstationen von Rent a Bike'
+          'An allen Mietstationen von Rent a Bike.'
         ),
         this.infoBlockFactoryService.createAddressInfoBlock(
           'Kontakt',

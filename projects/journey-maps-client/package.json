@@ -1,5 +1,5 @@
 {
-  "name": "journey-maps-client",
+  "name": "@SchweizerischeBundesbahnen/journey-maps-client",
   "version": "0.0.0-PLACEHOLDER",
   "peerDependencies": {
     "@angular/cdk": ">=v9",

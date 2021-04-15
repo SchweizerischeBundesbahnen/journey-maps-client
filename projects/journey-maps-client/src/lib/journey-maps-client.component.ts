@@ -151,6 +151,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   public touchOverlayText: string;
   public touchOverlayStyleClass = '';
 
+  // map.isStyleLoaded() returns sometimes false when sources are being updated.
+  // Therefore we set this variable to true once the style has been loaded.
+  private isStyleLoaded = false;
+
   /** @internal */
   constructor(private mapInitService: MapInitService,
               private mapService: MapService,
@@ -225,7 +229,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private executeWhenMapStyleLoaded(callback: () => void): void {
-    if (this.map?.isStyleLoaded()) {
+    if (this.isStyleLoaded) {
       callback();
     } else {
       this.styleLoaded.pipe(
@@ -294,7 +298,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       console.warn('Use either transfer or journey or routes. It does not work correctly when more than one of these properties is set.');
     }
 
-    if (!this.map?.isStyleLoaded()) {
+    if (!this.isStyleLoaded) {
       return;
     }
 
@@ -323,9 +327,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       m => {
         this.map = m;
         if (this.map.isStyleLoaded()) {
+          this.isStyleLoaded = true;
           this.styleLoaded.next();
         } else {
-          this.map.on('styledata', () => this.styleLoaded.next());
+          this.map.on('styledata', () => {
+            this.isStyleLoaded = true;
+            this.styleLoaded.next();
+          });
         }
         this.executeWhenMapStyleLoaded(() => this.onStyleLoaded());
       }

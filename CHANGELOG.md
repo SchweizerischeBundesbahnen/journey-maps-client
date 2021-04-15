@@ -1,12 +1,31 @@
 # Change Log
 
-## [Unreleased] - yyyy-mm-dd
-
-### Added
+## [0.7.2](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.7.1&sourceBranch=refs%2Ftags%2F0.7.2&targetRepoId=46287) - 2021-04-15
 
 ### Changed
 
-### Fixed
+* enclose the map container inside it's own "stacking context" to prevent internal z-indexes from conflicting with the
+  host's page
+* Detection mechanism whether the map style is loaded or not. Old solution seemed to be unstable.
+
+## [0.7.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.7.0&sourceBranch=refs%2Ftags%2F0.7.1&targetRepoId=46287) - 2021-04-14
+
+### Changed
+
+* moved the import of mapbox-gl.css outside of the library. it should be included by the encompassing app.
+
+## [0.7.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.6.3&sourceBranch=refs%2Ftags%2F0.7.0&targetRepoId=46287) - 2021-04-14
+
+### Changed
+
+* `JourneyMapsClientModule` no longer imports `HttpClientModule` to avoid the creation of multiple instances of it.
+  Applications using Journey Maps Client have to import `HttpClientModule` itself.
+
+## [0.6.3](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.6.2&sourceBranch=refs%2Ftags%2F0.6.3&targetRepoId=46287) - 2021-04-12
+
+### Added
+
+* added delay marker category
 
 ## [0.6.2](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.6.1&sourceBranch=refs%2Ftags%2F0.6.2&targetRepoId=46287) - 2021-04-08
 
