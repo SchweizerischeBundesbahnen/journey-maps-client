@@ -4,7 +4,9 @@
 
 ### Changed
 
-* enclose the map container inside it's own "stacking context" to prevent internal z-indexes from conflicting with the host's page 
+* enclose the map container inside it's own "stacking context" to prevent internal z-indexes from conflicting with the
+  host's page
+* Detection mechanism whether the map style is loaded or not. Old solution seemed to be unstable.
 
 ## [0.7.1](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.7.0&sourceBranch=refs%2Ftags%2F0.7.1&targetRepoId=46287) - 2021-04-14
 
