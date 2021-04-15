@@ -1,7 +1,7 @@
 {
   "name": "journey-maps-client",
-  "version": "0.7.2",
-  "scripts": {
+  "version": "0.8.0",
+  "scripts":   {
     "ng": "ng",
     "start-testapp": "npm run _testapp-example && ng serve journey-maps-client-testapp",
     "start-testapp-with-remote-access": "npm run _testapp-example && ng serve journey-maps-client-testapp --host 0.0.0.0 --disable-host-check",
