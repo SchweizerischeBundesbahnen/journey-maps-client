@@ -90,6 +90,7 @@ pipeline {
       steps {
         sh "cat dist/journey-maps-client/package.json | jq '.version = \"${releaseVersion}\"' > tmp.json && mv tmp.json dist/journey-maps-client/package.json"
         sh "cat dist/journey-maps-client-elements/package.json | jq \'.version = \"${releaseVersion}\"' > tmp.json && mv tmp.json dist/journey-maps-client-elements/package.json"
+        // Without sudo I cannot write to /var/data/jenkins/.npmrc
         sh 'sudo npm set //npm.pkg.github.com/:_authToken $GITHUB_ACCESS'
         sh 'sudo npm publish dist/journey-maps-client/ --registry=https://npm.pkg.github.com'
         sh 'sudo npm publish dist/journey-maps-client-elements/ --registry=https://npm.pkg.github.com'
