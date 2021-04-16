@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.7.2&sourceBranch=refs%2Ftags%2F1.0.0&targetRepoId=46287) - 2021-04-16
+
+### Added
+
+* Our packages are now also available on Github: https://github.com/SchweizerischeBundesbahnen/journey-maps-client
+
+### Changed
+
+* The names of the packages have changed!
+  * From `journey-maps-client` to `@SchweizerischeBundesbahnen/journey-maps-client`
+  * From `journey-maps-client-elements` to `@SchweizerischeBundesbahnen/journey-maps-client-elements`
+
 ## [0.7.2](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.7.1&sourceBranch=refs%2Ftags%2F0.7.2&targetRepoId=46287) - 2021-04-15
 
 ### Changed

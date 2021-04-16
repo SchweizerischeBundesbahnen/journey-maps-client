@@ -1,5 +1,7 @@
 #!groovy
 
+def releaseVersion
+
 pipeline {
   agent { label 'nodejs' }
   parameters {
@@ -60,7 +62,8 @@ pipeline {
       steps {
         script {
           def packageJson = readJSON file: './package.json'
-          def (int major, int minor, int patch) = packageJson.version.tokenize('.')
+          releaseVersion = packageJson.version
+          def (int major, int minor, int patch) = releaseVersion.tokenize('.')
 
           bin_npmLeanPublish(
             targetRepo: 'rokas.npm',
@@ -72,6 +75,24 @@ pipeline {
             releaseVersion: "${major}.${minor}.${patch}".toString()
           )
         }
+      }
+    }
+    stage('Publish to Github-Packages') {
+      when {
+        allOf {
+          branch 'master'
+          expression { return params.RELEASE }
+        }
+      }
+      environment {
+        GITHUB_ACCESS = credentials('35c4fe78-0d7d-4f6a-91c7-99a512b47665')
+      }
+      steps {
+        sh "cat dist/journey-maps-client/package.json | jq '.version = \"${releaseVersion}\"' > tmp.json && mv tmp.json dist/journey-maps-client/package.json"
+        sh "cat dist/journey-maps-client-elements/package.json | jq \'.version = \"${releaseVersion}\"' > tmp.json && mv tmp.json dist/journey-maps-client-elements/package.json"
+        sh "npm set //npm.pkg.github.com/:_authToken $GITHUB_ACCESS"
+        sh 'npm publish dist/journey-maps-client/ --registry=https://npm.pkg.github.com'
+        sh 'npm publish dist/journey-maps-client-elements/ --registry=https://npm.pkg.github.com'
       }
     }
     stage('Create & deploy testapp docker') {
