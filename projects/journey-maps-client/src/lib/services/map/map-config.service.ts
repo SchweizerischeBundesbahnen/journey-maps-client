@@ -21,8 +21,6 @@ export class MapConfigService {
     return this._popup;
   }
 
-  // TODO cdi replace code that can take advantage of querying this service
-
   get allowOneFingerPan(): boolean {
     return this._allowOneFingerPan;
   }
