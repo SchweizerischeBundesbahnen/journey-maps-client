@@ -15,6 +15,7 @@ import {PopupComponent} from './components/marker-details/components/popup/popup
 import {TeaserComponent} from './components/marker-details/components/teaser/teaser.component';
 import {InfoBlockRendererComponent} from './components/marker-details/components/info-block-renderer/info-block-renderer.component';
 import {AddressInfoBlockComponent} from './components/marker-details/components/info-block-renderer/components/address-info-block/address-info-block.component';
+import {ZoomControlsComponent} from './components/zoom-controls/zoom-controls.component';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import {AddressInfoBlockComponent} from './components/marker-details/components/
     SearchBarComponent,
     GlobalStylesComponent,
     LevelSwitchComponent,
+    ZoomControlsComponent,
     PopupComponent,
     MarkerDetailsComponent,
     InfoBlockRendererComponent,

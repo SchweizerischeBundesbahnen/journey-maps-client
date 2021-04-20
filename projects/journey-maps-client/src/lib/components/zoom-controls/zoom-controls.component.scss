@@ -1,0 +1,48 @@
+@import '~@sbb-esta/angular-public/styles.scss';
+
+.zoom-controls-buttons-container {
+  margin: 8px;
+  background: #FFFFFF;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  border-radius: 24px;
+}
+
+.zoom-controls-button {
+  padding: 6px;
+  width: 48px;
+  line-height: 36px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.zoom-controls-button:first-child {
+  border-radius: 24px 24px 0 0;
+
+  .zoom-controls-button-content {
+    border-radius: 24px 24px 8px 8px;
+  }
+}
+
+.zoom-controls-button:last-child {
+  border-radius: 0 0 24px 24px;
+  border-bottom-width: 0;
+
+  .zoom-controls-button-content {
+    border-radius: 8px 8px 24px 24px;
+  }
+}
+
+.zoom-controls-button-content {
+  cursor: pointer;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.zoom-controls-button-content:hover {
+  @extend .zoom-controls-button-content;
+  background-color: #212121;
+  color: white;
+}
+
+.sbb-icon {
+  vertical-align: middle;
+}
