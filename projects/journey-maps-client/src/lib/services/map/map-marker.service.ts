@@ -111,7 +111,7 @@ export class MapMarkerService {
   private easeTo(map: MapboxMap, center: LngLatLike, optionsOverride: object = {}): void {
     map.easeTo({
       center,
-      offset: this.getSelectedMarkerOffset(map),
+      offset: this.getSelectedMarkerOffset(map), // can be overridden by optionsOverride
       ...optionsOverride,
     });
   }
