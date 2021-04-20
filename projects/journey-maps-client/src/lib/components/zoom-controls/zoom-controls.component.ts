@@ -11,9 +11,10 @@ import {takeUntil} from 'rxjs/operators';
 export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() map: MapboxMap;
 
-  private lastZoom: number;
   private zoomChanged = new Subject<void>();
   private destroyed = new Subject<void>();
+  isMinZoom: boolean;
+  isMaxZoom: boolean;
 
   constructor(private ref: ChangeDetectorRef) {}
 
@@ -27,8 +28,13 @@ export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.map?.currentValue) {
-      this.lastZoom = this.map.getZoom();
       this.map.on('zoomend', () => this.zoomChanged.next());
+
+      if (!changes.map.previousValue) {
+        // only do this the first time map is set
+        this.setIsMinMaxZoom();
+      }
+
       // call outside component-zone, trigger detect changes manually
       this.ref.detectChanges();
     }
@@ -40,14 +46,19 @@ export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private onZoomChanged(): void {
-    this.lastZoom = this.map.getZoom();
+    this.setIsMinMaxZoom();
+  }
+
+  private setIsMinMaxZoom(): void {
+    this.isMinZoom = this.map.getZoom() === this.map.getMinZoom();
+    this.isMaxZoom = this.map.getZoom() === this.map.getMaxZoom();
   }
 
   zoomIn(): void {
-
+    this.map.zoomIn();
   }
 
   zoomOut(): void {
-
+    this.map.zoomOut();
   }
 }
