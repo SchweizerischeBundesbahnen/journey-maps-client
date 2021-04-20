@@ -33,7 +33,7 @@ describe('MapMarkerService#addMissingImages', () => {
       ['hasImage', 'loadImage']
     );
     mapServiceSpyObj = jasmine.createSpyObj(['addMissingImage']);
-    sut = new MapMarkerService(null, mapServiceSpyObj);
+    sut = new MapMarkerService(null, mapServiceSpyObj, null);
   });
 
   it('should add missing images with identical paths only once', () => {
