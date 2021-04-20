@@ -10,7 +10,7 @@ export class MapConfigService {
   constructor() {
   }
 
-  initializeConfigs(popup: boolean, allowOneFingerPan: boolean, enableSearchBar: boolean, showLevelSwitch: boolean): void {
+  updateConfigs(popup: boolean, allowOneFingerPan: boolean, enableSearchBar: boolean, showLevelSwitch: boolean): void {
     this._popup = popup;
     this._allowOneFingerPan = allowOneFingerPan;
     this._enableSearchBar = enableSearchBar;

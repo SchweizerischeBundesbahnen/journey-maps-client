@@ -272,6 +272,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.mapConfigService.updateConfigs(
+      this.popup,
+      this.allowOneFingerPan,
+      this.enableSearchBar,
+      this.showLevelSwitch,
+    );
+
     if (changes.markers) {
       this.updateMarkers();
     }
@@ -339,13 +346,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         }
         this.executeWhenMapStyleLoaded(() => this.onStyleLoaded());
       }
-    );
-
-    this.mapConfigService.initializeConfigs(
-      this.popup,
-      this.allowOneFingerPan,
-      this.enableSearchBar,
-      this.showLevelSwitch,
     );
 
     this.touchEventCollector.pipe(
