@@ -116,6 +116,7 @@ export class MapMarkerService {
     });
   }
 
+  // put the marker 15px above 1/3 from the top of the map
   private getSelectedMarkerOffset(map: MapboxMap): PointLike {
     let yOffset = 0;
     if (this.mapConfigService.popup) {
