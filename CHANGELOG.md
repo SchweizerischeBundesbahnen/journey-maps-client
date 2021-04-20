@@ -1,5 +1,14 @@
 # Change Log
 
+## [Unreleased] - yyyy-mm-dd
+
+### Added
+
+### Changed
+* When marker details are displayed in a popup instead of a teaser, position the newly selected marker 1/3 from the top of the map
+
+### Fixed
+
 ## [1.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.7.2&sourceBranch=refs%2Ftags%2F1.0.0&targetRepoId=46287) - 2021-04-16
 
 ### Added
