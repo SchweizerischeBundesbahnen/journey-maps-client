@@ -18,7 +18,7 @@
       [markerDetailsTemplate]=""
       [(selectedMarkerId)]="selectedMarkerId"
       [allowOneFingerPan]="allowOneFingerPan"
-      [popup]="false"
+      [popup]="popup"
     >
     </rokas-journey-maps-client>
 
@@ -34,11 +34,11 @@
       <li style="list-style: circle;">
         <button
           style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
-          (click)="setSelecteMarkerId('home')"
+          (click)="setSelectedMarkerId('home')"
         >select 'Home Office' Marker</button>
         <button
           style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
-          (click)="setSelecteMarkerId(undefined)"
+          (click)="setSelectedMarkerId(undefined)"
         >unselect all Markers</button>
       </li>
       <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span></li>
@@ -52,8 +52,20 @@
             style="width: 200px; min-height: 10px; padding: 0 5px; background-position: right; color: black;"
             (change)="setGeoJsonInput($event)"
           >
-            <option [value]="" (change)="setGeoJsonInput($event)">(none)</option>
-            <option *ngFor="let input of geoJsonInputs" [value]="input" (change)="setGeoJsonInput($event)">{{input}}</option>
+            <option value="" (change)="setGeoJsonInput($event)">(none)</option>
+            <option *ngFor="let input of geoJsonInputs" [value]="input">{{input}}</option>
+          </select>
+        </label>
+      </li>
+      <li>
+        <label for="popup-select">
+          Show marker details as:
+          <select id="popup-select"
+                  style="width: 200px; min-height: 10px; padding: 0 5px; background-position: right; color: black;"
+                  (change)="setPopupInput($event)"
+          >
+            <option value="true">Popup</option>
+            <option value="false">Teaser</option>
           </select>
         </label>
       </li>

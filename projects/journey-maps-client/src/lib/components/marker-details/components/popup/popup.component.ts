@@ -77,6 +77,9 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     const options = {} as any;
+    // don't trigger a 'close' event when clicking outside the popup
+    // we only want the popup to close when clicking on a marker or the close button
+    options.closeOnClick = false;
     options.className = 'rokas text-copy';
     // CHECKME ses: Verify with new markers
     options.offset = {
