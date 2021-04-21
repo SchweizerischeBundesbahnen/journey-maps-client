@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {Map as MapboxMap} from 'mapbox-gl';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -16,7 +16,7 @@ export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
   isMinZoom: boolean;
   isMaxZoom: boolean;
 
-  constructor(private ref: ChangeDetectorRef) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.zoomChanged
@@ -34,9 +34,6 @@ export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
         // only do this the first time map is set
         this.setIsMinMaxZoom();
       }
-
-      // call outside component-zone, trigger detect changes manually
-      this.ref.detectChanges();
     }
   }
 
