@@ -37,14 +37,13 @@
   text-align: center;
 }
 
-.zoom-controls-button-content:hover {
+.zoom-controls-button-content:not([disabled]):hover {
   background-color: #212121;
   color: white;
 }
 
-/* FIXME cdi this doesn't seem to work */
-.zoom-controls-button-content:disabled {
-  cursor: not-allowed;
+.zoom-controls-button-content[disabled] {
+  cursor: default;
 
   sbb-icon {
     color: $sbbColorCloud;
