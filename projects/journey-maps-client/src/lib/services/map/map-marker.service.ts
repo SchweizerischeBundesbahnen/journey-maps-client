@@ -1,17 +1,19 @@
 import {Injectable} from '@angular/core';
-import {GeoJSONSource, LngLatLike, Map as MapboxMap, MapboxGeoJSONFeature} from 'mapbox-gl';
+import {GeoJSONSource, LngLatLike, Map as MapboxMap, MapboxGeoJSONFeature, PointLike} from 'mapbox-gl';
 import {Constants} from '../constants';
 import {Marker} from '../../model/marker';
 import {MarkerConverterService} from '../marker-converter.service';
 import {MarkerCategory} from '../../model/marker-category.enum';
 import {MapService} from './map.service';
+import {MapConfigService} from './map-config.service';
 
 
 @Injectable({providedIn: 'root'})
 export class MapMarkerService {
 
   constructor(private markerConverter: MarkerConverterService,
-              private mapService: MapService) {
+              private mapService: MapService,
+              private mapConfigService: MapConfigService) {
   }
 
   updateMarkers(map: MapboxMap, markers: Marker[], selectedMarker: Marker): void {
@@ -43,12 +45,12 @@ export class MapMarkerService {
     this.zoomToCluster(map, cluster.properties.cluster_id, this.mapService.convertToLngLatLike(cluster.geometry));
   }
 
-  private zoomToCluster(map: MapboxMap, clusterId: any, center: LngLatLike): void {
+  private zoomToCluster(map: MapboxMap, clusterId: any, center: LngLatLike, offset: PointLike = [0, 0]): void {
     this.getMarkerSource(map).getClusterExpansionZoom(
       clusterId,
       (err, zoom) => {
         if (!err) {
-          map.easeTo({center, zoom: zoom + 0.1});
+          this.easeTo(map, center, {zoom: zoom + 0.1, offset});
         }
       }
     );
@@ -64,12 +66,13 @@ export class MapMarkerService {
     this.selectFeature(map, selectedFeatureId);
     const geometry = feature.geometry;
     if (geometry?.type === 'Point') {
-      map.flyTo({center: this.mapService.convertToLngLatLike(geometry)});
+      this.easeTo(map, this.mapService.convertToLngLatLike(geometry));
     }
 
     return selectedFeatureId;
   }
 
+  // When a marker has been selected from outside the map.
   selectMarker(map: MapboxMap, marker: Marker): void {
     this.selectFeature(map, marker.id);
 
@@ -84,7 +87,7 @@ export class MapMarkerService {
     if (features && features.length) {
       // Marker is already visible on map.
       // Center map to marker.
-      map.flyTo({center: marker.position as LngLatLike});
+      this.easeTo(map, marker.position as LngLatLike);
     } else {
       let cluster = this.queryClusterAtPosition(map, marker.position);
       if (cluster) {
@@ -100,9 +103,29 @@ export class MapMarkerService {
             }
           }
         );
-        map.flyTo({center: marker.position as LngLatLike});
+        this.easeTo(map, marker.position as LngLatLike);
       }
     }
+  }
+
+  private easeTo(map: MapboxMap, center: LngLatLike, optionsOverride: object = {}): void {
+    map.easeTo({
+      center,
+      offset: this.getSelectedMarkerOffset(map), // can be overridden by optionsOverride
+      ...optionsOverride,
+    });
+  }
+
+  // put the marker 15px above 1/3 from the top of the map
+  private getSelectedMarkerOffset(map: MapboxMap): PointLike {
+    let yOffset = 0;
+    if (this.mapConfigService.popup) {
+      const mapHeight = map.getContainer().clientHeight;
+      const mapHeightOffset = mapHeight / 6;
+      const tooltipToMarker = 15;
+      yOffset = -(mapHeightOffset + tooltipToMarker);
+    }
+    return [0, yOffset];
   }
 
   private queryClusterAtPosition(map: MapboxMap, position: GeoJSON.Position): MapboxGeoJSONFeature {
@@ -131,7 +154,7 @@ export class MapMarkerService {
           for (const child of children) {
             if (child.id === marker.id) {
               found.push(true);
-              this.zoomToCluster(map, clusterId, marker.position as LngLatLike);
+              this.zoomToCluster(map, clusterId, marker.position as LngLatLike, this.getSelectedMarkerOffset(map));
             } else if (child.properties.cluster === true) {
               this.zoomUntilMarkerVisible(map, child, marker, found);
             }

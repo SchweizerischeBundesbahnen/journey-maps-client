@@ -1,6 +1,14 @@
 # Change Log
 
-## [1.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.7.2&sourceBranch=refs%2Ftags%2F1.0.0&targetRepoId=46287) - 2021-04-16
+## [Unreleased] - yyyy-mm-dd
+
+### Added
+
+### Changed
+
+### Fixed
+
+## [1.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.7.2&sourceBranch=refs%2Ftags%2F1.0.0&targetRepoId=46287) - 2021-04-21
 
 ### Added
 
@@ -11,6 +19,13 @@
 * The names of the packages have changed!
   * From `journey-maps-client` to `@SchweizerischeBundesbahnen/journey-maps-client`
   * From `journey-maps-client-elements` to `@SchweizerischeBundesbahnen/journey-maps-client-elements`
+* When marker details are displayed in a popup instead of a teaser, position the newly selected marker 1/3 from the top
+  of the map
+
+### Fixed
+
+* Change the popup configuration to not emit a 'close' event when clicking outside the popup. Now clicking on the same
+  marker again closes the popup, same as we do with the teaser.
 
 ## [0.7.2](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.7.1&sourceBranch=refs%2Ftags%2F0.7.2&targetRepoId=46287) - 2021-04-15
 

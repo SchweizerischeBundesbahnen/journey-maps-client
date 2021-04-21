@@ -131,6 +131,7 @@ export class AppComponent implements OnInit {
   journey: GeoJSON.FeatureCollection;
   transfer: GeoJSON.FeatureCollection;
   routes: GeoJSON.FeatureCollection[] = [];
+  popup = true;
 
   // preload example data into these fields
   _journey: GeoJSON.FeatureCollection;
@@ -151,7 +152,7 @@ export class AppComponent implements OnInit {
     this.mapCenterChanged = this.mapCenter;
   }
 
-  setSelecteMarkerId(selectedMarkerId: string): void {
+  setSelectedMarkerId(selectedMarkerId: string): void {
     this.selectedMarkerId = selectedMarkerId;
   }
 
@@ -168,5 +169,9 @@ export class AppComponent implements OnInit {
     if ((event.target as HTMLOptionElement).value === 'routes') {
       this.routes = this._routes;
     }
+  }
+
+  setPopupInput(event: Event): void {
+    this.popup = (event.target as HTMLOptionElement).value === 'true';
   }
 }

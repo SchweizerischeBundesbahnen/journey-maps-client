@@ -29,6 +29,7 @@ import {MapService} from './services/map/map.service';
 import {MapJourneyService} from './services/map/map-journey.service';
 import {MapTransferService} from './services/map/map-transfer.service';
 import {MapRoutesService} from './services/map/map-routes.service';
+import {MapConfigService} from './services/map/map-config.service';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -157,6 +158,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   /** @internal */
   constructor(private mapInitService: MapInitService,
+              private mapConfigService: MapConfigService,
               private mapService: MapService,
               private mapMarkerService: MapMarkerService,
               private mapJourneyService: MapJourneyService,
@@ -270,6 +272,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.mapConfigService.updateConfigs(
+      this.popup,
+      this.allowOneFingerPan,
+      this.enableSearchBar,
+      this.showLevelSwitch,
+    );
+
     if (changes.markers) {
       this.updateMarkers();
     }
