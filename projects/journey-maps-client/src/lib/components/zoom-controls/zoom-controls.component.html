@@ -1,4 +1,4 @@
-<div class="zoom-controls-buttons-container">
+<div class="zoom-controls-buttons-container" *ngIf="map">
   <div class="zoom-controls-button">
     <div (click)="zoomIn()" class="zoom-controls-button-content" [attr.disabled]="isMaxZoom ? '' : null">
       <sbb-icon svgIcon="kom:plus-small"></sbb-icon>
