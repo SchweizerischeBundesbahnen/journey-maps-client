@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {Map as MapboxMap} from 'mapbox-gl';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -19,8 +19,9 @@ import {MapLayerFilterService} from './services/map-layer-filter.service';
       ]),
       transition(':leave',
         animate(150, style({opacity: 0})))
-    ])
-  ]
+    ]),
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   @Input() map: MapboxMap;

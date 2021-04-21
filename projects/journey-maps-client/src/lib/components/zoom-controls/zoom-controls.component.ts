@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {Map as MapboxMap} from 'mapbox-gl';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -7,6 +7,7 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'rokas-zoom-controls',
   templateUrl: './zoom-controls.component.html',
   styleUrls: ['./zoom-controls.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() map: MapboxMap;
