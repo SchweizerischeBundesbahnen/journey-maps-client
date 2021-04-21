@@ -37,7 +37,14 @@
   text-align: center;
 }
 
-.zoom-controls-button-content:not([disabled]):hover {
+@media (hover: hover) {
+  .zoom-controls-button-content:not([disabled]):hover {
+    background-color: #212121;
+    color: white;
+  }
+}
+
+.zoom-controls-button-content:not([disabled]):active {
   background-color: #212121;
   color: white;
 }
