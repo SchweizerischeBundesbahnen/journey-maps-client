@@ -12,9 +12,6 @@ import {MultiTouchSupport} from '../multiTouchSupport';
 })
 export class MapInitService {
 
-  constructor(private http: HttpClient) {
-  }
-
   private readonly defaultZoom = 7.5;
   private readonly defaultMapCenter: LngLatLike = [7.299265, 47.072120];
   private readonly defaultBoundingBox: LngLatBoundsLike = [[5.7, 47.9], [10.6, 45.7]]; // CH bounds;
@@ -37,26 +34,7 @@ export class MapInitService {
     }
   };
 
-  private static addControls(mapboxMap: mapboxgl.Map, allowOneFingerPan?: boolean): void {
-    if (!allowOneFingerPan) {
-      mapboxMap.addControl(new MultiTouchSupport());
-    }
-  }
-
-  private static defineClusterSettings(style: Style): void {
-    const markerSource = style.sources[Constants.MARKER_SOURCE] as any;
-
-    if (markerSource) {
-      markerSource.cluster = true;
-      markerSource.clusterRadius = Constants.CLUSTER_RADIUS;
-      markerSource.clusterMinPoints = 2;
-      markerSource.clusterProperties = {
-        // Maximum priority of the markers inside the cluster.
-        // Can be used in the map style for a custom cluster styling.
-        // See e.g: https://gitlab.geops.de/sbb/sbb-styles/-/blob/dev/partials/parkandrail.json#L21
-        priority: ['max', ['case', ['has', 'priority'], ['get', 'priority'], MarkerPriority.REGULAR]],
-      };
-    }
+  constructor(private http: HttpClient) {
   }
 
   initializeMap(
@@ -72,14 +50,14 @@ export class MapInitService {
     const mapboxMap = new MapboxMap(this.createOptions(mapNativeElement, zoomLevel, mapCenter, boundingBox, boundingBoxPadding));
 
     this.translateControlLabels(mapboxMap, language);
-    MapInitService.addControls(mapboxMap, allowOneFingerPan);
+    this.addControls(mapboxMap, allowOneFingerPan);
 
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
     mapboxMap.dragRotate.disable();
     mapboxMap.touchPitch.disable();
 
     return this.fetchStyle(styleUrl).pipe(
-      tap(style => MapInitService.defineClusterSettings(style)),
+      tap(style => this.defineClusterSettings(style)),
       tap(style => mapboxMap.setStyle(style)),
       map(() => mapboxMap)
     );
@@ -125,5 +103,27 @@ export class MapInitService {
       (mapboxMap as any)._locale,
       this.controlLabels[language]
     );
+  }
+
+  private addControls(mapboxMap: mapboxgl.Map, allowOneFingerPan?: boolean): void {
+    if (!allowOneFingerPan) {
+      mapboxMap.addControl(new MultiTouchSupport());
+    }
+  }
+
+  private defineClusterSettings(style: Style): void {
+    const markerSource = style.sources[Constants.MARKER_SOURCE] as any;
+
+    if (markerSource) {
+      markerSource.cluster = true;
+      markerSource.clusterRadius = Constants.CLUSTER_RADIUS;
+      markerSource.clusterMinPoints = 2;
+      markerSource.clusterProperties = {
+        // Maximum priority of the markers inside the cluster.
+        // Can be used in the map style for a custom cluster styling.
+        // See e.g: https://gitlab.geops.de/sbb/sbb-styles/-/blob/dev/partials/parkandrail.json#L21
+        priority: ['max', ['case', ['has', 'priority'], ['get', 'priority'], MarkerPriority.REGULAR]],
+      };
+    }
   }
 }
