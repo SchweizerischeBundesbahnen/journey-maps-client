@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {Map as MapboxMap} from 'mapbox-gl';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -17,7 +17,7 @@ export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
   isMinZoom: boolean;
   isMaxZoom: boolean;
 
-  constructor() {}
+  constructor(private ref: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.zoomChanged
@@ -29,7 +29,12 @@ export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.map?.currentValue) {
-      this.map.on('zoomend', () => this.zoomChanged.next());
+      this.map.on('zoomend', () => {
+        this.zoomChanged.next();
+        // call outside component-zone, trigger detect changes manually
+        // when using the mouse wheel to zoom, automatic change detection doesn't work
+        this.ref.detectChanges();
+      });
 
       if (!changes.map.previousValue) {
         // only do this the first time map is set
