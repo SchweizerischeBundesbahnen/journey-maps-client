@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapboxOptions, NavigationControl, Style} from 'mapbox-gl';
+import {LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapboxOptions, Style} from 'mapbox-gl';
 import {map, tap} from 'rxjs/operators';
 import {Constants} from '../constants';
 import {MarkerPriority} from '../../model/marker-priority.enum';
@@ -106,10 +106,6 @@ export class MapInitService {
   }
 
   private addControls(mapboxMap: mapboxgl.Map, allowOneFingerPan?: boolean): void {
-    mapboxMap.addControl(
-      new NavigationControl({showCompass: false}),
-      'top-right'
-    );
     if (!allowOneFingerPan) {
       mapboxMap.addControl(new MultiTouchSupport());
     }

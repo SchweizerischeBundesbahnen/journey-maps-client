@@ -6,6 +6,8 @@
 
 ### Changed
 
+* DUSP-1297 new styling of zoom controls
+
 ### Fixed
 
 ## [1.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.7.2&sourceBranch=refs%2Ftags%2F1.0.0&targetRepoId=46287) - 2021-04-21

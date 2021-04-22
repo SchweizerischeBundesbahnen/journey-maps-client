@@ -1,6 +1,7 @@
 .map {
+  min-height: 515px; // enough space for zoom controls, level-switch controls, and copyright
   height: 50vh;
-  box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, .15);
+  box-shadow: 0 5px 5px -5px rgba(0, 0, 0, .15);
 }
 
 .source {
