@@ -31,7 +31,8 @@ export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
     if (changes.map?.currentValue) {
       this.map.on('zoomend', () => {
         this.zoomChanged.next();
-        // when using the mouse whell to zoom, automatic change detection doesn't work
+        // call outside component-zone, trigger detect changes manually
+        // when using the mouse wheel to zoom, automatic change detection doesn't work
         this.ref.detectChanges();
       });
 
