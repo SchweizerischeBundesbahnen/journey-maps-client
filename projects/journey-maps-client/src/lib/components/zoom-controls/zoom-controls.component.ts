@@ -7,7 +7,7 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'rokas-zoom-controls',
   templateUrl: './zoom-controls.component.html',
   styleUrls: ['./zoom-controls.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default, // neeeded for zoom control with mouse wheel
 })
 export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() map: MapboxMap;
