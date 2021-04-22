@@ -1,5 +1,13 @@
 @import '~@sbb-esta/angular-public/styles.scss';
 
+button {
+  display: block;
+  width: 100%;
+  background-color: inherit;
+  border: 0;
+  padding: 0;
+}
+
 .zoom-controls-buttons-container {
   margin: 8px;
   background: #FFFFFF;

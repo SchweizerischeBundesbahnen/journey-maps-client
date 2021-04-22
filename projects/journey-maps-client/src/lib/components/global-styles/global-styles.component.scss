@@ -4,6 +4,10 @@
   display: none;
 }
 
+.mapboxgl-control-container {
+  user-select: none;
+}
+
 .mapboxgl-popup.rokas {
 
   $closeIconSize: 24px;

@@ -1,11 +1,13 @@
 <div class="level-switch-buttons-container" *ngIf="isVisible" @fade>
     <ng-container *ngFor="let level of levels">
         <div class="level-switch-button">
-            <div (click)="switchLevel(level)"
-                 [ngClass]="{
-                 'level-switch-button-content-selected':level === selectedLevel,
-                 'level-switch-button-content':level !== selectedLevel
-                 }">{{level}}</div>
+            <button
+              (click)="switchLevel(level)"
+              [ngClass]="{
+                'level-switch-button-content-selected':level === selectedLevel,
+                'level-switch-button-content':level !== selectedLevel
+              }"
+            >{{level}}</button>
         </div>
     </ng-container>
 

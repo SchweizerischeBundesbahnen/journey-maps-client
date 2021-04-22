@@ -7,6 +7,7 @@
 ### Changed
 
 * DUSP-1297 new styling of zoom controls
+* DUSP-1297 allow selecting zoom and level-switch controls with tab key
 
 ### Fixed
 
