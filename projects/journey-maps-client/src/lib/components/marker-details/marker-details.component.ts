@@ -1,13 +1,24 @@
-import {Component, EventEmitter, HostListener, Input, Output, TemplateRef} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  TemplateRef
+} from '@angular/core';
 import {Marker} from '../../model/marker';
 import {Map as MapboxMap} from 'mapbox-gl';
 
 @Component({
   selector: 'rokas-marker-details',
   templateUrl: './marker-details.component.html',
-  styleUrls: ['./marker-details.component.scss']
+  styleUrls: ['./marker-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MarkerDetailsComponent {
+export class MarkerDetailsComponent implements OnChanges {
 
   @Input() selectedMarker: Marker;
   @Input() template?: TemplateRef<any>;
@@ -15,14 +26,14 @@ export class MarkerDetailsComponent {
   @Input() map: MapboxMap;
   @Output() closeClicked = new EventEmitter<void>();
 
+  shouldRender = false;
+
   constructor() {
   }
 
-  shouldRender(): boolean {
-    return !!this.selectedMarker && (
-      this.selectedMarker.infoBlocks?.length > 0 ||
-      !!this.template
-    );
+  ngOnChanges(changes: SimpleChanges): void {
+    this.shouldRender = !!this.selectedMarker
+      && (this.selectedMarker.infoBlocks?.length > 0 || !!this.template);
   }
 
   @HostListener('document:keyup.escape')

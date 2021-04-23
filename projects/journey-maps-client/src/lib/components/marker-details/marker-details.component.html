@@ -1,5 +1,6 @@
-<ng-container *ngIf="shouldRender()">
+<ng-container>
   <rokas-teaser
+    [shouldRender]="shouldRender"
     [selectedMarker]="selectedMarker"
     (closeClicked)="closeClicked.next()"
     [template]="template"
@@ -7,6 +8,7 @@
     *ngIf="!popup"
   ></rokas-teaser>
   <rokas-popup
+    [shouldRender]="shouldRender"
     [map]="map"
     [selectedMarker]="selectedMarker"
     (closeClicked)="closeClicked.next()"

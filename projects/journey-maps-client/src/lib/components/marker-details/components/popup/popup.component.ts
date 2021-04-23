@@ -27,6 +27,7 @@ import {LocaleService} from '../../../../services/locale.service';
 })
 export class PopupComponent implements OnChanges, OnInit, OnDestroy {
 
+  @Input() shouldRender: boolean;
   @Input() map: MapboxMap;
   @Input() selectedMarker: Marker;
   @Input() template?: TemplateRef<any>;
@@ -55,7 +56,7 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
 
   // The view child is initially undefined (because of the *ngif in the parent component).
   @ViewChild('popupContent') set content(content: ElementRef) {
-    const firstChange = content != null && this.popupContent == null;
+    const firstChange = this.popupContent == null && content != null;
     this.popupContent = content;
     if (firstChange) {
       this.templateLoaded.next();
@@ -72,8 +73,15 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // Not sure why this is needed here...
+    // Otherwise this.popupContent is not correctly updated.
+    this.cd.detectChanges();
+
     if (changes.selectedMarker?.currentValue) {
       this.markerSelected.next();
+    } else if (this.popup) {
+      this.popup.remove();
+      this.popup = undefined;
     }
   }
 
@@ -113,6 +121,7 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     this.popup.on('close', () => {
+      this.popup = undefined;
       this.closeClicked.emit();
       this.cd.detectChanges();
     });
