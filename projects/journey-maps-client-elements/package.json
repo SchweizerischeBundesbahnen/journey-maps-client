@@ -1,6 +1,6 @@
 {
-  "name": "@SchweizerischeBundesbahnen/journey-maps-client-elements",
+  "name": "@schweizerischebundesbahnen/journey-maps-client-elements",
   "version": "0.0.0-PLACEHOLDER",
   "description": "Journey Maps Client as Web Component",
-  "repository":"https://github.com/SchweizerischeBundesbahnen/journey-maps-client"
+  "repository": "https://github.com/SchweizerischeBundesbahnen/journey-maps-client"
 }

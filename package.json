@@ -1,7 +1,7 @@
 {
-  "name": "@SchweizerischeBundesbahnen/journey-maps-client",
+  "name": "@schweizerischebundesbahnen/journey-maps-client",
   "version": "1.1.0",
-  "scripts":   {
+  "scripts": {
     "ng": "ng",
     "start-testapp": "npm run _testapp-example && ng serve journey-maps-client-testapp",
     "start-testapp-with-remote-access": "npm run _testapp-example && ng serve journey-maps-client-testapp --host 0.0.0.0 --disable-host-check",
