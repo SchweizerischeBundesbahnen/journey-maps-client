@@ -106,7 +106,6 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     this.popup.setLngLat(this.selectedMarker.position as LngLatLike);
-    this.cd.detectChanges();
   }
 
   private initPopup(): void {
@@ -123,7 +122,6 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
     this.popup.on('close', () => {
       this.popup = undefined;
       this.closeClicked.emit();
-      this.cd.detectChanges();
     });
   }
 }
