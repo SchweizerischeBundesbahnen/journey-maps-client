@@ -1,4 +1,6 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -20,31 +22,48 @@ import {LocaleService} from '../../../../services/locale.service';
 @Component({
   selector: 'rokas-popup',
   templateUrl: './popup.component.html',
-  styleUrls: ['./popup.component.scss']
+  styleUrls: ['./popup.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PopupComponent implements OnChanges, OnInit, OnDestroy {
 
+  @Input() shouldRender: boolean;
   @Input() map: MapboxMap;
   @Input() selectedMarker: Marker;
   @Input() template?: TemplateRef<any>;
   @Output() closeClicked = new EventEmitter<void>();
 
-  private popupContent: ElementRef;
-
-  // The view child is initially undefined (because of the *ngif in the parent component).
-  @ViewChild('popupContent') set content(content: ElementRef) {
-    if (content != null) {
-      this.popupContent = content;
-      this.templateLoaded.next();
+  private readonly options: any = {
+    closeOnClick: false,
+    className: 'rokas text-copy',
+    offset: {
+      right: [-15, -15],
+      left: [15, -15],
+      bottom: [0, -70],
+      'bottom-left': [0, -70],
+      'bottom-right': [0, -70],
+      top: [0, -10],
+      'top-left': [0, -10],
+      'top-right': [0, -10],
     }
-  }
+  };
 
   private popup: Popup;
+  private popupContent: ElementRef;
   private templateLoaded = new ReplaySubject<void>(1);
   private markerSelected = new ReplaySubject<void>(1);
   private destroyed = new Subject<void>();
 
-  constructor(private i18n: LocaleService) {
+  // The view child is initially undefined (because of the *ngif in the parent component).
+  @ViewChild('popupContent') set content(content: ElementRef) {
+    const firstChange = this.popupContent == null && content != null;
+    this.popupContent = content;
+    if (firstChange) {
+      this.templateLoaded.next();
+    }
+  }
+
+  constructor(private i18n: LocaleService, private cd: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -54,8 +73,15 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // Not sure why this is needed here...
+    // Otherwise this.popupContent is not correctly updated.
+    this.cd.detectChanges();
+
     if (changes.selectedMarker?.currentValue) {
       this.markerSelected.next();
+    } else if (this.popup) {
+      this.popup.remove();
+      this.popup = undefined;
     }
   }
 
@@ -75,26 +101,15 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
     if (!this.selectedMarker) {
       return;
     }
+    if (!this.popup) {
+      this.initPopup();
+    }
 
-    const options = {} as any;
-    // don't trigger a 'close' event when clicking outside the popup
-    // we only want the popup to close when clicking on a marker or the close button
-    options.closeOnClick = false;
-    options.className = 'rokas text-copy';
-    // CHECKME ses: Verify with new markers
-    options.offset = {
-      right: [-15, -15],
-      left: [15, -15],
-      bottom: [0, -70],
-      'bottom-left': [0, -70],
-      'bottom-right': [0, -70],
-      top: [0, -10],
-      'top-left': [0, -10],
-      'top-right': [0, -10],
-    };
+    this.popup.setLngLat(this.selectedMarker.position as LngLatLike);
+  }
 
-    this.popup = new Popup(options)
-      .setLngLat(this.selectedMarker.position as LngLatLike)
+  private initPopup(): void {
+    this.popup = new Popup(this.options)
       .setDOMContent(this.popupContent.nativeElement as HTMLElement)
       .addTo(this.map);
 
@@ -104,6 +119,9 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
       console.warn('Cannot modify label of popup close button: ', e);
     }
 
-    this.popup.on('close', () => this.closeClicked.emit());
+    this.popup.on('close', () => {
+      this.popup = undefined;
+      this.closeClicked.emit();
+    });
   }
 }

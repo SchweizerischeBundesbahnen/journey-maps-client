@@ -23,36 +23,41 @@ describe('MarkerDetailsComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('shouldRender() should return false if !selectedMarker', () => {
+  it('shouldRender should return false if !selectedMarker', () => {
     [null, undefined, null].forEach(selectedMarker => {
       component.selectedMarker = selectedMarker;
-      expect(component.shouldRender()).toBeFalse();
+      component.ngOnChanges(undefined);
+      expect(component.shouldRender).toBeFalse();
     });
   });
 
-  it('shouldRender() should return false if !selectedMarker.infoBlocks and !template', () => {
+  it('shouldRender should return false if !selectedMarker.infoBlocks and !template', () => {
     component.selectedMarker = {...testData.createMarkerWithoutInfoBlocks()};
-    expect(component.shouldRender()).toBeFalse();
+    component.ngOnChanges(undefined);
+    expect(component.shouldRender).toBeFalse();
   });
 
-  it('shouldRender() should return false if !selectedMarker.infoBlocks.length and !template', () => {
+  it('shouldRender should return false if !selectedMarker.infoBlocks.length and !template', () => {
     component.selectedMarker = {
       ...testData.createMarkerWithoutInfoBlocks(),
       infoBlocks: [],
     };
-    expect(component.shouldRender()).toBeFalse();
+    component.ngOnChanges(undefined);
+    expect(component.shouldRender).toBeFalse();
   });
 
-  it('shouldRender() should return true if template', () => {
+  it('shouldRender should return true if template', () => {
     component.selectedMarker = testData.createMarkerWithoutInfoBlocks();
     // dirty hack
     component.template = 1 as unknown as TemplateRef<any>;
-    expect(component.shouldRender()).toBeTrue();
+    component.ngOnChanges(undefined);
+    expect(component.shouldRender).toBeTrue();
   });
 
-  it('shouldRender() should return true if selectedMarker.infoBlocks.length', () => {
+  it('shouldRender should return true if selectedMarker.infoBlocks.length', () => {
     component.selectedMarker = testData.createMarkerWithInfoBlocks();
-    expect(component.shouldRender()).toBeTrue();
+    component.ngOnChanges(undefined);
+    expect(component.shouldRender).toBeTrue();
   });
 
   it('should emit closeClicked event if escape key is clicked', () => {

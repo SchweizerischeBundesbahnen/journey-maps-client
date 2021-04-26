@@ -22,6 +22,7 @@ import {LocaleService} from '../../../../services/locale.service';
 })
 export class TeaserComponent implements OnInit {
 
+  @Input() shouldRender: boolean;
   @Input() selectedMarker: Marker;
   @Input() template?: TemplateRef<any>;
   @Output() closeClicked = new EventEmitter<void>();

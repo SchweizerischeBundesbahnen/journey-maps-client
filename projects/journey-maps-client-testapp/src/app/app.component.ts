@@ -172,6 +172,7 @@ export class AppComponent implements OnInit {
   }
 
   setPopupInput(event: Event): void {
+    this.selectedMarkerId = undefined;
     this.popup = (event.target as HTMLOptionElement).value === 'true';
   }
 }

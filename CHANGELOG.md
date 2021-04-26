@@ -6,10 +6,16 @@
 
 ### Changed
 
+* The package name is now all lowercase as it should be  
+  (`@schweizerischebundesbahnen` instead of `@SchweizerischeBundesbahnen`)
 * DUSP-1297 new styling of zoom controls
 * DUSP-1297 allow selecting zoom and level-switch controls with tab key
 
 ### Fixed
+
+* Adding & Removal of popup when not clicking the close button
+* Fade out animation of teaser
+* Peer dependency versions
 
 ## [1.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F0.7.2&sourceBranch=refs%2Ftags%2F1.0.0&targetRepoId=46287) - 2021-04-21
 
