@@ -19,6 +19,7 @@ describe('TeaserComponent', () => {
     });
     fixture = TestBed.createComponent(TeaserComponent);
     component = fixture.componentInstance;
+    component.shouldRender = true;
     closeClicked = false;
   });
 
