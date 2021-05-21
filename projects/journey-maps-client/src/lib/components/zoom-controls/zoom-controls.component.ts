@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges,
 import {Map as MapboxMap} from 'mapbox-gl';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {LocaleService} from '../../services/locale.service';
 
 @Component({
   selector: 'rokas-zoom-controls',
@@ -17,7 +18,12 @@ export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
   isMinZoom: boolean;
   isMaxZoom: boolean;
 
-  constructor(private ref: ChangeDetectorRef) {}
+  zoomInLabel: string;
+  zoomOutLabel: string;
+
+  constructor(private ref: ChangeDetectorRef,
+              private i18n: LocaleService) {
+  }
 
   ngOnInit(): void {
     this.zoomChanged
@@ -25,6 +31,9 @@ export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(() => {
         this.onZoomChanged();
       });
+
+    this.zoomInLabel = `${this.i18n.getText('a4a.visualFunction')} ${this.i18n.getText('a4a.zoomIn')}`;
+    this.zoomOutLabel = `${this.i18n.getText('a4a.visualFunction')} ${this.i18n.getText('a4a.zoomOut')}`;
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -4,6 +4,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {MapLayerFilterService} from './services/map-layer-filter.service';
+import {LocaleService} from '../../services/locale.service';
 
 @Component({
   selector: 'rokas-level-switch',
@@ -28,6 +29,7 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
 
   // levels could be configurable or dynamically calculated by current map-extent in the future
   levels = [2, 1, 0, -1, -2, -4];
+  levelLabels = new Map<number, string>();
   selectedLevel: number;
   private readonly defaultLevel = 0;
   // same minZoom as in Android and iOS map
@@ -36,7 +38,9 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   private zoomChanged = new Subject<void>();
   private destroyed = new Subject<void>();
 
-  constructor(private ref: ChangeDetectorRef, private mapLayerFilterService: MapLayerFilterService) {
+  constructor(private ref: ChangeDetectorRef,
+              private mapLayerFilterService: MapLayerFilterService,
+              private i18n: LocaleService) {
     this.selectedLevel = this.defaultLevel;
   }
 
@@ -46,6 +50,8 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(() => {
         this.onZoomChanged();
       });
+
+    this.initAccessibilityLabels();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -87,5 +93,13 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.lastZoom = this.map.getZoom();
+  }
+
+  private initAccessibilityLabels(): void {
+    for (const level of this.levels) {
+      const txt1 = this.i18n.getText('a4a.visualFunction');
+      const txt2 = this.i18n.getTextWithParams('a4a.selectFloor', level);
+      this.levelLabels.set(level, `${txt1} ${txt2}`);
+    }
   }
 }
