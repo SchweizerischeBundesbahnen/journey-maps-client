@@ -7,6 +7,7 @@
                 'level-switch-button-content-selected':level === selectedLevel,
                 'level-switch-button-content':level !== selectedLevel
               }"
+              [attr.aria-label]="levelLabels.get(level)"
             >{{level}}</button>
         </div>
     </ng-container>

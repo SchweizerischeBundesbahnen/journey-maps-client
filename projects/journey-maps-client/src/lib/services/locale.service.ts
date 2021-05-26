@@ -7,7 +7,6 @@ export class LocaleService {
 
   language = 'de';
 
-  // CHECKME ses: "Professional translations needed?
   private i18n = {
     de: {
       close: 'Schliessen',
@@ -18,6 +17,12 @@ export class LocaleService {
       },
       touchOverlay: {
         tip: 'Benutzen Sie 2 Finger um die Karte zu bedienen.'
+      },
+      a4a: {
+        visualFunction: 'Visuelle Funktion, nicht für Screenreader gedacht.',
+        zoomIn: 'Kartenausschnitt vergrössern.',
+        zoomOut: 'Kartenausschnitt verkleinern.',
+        selectFloor: 'Stockwerk [0] anzeigen.'
       }
     },
     fr: {
@@ -29,6 +34,12 @@ export class LocaleService {
       },
       touchOverlay: {
         tip: 'Utilisez deux doigts pour consulter la carte.'
+      },
+      a4a: {
+        visualFunction: 'Fonction visuelle, non destinée aux lecteurs d\'écran.',
+        zoomIn: 'Zoomer.',
+        zoomOut: 'Dézoomer.',
+        selectFloor: 'Afficher l\'étage [0].'
       }
     },
     it: {
@@ -40,6 +51,12 @@ export class LocaleService {
       },
       touchOverlay: {
         tip: 'Utilizzate due dita per muovervi nella mappa.'
+      },
+      a4a: {
+        visualFunction: 'Funzione visiva, non destinata ai lettori di schermo.',
+        zoomIn: 'Ingrandire la sezione della mappa.',
+        zoomOut: 'Ridurre la sezione della mappa.',
+        selectFloor: 'Mostra il piano [0].'
       }
     },
     en: {
@@ -51,6 +68,12 @@ export class LocaleService {
       },
       touchOverlay: {
         tip: 'Use two fingers to operate the map.'
+      },
+      a4a: {
+        visualFunction: 'Visual function, not intended for screen readers.',
+        zoomIn: 'Zoom in on map.',
+        zoomOut: 'Zoom out on map.',
+        selectFloor: 'Select floor [0].'
       }
     }
   };
@@ -61,5 +84,11 @@ export class LocaleService {
   getText(key: string): string {
     const path = (`${this.language}.${key}`).split('.');
     return path.reduce((prev, curr) => prev && prev[curr], this.i18n);
+  }
+
+  getTextWithParams(key: string, ...params: any[]): string {
+    let text = this.getText(key);
+    params.forEach((value, index) => text = text.replace(`[${index}]`, value));
+    return text;
   }
 }
