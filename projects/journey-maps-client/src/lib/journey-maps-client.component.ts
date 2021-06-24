@@ -123,6 +123,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Open a popup - instead of the teaser - when selecting a marker. */
   @Input() popup = false;
 
+  /** Whether "scroll to zoom" is enabled or not */
+  @Input() scrollZoom = true;
+
   /**
    * This event is emitted whenever the zoom level of the map has changed.
    */
@@ -327,6 +330,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.mapElementRef.nativeElement,
       this.i18n.language,
       styleUrl,
+      this.scrollZoom,
       this.zoomLevel,
       this.mapCenter,
       this.boundingBox ?? this.getMarkersBounds,
