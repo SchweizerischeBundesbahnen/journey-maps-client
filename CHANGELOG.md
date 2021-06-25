@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.2.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.1.0&sourceBranch=refs%2Ftags%2F1.2.0&targetRepoId=46287) - 2021-06-25
+
+### Added
+
+* Optional `scrollZoom` input parameter to disable "scroll to zoom".
+* Aria-Label for map controls.
+
 ## [1.1.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.0.0&sourceBranch=refs%2Ftags%2F1.1.0&targetRepoId=46287) - 2021-04-27
 
 ### Changed
