@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.3.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.2.0&sourceBranch=refs%2Ftags%2F1.3.0&targetRepoId=46287) - 2021-06-28
+
+### Added
+
+*  `levelSwitch` control shows available levels in the currently visible station in map.
+
 ## [1.2.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.1.0&sourceBranch=refs%2Ftags%2F1.2.0&targetRepoId=46287) - 2021-06-25
 
 ### Added
