@@ -21,19 +21,6 @@ describe('QueryMapFeaturesService', () => {
     expect(levels.length).toBeFalsy();
   });
 
-  it('getVisibleLevels should return empty list if multiple features were found', () => {
-    const map: any = {
-      getStyle: () => {
-        return {sources: {service_points: {}}};
-      },
-      querySourceFeatures: () => {
-        return [{id: 1}, {id: 2}];
-      }
-    };
-    const levels = service.getVisibleLevels(map);
-    expect(levels.length).toBeFalsy();
-  });
-
   it('getVisibleLevels should return empty list if feature floor_liststring is missing', () => {
     const map: any = {
       getStyle: () => {
@@ -59,5 +46,19 @@ describe('QueryMapFeaturesService', () => {
     const levels = service.getVisibleLevels(map);
     expect(levels.length).toEqual(3);
     expect(JSON.stringify(levels)).toEqual('[0,-1,-4]');
+  });
+
+  it('getVisibleLevels should merge level lists if multiple features were found', () => {
+    const map: any = {
+      getStyle: () => {
+        return {sources: {service_points: {}}};
+      },
+      querySourceFeatures: () => {
+        return [{id: 1, properties: {floor_liststring: '-2,-1,0,1'}}, {id: 2, properties: {floor_liststring: '0,1,2'}}];
+      }
+    };
+    const levels = service.getVisibleLevels(map);
+    expect(levels.length).toEqual(5);
+    expect(JSON.stringify(levels)).toEqual('[2,1,0,-1,-2]');
   });
 });

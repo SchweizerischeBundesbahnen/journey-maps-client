@@ -13,20 +13,15 @@ export class QueryMapFeaturesService {
       console.error(`source '${this.servicePointsMapSourceId}' not found in map style.`);
       return [];
     }
-
     const servicePoints = map.querySourceFeatures(this.servicePointsMapSourceId);
-    // check unique features: mapbox returns multiple same features
-    if (new Set(servicePoints.map(feature => feature.id)).size !== 1) {
-      // if more then one feature found, return empty -> keep current or use default levels as fallback.
-      return [];
-    }
-
-    return this.extractLevels(servicePoints[0].properties);
+    // merge levels, when multiple stations found:
+    const allLevels = servicePoints.map(servicePoint => this.extractLevels(servicePoint.properties));
+    return Array.from(new Set([].concat(...allLevels))).reverse();
   }
 
   private extractLevels(properties: any): number[] {
     if (!!properties && !!properties[this.levelsFeaturePropertyName]) {
-      return properties[this.levelsFeaturePropertyName].split(',').map(f => Number(f)).reverse();
+      return properties[this.levelsFeaturePropertyName].split(',').map(f => Number(f));
     } else {
       return [];
     }
