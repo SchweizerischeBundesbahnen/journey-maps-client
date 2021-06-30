@@ -49,8 +49,12 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   private mapMoved = new Subject<void>();
   private destroyed = new Subject<void>();
 
-  get isVisible(): boolean {
+  get isVisibleInCurrentMapZoomLevel(): boolean {
     return this.map?.getZoom() >= this.levelButtonMinMapZoom;
+  }
+
+  get isVisible(): boolean {
+    return this.isVisibleInCurrentMapZoomLevel && this.levels.length > 0;
   }
 
   ngOnInit(): void {
@@ -98,32 +102,40 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   private onZoomChanged(): void {
     // diff <= 0 means that we passed the threshold to display the level switch component.
     const diff = (this.levelButtonMinMapZoom - this.lastZoom) * (this.levelButtonMinMapZoom - this.map.getZoom());
-    // Set default level when level switch is not visible
-    const shouldSetDefaultLevel = !this.isVisible && this.selectedLevel !== this.defaultLevel;
-
-    if (shouldSetDefaultLevel) {
-      this.switchLevel(this.defaultLevel);
-    }
-
-    if (shouldSetDefaultLevel || diff <= 0) {
+    if (diff <= 0) {
       // call outside component-zone, trigger detect changes manually
       this.ref.detectChanges();
     }
-
+    this.setDefaultLevelIfNotVisible();
     this.lastZoom = this.map.getZoom();
   }
 
-  private updateLevels(): void {
-    if (this.isVisible) {
-      const currentLevels = this.queryMapFeaturesService.getVisibleLevels(this.map);
-      this.updateLevelsIfChanged(currentLevels);
+  private setDefaultLevelIfNotVisible(): void {
+    // Set default level when level switch is not visible
+    const shouldSetDefaultLevel = !this.isVisible && this.selectedLevel !== this.defaultLevel;
+    if (shouldSetDefaultLevel) {
+      this.switchLevel(this.defaultLevel);
+      // call outside component-zone, trigger detect changes manually
+      this.ref.detectChanges();
     }
   }
 
+  private updateLevels(): void {
+    if (this.isVisibleInCurrentMapZoomLevel) {
+      const currentLevels = this.queryMapFeaturesService.getVisibleLevels(this.map);
+      this.updateLevelsIfChanged(currentLevels);
+    }
+
+    this.setDefaultLevelIfNotVisible();
+  }
+
   private updateLevelsIfChanged(levels: number[]): void {
-    // simple array compare
-    if (levels.length && JSON.stringify(this.levels) !== JSON.stringify(levels)) {
+    if (JSON.stringify(this.levels) !== JSON.stringify(levels)) {
       this.levels = levels;
+      // if selected level not in new levels list:
+      if (this.levels.indexOf(this.selectedLevel) === -1) {
+        this.switchLevel(this.defaultLevel);
+      }
       // call outside component-zone, trigger detect changes manually
       this.ref.detectChanges();
     }

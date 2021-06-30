@@ -16,7 +16,11 @@ export class QueryMapFeaturesService {
     const servicePoints = map.querySourceFeatures(this.servicePointsMapSourceId);
     // merge levels, when multiple stations found:
     const allLevels = servicePoints.map(servicePoint => this.extractLevels(servicePoint.properties));
-    return Array.from(new Set([].concat(...allLevels))).reverse();
+
+    // Seems like a king of bug in javascript. Even if it's a list of numbers,
+    // the default sort doesn't work as expected and an arrow fn must be provided.
+    // Check the unit test 'getVisibleLevels should merge level lists if multiple features were found'.
+    return this.flatten(allLevels).sort((a, b) => a - b).reverse();
   }
 
   private extractLevels(properties: any): number[] {
@@ -25,5 +29,9 @@ export class QueryMapFeaturesService {
     } else {
       return [];
     }
+  }
+
+  private flatten(arrayOfArrays: number[][]): number[] {
+    return Array.from(new Set([].concat(...arrayOfArrays)));
   }
 }

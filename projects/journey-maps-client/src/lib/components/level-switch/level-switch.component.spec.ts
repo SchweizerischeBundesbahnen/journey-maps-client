@@ -56,8 +56,15 @@ describe('LevelSwitchComponent', () => {
     expect(component.isVisible).toEqual(false);
   });
 
-  it('should be visible if map ready and beyond configured map zoom', () => {
+  it('should not be visible if map ready and beyond configured map zoom but no levels', () => {
     triggerMapReadyWithMapMock(component, 16);
+    component.levels = [];
+    expect(component.isVisible).toEqual(false);
+  });
+
+  it('should be visible if map ready and beyond configured map zoom and levels', () => {
+    triggerMapReadyWithMapMock(component, 16);
+    component.levels = [-1, 0];
     expect(component.isVisible).toEqual(true);
   });
 

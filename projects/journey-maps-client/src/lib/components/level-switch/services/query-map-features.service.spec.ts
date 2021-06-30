@@ -54,11 +54,14 @@ describe('QueryMapFeaturesService', () => {
         return {sources: {service_points: {}}};
       },
       querySourceFeatures: () => {
-        return [{id: 1, properties: {floor_liststring: '-2,-1,0,1'}}, {id: 2, properties: {floor_liststring: '0,1,2'}}];
+        return [
+          {id: 1, properties: {floor_liststring: '-1,0,1'}},
+          {id: 2, properties: {floor_liststring: '-4,-2,-1,0'}},
+        ];
       }
     };
     const levels = service.getVisibleLevels(map);
     expect(levels.length).toEqual(5);
-    expect(JSON.stringify(levels)).toEqual('[2,1,0,-1,-2]');
+    expect(JSON.stringify(levels)).toEqual('[1,0,-1,-2,-4]');
   });
 });
