@@ -76,10 +76,10 @@ rokas-search-bar {
   box-shadow: 0 0.06667em 0.53333em rgba(0, 0, 0, .4);
 }
 
-svg.mod_map_container_mobile_overlay_icon {
+div.mod_map_container_mobile_overlay_icon {
   width: 3.3em;
   height: 3.4em;
-  fill: #767676;
+  background: center 100% / 100% no-repeat url("./assets/hand_touch.svg");
 }
 
 .map-widgets {
