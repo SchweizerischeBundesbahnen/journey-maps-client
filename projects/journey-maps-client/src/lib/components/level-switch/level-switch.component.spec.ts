@@ -30,6 +30,8 @@ describe('LevelSwitchComponent', () => {
 
     // get instance for testing
     component = fixture.componentInstance;
+    // simulate station in viewport found:
+    component.levels = [-1, 0, 1];
     // trigger initial data binding
     fixture.detectChanges();
   });
