@@ -2,12 +2,12 @@
     <ng-container *ngFor="let level of levels">
         <div class="level-switch-button">
             <button
-              (click)="switchLevel(level)"
-              [ngClass]="{
+                    (click)="switchLevel(level)"
+                    [ngClass]="{
                 'level-switch-button-content-selected':level === selectedLevel,
                 'level-switch-button-content':level !== selectedLevel
               }"
-              [attr.aria-label]="levelLabels.get(level)"
+                    [attr.aria-label]="getLevelLabel(level)"
             >{{level}}</button>
         </div>
     </ng-container>
