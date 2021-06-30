@@ -26,21 +26,11 @@ import {QueryMapFeaturesService} from './services/query-map-features.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
-
-  constructor(private ref: ChangeDetectorRef,
-              private mapLayerFilterService: MapLayerFilterService,
-              private i18n: LocaleService,
-              private queryMapFeaturesService: QueryMapFeaturesService) {
-    this.selectedLevel = this.defaultLevel;
-  }
-
-  static defaultLevels = [2, 1, 0, -1, -2, -4];
   @Input() map: MapboxMap;
 
-  // levels could be configurable or dynamically calculated by current map-extent in the future
-
-  levels = LevelSwitchComponent.defaultLevels;
+  levels: number[] = [];
   selectedLevel: number;
+
   private readonly defaultLevel = 0;
   // same minZoom as in Android and iOS map
   private readonly levelButtonMinMapZoom = 15;
@@ -48,6 +38,13 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   private zoomChanged = new Subject<void>();
   private mapMoved = new Subject<void>();
   private destroyed = new Subject<void>();
+
+  constructor(private ref: ChangeDetectorRef,
+              private mapLayerFilterService: MapLayerFilterService,
+              private i18n: LocaleService,
+              private queryMapFeaturesService: QueryMapFeaturesService) {
+    this.selectedLevel = this.defaultLevel;
+  }
 
   get isVisibleInCurrentMapZoomLevel(): boolean {
     return this.map?.getZoom() >= this.levelButtonMinMapZoom;
