@@ -340,15 +340,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       m => {
         this.map = m;
         if (this.map.isStyleLoaded()) {
-          this.isStyleLoaded = true;
-          this.styleLoaded.next();
+          this.onStyleLoaded();
         } else {
           this.map.on('styledata', () => {
-            this.isStyleLoaded = true;
-            this.styleLoaded.next();
+            this.onStyleLoaded();
           });
         }
-        this.executeWhenMapStyleLoaded(() => this.onStyleLoaded());
       }
     );
 
@@ -398,7 +395,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.clusterClicked.pipe(
       debounceTime(200),
       filter(e => e != null),
-      map(e => this.map.queryRenderedFeatures(e.point, {layers: [Constants.CLUSTER_LAYER]})),
+      map(e => {
+        console.log(e);
+        return this.map.queryRenderedFeatures(e.point, {layers: [Constants.CLUSTER_LAYER]});
+      }),
       filter(features => features != null && features.length > 0),
       takeUntil(this.destroyed)
     ).subscribe(features => this.mapMarkerService.onClusterClicked(this.map, features[0]));
@@ -435,23 +435,28 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private onStyleLoaded(): void {
-    this.mapReady.next(this.map);
+    if (this.isStyleLoaded) {
+      return;
+    }
 
+    this.mapMarkerService.initStyleData(this.map);
     this.map.resize();
-    this.mapService.verifySources(this.map);
-    for (const layer of Constants.MARKER_AND_CLUSTER_LAYERS) {
+    this.mapService.verifySources(this.map, [Constants.ROUTE_SOURCE, Constants.WALK_SOURCE, ...this.mapMarkerService.sources]);
+
+    for (const layer of this.mapMarkerService.allMarkerAndClusterLayers) {
       this.map.on('mouseenter', layer, () => this.cursorChanged.next(true));
       this.map.on('mouseleave', layer, () => this.cursorChanged.next(false));
     }
-
-    for (const infoLayer of Constants.MARKER_LAYERS) {
+    for (const infoLayer of this.mapMarkerService.allMarkerLayers) {
       this.map.on('click', infoLayer, event => this.layerClicked.next(event));
     }
-
     this.map.on('click', Constants.CLUSTER_LAYER, event => this.clusterClicked.next(event));
     this.map.on('zoomend', () => this.zoomLevelChangeDebouncer.next());
     this.map.on('moveend', () => this.mapCenterChangeDebouncer.next());
-    // CHECKME ses: Handle missing map image
+
+    this.isStyleLoaded = true;
+    this.styleLoaded.next();
+    this.mapReady.next(this.map);
   }
 
   /** @internal */

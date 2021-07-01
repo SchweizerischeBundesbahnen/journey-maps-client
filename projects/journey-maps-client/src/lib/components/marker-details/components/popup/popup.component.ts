@@ -18,6 +18,7 @@ import {Marker} from '../../../../model/marker';
 import {combineLatest, ReplaySubject, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {LocaleService} from '../../../../services/locale.service';
+import {MapMarkerService} from '../../../../services/map/map-marker.service';
 
 @Component({
   selector: 'rokas-popup',
@@ -36,16 +37,17 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
   private readonly options: any = {
     closeOnClick: false,
     className: 'rokas text-copy',
-    offset: {
-      right: [-15, -15],
-      left: [15, -15],
-      bottom: [0, -70],
-      'bottom-left': [0, -70],
-      'bottom-right': [0, -70],
-      top: [0, -10],
-      'top-left': [0, -10],
-      'top-right': [0, -10],
-    }
+  };
+
+  private readonly _offset = {
+    right: [-15, -15],
+    left: [15, -15],
+    bottom: [0, -70],
+    'bottom-left': [0, -70],
+    'bottom-right': [0, -70],
+    top: [0, -10],
+    'top-left': [0, -10],
+    'top-right': [0, -10],
   };
 
   private popup: Popup;
@@ -56,6 +58,7 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
 
   // The view child is initially undefined (because of the *ngif in the parent component).
   @ViewChild('popupContent') set content(content: ElementRef) {
+
     const firstChange = this.popupContent == null && content != null;
     this.popupContent = content;
     if (firstChange) {
@@ -63,7 +66,11 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
-  constructor(private i18n: LocaleService, private cd: ChangeDetectorRef) {
+  constructor(
+    private i18n: LocaleService,
+    private cd: ChangeDetectorRef,
+    private mapMarkerService: MapMarkerService
+  ) {
   }
 
   ngOnInit(): void {
@@ -98,14 +105,22 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private showPopup(): void {
-    if (!this.selectedMarker) {
+    if (!this.selectedMarker || !this.popupContent) {
+      this.popup?.remove();
+      this.popup = undefined;
       return;
     }
     if (!this.popup) {
       this.initPopup();
     }
 
+    this.popup.setOffset(this.offset);
     this.popup.setLngLat(this.selectedMarker.position as LngLatLike);
+  }
+
+  private get offset(): any {
+    return this.mapMarkerService.markerCategoryMappings.get(this.selectedMarker.category)
+      ?.popupOffset ?? this._offset;
   }
 
   private initPopup(): void {

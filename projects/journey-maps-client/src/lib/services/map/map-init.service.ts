@@ -3,8 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapboxOptions, Style} from 'mapbox-gl';
 import {map, tap} from 'rxjs/operators';
-import {Constants} from '../constants';
-import {MarkerPriority} from '../../model/marker-priority.enum';
 import {MultiTouchSupport} from '../multiTouchSupport';
 
 @Injectable({
@@ -60,7 +58,6 @@ export class MapInitService {
     mapboxMap.touchPitch.disable();
 
     return this.fetchStyle(styleUrl).pipe(
-      tap(style => this.defineClusterSettings(style)),
       tap(style => mapboxMap.setStyle(style)),
       map(() => mapboxMap)
     );
@@ -112,22 +109,6 @@ export class MapInitService {
   private addControls(mapboxMap: mapboxgl.Map, allowOneFingerPan?: boolean): void {
     if (!allowOneFingerPan) {
       mapboxMap.addControl(new MultiTouchSupport());
-    }
-  }
-
-  private defineClusterSettings(style: Style): void {
-    const markerSource = style.sources[Constants.MARKER_SOURCE] as any;
-
-    if (markerSource) {
-      markerSource.cluster = true;
-      markerSource.clusterRadius = Constants.CLUSTER_RADIUS;
-      markerSource.clusterMinPoints = 2;
-      markerSource.clusterProperties = {
-        // Maximum priority of the markers inside the cluster.
-        // Can be used in the map style for a custom cluster styling.
-        // See e.g: https://gitlab.geops.de/sbb/sbb-styles/-/blob/dev/partials/parkandrail.json#L21
-        priority: ['max', ['case', ['has', 'priority'], ['get', 'priority'], MarkerPriority.REGULAR]],
-      };
     }
   }
 }

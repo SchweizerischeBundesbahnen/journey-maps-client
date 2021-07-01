@@ -6,14 +6,44 @@ import {MarkerConverterService} from '../marker-converter.service';
 import {MarkerCategory} from '../../model/marker-category.enum';
 import {MapService} from './map.service';
 import {MapConfigService} from './map-config.service';
+import {Feature} from 'geojson';
+import {MarkerCategoryMapping} from '../../model/marker-category-mapping';
 
 
 @Injectable({providedIn: 'root'})
 export class MapMarkerService {
 
+  markerCategoryMappings = new Map<string, MarkerCategoryMapping>();
+  sources: string[];
+  markerLayers: string[];
+  markerLayersSelected: string[];
+
   constructor(private markerConverter: MarkerConverterService,
               private mapService: MapService,
               private mapConfigService: MapConfigService) {
+  }
+
+  initStyleData(map: MapboxMap): void {
+    this.markerCategoryMappings.clear();
+    this.sources = [Constants.MARKER_SOURCE];
+    this.markerLayers = [Constants.MARKER_LAYER];
+    this.markerLayersSelected = [Constants.MARKER_LAYER_SELECTED];
+
+    const markerCategoryMappings = ((map.getStyle().metadata ?? {})['rokas:markerCategoryMapping'] ?? []) as MarkerCategoryMapping[];
+    for (const mapping of markerCategoryMappings) {
+      this.sources.push(mapping.source);
+      this.markerLayers.push(mapping.layer);
+      this.markerLayersSelected.push(mapping.layerSelected);
+      this.markerCategoryMappings.set(mapping.category, mapping);
+    }
+  }
+
+  get allMarkerAndClusterLayers(): string[] {
+    return [...Constants.CLUSTER_LAYERS, ...this.allMarkerLayers];
+  }
+
+  get allMarkerLayers(): string[] {
+    return [...this.markerLayers, ...this.markerLayersSelected];
   }
 
   updateMarkers(map: MapboxMap, markers: Marker[], selectedMarker: Marker): void {
@@ -23,21 +53,26 @@ export class MapMarkerService {
     }
     this.addMissingImages(map, markers);
 
-    const markerSource = this.getMarkerSource(map);
-
-    let features;
-    if (markers == null || markers.length === 0) {
-      features = [];
-    } else {
-      features = markers.map(this.markerConverter.convertToFeature);
+    const featuresPerSource = new Map<string, Feature[]>();
+    for (const marker of markers) {
+      const mapping = this.markerCategoryMappings.get(marker.category);
+      const sourceId = mapping?.source ?? Constants.MARKER_SOURCE;
+      if (!featuresPerSource.has(sourceId)) {
+        featuresPerSource.set(sourceId, []);
+      }
+      featuresPerSource.get(sourceId).push(this.markerConverter.convertToFeature(marker));
     }
 
-    const newData = {...this.mapService.emptyFeatureCollection};
-    newData.features = features;
-    markerSource.setData(newData);
+    for (const sourceId of this.sources) {
+      const newData = {...this.mapService.emptyFeatureCollection};
+      newData.features = featuresPerSource.get(sourceId) ?? [];
+
+      const source = map.getSource(sourceId) as GeoJSONSource;
+      source.setData(newData);
+    }
   }
 
-  private getMarkerSource(map: MapboxMap): GeoJSONSource {
+  private getPrimaryMarkerSource(map: MapboxMap): GeoJSONSource {
     return map.getSource(Constants.MARKER_SOURCE) as GeoJSONSource;
   }
 
@@ -46,7 +81,7 @@ export class MapMarkerService {
   }
 
   private zoomToCluster(map: MapboxMap, clusterId: any, center: LngLatLike, offset: PointLike = [0, 0]): void {
-    this.getMarkerSource(map).getClusterExpansionZoom(
+    this.getPrimaryMarkerSource(map).getClusterExpansionZoom(
       clusterId,
       (err, zoom) => {
         if (!err) {
@@ -75,11 +110,10 @@ export class MapMarkerService {
   // When a marker has been selected from outside the map.
   selectMarker(map: MapboxMap, marker: Marker): void {
     this.selectFeature(map, marker.id);
-
     const features = map.queryRenderedFeatures(
       map.project(marker.position as LngLatLike),
       {
-        layers: [Constants.MARKER_LAYER, Constants.MARKER_LAYER_SELECTED],
+        layers: this.allMarkerLayers,
         filter: ['in', 'id', marker.id]
       }
     );
@@ -146,7 +180,7 @@ export class MapMarkerService {
 
   private zoomUntilMarkerVisible(map: MapboxMap, cluster: GeoJSON.Feature, marker: Marker, found: boolean[] = []): void {
     const clusterId = cluster.properties.cluster_id;
-    this.getMarkerSource(map).getClusterChildren(
+    this.getPrimaryMarkerSource(map).getClusterChildren(
       clusterId,
       (e1, children) => {
         // Skip processing if marker has been found
@@ -165,12 +199,14 @@ export class MapMarkerService {
   }
 
   unselectFeature(map: MapboxMap): void {
-    this.selectFeature(map, undefined);
+    this.selectFeature(map, '');
   }
 
   private selectFeature(map: MapboxMap, selectedFeatureId: string): void {
-    map.setFilter(Constants.MARKER_LAYER, this.createMarkerFilter(selectedFeatureId ?? '', false));
-    map.setFilter(Constants.MARKER_LAYER_SELECTED, this.createMarkerFilter(selectedFeatureId ?? ''));
+    for (let i = 0; i < this.markerLayers.length; i++) {
+      map.setFilter(this.markerLayers[i], this.createMarkerFilter(selectedFeatureId, false));
+      map.setFilter(this.markerLayersSelected[i], this.createMarkerFilter(selectedFeatureId));
+    }
   }
 
   private createMarkerFilter(id: string, include = true): Array<any> {

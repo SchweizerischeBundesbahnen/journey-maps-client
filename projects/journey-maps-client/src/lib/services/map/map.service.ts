@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Geometry, Point} from 'geojson';
 import {FlyToOptions, LngLat, LngLatBoundsLike, LngLatLike, Map as MapboxMap} from 'mapbox-gl';
-import {Constants} from '../constants';
 
 @Injectable({providedIn: 'root'})
 export class MapService {
@@ -30,11 +29,11 @@ export class MapService {
     map.loadImage(icon, (error, image) => this.imageLoadedCallback(map, name, error, image));
   }
 
-  verifySources(map: MapboxMap): void {
-    for (const id of Constants.SOURCES) {
+  verifySources(map: MapboxMap, sourceIds: string[]): void {
+    for (const id of sourceIds) {
       const source = map.getSource(id);
       if (!source) {
-        throw new Error(`${source} was not found in map definition!`);
+        throw new Error(`${source} was not found in style definition!`);
       }
     }
   }
