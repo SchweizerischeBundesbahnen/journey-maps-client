@@ -54,7 +54,7 @@ export class MapMarkerService {
     this.addMissingImages(map, markers);
 
     const featuresPerSource = new Map<string, Feature[]>();
-    for (const marker of markers) {
+    for (const marker of markers ?? []) {
       const mapping = this.markerCategoryMappings.get(marker.category);
       const sourceId = mapping?.source ?? Constants.MARKER_SOURCE;
       if (!featuresPerSource.has(sourceId)) {
