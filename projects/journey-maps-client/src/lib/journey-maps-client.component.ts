@@ -395,10 +395,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.clusterClicked.pipe(
       debounceTime(200),
       filter(e => e != null),
-      map(e => {
-        console.log(e);
-        return this.map.queryRenderedFeatures(e.point, {layers: [Constants.CLUSTER_LAYER]});
-      }),
+      map(e => this.map.queryRenderedFeatures(e.point, {layers: [Constants.CLUSTER_LAYER]})),
       filter(features => features != null && features.length > 0),
       takeUntil(this.destroyed)
     ).subscribe(features => this.mapMarkerService.onClusterClicked(this.map, features[0]));

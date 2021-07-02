@@ -29,7 +29,7 @@ export class MapMarkerService {
     this.markerLayers = [Constants.MARKER_LAYER];
     this.markerLayersSelected = [Constants.MARKER_LAYER_SELECTED];
 
-    const markerCategoryMappings = ((map.getStyle().metadata ?? {})['rokas:markerCategoryMapping'] ?? []) as MarkerCategoryMapping[];
+    const markerCategoryMappings = ((map.getStyle().metadata ?? {})[Constants.METADATA_MAPPINGS] ?? []) as MarkerCategoryMapping[];
     for (const mapping of markerCategoryMappings) {
       this.sources.push(mapping.source);
       this.markerLayers.push(mapping.layer);

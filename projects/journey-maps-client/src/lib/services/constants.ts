@@ -10,6 +10,8 @@ export class Constants {
   static readonly MARKER_LAYER = 'sbb-marker';
   static readonly MARKER_LAYER_SELECTED = 'sbb-marker-selected';
 
+  static readonly METADATA_MAPPINGS = 'rokas:markerCategoryMapping';
+
   static readonly CLUSTER_LAYERS = [
     'rokas-marker-cluster',
     'rokas-marker-cluster-text',
