@@ -199,13 +199,14 @@ export class MapMarkerService {
   }
 
   unselectFeature(map: MapboxMap): void {
-    this.selectFeature(map, '');
+    this.selectFeature(map, undefined);
   }
 
   private selectFeature(map: MapboxMap, selectedFeatureId: string): void {
+    const id = selectedFeatureId ?? '';
     for (let i = 0; i < this.markerLayers.length; i++) {
-      map.setFilter(this.markerLayers[i], this.createMarkerFilter(selectedFeatureId, false));
-      map.setFilter(this.markerLayersSelected[i], this.createMarkerFilter(selectedFeatureId));
+      map.setFilter(this.markerLayers[i], this.createMarkerFilter(id, false));
+      map.setFilter(this.markerLayersSelected[i], this.createMarkerFilter(id));
     }
   }
 
