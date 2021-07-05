@@ -39,7 +39,7 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
     className: 'rokas text-copy',
   };
 
-  private readonly _offset = {
+  private readonly defaultOffset = {
     right: [-15, -15],
     left: [15, -15],
     bottom: [0, -70],
@@ -120,7 +120,7 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
 
   private get offset(): any {
     return this.mapMarkerService.markerCategoryMappings.get(this.selectedMarker.category)
-      ?.popupOffset ?? this._offset;
+      ?.popupOffset ?? this.defaultOffset;
   }
 
   private initPopup(): void {
