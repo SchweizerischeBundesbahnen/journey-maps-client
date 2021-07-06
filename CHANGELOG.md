@@ -1,10 +1,17 @@
 # Change Log
 
+## [Unreleased](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.3.0&sourceBranch=refs%2Ftags%2F1.x.0&targetRepoId=46287) - yyyy-mm-dd
+
+### Added
+
+* Support for markers on multiple sources & layers. Ask us if you need this feature, because your map style has to be
+  configured accordingly. Moreover not everything is working. Clustering is not yet supported on additional sources.
+
 ## [1.3.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.2.0&sourceBranch=refs%2Ftags%2F1.3.0&targetRepoId=46287) - 2021-06-28
 
 ### Added
 
-*  `levelSwitch` control shows available levels in the currently visible station in map.
+* `levelSwitch` control shows available levels in the currently visible station in map.
 
 ## [1.2.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.1.0&sourceBranch=refs%2Ftags%2F1.2.0&targetRepoId=46287) - 2021-06-25
 
