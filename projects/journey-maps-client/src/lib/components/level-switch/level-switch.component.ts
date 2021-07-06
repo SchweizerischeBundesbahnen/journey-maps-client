@@ -6,6 +6,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {MapLayerFilterService} from './services/map-layer-filter.service';
 import {LocaleService} from '../../services/locale.service';
 import {QueryMapFeaturesService} from './services/query-map-features.service';
+import {MapLeitPoiService} from '../../services/map/map-leit-poi.service';
 
 @Component({
   selector: 'rokas-level-switch',
@@ -42,7 +43,8 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private ref: ChangeDetectorRef,
               private mapLayerFilterService: MapLayerFilterService,
               private i18n: LocaleService,
-              private queryMapFeaturesService: QueryMapFeaturesService) {
+              private queryMapFeaturesService: QueryMapFeaturesService,
+              private mapLeitPoiService: MapLeitPoiService) {
     this.selectedLevel = this.defaultLevel;
   }
 
@@ -66,6 +68,11 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(() => {
         this.updateLevels();
       });
+
+    this.mapLeitPoiService.levelSwitched.pipe(takeUntil(this.destroyed))
+      .subscribe((nextLevel) => {
+        this.setNewLevel(nextLevel);
+      });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -86,8 +93,8 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   switchLevel(level: number): void {
-    this.selectedLevel = level;
-    this.mapLayerFilterService.setLevelFilter(level);
+    this.setNewLevel(level);
+    this.mapLeitPoiService.setCurrentLevel(this.map, level);
   }
 
   getLevelLabel(level: number): string {
@@ -136,5 +143,12 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
       // call outside component-zone, trigger detect changes manually
       this.ref.detectChanges();
     }
+  }
+
+  private setNewLevel(level: number): void {
+    this.selectedLevel = level;
+    this.mapLayerFilterService.setLevelFilter(level);
+    // call outside component-zone, trigger detect changes manually
+    this.ref.detectChanges();
   }
 }

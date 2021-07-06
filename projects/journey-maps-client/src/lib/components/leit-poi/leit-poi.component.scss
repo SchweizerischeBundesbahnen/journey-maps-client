@@ -1,57 +1,89 @@
+/* constants */
+
+$fontColor: #000000;
+$backgroundColor: #FFFFFF;
+$fontSize: 1.1em;
+$travelTypeSize: 90% 100%;
+$travelDirectionSize: 40% 100%;
+
+/* end of constants */
+
+::ng-deep {
+  .leit-poi-popup {
+
+    .mapboxgl-popup-tip {
+      padding: 0;
+      height: 0;
+      display: none;
+    }
+
+    .mapboxgl-popup-content {
+      border-radius: 25px;
+      padding: 6px;
+      border: 1px solid $fontColor;
+      cursor: pointer;
+    }
+  }
+}
+
 .container {
   display: flex;
-  width: 100%;
-  height: 100%;
+  width: 100px;
+  height: 23px;
   text-align: center;
-  vertical-align: center;
-  padding: 10px;
-  border-radius: 10px 10px 0 0;
-  background-color: #ffffff;
+  vertical-align: middle;
+  background-color: $backgroundColor;
 }
 
 .poi_icon {
   background-color: white;
   background-position: center;
-  background-size: 100%;
   background-repeat: no-repeat;
-  color: #000000;
-  font-size: 0;
-  height: 1em;
-  width: 30%;
+  color: $fontColor;
+  font-size: $fontSize;
+  width: 33%;
 }
 
 .travel_destination_level {
-  font-size: 1em;
-  font-weight: bold;
+  font-size: $fontSize;
+  font-weight: normal;
 }
 
 .stroke {
-  background-image: url('./../../assets/leit_poi_strich.svg');
+  background-color: #D8D8D8;
+  height: 28px;
+  margin-top: -2px;
   width: 1px;
 }
 
 .travel_type_lift {
   background-image: url('./../../assets/leit_poi_lift.svg');
+  background-size: $travelTypeSize;
 }
 
 .travel_type_ramp {
   background-image: url('./../../assets/leit_poi_rampe.svg');
+  background-size: $travelTypeSize;
 }
 
 .travel_type_stairs {
   background-image: url('./../../assets/leit_poi_treppe.svg');
+  background-size: $travelTypeSize;
 }
 
 .travel_type_default,
 .travel_type_escalator {
   background-image: url('./../../assets/leit_poi_rolltreppe.svg');
+  background-size: $travelTypeSize;
 }
 
 .travel_direction_downstairs {
   background-image: url('./../../assets/leit_poi_pfeil_down.svg');
+  background-size: $travelDirectionSize;
 }
 
 .travel_direction_default,
 .travel_direction_upstairs {
   background-image: url('./../../assets/leit_poi_pfeil_up.svg');
+  background-size: $travelDirectionSize;
 }
