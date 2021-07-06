@@ -9,7 +9,7 @@ import {LeitPoiFeature} from './model/leit-poi-feature';
 @Component({
   selector: 'rokas-leit-poi',
   templateUrl: './leit-poi.component.html',
-  styleUrls: ['./leit-poi.component.css'],
+  styleUrls: ['./leit-poi.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeitPoiComponent {
