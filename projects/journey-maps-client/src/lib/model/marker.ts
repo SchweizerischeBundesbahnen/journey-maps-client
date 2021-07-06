@@ -72,4 +72,9 @@ export interface Marker {
    * Default value is true.
    */
   triggerEvent?: boolean;
+
+  /**
+   * "Everything else" we don't want to add explicitly to the interface.
+   */
+  [additionalProperties: string]: any;
 }
