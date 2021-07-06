@@ -73,7 +73,7 @@ export class MapLeitPoiService {
         destinationLevel: Number(feature.properties.destinationFloor),
       } as any;
     } catch (e) {
-      console.error('Failed to convert feature to LeitPoi:', feature, e);
+      console.error('Failed to convert Feature to LeitPoiFeature:', feature, e);
     }
   }
 
