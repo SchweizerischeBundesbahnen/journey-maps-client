@@ -32,6 +32,8 @@ export class MapLeitPoiCreatorService {
     );
   }
 
+  // TODO: destroy component
+
   createLeitPoi(map: mapboxgl.Map, feature: LeitPoiFeature): { component: LeitPoiComponent, popup: mapboxgl.Popup } {
     const componentRef = this.componentFactory.create(this.injector);
     this.appRef.attachView(componentRef.hostView);
