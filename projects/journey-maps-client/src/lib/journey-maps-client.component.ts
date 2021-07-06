@@ -298,7 +298,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
           this.mapJourneyService.updateJourney(this.map, this.journey);
         }
         if (changes.transfer?.currentValue) {
-          this.mapJourneyService.updateJourney(this.map, this.transfer);
+          this.mapTransferService.updateTransfer(this.map, this.transfer);
         }
         if (changes.routes?.currentValue) {
           this.mapRoutesService.updateRoutes(this.map, this.routes);

@@ -19,16 +19,19 @@ export class AppComponent implements OnInit {
               private assetReaderService: AssetReaderService) {
   }
 
+  static MapCenterDefault: LngLatLike = [7.4391326448171196, 46.948834547463086];
+  static MapZoomLevelDefault = 7.5;
+
   title = 'journey-maps-client-testapp';
   loremIpsum = new LoremIpsum();
 
   @ViewChild(JourneyMapsClientComponent) rokasClient: JourneyMapsClientComponent;
 
   // Initial map position
-  zoomLevel = 7.5;
+  zoomLevel: number = AppComponent.MapZoomLevelDefault;
   showLevelSwitch = true;
   zoomLevelChanged: number;
-  mapCenter: LngLatLike = [7.4391326448171196, 46.948834547463086];
+  mapCenter: LngLatLike = AppComponent.MapCenterDefault;
   mapCenterChanged: LngLatLike;
   selectedMarkerId: string;
 
@@ -142,7 +145,7 @@ export class AppComponent implements OnInit {
     this.assetReaderService.loadAssetAsJSON('journey/zh-sh_waldfriedhof.json')
       .subscribe(json => this._journey = json);
 
-    this.assetReaderService.loadAssetAsJSON('transfer/luzern4-j.json')
+    this.assetReaderService.loadAssetAsJSON('transfer/zurich-indoor.json')
       .subscribe(json => this._transfer = json);
 
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
@@ -162,17 +165,26 @@ export class AppComponent implements OnInit {
     this.routes = undefined;
     if ((event.target as HTMLOptionElement).value === 'journey') {
       this.journey = this._journey;
+      this.setBbox(this.journey.bbox);
     }
     if ((event.target as HTMLOptionElement).value === 'transfer') {
       this.transfer = this._transfer;
+      this.setBbox(this.transfer.bbox);
     }
     if ((event.target as HTMLOptionElement).value === 'routes') {
       this.routes = this._routes;
+      this.zoomLevel = AppComponent.MapZoomLevelDefault;
+      this.mapCenter = AppComponent.MapCenterDefault;
     }
   }
 
   setPopupInput(event: Event): void {
     this.selectedMarkerId = undefined;
     this.popup = (event.target as HTMLOptionElement).value === 'true';
+  }
+
+  private setBbox(bbox: number[]): void {
+    this.mapCenter = this.zoomLevel = undefined;
+    this.boundingBox = [[bbox[0], bbox[1]], [bbox[2], bbox[3]]];
   }
 }

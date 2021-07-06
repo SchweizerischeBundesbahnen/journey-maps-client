@@ -16,6 +16,7 @@ import {TeaserComponent} from './components/marker-details/components/teaser/tea
 import {InfoBlockRendererComponent} from './components/marker-details/components/info-block-renderer/info-block-renderer.component';
 import {AddressInfoBlockComponent} from './components/marker-details/components/info-block-renderer/components/address-info-block/address-info-block.component';
 import {ZoomControlsComponent} from './components/zoom-controls/zoom-controls.component';
+import { LeitPoiComponent } from './components/leit-poi/leit-poi.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {ZoomControlsComponent} from './components/zoom-controls/zoom-controls.co
     PopupComponent,
     MarkerDetailsComponent,
     InfoBlockRendererComponent,
-    AddressInfoBlockComponent
+    AddressInfoBlockComponent,
+    LeitPoiComponent
   ],
   imports: [
     CommonModule,
