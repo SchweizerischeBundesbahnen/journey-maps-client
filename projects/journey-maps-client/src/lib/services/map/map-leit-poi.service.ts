@@ -13,7 +13,6 @@ import {MapLeitPoiCreatorService} from './map-leit-poi-creator.service';
 export class MapLeitPoiService {
   static LEIT_POI_PATH_TYPE = 'leit_poi';
   static DEFAULT_LEVEL = 0;
-  static POPUP_OPTIONS = {closeOnClick: false, closeButton: false};
   levelSwitched = new Subject<number>();
   destroyed = new Subject();
 
@@ -37,8 +36,10 @@ export class MapLeitPoiService {
 
     this.leitPoiFeatures = featureCollection.features
       .filter(f => !!f.properties?.step && f.properties?.pathType === MapLeitPoiService.LEIT_POI_PATH_TYPE)
-      .map(f => this.convertToLeitPoiFeature(f));
+      .map(f => this.convertToLeitPoiFeature(f))
+      .filter(lp => !!lp);
 
+    // TODO: read the routeStartLevel
     this.setCurrentLevel(map, MapLeitPoiService.DEFAULT_LEVEL);
   }
 
@@ -52,31 +53,28 @@ export class MapLeitPoiService {
   }
 
   private showLeitPoi(map: mapboxgl.Map, feature: LeitPoiFeature): void {
-    const component = this.mapLeitPoiCreator.createLeitPoiComponent();
-    const popup = new mapboxgl.Popup(MapLeitPoiService.POPUP_OPTIONS)
-      .setDOMContent(this.mapLeitPoiCreator.getNativeElement(component))
-      .addTo(map);
+    const {component, popup} = this.mapLeitPoiCreator.createLeitPoi(map, feature);
     this.popups.push(popup);
 
-    component.instance.switchLevelClick.pipe(takeUntil(this.destroyed)).subscribe(nextLevel => {
+    component.switchLevelClick.pipe(takeUntil(this.destroyed)).subscribe(nextLevel => {
       this.showLeitPoiByLevel(map, nextLevel);
       this.levelSwitched.next(nextLevel);
     });
-
-    component.instance.feature = feature;
-    popup.setLngLat(feature.location);
-    popup.addClassName('leit-poi-popup');
   }
 
-  private convertToLeitPoiFeature(feature: Feature<Geometry, { [p: string]: any }>): LeitPoiFeature {
-    return {
-      travelType: feature.properties.travelType.toLowerCase(),
-      travelDirection: feature.properties.direction.toLowerCase(),
-      placement: feature.properties.placement.toUpperCase(),
-      sourceLevel: Number(feature.properties.sourceFloor),
-      location: (feature.geometry as any).coordinates,
-      destinationLevel: Number(feature.properties.destinationFloor),
-    } as any;
+  private convertToLeitPoiFeature(feature: Feature<Geometry, { [p: string]: any }>): LeitPoiFeature | undefined {
+    try {
+      return {
+        travelType: feature.properties.travelType.toLowerCase(),
+        travelDirection: feature.properties.direction.toLowerCase(),
+        placement: feature.properties.placement.toUpperCase(),
+        sourceLevel: Number(feature.properties.sourceFloor),
+        location: (feature.geometry as any).coordinates,
+        destinationLevel: Number(feature.properties.destinationFloor),
+      } as any;
+    } catch (e) {
+      console.error('Failed to convert feature to LeitPoi:', feature, e);
+    }
   }
 
   private getFeaturesByLevel(currentLevel: number): LeitPoiFeature[] {
@@ -85,5 +83,6 @@ export class MapLeitPoiService {
 
   private removeMapPopups(): void {
     this.popups.forEach(p => p.remove());
+    this.popups.length = 0;
   }
 }
