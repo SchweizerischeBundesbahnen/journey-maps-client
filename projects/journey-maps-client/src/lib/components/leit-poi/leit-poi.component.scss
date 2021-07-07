@@ -8,24 +8,6 @@ $travelDirectionSize: 40% 100%;
 
 /* end of constants */
 
-::ng-deep {
-  .leit-poi-popup {
-
-    .mapboxgl-popup-tip {
-      padding: 0;
-      height: 0;
-      display: none;
-    }
-
-    .mapboxgl-popup-content {
-      border-radius: 25px;
-      padding: 6px;
-      border: 1px solid $fontColor;
-      cursor: pointer;
-    }
-  }
-}
-
 .container {
   display: flex;
   width: 100px;

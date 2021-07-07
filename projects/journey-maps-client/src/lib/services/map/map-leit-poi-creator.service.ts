@@ -8,10 +8,11 @@ import {
   Injector
 } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
+import {PointLike} from 'mapbox-gl';
 import {LeitPoiComponent} from '../../components/leit-poi/leit-poi.component';
 import {LeitPoiFeature} from '../../components/leit-poi/model/leit-poi-feature';
 import {LeitPoiPlacement} from '../../components/leit-poi/model/leit-poi-placement';
-import {PointLike} from 'mapbox-gl';
+import {MapLeitPoi} from '../../model/map-leit-poi';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,8 @@ import {PointLike} from 'mapbox-gl';
 export class MapLeitPoiCreatorService {
   static POPUP_OPTIONS = {closeOnClick: false, closeButton: false};
   static POPUP_CLASS_NAME = 'leit-poi-popup';
-  static OFFSET_IF_IS_NORTH: PointLike = [0, -20];
-  static DEFAULT_OFFSET: PointLike = [0, -10];
+  static OFFSET_IF_IS_NORTH: PointLike = [50, -25];
+  static DEFAULT_OFFSET: PointLike = [50, 0];
 
   private componentFactory: ComponentFactory<LeitPoiComponent>;
 
@@ -32,9 +33,7 @@ export class MapLeitPoiCreatorService {
     );
   }
 
-  // TODO: destroy component
-
-  createLeitPoi(map: mapboxgl.Map, feature: LeitPoiFeature): { component: LeitPoiComponent, popup: mapboxgl.Popup } {
+  createMapLeitPoi(map: mapboxgl.Map, feature: LeitPoiFeature): MapLeitPoi {
     const componentRef = this.componentFactory.create(this.injector);
     this.appRef.attachView(componentRef.hostView);
     const component = componentRef.instance;
@@ -50,7 +49,7 @@ export class MapLeitPoiCreatorService {
       MapLeitPoiCreatorService.OFFSET_IF_IS_NORTH :
       MapLeitPoiCreatorService.DEFAULT_OFFSET);
 
-    return {component, popup};
+    return new MapLeitPoi(componentRef, popup);
   }
 
   private getNativeElement(componentRef: ComponentRef<LeitPoiComponent>): HTMLElement {
@@ -62,3 +61,4 @@ export class MapLeitPoiCreatorService {
     return placement === LeitPoiPlacement.northwest || placement === LeitPoiPlacement.northeast;
   }
 }
+

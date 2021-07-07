@@ -6,6 +6,7 @@ import {LeitPoiFeature} from '../../components/leit-poi/model/leit-poi-feature';
 import {Feature, Geometry} from 'geojson';
 import {takeUntil} from 'rxjs/operators';
 import {MapLeitPoiCreatorService} from './map-leit-poi-creator.service';
+import {MapLeitPoi} from '../../model/map-leit-poi';
 
 @Injectable({
   providedIn: 'root'
@@ -17,19 +18,19 @@ export class MapLeitPoiService {
   destroyed = new Subject();
 
   private leitPoiFeatures: LeitPoiFeature[] = [];
-  private popups: mapboxgl.Popup[] = [];
+  private mapLeitPois: MapLeitPoi[] = [];
 
   constructor(private mapService: MapService, private mapLeitPoiCreator: MapLeitPoiCreatorService) {
   }
 
   destroy(): void {
-    this.removeMapPopups();
+    this.removeMapLeitPois();
     this.destroyed.next();
     this.destroyed.complete();
   }
 
   processData(map: mapboxgl.Map, featureCollection: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
-    this.removeMapPopups();
+    this.removeMapLeitPois();
     if (!featureCollection || !featureCollection.features?.length) {
       return;
     }
@@ -48,15 +49,15 @@ export class MapLeitPoiService {
   }
 
   private showLeitPoiByLevel(map: mapboxgl.Map, currentLevel: number): void {
-    this.removeMapPopups();
+    this.removeMapLeitPois();
     this.getFeaturesByLevel(currentLevel).forEach(f => this.showLeitPoi(map, f));
   }
 
   private showLeitPoi(map: mapboxgl.Map, feature: LeitPoiFeature): void {
-    const {component, popup} = this.mapLeitPoiCreator.createLeitPoi(map, feature);
-    this.popups.push(popup);
+    const mapLeitPoi = this.mapLeitPoiCreator.createMapLeitPoi(map, feature);
+    this.mapLeitPois.push(mapLeitPoi);
 
-    component.switchLevelClick.pipe(takeUntil(this.destroyed)).subscribe(nextLevel => {
+    mapLeitPoi.switchLevel.pipe(takeUntil(mapLeitPoi.destroyed)).subscribe(nextLevel => {
       this.showLeitPoiByLevel(map, nextLevel);
       this.levelSwitched.next(nextLevel);
     });
@@ -81,8 +82,8 @@ export class MapLeitPoiService {
     return this.leitPoiFeatures.filter(f => f.sourceLevel === currentLevel);
   }
 
-  private removeMapPopups(): void {
-    this.popups.forEach(p => p.remove());
-    this.popups.length = 0;
+  private removeMapLeitPois(): void {
+    this.mapLeitPois.forEach(p => p.destroy());
+    this.mapLeitPois.length = 0;
   }
 }

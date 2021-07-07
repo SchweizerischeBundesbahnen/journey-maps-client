@@ -14,9 +14,9 @@ import {LeitPoiFeature} from './model/leit-poi-feature';
 })
 export class LeitPoiComponent {
   @Input() feature: LeitPoiFeature = {} as LeitPoiFeature;
-  @Output() switchLevelClick = new EventEmitter<number>();
+  @Output() switchLevel = new EventEmitter<number>();
 
   onClick(): void {
-    this.switchLevelClick?.emit(this.feature.destinationLevel);
+    this.switchLevel?.emit(this.feature.destinationLevel);
   }
 }
