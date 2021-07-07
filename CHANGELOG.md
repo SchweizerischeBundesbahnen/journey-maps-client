@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unreleased](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.3.0&sourceBranch=refs%2Ftags%2F1.x.0&targetRepoId=46287) - yyyy-mm-dd
+## [1.4.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.3.0&sourceBranch=refs%2Ftags%2F1.4.0&targetRepoId=46287) - 2021-07-06
 
 ### Added
 
