@@ -14,9 +14,12 @@ import {MapLeitPoi} from '../../model/map-leit-poi';
 export class MapLeitPoiService {
   static LEIT_POI_PATH_TYPE = 'leit_poi';
   static DEFAULT_LEVEL = 0;
+  // check the rokas map style: 16.5 or 15 like LevelSwitch:
+  static LEIT_POI_MAX_MAP_ZOOM = 15;
   levelSwitched = new Subject<number>();
   destroyed = new Subject();
 
+  private mapZoomSubscription: any;
   private leitPoiFeatures: LeitPoiFeature[] = [];
   private mapLeitPois: MapLeitPoi[] = [];
 
@@ -40,17 +43,51 @@ export class MapLeitPoiService {
       .map(f => this.convertToLeitPoiFeature(f))
       .filter(lp => !!lp);
 
-    // TODO: read the routeStartLevel
-    this.setCurrentLevel(map, MapLeitPoiService.DEFAULT_LEVEL);
+    if (this.leitPoiFeatures.length) {
+      this.registerMapZoomEvent(map);
+      const routeStartLevelFeature = featureCollection.features
+        .find(f => !!f.properties?.step && f.properties?.routeStartLevel);
+      const routeStartLevel = routeStartLevelFeature ?
+        Number(routeStartLevelFeature.properties?.routeStartLevel) : MapLeitPoiService.DEFAULT_LEVEL;
+      this.setCurrentLevel(map, routeStartLevel);
+      this.levelSwitched.next(routeStartLevel);
+    }
   }
 
   setCurrentLevel(map: mapboxgl.Map, currentLevel: number): void {
     this.showLeitPoiByLevel(map, currentLevel);
   }
 
+  private registerMapZoomEvent(map: mapboxgl.Map): void {
+    if (!this.mapZoomSubscription) {
+      this.mapZoomSubscription = map.on('zoomend', () => this.toggleMapLeitPoisVisibility(map.getZoom()));
+    }
+  }
+
+  private toggleMapLeitPoisVisibility(currentZoomLevel: number): void {
+    if (MapLeitPoiService.LEIT_POI_MAX_MAP_ZOOM >= currentZoomLevel) {
+      this.hideLeitPois();
+    } else {
+      this.showLeitPois();
+    }
+  }
+
+  private showLeitPois(): void {
+    this.mapLeitPois.filter(p => !p.visible).forEach(p => {
+      p.toggleHidden();
+    });
+  }
+
+  private hideLeitPois(): void {
+    this.mapLeitPois.filter(p => p.visible).forEach(p => {
+      p.toggleHidden();
+    });
+  }
+
   private showLeitPoiByLevel(map: mapboxgl.Map, currentLevel: number): void {
     this.removeMapLeitPois();
     this.getFeaturesByLevel(currentLevel).forEach(f => this.showLeitPoi(map, f));
+    this.toggleMapLeitPoisVisibility(map.getZoom());
   }
 
   private showLeitPoi(map: mapboxgl.Map, feature: LeitPoiFeature): void {

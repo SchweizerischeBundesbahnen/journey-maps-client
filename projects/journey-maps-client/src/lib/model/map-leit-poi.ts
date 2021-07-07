@@ -8,6 +8,8 @@ import * as mapboxgl from 'mapbox-gl';
  */
 export class MapLeitPoi {
 
+  static HIDDEN_CLASS_NAME = 'leit-poi-popup-hidden';
+
   private destroySub = new Subject<void>();
 
   constructor(private componentRef: ComponentRef<LeitPoiComponent>, private popup: mapboxgl.Popup) {
@@ -19,6 +21,14 @@ export class MapLeitPoi {
 
   get switchLevel(): Subject<number> {
     return this.componentRef.instance.switchLevel;
+  }
+
+  get visible(): boolean {
+    return !this.popup.getElement().className.includes(MapLeitPoi.HIDDEN_CLASS_NAME);
+  }
+
+  toggleHidden(): void {
+    return this.popup.toggleClassName(MapLeitPoi.HIDDEN_CLASS_NAME);
   }
 
   destroy(): void {

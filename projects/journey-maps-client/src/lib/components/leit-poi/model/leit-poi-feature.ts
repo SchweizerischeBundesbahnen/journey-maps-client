@@ -7,7 +7,6 @@ export interface LeitPoiFeature {
   travelType: LeitPoiTravelType;
   travelDirection: LeitPoiTravelDirection;
   placement: LeitPoiPlacement;
-  // TODO: if (sourceFloor != nextLevel)  do not show
   sourceLevel: number;
   location: LngLatLike;
   destinationLevel: number;

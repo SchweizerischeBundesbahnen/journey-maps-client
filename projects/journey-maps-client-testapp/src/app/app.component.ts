@@ -130,7 +130,7 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  geoJsonInputs = ['journey', 'transfer', 'routes'];
+  geoJsonInputs = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'routes'];
   journey: GeoJSON.FeatureCollection;
   transfer: GeoJSON.FeatureCollection;
   routes: GeoJSON.FeatureCollection[] = [];
@@ -138,15 +138,23 @@ export class AppComponent implements OnInit {
 
   // preload example data into these fields
   _journey: GeoJSON.FeatureCollection;
-  _transfer: GeoJSON.FeatureCollection;
+  _transferLuzern: GeoJSON.FeatureCollection;
+  _transferZurichIndoor: GeoJSON.FeatureCollection;
+  _transferBernIndoor: GeoJSON.FeatureCollection;
   _routes: GeoJSON.FeatureCollection[] = [];
 
   ngOnInit(): void {
     this.assetReaderService.loadAssetAsJSON('journey/zh-sh_waldfriedhof.json')
       .subscribe(json => this._journey = json);
 
+    this.assetReaderService.loadAssetAsJSON('transfer/luzern4-j.json')
+      .subscribe(json => this._transferLuzern = json);
+
     this.assetReaderService.loadAssetAsJSON('transfer/zurich-indoor.json')
-      .subscribe(json => this._transfer = json);
+      .subscribe(json => this._transferZurichIndoor = json);
+
+    this.assetReaderService.loadAssetAsJSON('transfer/bern-indoor.json')
+      .subscribe(json => this._transferBernIndoor = json);
 
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
       .subscribe(json => this._routes = json);
@@ -167,8 +175,16 @@ export class AppComponent implements OnInit {
       this.journey = this._journey;
       this.setBbox(this.journey.bbox);
     }
-    if ((event.target as HTMLOptionElement).value === 'transfer') {
-      this.transfer = this._transfer;
+    if ((event.target as HTMLOptionElement).value === 'transfer luzern') {
+      this.transfer = this._transferLuzern;
+      this.setBbox(this.transfer.bbox);
+    }
+    if ((event.target as HTMLOptionElement).value === 'transfer zurich') {
+      this.transfer = this._transferZurichIndoor;
+      this.setBbox(this.transfer.bbox);
+    }
+    if ((event.target as HTMLOptionElement).value === 'transfer bern') {
+      this.transfer = this._transferBernIndoor;
       this.setBbox(this.transfer.bbox);
     }
     if ((event.target as HTMLOptionElement).value === 'routes') {
