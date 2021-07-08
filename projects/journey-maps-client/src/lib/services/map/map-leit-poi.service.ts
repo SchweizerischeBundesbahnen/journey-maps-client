@@ -14,7 +14,7 @@ import {MapLeitPoi} from '../../model/map-leit-poi';
 export class MapLeitPoiService {
   static LEIT_POI_PATH_TYPE = 'leit_poi';
   static DEFAULT_LEVEL = 0;
-  // check the rokas map style: 16.5 or 15 like LevelSwitch:
+  // check the rokas map style blue-arrow: 16.5 or 15 like LevelSwitch:
   static LEIT_POI_MAX_MAP_ZOOM = 15;
   levelSwitched = new Subject<number>();
   destroyed = new Subject();
