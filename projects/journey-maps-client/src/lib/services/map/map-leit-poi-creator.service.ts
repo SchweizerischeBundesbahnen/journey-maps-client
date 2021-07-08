@@ -20,8 +20,8 @@ import {MapLeitPoi} from '../../model/map-leit-poi';
 export class MapLeitPoiCreatorService {
   static POPUP_OPTIONS = {closeOnClick: false, closeButton: false};
   static POPUP_CLASS_NAME = 'leit-poi-popup';
-  static OFFSET_IF_IS_NORTH: PointLike = [60, -20];
-  static DEFAULT_OFFSET: PointLike = [60, 0];
+  static OFFSET_IF_IS_NORTH: PointLike = [0, -10];
+  static DEFAULT_OFFSET: PointLike = [0, 50];
 
   private componentFactory: ComponentFactory<LeitPoiComponent>;
 
