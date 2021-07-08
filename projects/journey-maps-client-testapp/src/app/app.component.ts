@@ -130,7 +130,7 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  geoJsonInputs = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'routes'];
+  geoJsonInputs = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
   journey: GeoJSON.FeatureCollection;
   transfer: GeoJSON.FeatureCollection;
   routes: GeoJSON.FeatureCollection[] = [];
@@ -141,6 +141,7 @@ export class AppComponent implements OnInit {
   _transferLuzern: GeoJSON.FeatureCollection;
   _transferZurichIndoor: GeoJSON.FeatureCollection;
   _transferBernIndoor: GeoJSON.FeatureCollection;
+  _transferGeneveIndoor: GeoJSON.FeatureCollection;
   _routes: GeoJSON.FeatureCollection[] = [];
 
   ngOnInit(): void {
@@ -155,6 +156,9 @@ export class AppComponent implements OnInit {
 
     this.assetReaderService.loadAssetAsJSON('transfer/bern-indoor.json')
       .subscribe(json => this._transferBernIndoor = json);
+
+    this.assetReaderService.loadAssetAsJSON('transfer/geneve-indoor.json')
+      .subscribe(json => this._transferGeneveIndoor = json);
 
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
       .subscribe(json => this._routes = json);
@@ -185,6 +189,10 @@ export class AppComponent implements OnInit {
     }
     if ((event.target as HTMLOptionElement).value === 'transfer bern') {
       this.transfer = this._transferBernIndoor;
+      this.setBbox(this.transfer.bbox);
+    }
+    if ((event.target as HTMLOptionElement).value === 'transfer geneve') {
+      this.transfer = this._transferGeneveIndoor;
       this.setBbox(this.transfer.bbox);
     }
     if ((event.target as HTMLOptionElement).value === 'routes') {
