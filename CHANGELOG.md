@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.5.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.4.0&sourceBranch=refs%2Ftags%2F1.5.0&targetRepoId=46287) - 2021-07-12
+
+### Added
+
+* Support for indoor routing
+
 ## [1.4.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.3.0&sourceBranch=refs%2Ftags%2F1.4.0&targetRepoId=46287) - 2021-07-06
 
 ### Added

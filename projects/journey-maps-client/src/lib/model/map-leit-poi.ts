@@ -8,7 +8,7 @@ import * as mapboxgl from 'mapbox-gl';
  */
 export class MapLeitPoi {
 
-  static HIDDEN_CLASS_NAME = 'leit-poi-popup-hidden';
+  private static readonly HIDDEN_CLASS_NAME = 'leit-poi-popup-hidden';
 
   private destroySub = new Subject<void>();
 

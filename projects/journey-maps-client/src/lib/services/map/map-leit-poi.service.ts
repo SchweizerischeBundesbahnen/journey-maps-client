@@ -12,10 +12,10 @@ import {MapLeitPoi} from '../../model/map-leit-poi';
   providedIn: 'root'
 })
 export class MapLeitPoiService {
-  static LEIT_POI_PATH_TYPE = 'leit_poi';
-  static DEFAULT_LEVEL = 0;
+  private static readonly LEIT_POI_PATH_TYPE = 'leit_poi';
+  private static readonly DEFAULT_LEVEL = 0;
   // check the rokas map style blue-arrow: 16.5 or 15 like LevelSwitch:
-  static LEIT_POI_MAX_MAP_ZOOM = 15;
+  private static readonly LEIT_POI_MIN_MAP_ZOOM = 15;
   levelSwitched = new Subject<number>();
   destroyed = new Subject();
 
@@ -65,7 +65,7 @@ export class MapLeitPoiService {
   }
 
   private toggleMapLeitPoisVisibility(currentZoomLevel: number): void {
-    if (MapLeitPoiService.LEIT_POI_MAX_MAP_ZOOM >= currentZoomLevel) {
+    if (MapLeitPoiService.LEIT_POI_MIN_MAP_ZOOM >= currentZoomLevel) {
       this.hideLeitPois();
     } else {
       this.showLeitPois();
