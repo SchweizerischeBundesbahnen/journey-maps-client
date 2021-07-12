@@ -8,7 +8,6 @@ import {
   Injector
 } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
-import {PointLike} from 'mapbox-gl';
 import {LeitPoiComponent} from '../../components/leit-poi/leit-poi.component';
 import {LeitPoiFeature} from '../../components/leit-poi/model/leit-poi-feature';
 import {LeitPoiPlacement} from '../../components/leit-poi/model/leit-poi-placement';
@@ -20,8 +19,8 @@ import {MapLeitPoi} from '../../model/map-leit-poi';
 export class MapLeitPoiCreatorService {
   private static readonly POPUP_OPTIONS = {closeOnClick: false, closeButton: false};
   private static readonly POPUP_CLASS_NAME = 'leit-poi-popup';
-  private static readonly OFFSET_IF_IS_NORTH: PointLike = [0, -10];
-  private static readonly DEFAULT_OFFSET: PointLike = [0, 50];
+  private static readonly X_OFFSET = 57; // 1/2 Leit-POI width
+  private static readonly Y_OFFSET = 37; // Leit-POI height
 
   private componentFactory: ComponentFactory<LeitPoiComponent>;
 
@@ -45,9 +44,10 @@ export class MapLeitPoiCreatorService {
 
     popup.setLngLat(feature.location);
     popup.addClassName(MapLeitPoiCreatorService.POPUP_CLASS_NAME);
-    popup.setOffset(this.isNorth(feature.placement) ?
-      MapLeitPoiCreatorService.OFFSET_IF_IS_NORTH :
-      MapLeitPoiCreatorService.DEFAULT_OFFSET);
+    popup.setOffset([
+      (this.isEast(feature.placement) ? 1 : -1) * MapLeitPoiCreatorService.X_OFFSET,
+      this.isNorth(feature.placement) ? 0 : MapLeitPoiCreatorService.Y_OFFSET
+    ]);
 
     return new MapLeitPoi(componentRef, popup);
   }
@@ -59,6 +59,10 @@ export class MapLeitPoiCreatorService {
 
   private isNorth(placement: LeitPoiPlacement): boolean {
     return placement === LeitPoiPlacement.northwest || placement === LeitPoiPlacement.northeast;
+  }
+
+  private isEast(placement: LeitPoiPlacement): boolean {
+    return placement === LeitPoiPlacement.southeast || placement === LeitPoiPlacement.northeast;
   }
 }
 
