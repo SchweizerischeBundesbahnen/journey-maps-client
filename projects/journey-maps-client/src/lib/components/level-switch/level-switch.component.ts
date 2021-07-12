@@ -7,6 +7,7 @@ import {MapLayerFilterService} from './services/map-layer-filter.service';
 import {LocaleService} from '../../services/locale.service';
 import {QueryMapFeaturesService} from './services/query-map-features.service';
 import {MapLeitPoiService} from '../../services/map/map-leit-poi.service';
+import {MapTransferService} from '../../services/map/map-transfer.service';
 
 @Component({
   selector: 'rokas-level-switch',
@@ -44,7 +45,9 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
               private mapLayerFilterService: MapLayerFilterService,
               private i18n: LocaleService,
               private queryMapFeaturesService: QueryMapFeaturesService,
-              private mapLeitPoiService: MapLeitPoiService) {
+              private mapLeitPoiService: MapLeitPoiService,
+              private mapTransferService: MapTransferService
+  ) {
     this.selectedLevel = this.defaultLevel;
   }
 
@@ -148,6 +151,9 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   private setNewLevel(level: number): void {
     this.selectedLevel = level;
     this.mapLayerFilterService.setLevelFilter(level);
+
+    this.mapTransferService.updateOutdoorWalkFloor(this.map, level);
+
     // call outside component-zone, trigger detect changes manually
     this.ref.detectChanges();
   }
