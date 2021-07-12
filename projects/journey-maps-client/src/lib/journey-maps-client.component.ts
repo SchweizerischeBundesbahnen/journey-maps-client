@@ -456,6 +456,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.map.on('click', Constants.CLUSTER_LAYER, event => this.clusterClicked.next(event));
     this.map.on('zoomend', () => this.zoomLevelChangeDebouncer.next());
     this.map.on('moveend', () => this.mapCenterChangeDebouncer.next());
+    // Emit initial values
+    this.zoomLevelChangeDebouncer.next();
+    this.mapCenterChangeDebouncer.next();
 
     this.isStyleLoaded = true;
     this.styleLoaded.next();
