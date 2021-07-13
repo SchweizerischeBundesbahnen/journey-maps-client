@@ -6,7 +6,7 @@
     "start-testapp": "npm run _testapp-example && ng serve journey-maps-client-testapp",
     "start-testapp-with-remote-access": "npm run _testapp-example && ng serve journey-maps-client-testapp --host 0.0.0.0 --disable-host-check",
     "start-elements": "ng serve journey-maps-client-elements --port 4201",
-    "build": "concurrently --kill-others-on-fail npm:build-lib npm:build-testapp npm:build-elements",
+    "build": "concurrently --kill-others-on-fail npm:build-lib npm:build-testapp && npm run build-elements",
     "build-lib": "ng build journey-maps-client --prod",
     "build-lib-watch": "ng build journey-maps-client --watch",
     "build-testapp": "npm run _testapp-example && ng build journey-maps-client-testapp --prod --progress=false",

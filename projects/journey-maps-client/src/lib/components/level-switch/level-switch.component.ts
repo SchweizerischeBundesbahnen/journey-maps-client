@@ -85,6 +85,11 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
       this.map.on('moveend', () => this.mapMoved.next());
 
       this.mapLayerFilterService.setMap(this.map);
+      if (this.map.isSourceLoaded(QueryMapFeaturesService.SERVICE_POINT_SOURCE_ID)) {
+        this.updateLevels();
+      } else {
+        this.map.once('idle', () => this.updateLevels());
+      }
       // call outside component-zone, trigger detect changes manually
       this.ref.detectChanges();
     }

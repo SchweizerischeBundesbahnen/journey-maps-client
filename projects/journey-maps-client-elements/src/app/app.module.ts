@@ -1,9 +1,10 @@
 import {CUSTOM_ELEMENTS_SCHEMA, Injector, NgModule} from '@angular/core';
-import {JourneyMapsClientModule} from '../../../journey-maps-client/src/lib/journey-maps-client.module';
-import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 import {createCustomElement} from '@angular/elements';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
+// Must be imported from dist!
+// Needs rebuilds during local development but otherwise it won't work correctly. (e.g. inline SVG)
+import {JourneyMapsClientComponent, JourneyMapsClientModule} from 'journey-maps-client';
 
 
 @NgModule({
