@@ -115,6 +115,8 @@ describe('LevelSwitchComponent', () => {
           onZoomChangedCallbackFn = callbackFn;
         }
       },
+      isSourceLoaded: (id: string) => false,
+      once: (event: string, callback: () => void) => undefined
     };
 
     setMapZoom(initialMapZoom);
