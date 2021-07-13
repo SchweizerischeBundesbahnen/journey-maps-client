@@ -30,6 +30,7 @@ import {MapJourneyService} from './services/map/map-journey.service';
 import {MapTransferService} from './services/map/map-transfer.service';
 import {MapRoutesService} from './services/map/map-routes.service';
 import {MapConfigService} from './services/map/map-config.service';
+import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -167,6 +168,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapJourneyService: MapJourneyService,
               private mapTransferService: MapTransferService,
               private mapRoutesService: MapRoutesService,
+              private mapLeitPoiService: MapLeitPoiService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService) {
   }
@@ -293,12 +295,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         this.mapJourneyService.updateJourney(this.map, undefined);
         this.mapTransferService.updateTransfer(this.map, undefined);
         this.mapRoutesService.updateRoutes(this.map, undefined);
+        this.mapLeitPoiService.processData(this.map, undefined);
         // only add new data if we have some
         if (changes.journey?.currentValue) {
           this.mapJourneyService.updateJourney(this.map, this.journey);
         }
         if (changes.transfer?.currentValue) {
-          this.mapJourneyService.updateJourney(this.map, this.transfer);
+          this.mapTransferService.updateTransfer(this.map, this.transfer);
+          this.mapLeitPoiService.processData(this.map, this.transfer);
         }
         if (changes.routes?.currentValue) {
           this.mapRoutesService.updateRoutes(this.map, this.routes);
@@ -367,6 +371,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   ngOnDestroy(): void {
     this.destroyed.next();
     this.destroyed.complete();
+    this.mapLeitPoiService.destroy();
   }
 
   private setupSubjects(): void {
@@ -438,6 +443,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
     this.mapMarkerService.initStyleData(this.map);
     this.map.resize();
+    // @ts-ignore
     this.mapService.verifySources(this.map, [Constants.ROUTE_SOURCE, Constants.WALK_SOURCE, ...this.mapMarkerService.sources]);
 
     for (const layer of this.mapMarkerService.allMarkerAndClusterLayers) {
@@ -450,6 +456,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.map.on('click', Constants.CLUSTER_LAYER, event => this.clusterClicked.next(event));
     this.map.on('zoomend', () => this.zoomLevelChangeDebouncer.next());
     this.map.on('moveend', () => this.mapCenterChangeDebouncer.next());
+    // Emit initial values
+    this.zoomLevelChangeDebouncer.next();
+    this.mapCenterChangeDebouncer.next();
 
     this.isStyleLoaded = true;
     this.styleLoaded.next();

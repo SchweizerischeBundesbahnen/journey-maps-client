@@ -1,47 +1,52 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Marker} from '../../../journey-maps-client/src/lib/model/marker';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 import {InfoBlockFactoryService} from '../../../journey-maps-client/src/lib/services/info-block-factory.service';
 import {LngLatBoundsLike, LngLatLike} from 'mapbox-gl';
 import {LoremIpsum} from 'lorem-ipsum';
-import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 import {AssetReaderService} from './services/asset-reader.service';
 import {MarkerColor} from '../../../journey-maps-client/src/lib/model/marker-color.enum';
+import {Subject} from 'rxjs';
+import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
-  constructor(private infoBlockFactoryService: InfoBlockFactoryService,
-              private assetReaderService: AssetReaderService) {
+  constructor(
+    private infoBlockFactoryService: InfoBlockFactoryService,
+    private assetReaderService: AssetReaderService
+  ) {
   }
 
-  title = 'journey-maps-client-testapp';
-  loremIpsum = new LoremIpsum();
+  private loremIpsum = new LoremIpsum();
+  private _journey: GeoJSON.FeatureCollection;
+  private _transferLuzern: GeoJSON.FeatureCollection;
+  private _transferZurichIndoor: GeoJSON.FeatureCollection;
+  private _transferBernIndoor: GeoJSON.FeatureCollection;
+  private _transferGeneveIndoor: GeoJSON.FeatureCollection;
+  private _routes: GeoJSON.FeatureCollection[] = [];
+  private destroyed = new Subject<void>();
 
-  @ViewChild(JourneyMapsClientComponent) rokasClient: JourneyMapsClientComponent;
-
-  // Initial map position
-  zoomLevel = 7.5;
   showLevelSwitch = true;
-  zoomLevelChanged: number;
-  mapCenter: LngLatLike = [7.4391326448171196, 46.948834547463086];
-  mapCenterChanged: LngLatLike;
   selectedMarkerId: string;
-
-  // Can be used instead of zoomLevel and mapCenter
-  boundingBox: LngLatBoundsLike = [[-9.97708574059, 51.6693012559], [-6.03298539878, 55.1316222195]];
-
-  // Can be used instead of zoomLevel and mapCenter
-  zoomToMarkers = true;
-
-  // Can be used to disable message overlay enforcing two-finger panning of map
+  boundingBox: LngLatBoundsLike = [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]];
   allowOneFingerPan = true;
+  popup = true;
 
-  // Call this.rokasClient.updateMarkers() when markers have been added/removed.
+  geoJsonInputs = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
+  journey: GeoJSON.FeatureCollection;
+  transfer: GeoJSON.FeatureCollection;
+  routes: GeoJSON.FeatureCollection[] = [];
+
+  zoomLevel: number;
+  zoomLevelChanged = new Subject<number>();
+  mapCenter: LngLatLike;
+  mapCenterChanged = new Subject<LngLatLike>();
+
   markers: Marker[] = [
     {
       id: 'velo',
@@ -127,29 +132,32 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  geoJsonInputs = ['journey', 'transfer', 'routes'];
-  journey: GeoJSON.FeatureCollection;
-  transfer: GeoJSON.FeatureCollection;
-  routes: GeoJSON.FeatureCollection[] = [];
-  popup = true;
-
-  // preload example data into these fields
-  _journey: GeoJSON.FeatureCollection;
-  _transfer: GeoJSON.FeatureCollection;
-  _routes: GeoJSON.FeatureCollection[] = [];
-
   ngOnInit(): void {
     this.assetReaderService.loadAssetAsJSON('journey/zh-sh_waldfriedhof.json')
       .subscribe(json => this._journey = json);
 
     this.assetReaderService.loadAssetAsJSON('transfer/luzern4-j.json')
-      .subscribe(json => this._transfer = json);
+      .subscribe(json => this._transferLuzern = json);
+
+    this.assetReaderService.loadAssetAsJSON('transfer/zurich-indoor.json')
+      .subscribe(json => this._transferZurichIndoor = json);
+
+    this.assetReaderService.loadAssetAsJSON('transfer/bern-indoor.json')
+      .subscribe(json => this._transferBernIndoor = json);
+
+    this.assetReaderService.loadAssetAsJSON('transfer/geneve-indoor.json')
+      .subscribe(json => this._transferGeneveIndoor = json);
 
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
       .subscribe(json => this._routes = json);
 
-    this.zoomLevelChanged = this.zoomLevel;
-    this.mapCenterChanged = this.mapCenter;
+    this.zoomLevelChanged.pipe(takeUntil(this.destroyed)).subscribe(_zoomLevel => this.zoomLevel = _zoomLevel);
+    this.mapCenterChanged.pipe(takeUntil(this.destroyed)).subscribe(_mapCenter => this.mapCenter = _mapCenter);
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 
   setSelectedMarkerId(selectedMarkerId: string): void {
@@ -160,19 +168,45 @@ export class AppComponent implements OnInit {
     this.journey = undefined;
     this.transfer = undefined;
     this.routes = undefined;
+
+    let bbox;
+    let updateDataFunction: () => void;
     if ((event.target as HTMLOptionElement).value === 'journey') {
-      this.journey = this._journey;
+      updateDataFunction = () => this.journey = this._journey;
+      bbox = this._journey.bbox;
     }
-    if ((event.target as HTMLOptionElement).value === 'transfer') {
-      this.transfer = this._transfer;
+    if ((event.target as HTMLOptionElement).value === 'transfer luzern') {
+      updateDataFunction = () => this.transfer = this._transferLuzern;
+      bbox = this._transferLuzern.bbox;
+    }
+    if ((event.target as HTMLOptionElement).value === 'transfer zurich') {
+      updateDataFunction = () => this.transfer = this._transferZurichIndoor;
+      bbox = this._transferZurichIndoor.bbox;
+    }
+    if ((event.target as HTMLOptionElement).value === 'transfer bern') {
+      updateDataFunction = () => this.transfer = this._transferBernIndoor;
+      bbox = this._transferBernIndoor.bbox;
+    }
+    if ((event.target as HTMLOptionElement).value === 'transfer geneve') {
+      updateDataFunction = () => this.transfer = this._transferGeneveIndoor;
+      bbox = this._transferGeneveIndoor.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'routes') {
       this.routes = this._routes;
+    }
+
+    if (bbox) {
+      this.setBbox(bbox);
+      this.mapCenterChanged.pipe(take(1)).subscribe(() => updateDataFunction());
     }
   }
 
   setPopupInput(event: Event): void {
     this.selectedMarkerId = undefined;
     this.popup = (event.target as HTMLOptionElement).value === 'true';
+  }
+
+  private setBbox(bbox: number[]): void {
+    this.boundingBox = [[bbox[0], bbox[1]], [bbox[2], bbox[3]]];
   }
 }

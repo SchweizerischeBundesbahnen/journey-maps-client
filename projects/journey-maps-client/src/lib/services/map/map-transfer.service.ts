@@ -6,10 +6,36 @@ import {MapService} from './map.service';
 @Injectable({providedIn: 'root'})
 export class MapTransferService {
 
-  constructor(private mapService: MapService) {}
+  private data: GeoJSON.FeatureCollection;
+
+  constructor(private mapService: MapService) {
+  }
 
   updateTransfer(map: mapboxgl.Map, featureCollection: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
-    const source = map.getSource(Constants.WALK_SOURCE) as GeoJSONSource;
-    source.setData(featureCollection);
+    this.getSource(map).setData(featureCollection);
+    this.data = featureCollection;
+  }
+
+  // If we enter the station on another floor than '0' then the outdoor route should be displayed
+  // on two floors. (Floor 0 and 'entrance' floor)
+  updateOutdoorWalkFloor(map: mapboxgl.Map, level: number): void {
+    let floorChanged = false;
+
+    (this.data?.features ?? [])
+      .filter(f => +f.properties.additionalFloor === level)
+      .forEach(f => {
+        const floor = f.properties.floor;
+        f.properties.floor = f.properties.additionalFloor;
+        f.properties.additionalFloor = floor;
+        floorChanged = true;
+      });
+
+    if (floorChanged) {
+      this.getSource(map).setData(this.data);
+    }
+  }
+
+  private getSource(map: mapboxgl.Map): GeoJSONSource {
+    return map.getSource(Constants.WALK_SOURCE) as GeoJSONSource;
   }
 }

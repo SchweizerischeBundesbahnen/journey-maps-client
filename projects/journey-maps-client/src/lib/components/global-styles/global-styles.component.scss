@@ -45,9 +45,7 @@
   }
 
   .mapboxgl-popup-close-button {
-    // Inline SVG :-P
-    // Therefore we don't have to care where to load the asset from.
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path fill='none' stroke='%23000' d='M6,17.9997 L18,5.9997 M18,17.9997 L6,5.9997'/></svg>");
+    background-image: url('./../../assets/close.svg');
     background-color: white;
     font-size: 0;
     height: $closeIconSize;
@@ -82,3 +80,24 @@
     }
   }
 }
+
+.leit-poi-popup {
+
+  .mapboxgl-popup-tip {
+    padding: 0;
+    height: 0;
+    display: none;
+  }
+
+  .mapboxgl-popup-content {
+    border-radius: 25px;
+    padding: 6px;
+    border: 1px solid #000000;
+    cursor: pointer;
+  }
+}
+
+.leit-poi-popup-hidden {
+  display: none;
+}
+

@@ -10,11 +10,10 @@
       [journey]="journey"
       [transfer]="transfer"
       [routes]="routes"
-      [zoomLevel]="zoomLevel"
+      [boundingBox]="boundingBox"
       [showLevelSwitch]="showLevelSwitch"
-      (zoomLevelChanged)="zoomLevelChanged=$event"
-      [mapCenter]="mapCenter"
-      (mapCenterChanged)="mapCenterChanged=$event"
+      (mapCenterChanged)="mapCenterChanged.next($event)"
+      (zoomLevelChanged)="zoomLevelChanged.next($event)"
       [markerDetailsTemplate]=""
       [(selectedMarkerId)]="selectedMarkerId"
       [allowOneFingerPan]="allowOneFingerPan"
@@ -36,22 +35,25 @@
         <button
           style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
           (click)="setSelectedMarkerId('home')"
-        >select 'Home Office' Marker</button>
+        >select 'Home Office' Marker
+        </button>
         <button
           style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
           (click)="setSelectedMarkerId(undefined)"
-        >unselect all Markers</button>
+        >unselect all Markers
+        </button>
       </li>
-      <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span></li>
-      <li style="list-style: circle;">Zoom Level: {{zoomLevelChanged}}</li>
-      <li style="list-style: circle;">Map center: {{mapCenterChanged}}</li>
+      <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span>
+      </li>
+      <li style="list-style: circle;">Zoom Level: {{zoomLevel}}</li>
+      <li style="list-style: circle;">Map center: {{mapCenter}}</li>
       <li style="list-style: circle;">Allow moving the map with one finger: {{allowOneFingerPan}}</li>
       <li style="list-style: circle;">
         <label for="geo-json-select">
           Display GeoJSON data for:
           <select id="geo-json-select"
-            style="width: 200px; min-height: 10px; padding: 0 5px; background-position: right; color: black;"
-            (change)="setGeoJsonInput($event)"
+                  style="width: 200px; min-height: 10px; padding: 0 5px; background-position: right; color: black;"
+                  (change)="setGeoJsonInput($event)"
           >
             <option value="" (change)="setGeoJsonInput($event)">(none)</option>
             <option *ngFor="let input of geoJsonInputs" [value]="input">{{input}}</option>
