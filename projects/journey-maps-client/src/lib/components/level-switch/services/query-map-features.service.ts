@@ -5,15 +5,15 @@ import {Map as MapboxMap} from 'mapbox-gl';
   providedIn: 'root'
 })
 export class QueryMapFeaturesService {
-  private readonly servicePointsMapSourceId = 'service_points';
+  static readonly SERVICE_POINT_SOURCE_ID = 'service_points';
   private readonly levelsFeaturePropertyName = 'floor_liststring';
 
   getVisibleLevels(map: MapboxMap): number[] {
-    if (!map.getStyle().sources[this.servicePointsMapSourceId]) {
-      console.error(`source '${this.servicePointsMapSourceId}' not found in map style.`);
+    if (!map.getStyle().sources[QueryMapFeaturesService.SERVICE_POINT_SOURCE_ID]) {
+      console.error(`source '${QueryMapFeaturesService.SERVICE_POINT_SOURCE_ID}' not found in map style.`);
       return [];
     }
-    const servicePoints = map.querySourceFeatures(this.servicePointsMapSourceId);
+    const servicePoints = map.querySourceFeatures(QueryMapFeaturesService.SERVICE_POINT_SOURCE_ID);
     // merge levels, when multiple stations found:
     const allLevels = servicePoints.map(servicePoint => this.extractLevels(servicePoint.properties));
 
