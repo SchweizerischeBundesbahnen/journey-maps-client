@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {JourneyMapsClientComponent} from './journey-maps-client.component';
 import {CommonModule} from '@angular/common';
-import {SBB_ICON_REGISTRY_PROVIDER, SbbIconModule} from '@sbb-esta/angular-core';
+import {SbbIconModule} from '@sbb-esta/angular-core';
 import {SbbAutocompleteModule, SbbButtonModule, SbbSearchModule} from '@sbb-esta/angular-public';
 import {SearchBarComponent} from './components/search-bar/search-bar.component';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -44,7 +44,6 @@ import { LeitPoiComponent } from './components/leit-poi/leit-poi.component';
     ReactiveFormsModule,
     AngularResizedEventModule,
   ],
-  providers: [SBB_ICON_REGISTRY_PROVIDER],
   exports: [JourneyMapsClientComponent],
 })
 export class JourneyMapsClientModule {
