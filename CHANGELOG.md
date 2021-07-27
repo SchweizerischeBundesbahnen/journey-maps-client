@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.7.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.6.0&sourceBranch=refs%2Ftags%2F1.7.0&targetRepoId=46287) - 2021-07-27
+
+### Changed
+
+* Migration from Angular 11 to Angular 12
+
 ## [1.6.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.5.0&sourceBranch=refs%2Ftags%2F1.6.0&targetRepoId=46287) - 2021-07-13
 
 ### Fixed
