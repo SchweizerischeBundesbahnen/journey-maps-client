@@ -62,7 +62,6 @@
             "main": "projects/journey-maps-client-testapp/src/main.ts",
             "polyfills": "projects/journey-maps-client-testapp/src/polyfills.ts",
             "tsConfig": "projects/journey-maps-client-testapp/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "projects/journey-maps-client-testapp/src/favicon.ico",
               "projects/journey-maps-client-testapp/src/assets"
@@ -74,7 +73,13 @@
             "allowedCommonJsDependencies": [
               "highlight.js",
               "lorem-ipsum"
-            ]
+            ],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -84,7 +89,14 @@
                   "with": "projects/journey-maps-client-testapp/src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
@@ -104,7 +116,8 @@
                 }
               ]
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -204,7 +217,14 @@
                   "with": "projects/journey-maps-client-elements/src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
               "outputHashing": "all",
               "sourceMap": false,
               "extractCss": true,
