@@ -12,8 +12,4 @@ export class Constants {
 
   static readonly METADATA_MAPPINGS = 'rokas:markerCategoryMapping';
 
-  static readonly CLUSTER_LAYERS = [
-    'rokas-marker-cluster',
-    'rokas-marker-cluster-text',
-  ];
 }

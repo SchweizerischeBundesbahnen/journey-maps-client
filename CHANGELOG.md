@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.8.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.7.0&sourceBranch=refs%2Ftags%2F1.8.0&targetRepoId=46287) - 2021-08-05
+
+### Added
+
+* Optional `order` property to `Marker` interface. If two markers overlap this property decides which one gets drawn
+  first.
+
+### Fixed
+
+* Click handler. Now always the topmost rendered feature (marker or cluster) gets selected when multiple features
+  overlap.
+
 ## [1.7.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.6.0&sourceBranch=refs%2Ftags%2F1.7.0&targetRepoId=46287) - 2021-07-27
 
 ### Changed
