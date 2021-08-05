@@ -74,6 +74,13 @@ export interface Marker {
   triggerEvent?: boolean;
 
   /**
+   * Markers with a lower order are drawn and placed first on the map.
+   * Markers with a higher order will overlap over markers with a lower order.
+   * (This has no effect when the corresponding markers are clustered.)
+   */
+  order?: number;
+
+  /**
    * "Everything else" we don't want to add explicitly to the interface.
    */
   [additionalProperties: string]: any;
