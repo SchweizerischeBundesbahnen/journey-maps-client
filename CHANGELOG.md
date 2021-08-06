@@ -1,6 +1,6 @@
 # Change Log
 
-## [1.8.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.7.0&sourceBranch=refs%2Ftags%2F1.8.0&targetRepoId=46287) - 2021-08-05
+## [1.9.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.7.0&sourceBranch=refs%2Ftags%2F1.9.0&targetRepoId=46287) - 2021-08-06
 
 ### Added
 
