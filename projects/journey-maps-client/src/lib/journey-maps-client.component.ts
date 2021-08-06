@@ -145,8 +145,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private windowResized = new Subject<void>();
   private destroyed = new Subject<void>();
   private cursorChanged = new ReplaySubject<boolean>(1);
-  private clusterClicked = new ReplaySubject<MapLayerMouseEvent>(1);
-  private layerClicked = new ReplaySubject<MapLayerMouseEvent>(1);
+  private mapClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private styleLoaded = new ReplaySubject(1);
   private mapParameterChanged = new Subject<void>();
   mapReady = new ReplaySubject<MapboxMap>(1);
@@ -385,25 +384,31 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       takeUntil(this.destroyed)
     ).subscribe(isEnter => this.map.getCanvas().style.cursor = isEnter ? 'pointer' : '');
 
-    this.layerClicked.pipe(
-      filter(e => e?.features != null && e.features.length > 0),
-      map(e => e.features),
-      // CHECKME ses: When setting debounceTime as first operator then e.features is always undefined... Why?
+    this.mapClicked.pipe(
       debounceTime(200),
+      map(e => this.map.queryRenderedFeatures(e.point, {layers: this.mapMarkerService.allMarkerAndClusterLayers})),
+      filter(features => features?.length > 0),
       takeUntil(this.destroyed)
     ).subscribe(features => {
-      const selectedMarkerId = this.mapMarkerService.onLayerClicked(this.map, features[0], this.selectedMarker?.id);
-      this.selectedMarker = this.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
-      this.cd.detectChanges();
-    });
+      let i = 0;
+      let target = features[0];
 
-    this.clusterClicked.pipe(
-      debounceTime(200),
-      filter(e => e != null),
-      map(e => this.map.queryRenderedFeatures(e.point, {layers: [Constants.CLUSTER_LAYER]})),
-      filter(features => features != null && features.length > 0),
-      takeUntil(this.destroyed)
-    ).subscribe(features => this.mapMarkerService.onClusterClicked(this.map, features[0]));
+      // The topmost rendered feature should be at position 0.
+      // But it doesn't work for features whithin the same layer.
+      while (target.layer.id === features[++i]?.layer.id) {
+        if (target.properties.order < features[i].properties.order) {
+          target = features[i];
+        }
+      }
+
+      if (target.properties.cluster) {
+        this.mapMarkerService.onClusterClicked(this.map, target);
+      } else {
+        const selectedMarkerId = this.mapMarkerService.onMarkerClicked(this.map, target, this.selectedMarkerId);
+        this.selectedMarker = this.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
+        this.cd.detectChanges();
+      }
+    });
 
     this.mapParameterChanged.pipe(
       debounceTime(200),
@@ -449,11 +454,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     for (const layer of this.mapMarkerService.allMarkerAndClusterLayers) {
       this.map.on('mouseenter', layer, () => this.cursorChanged.next(true));
       this.map.on('mouseleave', layer, () => this.cursorChanged.next(false));
+      this.map.on('click', layer, event => this.mapClicked.next(event));
     }
-    for (const infoLayer of this.mapMarkerService.allMarkerLayers) {
-      this.map.on('click', infoLayer, event => this.layerClicked.next(event));
-    }
-    this.map.on('click', Constants.CLUSTER_LAYER, event => this.clusterClicked.next(event));
     this.map.on('zoomend', () => this.zoomLevelChangeDebouncer.next());
     this.map.on('moveend', () => this.mapCenterChangeDebouncer.next());
     // Emit initial values

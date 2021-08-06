@@ -39,7 +39,7 @@ export class MapMarkerService {
   }
 
   get allMarkerAndClusterLayers(): string[] {
-    return [...Constants.CLUSTER_LAYERS, ...this.allMarkerLayers];
+    return [Constants.CLUSTER_LAYER, ...this.allMarkerLayers];
   }
 
   get allMarkerLayers(): string[] {
@@ -91,7 +91,7 @@ export class MapMarkerService {
     );
   }
 
-  onLayerClicked(map: MapboxMap, feature: MapboxGeoJSONFeature, oldSelectedFeatureId: string): string {
+  onMarkerClicked(map: MapboxMap, feature: MapboxGeoJSONFeature, oldSelectedFeatureId: string): string {
     const selectedFeatureId = feature.properties?.id;
     if (!selectedFeatureId || selectedFeatureId === oldSelectedFeatureId) {
       this.unselectFeature(map);
