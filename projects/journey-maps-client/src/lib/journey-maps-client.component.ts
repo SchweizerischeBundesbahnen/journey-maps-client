@@ -58,7 +58,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
 
-  /** Overwrite this value if you want to use a custom style id . */
+  /** Overwrite this value if you want to use a custom style id. */
   @Input() styleId = 'base_bright_v2_ki';
 
   /** Overwrite this value if you want to use a custom style id for the dark mode. */
@@ -70,7 +70,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Input() styleUrl = 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}';
 
-  /** Select the style mode between BRIGHT and DARK */
+  /** Select the style mode between BRIGHT and DARK. */
   @Input() styleMode = 'DARK';
 
   /** If the search bar - to filter markers - should be enabled or not. */
@@ -124,7 +124,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Input() markers: Marker[];
   private _selectedMarker: Marker;
 
-  /** By default, you get a message-overlay if you try to pan with one finger */
+  /** By default, you get a message-overlay if you try to pan with one finger. */
   @Input() allowOneFingerPan = false;
 
   /** Open a popup - instead of the teaser - when selecting a marker. */
@@ -323,7 +323,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       return;
     }
 
-    if (changes.mapCenter || changes.zoomLevel || changes.boundingBox || changes.zoomToMarkers || changes.styleMode) {
+    if (changes.mapCenter || changes.zoomLevel || changes.boundingBox || changes.zoomToMarkers) {
       this.mapParameterChanged.next();
     }
 

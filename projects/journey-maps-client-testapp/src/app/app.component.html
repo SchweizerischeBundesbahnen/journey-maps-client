@@ -54,8 +54,7 @@
           Display GeoJSON data for:
           <select id="geo-json-select"
                   style="width: 200px; min-height: 10px; padding: 0 5px; background-position: right; color: black;"
-                  (change)="setGeoJsonInput($event)"
-          >
+                  (change)="setGeoJsonInput($event)">
             <option value="" (change)="setGeoJsonInput($event)">(none)</option>
             <option *ngFor="let input of geoJsonInputs" [value]="input">{{input}}</option>
           </select>
