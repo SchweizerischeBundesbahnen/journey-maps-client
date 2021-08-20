@@ -58,14 +58,20 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
 
-  /** Overwrite this value if you want to use a custom style id. */
+  /** Overwrite this value if you want to use a custom style id . */
   @Input() styleId = 'base_bright_v2_ki';
+
+  /** Overwrite this value if you want to use a custom style id for the dark mode. */
+  @Input() styleIdDark = 'base_dark_v2_ki';
 
   /**
    * Overwrite this value if you want to use a style from a different source.
    * Actually you should not need this.
    */
   @Input() styleUrl = 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}';
+
+  /** Select the style mode between BRIGHT and DARK */
+  @Input() styleMode = 'DARK';
 
   /** If the search bar - to filter markers - should be enabled or not. */
   @Input() enableSearchBar = true;
@@ -148,6 +154,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private mapClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private styleLoaded = new ReplaySubject(1);
   private mapParameterChanged = new Subject<void>();
+  private mapStyleModeChanged = new Subject<void>();
   mapReady = new ReplaySubject<MapboxMap>(1);
 
   // visible for testing
@@ -227,7 +234,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   private updateMarkers(): void {
     this.selectedMarker = this.markers?.find(marker => this.selectedMarker?.id === marker.id);
-
     this.executeWhenMapStyleLoaded(() => {
       this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker);
       this.cd.detectChanges();
@@ -317,16 +323,18 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       return;
     }
 
-    if (changes.mapCenter || changes.zoomLevel || changes.boundingBox || changes.zoomToMarkers) {
+    if (changes.mapCenter || changes.zoomLevel || changes.boundingBox || changes.zoomToMarkers || changes.styleMode) {
       this.mapParameterChanged.next();
+    }
+
+    if (changes.styleMode) {
+      this.mapStyleModeChanged.next();
     }
   }
 
   ngAfterViewInit(): void {
     // CHECKME ses: Lazy initialization with IntersectionObserver?
-    const styleUrl = this.styleUrl
-      .replace('{styleId}', this.styleId)
-      .replace('{apiKey}', this.apiKey);
+    const styleUrl = this.getStyleUrl();
 
     this.touchOverlayText = this.i18n.getText('touchOverlay.tip');
     this.mapInitService.initializeMap(
@@ -365,6 +373,23 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         this.cd.detectChanges();
       }
     });
+  }
+
+  private getStyleUrl(): string {
+    return this.styleUrl
+      .replace('{styleId}', this.getStyleId())
+      .replace('{apiKey}', this.apiKey);
+  }
+
+  private getStyleId(): string {
+    switch (this.styleMode) {
+      case 'BRIGHT' :
+        return this.styleId;
+      case 'DARK' :
+        return this.styleIdDark;
+      default :
+        return this.styleId;
+    }
   }
 
   ngOnDestroy(): void {
@@ -418,6 +443,19 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.zoomLevel,
       this.boundingBox ?? this.getMarkersBounds,
       this.boundingBox ? this.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING));
+
+    this.mapStyleModeChanged.pipe(
+      debounceTime(200),
+      takeUntil(this.destroyed)
+    ).subscribe(() => {
+      this.mapInitService.fetchStyle(this.getStyleUrl()).subscribe(style => {
+        this.map.setStyle(style, {diff: false});
+        this.map.once('styledata', () => {
+          this.updateMarkers();
+          this.mapMarkerService.initStyleData(this.map);
+        });
+      });
+    });
 
     this.zoomLevelChangeDebouncer.pipe(
       debounceTime(200),

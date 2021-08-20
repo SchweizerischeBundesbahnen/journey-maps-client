@@ -36,6 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
   boundingBox: LngLatBoundsLike = [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]];
   allowOneFingerPan = true;
   popup = true;
+  styleMode: string;
 
   geoJsonInputs = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
   journey: GeoJSON.FeatureCollection;
@@ -204,6 +205,11 @@ export class AppComponent implements OnInit, OnDestroy {
   setPopupInput(event: Event): void {
     this.selectedMarkerId = undefined;
     this.popup = (event.target as HTMLOptionElement).value === 'true';
+  }
+
+  setStyleModeInput(event: Event): void {
+    this.selectedMarkerId = undefined;
+    this.styleMode = (event.target as HTMLOptionElement).value;
   }
 
   private setBbox(bbox: number[]): void {

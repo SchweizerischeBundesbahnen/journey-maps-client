@@ -92,7 +92,7 @@ export class MapInitService {
     return options;
   }
 
-  private fetchStyle(styleUrl: string): Observable<Style> {
+  public fetchStyle(styleUrl: string): Observable<Style> {
     return this.http.get(styleUrl).pipe(
       map(style => style as Style)
     );

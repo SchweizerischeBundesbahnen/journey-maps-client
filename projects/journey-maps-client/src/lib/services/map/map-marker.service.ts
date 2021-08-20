@@ -219,7 +219,7 @@ export class MapMarkerService {
     const images = new Map<string, string>();
 
     (markers ?? [])
-      .filter(marker => marker.category === MarkerCategory.CUSTOM)
+      .filter(marker => marker.category === MarkerCategory.CUSTOM || (marker.icon && marker.category === this.buildImageName(marker)))
       .forEach(marker => {
         // The image will later be loaded by the category name.
         // Therefore we have to overwrite the category.
@@ -227,9 +227,10 @@ export class MapMarkerService {
         // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/dev/partials/_ki.json#L28
         const imageName = this.buildImageName(marker);
         marker.category = imageName;
-        // TODO Dark mode support ?
         images.set(`sbb-marker_bright-inactive-black_${imageName}`, marker.icon);
         images.set(`sbb-marker_bright-active-red_${imageName}`, marker.iconSelected);
+        images.set(`sbb-marker_dark-inactive-black_${imageName}`, marker.icon);
+        images.set(`sbb-marker_dark-active-red_${imageName}`, marker.iconSelected);
       });
 
     for (const [imageName, icon] of images) {

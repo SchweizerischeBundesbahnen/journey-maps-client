@@ -19,6 +19,7 @@
       [allowOneFingerPan]="allowOneFingerPan"
       [popup]="popup"
       [scrollZoom]="true"
+      [styleMode]="styleMode"
     >
     </rokas-journey-maps-client>
 
@@ -69,6 +70,18 @@
           >
             <option value="true">Popup</option>
             <option value="false">Teaser</option>
+          </select>
+        </label>
+      </li>
+      <li>
+        <label for="styleMode-select">
+          Change style mode:
+          <select id="styleMode-select"
+                  style="width: 200px; min-height: 10px; padding: 0 5px; background-position: right; color: black;"
+                  (change)="setStyleModeInput($event)"
+          >
+            <option value="BRIGHT">Bright Mode</option>
+            <option value="DARK">Dark Mode</option>
           </select>
         </label>
       </li>
