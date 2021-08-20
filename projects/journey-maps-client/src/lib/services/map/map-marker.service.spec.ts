@@ -43,11 +43,15 @@ describe('MapMarkerService#addMissingImages', () => {
     ];
     sut.addMissingImages(mapSpyObj, markers);
 
-    expect(mapServiceSpyObj.addMissingImage).toHaveBeenCalledTimes(2);
+    expect(mapServiceSpyObj.addMissingImage).toHaveBeenCalledTimes(4);
     expect(mapServiceSpyObj.addMissingImage)
       .toHaveBeenCalledWith(mapSpyObj, 'sbb-marker_bright-inactive-black_train_train_selected_2033534440', icon);
     expect(mapServiceSpyObj.addMissingImage)
       .toHaveBeenCalledWith(mapSpyObj, 'sbb-marker_bright-active-red_train_train_selected_2033534440', iconSelected);
+    expect(mapServiceSpyObj.addMissingImage)
+      .toHaveBeenCalledWith(mapSpyObj, 'sbb-marker_dark-inactive-black_train_train_selected_2033534440', icon);
+    expect(mapServiceSpyObj.addMissingImage)
+      .toHaveBeenCalledWith(mapSpyObj, 'sbb-marker_dark-active-red_train_train_selected_2033534440', iconSelected);
   });
 
   it('should add missing images with similar paths separately', () => {
@@ -57,7 +61,7 @@ describe('MapMarkerService#addMissingImages', () => {
     ];
     sut.addMissingImages(mapSpyObj, markers);
 
-    expect(mapServiceSpyObj.addMissingImage).toHaveBeenCalledTimes(4);
+    expect(mapServiceSpyObj.addMissingImage).toHaveBeenCalledTimes(8);
     expect(mapServiceSpyObj.addMissingImage)
       .toHaveBeenCalledWith(mapSpyObj, 'sbb-marker_bright-inactive-black_train_train_selected_2033534440', icon);
     expect(mapServiceSpyObj.addMissingImage)
