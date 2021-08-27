@@ -24,6 +24,9 @@ export interface Marker {
    */
   category: MarkerCategory | string;
 
+  /** Internal use */
+  _originalCategory?: MarkerCategory | string;
+
   /**
    * The color of the marker. Default is BLACK.
    * Not all combinations are possible between category and color.

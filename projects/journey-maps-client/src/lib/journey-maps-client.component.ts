@@ -18,7 +18,7 @@ import {
 import {LngLatBounds, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
 import {MapInitService} from './services/map/map-init.service';
 import {ReplaySubject, Subject} from 'rxjs';
-import {debounceTime, delay, filter, map, take, takeUntil} from 'rxjs/operators';
+import {debounceTime, delay, filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
 import {MapMarkerService} from './services/map/map-marker.service';
 import {Constants} from './services/constants';
 import {Marker} from './model/marker';
@@ -31,6 +31,7 @@ import {MapTransferService} from './services/map/map-transfer.service';
 import {MapRoutesService} from './services/map/map-routes.service';
 import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
+import {StyleMode} from './model/style-mode.enum';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -71,7 +72,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Input() styleUrl = 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}';
 
   /** Select the style mode between BRIGHT and DARK. */
-  @Input() styleMode = 'DARK';
+  @Input() styleMode = StyleMode.BRIGHT;
 
   /** If the search bar - to filter markers - should be enabled or not. */
   @Input() enableSearchBar = true;
@@ -235,7 +236,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private updateMarkers(): void {
     this.selectedMarker = this.markers?.find(marker => this.selectedMarker?.id === marker.id);
     this.executeWhenMapStyleLoaded(() => {
-      this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker);
+      this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker, this.styleMode);
       this.cd.detectChanges();
     });
   }
@@ -382,14 +383,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private getStyleId(): string {
-    switch (this.styleMode) {
-      case 'BRIGHT' :
-        return this.styleId;
-      case 'DARK' :
-        return this.styleIdDark;
-      default :
-        return this.styleId;
-    }
+    return this.styleMode === StyleMode.DARK ? this.styleIdDark : this.styleId;
   }
 
   ngOnDestroy(): void {
@@ -446,16 +440,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
     this.mapStyleModeChanged.pipe(
       debounceTime(200),
-      takeUntil(this.destroyed)
-    ).subscribe(() => {
-      this.mapInitService.fetchStyle(this.getStyleUrl()).subscribe(style => {
+      takeUntil(this.destroyed),
+      switchMap(() => this.mapInitService.fetchStyle(this.getStyleUrl()))
+    ).subscribe(style => {
         this.map.setStyle(style, {diff: false});
-        this.map.once('styledata', () => {
-          this.updateMarkers();
-          this.mapMarkerService.initStyleData(this.map);
-        });
+        this.map.once('styledata', () => this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker, this.styleMode));
       });
-    });
 
     this.zoomLevelChangeDebouncer.pipe(
       debounceTime(200),

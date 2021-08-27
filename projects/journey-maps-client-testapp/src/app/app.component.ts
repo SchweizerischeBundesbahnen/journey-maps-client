@@ -8,6 +8,7 @@ import {AssetReaderService} from './services/asset-reader.service';
 import {MarkerColor} from '../../../journey-maps-client/src/lib/model/marker-color.enum';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
+import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 
 @Component({
   selector: 'app-root',
@@ -36,7 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
   boundingBox: LngLatBoundsLike = [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]];
   allowOneFingerPan = true;
   popup = true;
-  styleMode: string;
+  styleMode: StyleMode;
 
   geoJsonInputs = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
   journey: GeoJSON.FeatureCollection;
@@ -209,7 +210,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   setStyleModeInput(event: Event): void {
     this.selectedMarkerId = undefined;
-    this.styleMode = (event.target as HTMLOptionElement).value;
+    this.styleMode = StyleMode[(event.target as HTMLOptionElement).value];
   }
 
   private setBbox(bbox: number[]): void {
