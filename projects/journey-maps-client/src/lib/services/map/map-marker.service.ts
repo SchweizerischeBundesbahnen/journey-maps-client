@@ -220,13 +220,13 @@ export class MapMarkerService {
     const images = new Map<string, string>();
 
     (markers ?? [])
-      .filter(marker => marker._originalCategory ?? marker.category === MarkerCategory.CUSTOM)
+      .filter(marker => marker.originalCategory ?? marker.category === MarkerCategory.CUSTOM)
       .forEach(marker => {
         // The image will later be loaded by the category name.
         // Therefore we have to overwrite the category.
         // We also need to use the same naming convention that we use in the map style.
         // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/dev/partials/_ki.json#L28
-        marker._originalCategory = marker.category;
+        marker.originalCategory = marker.category;
         const imageName = this.buildImageName(marker);
         marker.category = imageName;
         if (isDarkMode) {
