@@ -8,6 +8,7 @@ import {MapService} from './map.service';
 import {MapConfigService} from './map-config.service';
 import {Feature} from 'geojson';
 import {MarkerCategoryMapping} from '../../model/marker-category-mapping';
+import {StyleMode} from '../../model/style-mode.enum';
 
 
 @Injectable({providedIn: 'root'})
@@ -46,12 +47,12 @@ export class MapMarkerService {
     return [...this.markerLayers, ...this.markerLayersSelected];
   }
 
-  updateMarkers(map: MapboxMap, markers: Marker[], selectedMarker: Marker): void {
+  updateMarkers(map: MapboxMap, markers: Marker[], selectedMarker: Marker, styleMode: StyleMode): void {
     this.verifyMarkers(markers);
     if (!selectedMarker) {
       this.unselectFeature(map);
     }
-    this.addMissingImages(map, markers);
+    this.addMissingImages(map, markers, styleMode === StyleMode.DARK);
 
     const featuresPerSource = new Map<string, Feature[]>();
     for (const marker of markers ?? []) {
@@ -215,21 +216,26 @@ export class MapMarkerService {
   }
 
   // visible for testing
-  addMissingImages(map: mapboxgl.Map, markers: Marker[]): void {
+  addMissingImages(map: mapboxgl.Map, markers: Marker[], isDarkMode: boolean): void {
     const images = new Map<string, string>();
 
     (markers ?? [])
-      .filter(marker => marker.category === MarkerCategory.CUSTOM)
+      .filter(marker => marker.originalCategory ?? marker.category === MarkerCategory.CUSTOM)
       .forEach(marker => {
         // The image will later be loaded by the category name.
         // Therefore we have to overwrite the category.
         // We also need to use the same naming convention that we use in the map style.
         // see https://gitlab.geops.de/sbb/sbb-styles/-/blob/dev/partials/_ki.json#L28
+        marker.originalCategory = marker.category;
         const imageName = this.buildImageName(marker);
         marker.category = imageName;
-        // TODO Dark mode support ?
-        images.set(`sbb-marker_bright-inactive-black_${imageName}`, marker.icon);
-        images.set(`sbb-marker_bright-active-red_${imageName}`, marker.iconSelected);
+        if (isDarkMode) {
+          images.set(`sbb-marker_dark-inactive-black_${imageName}`, marker.icon);
+          images.set(`sbb-marker_dark-active-red_${imageName}`, marker.iconSelected);
+        } else {
+          images.set(`sbb-marker_bright-inactive-black_${imageName}`, marker.icon);
+          images.set(`sbb-marker_bright-active-red_${imageName}`, marker.iconSelected);
+        }
       });
 
     for (const [imageName, icon] of images) {
