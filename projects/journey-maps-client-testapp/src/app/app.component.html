@@ -20,7 +20,7 @@
       [popup]="popup"
       [scrollZoom]="true"
       [styleMode]="styleMode"
-      (mapReady)="mapReady.next($event)"
+      (mapReady)="onMapRecieved($event)"
     >
     </rokas-journey-maps-client>
 

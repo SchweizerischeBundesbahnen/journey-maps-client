@@ -49,7 +49,6 @@ export class AppComponent implements OnInit, OnDestroy {
   mapCenter: LngLatLike;
   mapCenterChanged = new Subject<LngLatLike>();
   map: Map;
-  mapReady = new Subject<Map>();
 
   markers: Marker[] = [
     {
@@ -157,7 +156,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.zoomLevelChanged.pipe(takeUntil(this.destroyed)).subscribe(_zoomLevel => this.zoomLevel = _zoomLevel);
     this.mapCenterChanged.pipe(takeUntil(this.destroyed)).subscribe(_mapCenter => this.mapCenter = _mapCenter);
-    this.mapReady.pipe(takeUntil(this.destroyed)).subscribe(_map => this.map = _map);
+  }
+
+  onMapRecieved(map: Map): void {
+    this.map = map;
   }
 
   ngOnDestroy(): void {
