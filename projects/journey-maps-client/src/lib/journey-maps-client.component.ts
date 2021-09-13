@@ -241,6 +241,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
+  public get selectedMarker(): Marker {
+    return this._selectedMarker;
+  }
+
   /** pan to the north */
   @Input()
   public moveNorth(): void {
