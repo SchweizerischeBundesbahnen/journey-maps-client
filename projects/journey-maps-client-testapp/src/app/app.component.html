@@ -22,6 +22,8 @@
       [scrollZoom]="true"
       [styleMode]="styleMode"
       (mapReady)="onMapRecieved($event)"
+      [zoomLevel]="zoomLevel"
+      #client
     >
     </rokas-journey-maps-client>
 
@@ -47,6 +49,28 @@
         </button>
       </li>
       <li style="list-style: circle;">Map center: {{mapCenter}}</li>
+      <li style="list-style: circle;">
+        <button
+          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
+          (click)="client.moveNorth()"
+        >Move North
+        </button>
+        <button
+          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
+          (click)="client.moveEast()"
+        >Move East
+        </button>
+        <button
+          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
+          (click)="client.moveSouth()"
+        >Move South
+        </button>
+        <button
+          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
+          (click)="client.moveWest()"
+        >Move West
+        </button>
+      </li>
       <li style="list-style: circle;">Map loaded: {{map?.loaded()}}</li>
       <li style="list-style: circle;">Allow moving the map with one finger: {{allowOneFingerPan}}</li>
       <li style="list-style: circle;">

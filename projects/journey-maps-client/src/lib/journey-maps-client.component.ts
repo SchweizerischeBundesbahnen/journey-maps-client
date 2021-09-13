@@ -183,7 +183,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapRoutesService: MapRoutesService,
               private mapLeitPoiService: MapLeitPoiService,
               private cd: ChangeDetectorRef,
-              private i18n: LocaleService) {
+              private i18n: LocaleService,
+              private host: ElementRef) {
+    // https://github.com/angular/angular/issues/22114#issuecomment-569311422
+    this.host.nativeElement.moveNorth = this.moveNorth.bind(this);
+    this.host.nativeElement.moveEast = this.moveEast.bind(this);
+    this.host.nativeElement.moveSouth = this.moveSouth.bind(this);
+    this.host.nativeElement.moveWest = this.moveWest.bind(this);
   }
 
   onTouchStart(event: TouchEvent): void {
@@ -235,8 +241,38 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  public get selectedMarker(): Marker {
-    return this._selectedMarker;
+  /** pan to the north */
+  @Input()
+  public moveNorth(): void {
+    this.pan(0, 1);
+  }
+
+  /** pan to the east */
+  @Input()
+  public moveEast(): void {
+    this.pan(-1, 0);
+  }
+
+  /** pan to the south */
+  @Input()
+  public moveSouth(): void {
+    this.pan(0, -1);
+  }
+
+  /** pan to the west */
+  @Input()
+  public moveWest(): void {
+    this.pan(1, 0);
+  }
+
+  private pan(xDir: number, yDir): void {
+    // same default values as KeyboardHandler.keydown() in mapbox keyboard.js
+    const panStep = 100; // pixels
+    const duration = 300; // pixels
+    this.map.panBy(
+      [-xDir * panStep, -yDir * panStep],
+      {duration}
+    );
   }
 
   private updateMarkers(): void {
