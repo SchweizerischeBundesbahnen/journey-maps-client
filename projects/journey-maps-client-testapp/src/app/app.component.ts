@@ -136,6 +136,8 @@ export class AppComponent implements OnInit, OnDestroy {
     },
   ];
 
+  customButtonStyle = 'background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;';
+
   ngOnInit(): void {
     this.assetReaderService.loadAssetAsJSON('journey/zh-sh_waldfriedhof.json')
       .subscribe(json => this._journey = json);

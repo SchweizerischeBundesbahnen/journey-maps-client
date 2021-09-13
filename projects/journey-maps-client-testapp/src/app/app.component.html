@@ -37,12 +37,12 @@
     <ul>
       <li style="list-style: circle;">
         <button
-          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
+          [style]="customButtonStyle"
           (click)="setSelectedMarkerId('home')"
         >select 'Home Office' Marker
         </button>
         <button
-          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
+          [style]="customButtonStyle"
           (click)="setSelectedMarkerId(undefined)"
         >unselect all Markers
         </button>
@@ -53,22 +53,22 @@
       <li style="list-style: circle;">Map center: {{mapCenter}}</li>
       <li style="list-style: circle;">
         <button
-          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
+          [style]="customButtonStyle"
           (click)="client.moveNorth()"
         >Move North
         </button>
         <button
-          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
+          [style]="customButtonStyle"
           (click)="client.moveEast()"
         >Move East
         </button>
         <button
-          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
+          [style]="customButtonStyle"
           (click)="client.moveSouth()"
         >Move South
         </button>
         <button
-          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
+          [style]="customButtonStyle"
           (click)="client.moveWest()"
         >Move West
         </button>
