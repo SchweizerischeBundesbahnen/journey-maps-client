@@ -13,7 +13,7 @@ import {
   Output,
   SimpleChanges,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import {LngLatBounds, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
 import {MapInitService} from './services/map/map-init.service';
@@ -88,6 +88,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   /** Should show level switch control or not. */
   @Input() showLevelSwitch = false;
+
+  /** Should show zoom level control or not. */
+  @Input() showZoomControls = false;
 
   /** The initial bounding box of the map. */
   @Input() boundingBox?: LngLatBoundsLike;
