@@ -20,6 +20,7 @@
       [popup]="popup"
       [scrollZoom]="true"
       [styleMode]="styleMode"
+      (mapReady)="onMapRecieved($event)"
     >
     </rokas-journey-maps-client>
 
@@ -48,6 +49,7 @@
       </li>
       <li style="list-style: circle;">Zoom Level: {{zoomLevel}}</li>
       <li style="list-style: circle;">Map center: {{mapCenter}}</li>
+      <li style="list-style: circle;">Map loaded: {{map?.loaded()}}</li>
       <li style="list-style: circle;">Allow moving the map with one finger: {{allowOneFingerPan}}</li>
       <li style="list-style: circle;">
         <label for="geo-json-select">
