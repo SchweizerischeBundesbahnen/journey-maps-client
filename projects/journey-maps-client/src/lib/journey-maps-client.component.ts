@@ -150,6 +150,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * This event is emitted whenever a marker, with property triggerEvent, is selected or unselected.
    */
   @Output() selectedMarkerIdChange = new EventEmitter<string>();
+  /**
+   * This event is emitted whenever the map is ready.
+   */
+  @Output() mapReady = new ReplaySubject<MapboxMap>(1);
 
   private mapCenterChangeDebouncer = new Subject<void>();
   private windowResized = new Subject<void>();
@@ -159,7 +163,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private styleLoaded = new ReplaySubject(1);
   private mapParameterChanged = new Subject<void>();
   private mapStyleModeChanged = new Subject<void>();
-  mapReady = new ReplaySubject<MapboxMap>(1);
 
   // visible for testing
   touchEventCollector = new Subject<TouchEvent>();
