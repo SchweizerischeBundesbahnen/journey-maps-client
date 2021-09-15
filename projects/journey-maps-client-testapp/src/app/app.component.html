@@ -50,6 +50,18 @@
       <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span>
       </li>
       <li style="list-style: circle;">Zoom Level: {{zoomLevel}}</li>
+      <li style="list-style: circle;">
+        <button
+          [style]="customButtonStyle"
+          (click)="zoomIn()"
+        >Zoom In
+        </button>
+        <button
+          [style]="customButtonStyle"
+          (click)="zoomOut()"
+        >Zoom Out
+        </button>
+      </li>
       <li style="list-style: circle;">Map center: {{mapCenter}}</li>
       <li style="list-style: circle;">
         <button

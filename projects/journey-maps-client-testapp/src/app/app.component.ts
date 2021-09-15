@@ -221,6 +221,14 @@ export class AppComponent implements OnInit, OnDestroy {
     this.styleMode = StyleMode[(event.target as HTMLOptionElement).value];
   }
 
+  zoomIn(): void {
+    this.map.zoomIn();
+  }
+
+  zoomOut(): void {
+    this.map.zoomOut();
+  }
+
   private setBbox(bbox: number[]): void {
     this.boundingBox = [[bbox[0], bbox[1]], [bbox[2], bbox[3]]];
   }
