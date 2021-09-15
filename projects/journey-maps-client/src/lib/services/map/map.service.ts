@@ -21,6 +21,24 @@ export class MapService {
     }
   }
 
+  /**
+   * Emulate moving the map with the keyboard's arrow keys
+   */
+  pan(map: MapboxMap, dir: Direction): void {
+    const {NORTH, EAST, SOUTH, WEST} = Direction;
+    const xDir = dir === WEST ? 1 : dir === EAST ? -1 : 0;
+    const yDir = dir === NORTH ? 1 : dir === SOUTH ? -1 : 0;
+
+    // same default values as KeyboardHandler.keydown() in mapbox's keyboard.js
+    const panStep = 100; // pixels
+    const duration = 300; // pixels
+
+    map.panBy(
+      [-xDir * panStep, -yDir * panStep],
+      {duration}
+    );
+  }
+
   convertToLngLatLike(geometry: Geometry): LngLatLike {
     return (geometry as Point).coordinates as LngLatLike;
   }
@@ -63,4 +81,11 @@ export class MapService {
       map.flyTo(options);
     }
   }
+}
+
+export enum Direction {
+  NORTH,
+  EAST,
+  SOUTH,
+  WEST
 }

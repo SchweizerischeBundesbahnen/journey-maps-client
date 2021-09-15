@@ -25,7 +25,7 @@ import {Marker} from './model/marker';
 import {LocaleService} from './services/locale.service';
 import {ResizedEvent} from 'angular-resize-event';
 import {bufferTimeOnValue} from './services/bufferTimeOnValue';
-import {MapService} from './services/map/map.service';
+import {Direction, MapService} from './services/map/map.service';
 import {MapJourneyService} from './services/map/map-journey.service';
 import {MapTransferService} from './services/map/map-transfer.service';
 import {MapRoutesService} from './services/map/map-routes.service';
@@ -248,35 +248,25 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** pan to the north */
   @Input()
   public moveNorth(): void {
-    this.pan(0, 1);
+    this.mapService.pan(this.map, Direction.NORTH);
   }
 
   /** pan to the east */
   @Input()
   public moveEast(): void {
-    this.pan(-1, 0);
+    this.mapService.pan(this.map, Direction.EAST);
   }
 
   /** pan to the south */
   @Input()
   public moveSouth(): void {
-    this.pan(0, -1);
+    this.mapService.pan(this.map, Direction.SOUTH);
   }
 
   /** pan to the west */
   @Input()
   public moveWest(): void {
-    this.pan(1, 0);
-  }
-
-  private pan(xDir: number, yDir): void {
-    // same default values as KeyboardHandler.keydown() in mapbox keyboard.js
-    const panStep = 100; // pixels
-    const duration = 300; // pixels
-    this.map.panBy(
-      [-xDir * panStep, -yDir * panStep],
-      {duration}
-    );
+    this.mapService.pan(this.map, Direction.WEST);
   }
 
   private updateMarkers(): void {
