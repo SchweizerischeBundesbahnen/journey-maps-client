@@ -32,6 +32,7 @@ import {MapRoutesService} from './services/map/map-routes.service';
 import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
+import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -137,6 +138,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Whether "scroll to zoom" is enabled or not */
   @Input() scrollZoom = true;
 
+  /** Which (floor-)level should be shown */
+  @Input() selectedLevel: number;
+
   /**
    * This event is emitted whenever the zoom level of the map has changed.
    */
@@ -154,6 +158,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * This event is emitted whenever the map is ready.
    */
   @Output() mapReady = new ReplaySubject<MapboxMap>(1);
+  /**
+   * This event is emitted whenever the selected (floor-) level changes
+   */
+  @Output() selectedLevelChange = new EventEmitter<number>();
+  /**
+   * This event is emitted whenever the list of available (floor-) levels changes
+   */
+  @Output() availableLevelsChange = new EventEmitter<number[]>();
 
   private mapCenterChangeDebouncer = new Subject<void>();
   private windowResized = new Subject<void>();
@@ -182,6 +194,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapTransferService: MapTransferService,
               private mapRoutesService: MapRoutesService,
               private mapLeitPoiService: MapLeitPoiService,
+              private mapLayerFilterService: MapLayerFilterService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService,
               private host: ElementRef) {
@@ -360,6 +373,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.mapParameterChanged.next();
     }
 
+    if (changes.selectedLevel?.currentValue !== undefined /* allow '0' */) {
+      this.updateSelectedLevel(this.selectedLevel);
+    }
+
     if (changes.styleMode) {
       this.mapStyleModeChanged.next();
     }
@@ -521,6 +538,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     // Emit initial values
     this.zoomLevelChangeDebouncer.next();
     this.mapCenterChangeDebouncer.next();
+    this.selectedLevelChange.emit(this.selectedLevel);
 
     this.isStyleLoaded = true;
     this.styleLoaded.next();
@@ -558,5 +576,21 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       bounds.extend(marker.position as LngLatLike);
     });
     return bounds;
+  }
+
+  onAvailableLevelsChange(levels: number[]): void {
+    this.availableLevelsChange.emit(levels);
+  }
+
+  onSelectedLevelChange(selectedLevel: number): void {
+    this.selectedLevel = selectedLevel;
+    this.selectedLevelChange.emit(selectedLevel);
+    this.updateSelectedLevel(selectedLevel);
+  }
+
+  // TODO cdi put into a levelService
+  updateSelectedLevel(selectedLevel: number): void {
+    this.mapLayerFilterService.setLevelFilter(selectedLevel);
+    this.mapTransferService.updateOutdoorWalkFloor(this.map, selectedLevel);
   }
 }

@@ -1,4 +1,4 @@
-<div class="level-switch-buttons-container" *ngIf="isVisible" @fade>
+<div class="level-switch-buttons-container" *ngIf="showLevelSwitch && isVisible" @fade>
     <ng-container *ngFor="let level of levels">
         <div class="level-switch-button">
             <button
@@ -11,5 +11,4 @@
             >{{level}}</button>
         </div>
     </ng-container>
-
 </div>

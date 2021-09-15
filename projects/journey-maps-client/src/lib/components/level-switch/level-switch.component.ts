@@ -1,4 +1,15 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {Map as MapboxMap} from 'mapbox-gl';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -7,7 +18,6 @@ import {MapLayerFilterService} from './services/map-layer-filter.service';
 import {LocaleService} from '../../services/locale.service';
 import {QueryMapFeaturesService} from './services/query-map-features.service';
 import {MapLeitPoiService} from '../../services/map/map-leit-poi.service';
-import {MapTransferService} from '../../services/map/map-transfer.service';
 
 @Component({
   selector: 'rokas-level-switch',
@@ -30,8 +40,15 @@ import {MapTransferService} from '../../services/map/map-transfer.service';
 export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   @Input() map: MapboxMap;
 
-  levels: number[] = [];
-  selectedLevel: number;
+  @Input() showLevelSwitch = false;
+
+  @Input() levels: number[] = [];
+
+  @Output() levelsChange = new EventEmitter<number[]>();
+
+  @Input() selectedLevel: number;
+
+  @Output() selectedLevelChange = new EventEmitter<number>();
 
   private readonly defaultLevel = 0;
   // same minZoom as in Android and iOS map
@@ -45,8 +62,7 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
               private mapLayerFilterService: MapLayerFilterService,
               private i18n: LocaleService,
               private queryMapFeaturesService: QueryMapFeaturesService,
-              private mapLeitPoiService: MapLeitPoiService,
-              private mapTransferService: MapTransferService
+              private mapLeitPoiService: MapLeitPoiService
   ) {
     this.selectedLevel = this.defaultLevel;
   }
@@ -144,6 +160,7 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   private updateLevelsIfChanged(levels: number[]): void {
     if (JSON.stringify(this.levels) !== JSON.stringify(levels)) {
       this.levels = levels;
+      this.levelsChange.emit(levels);
       // if selected level not in new levels list:
       if (this.levels.indexOf(this.selectedLevel) === -1) {
         this.switchLevel(this.defaultLevel);
@@ -154,12 +171,6 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private setNewLevel(level: number): void {
-    this.selectedLevel = level;
-    this.mapLayerFilterService.setLevelFilter(level);
-
-    this.mapTransferService.updateOutdoorWalkFloor(this.map, level);
-
-    // call outside component-zone, trigger detect changes manually
-    this.ref.detectChanges();
+    this.selectedLevelChange.emit(level);
   }
 }
