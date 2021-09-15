@@ -245,25 +245,21 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     return this._selectedMarker;
   }
 
-  /** pan to the north */
   @Input()
   public moveNorth(): void {
     this.mapService.pan(this.map, Direction.NORTH);
   }
 
-  /** pan to the east */
   @Input()
   public moveEast(): void {
     this.mapService.pan(this.map, Direction.EAST);
   }
 
-  /** pan to the south */
   @Input()
   public moveSouth(): void {
     this.mapService.pan(this.map, Direction.SOUTH);
   }
 
-  /** pan to the west */
   @Input()
   public moveWest(): void {
     this.mapService.pan(this.map, Direction.WEST);
