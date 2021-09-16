@@ -14,7 +14,7 @@
       [showLevelSwitch]="showLevelSwitch"
       (availableLevelsChange)="availableLevels=$event"
       [selectedLevel]="selectedLevel"
-      (selectedLevelChange)="selectedLevel=$event"
+      (selectedLevelChange)="selectedLevelOutput=$event"
       [showZoomControls]="showZoomControls"
       (mapCenterChanged)="mapCenterChanged.next($event)"
       (zoomLevelChanged)="zoomLevelChanged.next($event)"
@@ -66,7 +66,7 @@
         </button>
       </li>
       <li style="list-style: circle;">Available levels: {{availableLevels}}</li>
-      <li style="list-style: circle;">Selected level: {{selectedLevel}}</li>
+      <li style="list-style: circle;">Selected level: {{selectedLevelOutput}}</li>
       <li style="list-style: circle;">
         Level switch: <span *ngIf="!availableLevels">There are no available levels.</span>
         <ng-container *ngFor="let level of availableLevels">
