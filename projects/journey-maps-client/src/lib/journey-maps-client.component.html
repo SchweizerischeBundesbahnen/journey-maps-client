@@ -28,10 +28,7 @@
         [map]="mapReady | async"
       ></rokas-zoom-controls>
       <rokas-level-switch
-        [showLevelSwitch]="showLevelSwitch"
-        (levelsChange)="onAvailableLevelsChange($event)"
-        [selectedLevel]="selectedLevel"
-        (selectedLevelChange)="onSelectedLevelChange($event)"
+        *ngIf="showLevelSwitch"
         [map]="mapReady | async"
       ></rokas-level-switch>
     </div>

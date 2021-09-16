@@ -32,6 +32,7 @@ import {MapRoutesService} from './services/map/map-routes.service';
 import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
+import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -193,6 +194,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapTransferService: MapTransferService,
               private mapRoutesService: MapRoutesService,
               private mapLeitPoiService: MapLeitPoiService,
+              private levelSwitchService: LevelSwitchService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService,
               private host: ElementRef) {
@@ -374,6 +376,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     if (changes.styleMode) {
       this.mapStyleModeChanged.next();
     }
+
+    if (changes.selectedLevel?.currentValue !== undefined) {
+      this.levelSwitchService.setSelectedLevel(this.selectedLevel);
+    }
   }
 
   ngAfterViewInit(): void {
@@ -499,6 +505,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       debounceTime(200),
       takeUntil(this.destroyed)
     ).subscribe(() => this.mapCenterChanged.emit(this.map.getCenter()));
+
+    this.levelSwitchService.selectedLevel$.subscribe(level => this.selectedLevelChange.emit(level));
+    this.levelSwitchService.availableLevels$.subscribe(levels => this.availableLevelsChange.emit(levels));
   }
 
   @HostListener('window:resize')
@@ -518,6 +527,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
 
     this.mapMarkerService.initStyleData(this.map);
+    this.levelSwitchService.onInit(this.map);
     this.map.resize();
     // @ts-ignore
     this.mapService.verifySources(this.map, [Constants.ROUTE_SOURCE, Constants.WALK_SOURCE, ...this.mapMarkerService.sources]);
@@ -532,7 +542,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     // Emit initial values
     this.zoomLevelChangeDebouncer.next();
     this.mapCenterChangeDebouncer.next();
-    this.selectedLevelChange.emit(this.selectedLevel);
 
     this.isStyleLoaded = true;
     this.styleLoaded.next();
@@ -570,14 +579,5 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       bounds.extend(marker.position as LngLatLike);
     });
     return bounds;
-  }
-
-  onAvailableLevelsChange(levels: number[]): void {
-    this.availableLevelsChange.emit(levels);
-  }
-
-  onSelectedLevelChange(selectedLevel: number): void {
-    this.selectedLevel = selectedLevel;
-    this.selectedLevelChange.emit(selectedLevel);
   }
 }
