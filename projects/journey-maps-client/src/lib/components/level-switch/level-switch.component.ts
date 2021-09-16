@@ -44,11 +44,9 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showLevelSwitch = false;
 
   @Input() levels: number[] = [];
-
   @Output() levelsChange = new EventEmitter<number[]>();
 
   @Input() selectedLevel: number;
-
   @Output() selectedLevelChange = new EventEmitter<number>();
 
   private readonly defaultLevel = 0;
