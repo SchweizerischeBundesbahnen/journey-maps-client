@@ -32,7 +32,6 @@ import {MapRoutesService} from './services/map/map-routes.service';
 import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
-import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -194,7 +193,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapTransferService: MapTransferService,
               private mapRoutesService: MapRoutesService,
               private mapLeitPoiService: MapLeitPoiService,
-              private mapLayerFilterService: MapLayerFilterService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService,
               private host: ElementRef) {
@@ -371,10 +369,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
     if (changes.mapCenter || changes.zoomLevel || changes.boundingBox || changes.zoomToMarkers) {
       this.mapParameterChanged.next();
-    }
-
-    if (changes.selectedLevel?.currentValue !== undefined /* allow '0' */) {
-      this.updateSelectedLevel(this.selectedLevel);
     }
 
     if (changes.styleMode) {
@@ -585,12 +579,5 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   onSelectedLevelChange(selectedLevel: number): void {
     this.selectedLevel = selectedLevel;
     this.selectedLevelChange.emit(selectedLevel);
-    this.updateSelectedLevel(selectedLevel);
-  }
-
-  // TODO cdi put into a levelService
-  updateSelectedLevel(selectedLevel: number): void {
-    this.mapLayerFilterService.setLevelFilter(selectedLevel);
-    this.mapTransferService.updateOutdoorWalkFloor(this.map, selectedLevel);
   }
 }
