@@ -68,42 +68,15 @@
       <li style="list-style: circle;">Available levels: {{availableLevels}}</li>
       <li style="list-style: circle;">Selected level: {{selectedLevel}}</li>
       <li style="list-style: circle;">
-        <button
-          [disabled]="!availableLevels?.includes(2)"
-          [style]="customButtonStyle"
-          (click)="setSelectedLevel(2)"
-        >Select Level 2
-        </button>
-        <button
-          [disabled]="!availableLevels?.includes(1)"
-          [style]="customButtonStyle"
-          (click)="setSelectedLevel(1)"
-        >Select Level 1
-        </button>
-        <button
-          [disabled]="!availableLevels?.includes(0)"
-          [style]="customButtonStyle"
-          (click)="setSelectedLevel(0)"
-        >Select Level 0
-        </button>
-        <button
-          [disabled]="!availableLevels?.includes(-1)"
-          [style]="customButtonStyle"
-          (click)="setSelectedLevel(-1)"
-        >Select Level -1
-        </button>
-        <button
-          [disabled]="!availableLevels?.includes(-2)"
-          [style]="customButtonStyle"
-          (click)="setSelectedLevel(-2)"
-        >Select Level -2
-        </button>
-        <button
-          [disabled]="!availableLevels?.includes(-4)"
-          [style]="customButtonStyle"
-          (click)="setSelectedLevel(-4)"
-        >Select Level -4
-        </button>
+        Level switch: <span *ngIf="!availableLevels">There are no available levels.</span>
+        <ng-container *ngFor="let level of availableLevels">
+          <button
+            [disabled]="!availableLevels?.includes(level)"
+            [style]="customButtonStyle"
+            (click)="setSelectedLevel(level)"
+          >Select Level {{level}}
+          </button>
+        </ng-container>
       </li>
       <li style="list-style: circle;">Map center: {{mapCenter}}</li>
       <li style="list-style: circle;">
