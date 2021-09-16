@@ -167,7 +167,7 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   private updateLevelsIfChanged(levels: number[]): void {
     if (JSON.stringify(this.levels) !== JSON.stringify(levels)) {
       this.levels = levels;
-      this.levelsChange.emit(levels);
+      this.levelsChange.emit(levels); // inform the parent component
       // if selected level not in new levels list:
       if (this.levels.indexOf(this.selectedLevel) === -1) {
         this.switchLevel(this.defaultLevel);
@@ -178,6 +178,6 @@ export class LevelSwitchComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private setNewLevel(level: number): void {
-    this.selectedLevelChange.emit(level);
+    this.selectedLevelChange.emit(level); // inform the parent component
   }
 }
