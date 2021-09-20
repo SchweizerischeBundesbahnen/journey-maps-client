@@ -36,11 +36,11 @@ export class LevelSwitchComponent {
   }
 
   get selectedLevel(): number {
-    return this.levelSwitchService.getSelectedLevel();
+    return this.levelSwitchService.selectedLevel;
   }
 
   get visibleLevels(): number[] {
-    return this.levelSwitchService.getVisibleLevels();
+    return this.levelSwitchService.visibleLevels;
   }
 
   switchLevel(level: number): void {

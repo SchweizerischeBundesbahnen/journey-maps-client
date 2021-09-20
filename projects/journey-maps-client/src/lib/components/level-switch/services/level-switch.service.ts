@@ -34,7 +34,7 @@ export class LevelSwitchService implements OnDestroy {
   // changeDetectionEmitter inspired by https://stackoverflow.com/a/48736591/349169
   readonly changeDetectionEmitter = new EventEmitter<void>();
 
-  getSelectedLevel(): number {
+  get selectedLevel(): number {
     return this._selectedLevel.getValue();
   }
 
@@ -42,7 +42,7 @@ export class LevelSwitchService implements OnDestroy {
     this._selectedLevel.next(selectedLevel);
   }
 
-  getAvailableLevels(): number[] {
+  get availableLevels(): number[] {
     return this._availableLevels.getValue();
   }
 
@@ -51,7 +51,7 @@ export class LevelSwitchService implements OnDestroy {
     this.updateIsLevelSwitchVisible();
   }
 
-  getVisibleLevels(): number[] {
+  get visibleLevels(): number[] {
     return this._visibleLevels.getValue();
   }
 
@@ -67,8 +67,8 @@ export class LevelSwitchService implements OnDestroy {
     return this.map?.getZoom() >= this.levelButtonMinMapZoom;
   }
 
-  private isVisible(): boolean {
-    return this.isVisibleInCurrentMapZoomLevel() && this.getAvailableLevels().length > 0;
+  isVisible(): boolean {
+    return this.isVisibleInCurrentMapZoomLevel() && this.availableLevels.length > 0;
   }
 
   onInit(map: MapboxMap): void {
@@ -147,7 +147,7 @@ export class LevelSwitchService implements OnDestroy {
 
   private updateIsLevelSwitchVisible(): void {
     if (this.isVisibleInCurrentMapZoomLevel()) {
-      this._visibleLevels.next(this.getAvailableLevels());
+      this._visibleLevels.next(this.availableLevels);
     } else {
       this._visibleLevels.next([]);
     }
@@ -155,7 +155,7 @@ export class LevelSwitchService implements OnDestroy {
 
   private setDefaultLevelIfNotVisible(): void {
     // Set default level when level switch is not visible
-    const shouldSetDefaultLevel = !this.isVisible() && this.getSelectedLevel() !== this.defaultLevel;
+    const shouldSetDefaultLevel = !this.isVisible() && this.selectedLevel !== this.defaultLevel;
     if (shouldSetDefaultLevel) {
       this.switchLevel(this.defaultLevel);
       // call outside component-zone, trigger detect changes manually
@@ -176,10 +176,10 @@ export class LevelSwitchService implements OnDestroy {
   }
 
   private updateLevelsIfChanged(levels: number[]): void {
-    if (JSON.stringify(this.getAvailableLevels()) !== JSON.stringify(levels)) {
+    if (JSON.stringify(this.availableLevels) !== JSON.stringify(levels)) {
       this.setAvailableLevels(levels);
       // if selected level not in new levels list:
-      if (this.getAvailableLevels().indexOf(this.getSelectedLevel()) === -1) {
+      if (this.availableLevels.indexOf(this.selectedLevel) === -1) {
         this.switchLevel(this.defaultLevel);
       }
       // call outside component-zone, trigger detect changes manually
