@@ -22,6 +22,7 @@ export class LevelSwitchService implements OnDestroy {
   private readonly levelButtonMinMapZoom = 15;
   private readonly _selectedLevel = new BehaviorSubject<number>(0);
   private readonly _availableLevels = new BehaviorSubject<number[]>([]);
+  private readonly _visibleLevels = new BehaviorSubject<number[]>([]);
 
   private readonly zoomChanged = new Subject<void>(); // gets triggered by the map's 'zoomend' event and calls onZoomChanged()
   private readonly mapMoved = new Subject<void>(); // gets triggered by the map's 'moveend' event and calls updateLevels()
@@ -29,8 +30,8 @@ export class LevelSwitchService implements OnDestroy {
 
   // service design inspired by https://www.maestralsolutions.com/angular-application-state-management-you-do-not-need-external-data-stores/
   readonly selectedLevel$ = this._selectedLevel.asObservable();
-  readonly availableLevels$ = this._availableLevels.asObservable();
-  // https://stackoverflow.com/a/48736591/349169
+  readonly visibleLevels$ = this._visibleLevels.asObservable();
+  // changeDetectionEmitter inspired by https://stackoverflow.com/a/48736591/349169
   readonly changeDetectionEmitter = new EventEmitter<void>();
 
   getSelectedLevel(): number {
@@ -47,6 +48,11 @@ export class LevelSwitchService implements OnDestroy {
 
   setAvailableLevels(availableLevels: number[]): void {
     this._availableLevels.next(availableLevels);
+    this.updateIsLevelSwitchVisible();
+  }
+
+  getVisibleLevels(): number[] {
+    return this._visibleLevels.getValue();
   }
 
   constructor(private mapLayerFilterService: MapLayerFilterService,
@@ -57,12 +63,12 @@ export class LevelSwitchService implements OnDestroy {
     this.setSelectedLevel(this.defaultLevel);
   }
 
-  get isVisibleInCurrentMapZoomLevel(): boolean {
+  private isVisibleInCurrentMapZoomLevel(): boolean {
     return this.map?.getZoom() >= this.levelButtonMinMapZoom;
   }
 
-  get isVisible(): boolean {
-    return this.isVisibleInCurrentMapZoomLevel && this.getAvailableLevels().length > 0;
+  private isVisible(): boolean {
+    return this.isVisibleInCurrentMapZoomLevel() && this.getAvailableLevels().length > 0;
   }
 
   onInit(map: MapboxMap): void {
@@ -127,12 +133,8 @@ export class LevelSwitchService implements OnDestroy {
    * gets called every time the map's 'zoomend' event triggers the 'zoomChanged' observable
    */
   private onZoomChanged(): void {
-    // (15-lz) * (15-z) = diff
-    // (15-14) * (15-16) = 1 * -1 = -1 => crossed from below to above the threshold
-    // (15-14) * (15-15) = 1 * 0 = 0 => touched after
-    // (15-15) * (15-14) = 0 * 1 = 0 => touched before
-    // (15-16) * (15-14) = -1 * 1 = -1 => crossed from above to below the threshold
-    // diff < 0 means that we passed the threshold to display the level switch component.
+    this.updateIsLevelSwitchVisible();
+    // diff < 0 means that we crossed (in either direction) the threshold to display the level switch component.
     // diff = 0 means that we touched (before or after zoomChanged) the threshold to display the level switch component.
     const diff = (this.levelButtonMinMapZoom - this.lastZoom) * (this.levelButtonMinMapZoom - this.map.getZoom());
     if (diff <= 0) {
@@ -143,9 +145,17 @@ export class LevelSwitchService implements OnDestroy {
     this.lastZoom = this.map.getZoom();
   }
 
+  private updateIsLevelSwitchVisible(): void {
+    if (this.isVisibleInCurrentMapZoomLevel()) {
+      this._visibleLevels.next(this.getAvailableLevels());
+    } else {
+      this._visibleLevels.next([]);
+    }
+  }
+
   private setDefaultLevelIfNotVisible(): void {
     // Set default level when level switch is not visible
-    const shouldSetDefaultLevel = !this.isVisible && this.getSelectedLevel() !== this.defaultLevel;
+    const shouldSetDefaultLevel = !this.isVisible() && this.getSelectedLevel() !== this.defaultLevel;
     if (shouldSetDefaultLevel) {
       this.switchLevel(this.defaultLevel);
       // call outside component-zone, trigger detect changes manually
@@ -157,7 +167,7 @@ export class LevelSwitchService implements OnDestroy {
    * gets called when the map is initialized and then again every time the map's 'moveend' event triggers the 'mapMoved' observable
    */
   private updateLevels(): void {
-    if (this.isVisibleInCurrentMapZoomLevel) {
+    if (this.isVisibleInCurrentMapZoomLevel()) {
       const currentLevels = this.queryMapFeaturesService.getVisibleLevels(this.map);
       this.updateLevelsIfChanged(currentLevels);
     }

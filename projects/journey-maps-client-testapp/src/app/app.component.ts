@@ -35,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
   showLevelSwitch = true;
   showZoomControls = true;
   selectedMarkerId: string;
-  availableLevels: number[];
+  visibleLevels: number[];
   selectedLevel: number;
   selectedLevelOutput: number;
   boundingBox: LngLatBoundsLike = [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]];

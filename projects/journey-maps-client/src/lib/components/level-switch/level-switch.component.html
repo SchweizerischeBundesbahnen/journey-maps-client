@@ -1,5 +1,5 @@
-<div class="level-switch-buttons-container" *ngIf="isVisible" @fade>
-    <ng-container *ngFor="let level of levels">
+<div class="level-switch-buttons-container" *ngIf="visibleLevels.length" @fade>
+    <ng-container *ngFor="let level of visibleLevels">
         <div class="level-switch-button">
             <button
                     (click)="switchLevel(level)"

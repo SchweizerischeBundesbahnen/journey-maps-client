@@ -12,7 +12,7 @@
       [routes]="routes"
       [boundingBox]="boundingBox"
       [showLevelSwitch]="showLevelSwitch"
-      (availableLevelsChange)="availableLevels=$event"
+      (visibleLevelsChange)="visibleLevels=$event"
       [selectedLevel]="selectedLevel"
       (selectedLevelChange)="selectedLevelOutput=$event"
       [showZoomControls]="showZoomControls"
@@ -42,12 +42,12 @@
         <button
           [style]="customButtonStyle"
           (click)="setSelectedMarkerId('home')"
-        >select 'Home Office' Marker
+        >Select 'Home Office' marker
         </button>
         <button
           [style]="customButtonStyle"
           (click)="setSelectedMarkerId(undefined)"
-        >unselect all Markers
+        >Unselect all markers
         </button>
       </li>
       <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span>
@@ -65,13 +65,13 @@
         >Zoom Out
         </button>
       </li>
-      <li style="list-style: circle;">Available levels: {{availableLevels}}</li>
+      <li style="list-style: circle;">Available levels: {{visibleLevels}}</li>
       <li style="list-style: circle;">Selected level: {{selectedLevelOutput}}</li>
       <li style="list-style: circle;">
-        Level switch: <span *ngIf="!availableLevels">There are no available levels.</span>
-        <ng-container *ngFor="let level of availableLevels">
+        Level switch: <span *ngIf="!visibleLevels">There are no visible levels.</span>
+        <ng-container *ngFor="let level of visibleLevels">
           <button
-            [disabled]="!availableLevels?.includes(level)"
+            [disabled]="!visibleLevels?.includes(level)"
             [style]="customButtonStyle"
             (click)="setSelectedLevel(level)"
           >Level {{level}}

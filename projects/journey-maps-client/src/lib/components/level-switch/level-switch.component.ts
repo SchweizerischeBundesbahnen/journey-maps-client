@@ -39,12 +39,8 @@ export class LevelSwitchComponent {
     return this.levelSwitchService.getSelectedLevel();
   }
 
-  get levels(): number[] {
-    return this.levelSwitchService.getAvailableLevels();
-  }
-
-  get isVisible(): boolean {
-    return this.levelSwitchService.isVisible;
+  get visibleLevels(): number[] {
+    return this.levelSwitchService.getVisibleLevels();
   }
 
   switchLevel(level: number): void {

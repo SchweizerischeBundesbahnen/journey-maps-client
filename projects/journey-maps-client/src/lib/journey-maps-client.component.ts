@@ -165,7 +165,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /**
    * This event is emitted whenever the list of available (floor-) levels changes
    */
-  @Output() availableLevelsChange = new EventEmitter<number[]>();
+  @Output() visibleLevelsChange = new EventEmitter<number[]>();
 
   private mapCenterChangeDebouncer = new Subject<void>();
   private windowResized = new Subject<void>();
@@ -507,7 +507,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     ).subscribe(() => this.mapCenterChanged.emit(this.map.getCenter()));
 
     this.levelSwitchService.selectedLevel$.subscribe(level => this.selectedLevelChange.emit(level));
-    this.levelSwitchService.availableLevels$.subscribe(levels => this.availableLevelsChange.emit(levels));
+    this.levelSwitchService.visibleLevels$.subscribe(levels => this.visibleLevelsChange.emit(levels));
   }
 
   @HostListener('window:resize')
