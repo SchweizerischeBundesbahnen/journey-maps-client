@@ -70,8 +70,7 @@ describe('LevelSwitchService', () => {
     levelSwitchService.setAvailableLevels([1, 2, 3]);
     triggerOnInitWithMapMock(14);
     expect(levelSwitchService.isVisible()).toEqual(false);
-    setMapZoom(16);
-    onZoomChangedCallbackFn();
+    setMapZoomAndTriggerZoomChanged(16);
     expect(levelSwitchService.isVisible()).toEqual(true);
   });
 
@@ -84,14 +83,93 @@ describe('LevelSwitchService', () => {
     levelSwitchService.switchLevel(-2);
     expect(levelSwitchService.selectedLevel).toEqual(-2);
 
-    setMapZoom(14);
-
-    // zoom callback
-    onZoomChangedCallbackFn();
+    setMapZoomAndTriggerZoomChanged(14);
 
     // check visibility and selected level
     expect(levelSwitchService.isVisible()).toEqual(false);
     expect(levelSwitchService.selectedLevel).toEqual(0);
+  });
+
+  it('should show visibleLevels', () => {
+    let latestVisibleLevels: number[] = null;
+    levelSwitchService.visibleLevels$.subscribe(visibleLevels => latestVisibleLevels = visibleLevels);
+
+    // start with some visibleLevels
+    triggerOnInitWithMapMock(15.5);
+    levelSwitchService.setAvailableLevels([1, 2, 3]);
+
+    expect(latestVisibleLevels.length).toBe(3);
+  });
+
+  it('should not show visibleLevels as empty if zoomLevel goes below 15', () => {
+    let latestVisibleLevels: number[] = null;
+    levelSwitchService.visibleLevels$.subscribe(visibleLevels => latestVisibleLevels = visibleLevels);
+
+    // start with some visibleLevels
+    triggerOnInitWithMapMock(15.5);
+    levelSwitchService.setAvailableLevels([1, 2, 3]);
+
+    expect(latestVisibleLevels.length).toBe(3);
+
+    setMapZoomAndTriggerZoomChanged(14.5);
+
+    expect(latestVisibleLevels.length).toBe(0);
+  });
+
+  it('should not show visibleLevels as empty if nb levels goes to 0', () => {
+    let latestVisibleLevels: number[] = null;
+    levelSwitchService.visibleLevels$.subscribe(visibleLevels => latestVisibleLevels = visibleLevels);
+
+    // start with some visibleLevels
+    triggerOnInitWithMapMock(15.5);
+    levelSwitchService.setAvailableLevels([1, 2, 3]);
+
+    expect(latestVisibleLevels.length).toBe(3);
+
+    levelSwitchService.setAvailableLevels([]);
+
+    expect(latestVisibleLevels.length).toBe(0);
+  });
+
+  it('should not show visibleLevels', () => {
+    let latestVisibleLevels: number[] = null;
+    levelSwitchService.visibleLevels$.subscribe(visibleLevels => latestVisibleLevels = visibleLevels);
+
+    // start with some visibleLevels
+    triggerOnInitWithMapMock(14);
+    levelSwitchService.setAvailableLevels([1, 2, 3]);
+
+    expect(latestVisibleLevels.length).toBe(0);
+  });
+
+  it('should show visibleLevels if zoom level goes above 15', () => {
+    let latestVisibleLevels: number[] = null;
+    levelSwitchService.visibleLevels$.subscribe(visibleLevels => latestVisibleLevels = visibleLevels);
+
+    // start with some visibleLevels
+    triggerOnInitWithMapMock(14);
+    levelSwitchService.setAvailableLevels([1, 2, 3]);
+
+    expect(latestVisibleLevels.length).toBe(0);
+
+    setMapZoomAndTriggerZoomChanged(15.5);
+
+    expect(latestVisibleLevels.length).toBe(3);
+  });
+
+  it('should show visibleLevels if number of level goes above 0', () => {
+    let latestVisibleLevels: number[] = null;
+    levelSwitchService.visibleLevels$.subscribe(visibleLevels => latestVisibleLevels = visibleLevels);
+
+    // start with some visibleLevels
+    triggerOnInitWithMapMock(16);
+    levelSwitchService.setAvailableLevels([]);
+
+    expect(latestVisibleLevels.length).toBe(0);
+
+    levelSwitchService.setAvailableLevels([1, 2, 3]);
+
+    expect(latestVisibleLevels.length).toBe(3);
   });
 
   function triggerOnInitWithMapMock(initialMapZoom?: number): any {
@@ -119,5 +197,10 @@ describe('LevelSwitchService', () => {
     mapMock.getZoom = () => {
       return mapZoom;
     };
+  }
+
+  function setMapZoomAndTriggerZoomChanged(mapZoom: number): void {
+    setMapZoom(mapZoom);
+    onZoomChangedCallbackFn();
   }
 });
