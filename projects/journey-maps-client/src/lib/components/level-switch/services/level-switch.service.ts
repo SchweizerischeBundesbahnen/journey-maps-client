@@ -60,7 +60,6 @@ export class LevelSwitchService implements OnDestroy {
               private queryMapFeaturesService: QueryMapFeaturesService,
               private mapLeitPoiService: MapLeitPoiService,
               private mapTransferService: MapTransferService) {
-    this.setSelectedLevel(this.defaultLevel);
   }
 
   private isVisibleInCurrentMapZoomLevel(): boolean {
@@ -111,6 +110,9 @@ export class LevelSwitchService implements OnDestroy {
         // call outside component-zone, trigger detect changes manually
         this.changeDetectionEmitter.emit();
       });
+
+    // call setSelectedLevel() here, as calling it from the constructor doesn't seem to notify the elements testapp
+    this.setSelectedLevel(this.defaultLevel);
   }
 
   ngOnDestroy(): void {

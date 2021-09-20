@@ -27,6 +27,7 @@
       client.apiKey = 'e500c71b8c83c1cfb2170608582ae9c8';
       client.zoomLevel = 7.5;
       client.showLevelSwitch = true;
+      client.showZoomControls = true;
       client.mapCenter = [7.4391326448171196, 46.948834547463086];
       client.scrollZoom = false;
       client.markers = [
@@ -71,6 +72,7 @@
         document.getElementById('container').appendChild(client);
         document.getElementById('zoom-level').appendChild(document.createTextNode(client.zoomLevel));
         document.getElementById('selected-marker-id').appendChild(document.createTextNode(undefined));
+        document.getElementById('selected-level').appendChild(document.createTextNode(undefined));
       });
 
       client.addEventListener('zoomLevelChanged', function (event) {
@@ -82,6 +84,28 @@
         const selectedMarkerId = document.getElementById('selected-marker-id');
         if (selectedMarkerId.firstChild) {
           selectedMarkerId.replaceChild(document.createTextNode(event.detail), selectedMarkerId.firstChild);
+        }
+      });
+
+      client.addEventListener('selectedLevelChange', function (event) {
+        const selectedLevel = document.getElementById('selected-level');
+        if (selectedLevel.firstChild) {
+          selectedLevel.replaceChild(document.createTextNode(event.detail), selectedLevel.firstChild);
+        }
+      });
+
+      client.addEventListener('visibleLevelsChange', function (event) {
+        const levelSwitch = document.getElementById('level-switch');
+        if (levelSwitch.firstChild) {
+          const visibleLevels = event.detail;
+          const levelSwitchDiv = document.createElement('div');
+          visibleLevels.forEach(level => {
+            const levelSwitchButton = document.createElement('button');
+            levelSwitchButton.innerHTML = 'Level ' + level;
+            levelSwitchButton.onclick = () => client.selectedLevel = level;
+            levelSwitchDiv.appendChild(levelSwitchButton);
+          });
+          levelSwitch.replaceChild(levelSwitchDiv, levelSwitch.firstChild);
         }
       });
 
@@ -107,6 +131,12 @@
         <li>
           <button onclick="map.zoomIn();">Zoom In</button>
           <button onclick="map.zoomOut();">Zoom Out</button>
+        </li>
+        <li>
+          Selected level: <span id="selected-level"></span>
+        </li>
+        <li>
+          Level Switch: <div id="level-switch"><div id="dummy"></div></div>
         </li>
         <li>
           <button onclick="client.moveNorth()">Move North</button>
