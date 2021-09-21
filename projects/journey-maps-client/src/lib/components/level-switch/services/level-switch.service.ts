@@ -39,7 +39,9 @@ export class LevelSwitchService implements OnDestroy {
   }
 
   setSelectedLevel(selectedLevel: number): void {
-    this._selectedLevel.next(selectedLevel);
+    if (this.availableLevels.includes(selectedLevel) || selectedLevel === 0) {
+      this._selectedLevel.next(selectedLevel);
+    }
   }
 
   get availableLevels(): number[] {
