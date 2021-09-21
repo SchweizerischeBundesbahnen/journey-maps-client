@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable, OnDestroy} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import {Map as MapboxMap} from 'mapbox-gl';
 import {BehaviorSubject, Subject} from 'rxjs';
@@ -6,13 +6,12 @@ import {LocaleService} from '../../../services/locale.service';
 import {QueryMapFeaturesService} from './query-map-features.service';
 import {MapLeitPoiService} from '../../../services/map/map-leit-poi.service';
 import {MapTransferService} from '../../../services/map/map-transfer.service';
-import {takeUntil} from 'rxjs/operators';
 import {MapLayerFilterService} from './map-layer-filter.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LevelSwitchService implements OnDestroy {
+export class LevelSwitchService {
 
   private map: mapboxgl.Map;
   private lastZoom: number; // needed to detect when we cross zoom threshold to show or hide the level switcher component
@@ -26,7 +25,6 @@ export class LevelSwitchService implements OnDestroy {
 
   private readonly zoomChanged = new Subject<void>(); // gets triggered by the map's 'zoomend' event and calls onZoomChanged()
   private readonly mapMoved = new Subject<void>(); // gets triggered by the map's 'moveend' event and calls updateLevels()
-  private readonly destroyed = new Subject<void>(); // needed to detect when the component is destroyed to unsubscribe the other observables
 
   // service design inspired by https://www.maestralsolutions.com/angular-application-state-management-you-do-not-need-external-data-stores/
   readonly selectedLevel$ = this._selectedLevel.asObservable();
@@ -88,24 +86,22 @@ export class LevelSwitchService implements OnDestroy {
     this.changeDetectionEmitter.emit();
 
     this.zoomChanged
-      .pipe(takeUntil(this.destroyed))
       .subscribe(() => {
         this.onZoomChanged();
       });
 
     this.mapMoved
-      .pipe(takeUntil(this.destroyed))
       .subscribe(() => {
         this.updateLevels();
       });
 
     // called whenever the level is switched via the leit-pois (or when the map is set to a specific floor for a new transfer)
-    this.mapLeitPoiService.levelSwitched.pipe(takeUntil(this.destroyed))
+    this.mapLeitPoiService.levelSwitched
       .subscribe((nextLevel) => {
         this.setSelectedLevel(nextLevel);
       });
 
-    this._selectedLevel.pipe(takeUntil(this.destroyed))
+    this._selectedLevel
       .subscribe(selectedLevel => {
         this.mapLayerFilterService.setLevelFilter(selectedLevel);
         this.mapTransferService.updateOutdoorWalkFloor(this.map, selectedLevel);
@@ -115,11 +111,6 @@ export class LevelSwitchService implements OnDestroy {
 
     // call setSelectedLevel() here, as calling it from the constructor doesn't seem to notify the elements testapp
     this.setSelectedLevel(this.defaultLevel);
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed.next();
-    this.destroyed.complete();
   }
 
   switchLevel(level: number): void {
