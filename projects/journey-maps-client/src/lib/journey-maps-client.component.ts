@@ -386,7 +386,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
 
     if (changes.selectedLevel?.currentValue !== undefined) {
-      this.levelSwitchService.setSelectedLevel(this.selectedLevel);
+      this.levelSwitchService.switchLevel(this.selectedLevel);
     }
   }
 

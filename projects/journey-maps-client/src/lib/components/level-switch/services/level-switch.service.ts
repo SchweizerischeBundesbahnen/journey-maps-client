@@ -36,7 +36,8 @@ export class LevelSwitchService {
     return this._selectedLevel.getValue();
   }
 
-  setSelectedLevel(selectedLevel: number): void {
+  // in most instances you should call switchLevel() instead
+  private setSelectedLevel(selectedLevel: number): void {
     if (this.availableLevels.includes(selectedLevel) || selectedLevel === this.defaultLevel) {
       this._selectedLevel.next(selectedLevel);
     }
