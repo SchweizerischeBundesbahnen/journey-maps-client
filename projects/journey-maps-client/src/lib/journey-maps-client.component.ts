@@ -142,6 +142,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Input() selectedLevel: number;
 
   /**
+   * This event is emitted whenever the min zoom level of the map has changed.
+   */
+  @Output() minZoomLevelChanged = new EventEmitter<number>();
+  /**
+   * This event is emitted whenever the max zoom level of the map has changed.
+   */
+  @Output() maxZoomLevelChanged = new EventEmitter<number>();
+  /**
    * This event is emitted whenever the zoom level of the map has changed.
    */
   @Output() zoomLevelChanged = new EventEmitter<number>();
@@ -542,6 +550,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     // Emit initial values
     this.zoomLevelChangeDebouncer.next();
     this.mapCenterChangeDebouncer.next();
+    this.minZoomLevelChanged.emit(MapInitService.MIN_ZOOM);
+    this.maxZoomLevelChanged.emit(MapInitService.MAX_ZOOM);
 
     this.isStyleLoaded = true;
     this.styleLoaded.next();

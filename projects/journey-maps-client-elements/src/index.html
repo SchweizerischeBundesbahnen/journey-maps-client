@@ -71,6 +71,8 @@
       document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('container').appendChild(client);
         document.getElementById('zoom-level').appendChild(document.createTextNode(client.zoomLevel));
+        document.getElementById('min-zoom').appendChild(document.createTextNode(undefined));
+        document.getElementById('max-zoom').appendChild(document.createTextNode(undefined));
         document.getElementById('selected-marker-id').appendChild(document.createTextNode(undefined));
         document.getElementById('selected-level').appendChild(document.createTextNode(undefined));
       });
@@ -78,6 +80,16 @@
       client.addEventListener('zoomLevelChanged', function (event) {
         const zoomLevelSpan = document.getElementById('zoom-level');
         zoomLevelSpan.replaceChild(document.createTextNode(event.detail), zoomLevelSpan.firstChild);
+      });
+
+      client.addEventListener('minZoomLevelChanged', function (event) {
+        const minZoomSpan = document.getElementById('min-zoom');
+        minZoomSpan.replaceChild(document.createTextNode(event.detail), minZoomSpan.firstChild);
+      });
+
+      client.addEventListener('maxZoomLevelChanged', function (event) {
+        const maxZoomSpan = document.getElementById('max-zoom');
+        maxZoomSpan.replaceChild(document.createTextNode(event.detail), maxZoomSpan.firstChild);
       });
 
       client.addEventListener('selectedMarkerIdChange', function (event) {
@@ -127,7 +139,7 @@
           <button onclick="setSelecteMarkerId(undefined)">unselect all Markers</button>
         </li>
         <li>Selected Marker ID: <span id="selected-marker-id"></span></li>
-        <li>Zoom Level: <span id="zoom-level"></span></li>
+        <li>Zoom Level (within range <span id="min-zoom"></span>..<span id="max-zoom"></span>): <span id="zoom-level"></span></li>
         <li>
           <button onclick="map.zoomIn();">Zoom In</button>
           <button onclick="map.zoomOut();">Zoom Out</button>

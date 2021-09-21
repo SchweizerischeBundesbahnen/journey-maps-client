@@ -49,6 +49,8 @@ export class AppComponent implements OnInit, OnDestroy {
   routes: GeoJSON.FeatureCollection[] = [];
 
   zoomLevel: number;
+  minZoomLevel: number;
+  maxZoomLevel: number;
   zoomLevelChanged = new Subject<number>();
   mapCenter: LngLatLike;
   mapCenterChanged = new Subject<LngLatLike>();

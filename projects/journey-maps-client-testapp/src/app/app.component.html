@@ -18,6 +18,8 @@
       [showZoomControls]="showZoomControls"
       (mapCenterChanged)="mapCenterChanged.next($event)"
       (zoomLevelChanged)="zoomLevelChanged.next($event)"
+      (minZoomLevelChanged)="minZoomLevel=$event"
+      (maxZoomLevelChanged)="maxZoomLevel=$event"
       [markerDetailsTemplate]=""
       [(selectedMarkerId)]="selectedMarkerId"
       [allowOneFingerPan]="allowOneFingerPan"
@@ -52,7 +54,7 @@
       </li>
       <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span>
       </li>
-      <li style="list-style: circle;">Zoom Level: {{zoomLevel}}</li>
+      <li style="list-style: circle;">Zoom Level (within range {{minZoomLevel}}..{{maxZoomLevel}}): {{zoomLevel}}</li>
       <li style="list-style: circle;">
         <button
           [style]="customButtonStyle"
