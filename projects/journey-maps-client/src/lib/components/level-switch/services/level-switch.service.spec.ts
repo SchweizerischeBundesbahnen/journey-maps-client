@@ -44,6 +44,8 @@ describe('LevelSwitchService', () => {
     let selectedLevel: number = null;
     levelSwitchService.selectedLevel$.subscribe(levelUpdate => selectedLevel = levelUpdate);
 
+    levelSwitchService.setAvailableLevels([0, -4]);
+
     const newLevel = -4;
     levelSwitchService.switchLevel(newLevel);
 
@@ -51,8 +53,22 @@ describe('LevelSwitchService', () => {
     expect(selectedLevel).toEqual(newLevel);
   });
 
+  it('should not allow setting new level to unavailable level', () => {
+    let selectedLevel: number = null;
+    levelSwitchService.selectedLevel$.subscribe(levelUpdate => selectedLevel = levelUpdate);
+
+    levelSwitchService.setAvailableLevels([0, -4]);
+
+    const newLevel = -3;
+    levelSwitchService.switchLevel(newLevel);
+
+    expect(levelSwitchService.selectedLevel).toEqual(0);
+    expect(selectedLevel).toEqual(0);
+  });
+
   it('should call injected services with new level value on switchLevel', () => {
     triggerOnInitWithMapMock();
+    levelSwitchService.setAvailableLevels([0, -1, -2, -4]);
 
     const newLevel = -4;
     levelSwitchService.switchLevel(newLevel);
@@ -103,7 +119,7 @@ describe('LevelSwitchService', () => {
   it('should set default level if map zoomed-out and below configured map zoom', () => {
     // initial zoom
     triggerOnInitWithMapMock();
-    levelSwitchService.setAvailableLevels([1, 2, 3]);
+    levelSwitchService.setAvailableLevels([0, -2, -3]);
     expect(levelSwitchService.isVisible()).toEqual(true);
     // switch to level -2
     levelSwitchService.switchLevel(-2);
