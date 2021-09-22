@@ -1,5 +1,21 @@
 # Change Log
 
+## [1.11.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.10.0&sourceBranch=refs%2Ftags%2F1.11.0&targetRepoId=46287) - 2021-09-22
+
+### Added
+
+* The Map object is now exposed and can be controlled directly from outside the main component.
+* Min/Max Zoom, the currently selected floor level, as well as the available floor levels are exposed as well.
+* The Zoom-In/Out and Level-Switch UI components can now be disabled for the map
+* The Zoom-In/Out can be controlled from outside the main component via the Map object.
+* The Level-Switch, and Move N/E/S/W can now be controlled from outside the main component as well.
+
+## [1.10.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.9.0&sourceBranch=refs%2Ftags%2F1.10.0&targetRepoId=46287) - 2021-09-07
+
+### Added
+
+* A dark mode can now be configured for the map
+
 ## [1.9.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.7.0&sourceBranch=refs%2Ftags%2F1.9.0&targetRepoId=46287) - 2021-08-06
 
 ### Added
