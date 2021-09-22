@@ -33,7 +33,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private destroyed = new Subject<void>();
 
   showLevelSwitch = true;
+  showZoomControls = true;
   selectedMarkerId: string;
+  visibleLevels: number[];
+  selectedLevel: number;
+  selectedLevelOutput: number;
   boundingBox: LngLatBoundsLike = [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]];
   allowOneFingerPan = true;
   popup = true;
@@ -45,6 +49,8 @@ export class AppComponent implements OnInit, OnDestroy {
   routes: GeoJSON.FeatureCollection[] = [];
 
   zoomLevel: number;
+  minZoomLevel: number;
+  maxZoomLevel: number;
   zoomLevelChanged = new Subject<number>();
   mapCenter: LngLatLike;
   mapCenterChanged = new Subject<LngLatLike>();
@@ -135,6 +141,8 @@ export class AppComponent implements OnInit, OnDestroy {
     },
   ];
 
+  customButtonStyle = 'background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;';
+
   ngOnInit(): void {
     this.assetReaderService.loadAssetAsJSON('journey/zh-sh_waldfriedhof.json')
       .subscribe(json => this._journey = json);
@@ -169,6 +177,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   setSelectedMarkerId(selectedMarkerId: string): void {
     this.selectedMarkerId = selectedMarkerId;
+  }
+
+  setSelectedLevel(selectedLevel: number): void {
+    this.selectedLevel = selectedLevel;
   }
 
   setGeoJsonInput(event: Event): void {
@@ -216,6 +228,14 @@ export class AppComponent implements OnInit, OnDestroy {
   setStyleModeInput(event: Event): void {
     this.selectedMarkerId = undefined;
     this.styleMode = StyleMode[(event.target as HTMLOptionElement).value];
+  }
+
+  zoomIn(): void {
+    this.map.zoomIn();
+  }
+
+  zoomOut(): void {
+    this.map.zoomOut();
   }
 
   private setBbox(bbox: number[]): void {

@@ -13,7 +13,7 @@ import {
   Output,
   SimpleChanges,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import {LngLatBounds, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
 import {MapInitService} from './services/map/map-init.service';
@@ -25,13 +25,14 @@ import {Marker} from './model/marker';
 import {LocaleService} from './services/locale.service';
 import {ResizedEvent} from 'angular-resize-event';
 import {bufferTimeOnValue} from './services/bufferTimeOnValue';
-import {MapService} from './services/map/map.service';
+import {Direction, MapService} from './services/map/map.service';
 import {MapJourneyService} from './services/map/map-journey.service';
 import {MapTransferService} from './services/map/map-transfer.service';
 import {MapRoutesService} from './services/map/map-routes.service';
 import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
+import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -89,6 +90,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Should show level switch control or not. */
   @Input() showLevelSwitch = false;
 
+  /** Should show zoom level control or not. */
+  @Input() showZoomControls = false;
+
   /** The initial bounding box of the map. */
   @Input() boundingBox?: LngLatBoundsLike;
   /** The amount of padding in pixels to add to the given boundingBox. */
@@ -134,6 +138,17 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Whether "scroll to zoom" is enabled or not */
   @Input() scrollZoom = true;
 
+  /** Which (floor-)level should be shown */
+  @Input() selectedLevel: number;
+
+  /**
+   * This event is emitted whenever the min zoom level of the map has changed.
+   */
+  @Output() minZoomLevelChanged = new EventEmitter<number>();
+  /**
+   * This event is emitted whenever the max zoom level of the map has changed.
+   */
+  @Output() maxZoomLevelChanged = new EventEmitter<number>();
   /**
    * This event is emitted whenever the zoom level of the map has changed.
    */
@@ -151,6 +166,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * This event is emitted whenever the map is ready.
    */
   @Output() mapReady = new ReplaySubject<MapboxMap>(1);
+  /**
+   * This event is emitted whenever the selected (floor-) level changes
+   */
+  @Output() selectedLevelChange = new EventEmitter<number>();
+  /**
+   * This event is emitted whenever the list of available (floor-) levels changes
+   */
+  @Output() visibleLevelsChange = new EventEmitter<number[]>();
 
   private mapCenterChangeDebouncer = new Subject<void>();
   private windowResized = new Subject<void>();
@@ -179,8 +202,15 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapTransferService: MapTransferService,
               private mapRoutesService: MapRoutesService,
               private mapLeitPoiService: MapLeitPoiService,
+              private levelSwitchService: LevelSwitchService,
               private cd: ChangeDetectorRef,
-              private i18n: LocaleService) {
+              private i18n: LocaleService,
+              private host: ElementRef) {
+    // https://github.com/angular/angular/issues/22114#issuecomment-569311422
+    this.host.nativeElement.moveNorth = this.moveNorth.bind(this);
+    this.host.nativeElement.moveEast = this.moveEast.bind(this);
+    this.host.nativeElement.moveSouth = this.moveSouth.bind(this);
+    this.host.nativeElement.moveWest = this.moveWest.bind(this);
   }
 
   onTouchStart(event: TouchEvent): void {
@@ -234,6 +264,26 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   public get selectedMarker(): Marker {
     return this._selectedMarker;
+  }
+
+  @Input()
+  public moveNorth(): void {
+    this.mapService.pan(this.map, Direction.NORTH);
+  }
+
+  @Input()
+  public moveEast(): void {
+    this.mapService.pan(this.map, Direction.EAST);
+  }
+
+  @Input()
+  public moveSouth(): void {
+    this.mapService.pan(this.map, Direction.SOUTH);
+  }
+
+  @Input()
+  public moveWest(): void {
+    this.mapService.pan(this.map, Direction.WEST);
   }
 
   private updateMarkers(): void {
@@ -333,6 +383,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
     if (changes.styleMode) {
       this.mapStyleModeChanged.next();
+    }
+
+    if (changes.selectedLevel?.currentValue !== undefined) {
+      this.levelSwitchService.switchLevel(this.selectedLevel);
     }
   }
 
@@ -459,6 +513,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       debounceTime(200),
       takeUntil(this.destroyed)
     ).subscribe(() => this.mapCenterChanged.emit(this.map.getCenter()));
+
+    this.levelSwitchService.selectedLevel$.subscribe(level => this.selectedLevelChange.emit(level));
+    this.levelSwitchService.visibleLevels$.subscribe(levels => this.visibleLevelsChange.emit(levels));
   }
 
   @HostListener('window:resize')
@@ -478,6 +535,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
 
     this.mapMarkerService.initStyleData(this.map);
+    this.levelSwitchService.onInit(this.map);
     this.map.resize();
     // @ts-ignore
     this.mapService.verifySources(this.map, [Constants.ROUTE_SOURCE, Constants.WALK_SOURCE, ...this.mapMarkerService.sources]);
@@ -492,6 +550,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     // Emit initial values
     this.zoomLevelChangeDebouncer.next();
     this.mapCenterChangeDebouncer.next();
+    this.minZoomLevelChanged.emit(MapInitService.MIN_ZOOM);
+    this.maxZoomLevelChanged.emit(MapInitService.MAX_ZOOM);
 
     this.isStyleLoaded = true;
     this.styleLoaded.next();

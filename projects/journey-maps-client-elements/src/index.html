@@ -21,14 +21,16 @@
   </head>
   <body>
     <script>
-      var map = document.createElement('journey-maps-client');
-      map.language = 'de';
-      map.apiKey = 'e500c71b8c83c1cfb2170608582ae9c8';
-      map.zoomLevel = 7.5;
-      map.showLevelSwitch = true;
-      map.mapCenter = [7.4391326448171196, 46.948834547463086];
-      map.scrollZoom = false;
-      map.markers = [
+      var map;
+      var client = document.createElement('journey-maps-client');
+      client.language = 'de';
+      client.apiKey = 'e500c71b8c83c1cfb2170608582ae9c8';
+      client.zoomLevel = 7.5;
+      client.showLevelSwitch = true;
+      client.showZoomControls = true;
+      client.mapCenter = [7.4391326448171196, 46.948834547463086];
+      client.scrollZoom = false;
+      client.markers = [
         {
           id: 'home',
           title: 'Home Office',
@@ -63,29 +65,68 @@
           ]
         },
       ];
-      map.allowOneFingerPan = false; // prevent overlay asking for the use of two fingers
-      map.popup = true;
+      client.allowOneFingerPan = false; // prevent overlay asking for the use of two fingers
+      client.popup = true;
 
-      document.addEventListener('DOMContentLoaded', function (event) {
-        document.getElementById('container').appendChild(map);
-        document.getElementById('zoom-level').appendChild(document.createTextNode(map.zoomLevel));
+      document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('container').appendChild(client);
+        document.getElementById('zoom-level').appendChild(document.createTextNode(client.zoomLevel));
+        document.getElementById('min-zoom').appendChild(document.createTextNode(undefined));
+        document.getElementById('max-zoom').appendChild(document.createTextNode(undefined));
         document.getElementById('selected-marker-id').appendChild(document.createTextNode(undefined));
+        document.getElementById('selected-level').appendChild(document.createTextNode(undefined));
       });
 
-      map.addEventListener('zoomLevelChanged', function (event) {
+      client.addEventListener('zoomLevelChanged', function (event) {
         const zoomLevelSpan = document.getElementById('zoom-level');
         zoomLevelSpan.replaceChild(document.createTextNode(event.detail), zoomLevelSpan.firstChild);
       });
 
-      map.addEventListener('selectedMarkerIdChange', function (event) {
+      client.addEventListener('minZoomLevelChanged', function (event) {
+        const minZoomSpan = document.getElementById('min-zoom');
+        minZoomSpan.replaceChild(document.createTextNode(event.detail), minZoomSpan.firstChild);
+      });
+
+      client.addEventListener('maxZoomLevelChanged', function (event) {
+        const maxZoomSpan = document.getElementById('max-zoom');
+        maxZoomSpan.replaceChild(document.createTextNode(event.detail), maxZoomSpan.firstChild);
+      });
+
+      client.addEventListener('selectedMarkerIdChange', function (event) {
         const selectedMarkerId = document.getElementById('selected-marker-id');
         if (selectedMarkerId.firstChild) {
           selectedMarkerId.replaceChild(document.createTextNode(event.detail), selectedMarkerId.firstChild);
         }
       });
 
+      client.addEventListener('selectedLevelChange', function (event) {
+        const selectedLevel = document.getElementById('selected-level');
+        if (selectedLevel.firstChild) {
+          selectedLevel.replaceChild(document.createTextNode(event.detail), selectedLevel.firstChild);
+        }
+      });
+
+      client.addEventListener('visibleLevelsChange', function (event) {
+        const levelSwitch = document.getElementById('level-switch');
+        if (levelSwitch.firstChild) {
+          const visibleLevels = event.detail;
+          const levelSwitchDiv = document.createElement('div');
+          visibleLevels.forEach(level => {
+            const levelSwitchButton = document.createElement('button');
+            levelSwitchButton.innerHTML = 'Level ' + level;
+            levelSwitchButton.onclick = () => client.selectedLevel = level;
+            levelSwitchDiv.appendChild(levelSwitchButton);
+          });
+          levelSwitch.replaceChild(levelSwitchDiv, levelSwitch.firstChild);
+        }
+      });
+
+      client.addEventListener('mapReady', function (event) {
+        map = event.detail;
+      });
+
       function setSelecteMarkerId(id) {
-        map.selectedMarkerId = id;
+        client.selectedMarkerId = id;
       }
     </script>
 
@@ -98,7 +139,23 @@
           <button onclick="setSelecteMarkerId(undefined)">unselect all Markers</button>
         </li>
         <li>Selected Marker ID: <span id="selected-marker-id"></span></li>
-        <li>Zoom Level: <span id="zoom-level"></span></li>
+        <li>Zoom Level (within range <span id="min-zoom"></span>..<span id="max-zoom"></span>): <span id="zoom-level"></span></li>
+        <li>
+          <button onclick="map.zoomIn();">Zoom In</button>
+          <button onclick="map.zoomOut();">Zoom Out</button>
+        </li>
+        <li>
+          Selected level: <span id="selected-level"></span>
+        </li>
+        <li>
+          Level Switch: <div id="level-switch"><div id="dummy"></div></div>
+        </li>
+        <li>
+          <button onclick="client.moveNorth()">Move North</button>
+          <button onclick="client.moveEast()">Move East</button>
+          <button onclick="client.moveSouth()">Move South</button>
+          <button onclick="client.moveWest()">Move West</button>
+        </li>
       </ul>
     </div>
 </div>

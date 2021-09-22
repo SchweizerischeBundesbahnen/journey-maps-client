@@ -12,8 +12,14 @@
       [routes]="routes"
       [boundingBox]="boundingBox"
       [showLevelSwitch]="showLevelSwitch"
+      (visibleLevelsChange)="visibleLevels=$event"
+      [selectedLevel]="selectedLevel"
+      (selectedLevelChange)="selectedLevelOutput=$event"
+      [showZoomControls]="showZoomControls"
       (mapCenterChanged)="mapCenterChanged.next($event)"
       (zoomLevelChanged)="zoomLevelChanged.next($event)"
+      (minZoomLevelChanged)="minZoomLevel=$event"
+      (maxZoomLevelChanged)="maxZoomLevel=$event"
       [markerDetailsTemplate]=""
       [(selectedMarkerId)]="selectedMarkerId"
       [allowOneFingerPan]="allowOneFingerPan"
@@ -21,6 +27,7 @@
       [scrollZoom]="true"
       [styleMode]="styleMode"
       (mapReady)="onMapRecieved($event)"
+      #client
     >
     </rokas-journey-maps-client>
 
@@ -35,20 +42,66 @@
     <ul>
       <li style="list-style: circle;">
         <button
-          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
+          [style]="customButtonStyle"
           (click)="setSelectedMarkerId('home')"
-        >select 'Home Office' Marker
+        >Select 'Home Office' marker
         </button>
         <button
-          style="background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;"
+          [style]="customButtonStyle"
           (click)="setSelectedMarkerId(undefined)"
-        >unselect all Markers
+        >Unselect all markers
         </button>
       </li>
       <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span>
       </li>
-      <li style="list-style: circle;">Zoom Level: {{zoomLevel}}</li>
+      <li style="list-style: circle;">Zoom Level (within range {{minZoomLevel}}..{{maxZoomLevel}}): {{zoomLevel}}</li>
+      <li style="list-style: circle;">
+        <button
+          [style]="customButtonStyle"
+          (click)="zoomIn()"
+        >Zoom In
+        </button>
+        <button
+          [style]="customButtonStyle"
+          (click)="zoomOut()"
+        >Zoom Out
+        </button>
+      </li>
+      <li style="list-style: circle;">Selected level: {{selectedLevelOutput}}</li>
+      <li style="list-style: circle;">
+        Level switch: <span *ngIf="!visibleLevels.length">There are no visible levels.</span>
+        <ng-container *ngFor="let level of visibleLevels">
+          <button
+            [disabled]="!visibleLevels?.includes(level)"
+            [style]="customButtonStyle"
+            (click)="setSelectedLevel(level)"
+          >Level {{level}}
+          </button>
+        </ng-container>
+      </li>
       <li style="list-style: circle;">Map center: {{mapCenter}}</li>
+      <li style="list-style: circle;">
+        <button
+          [style]="customButtonStyle"
+          (click)="client.moveNorth()"
+        >Move North
+        </button>
+        <button
+          [style]="customButtonStyle"
+          (click)="client.moveEast()"
+        >Move East
+        </button>
+        <button
+          [style]="customButtonStyle"
+          (click)="client.moveSouth()"
+        >Move South
+        </button>
+        <button
+          [style]="customButtonStyle"
+          (click)="client.moveWest()"
+        >Move West
+        </button>
+      </li>
       <li style="list-style: circle;">Map loaded: {{map?.loaded()}}</li>
       <li style="list-style: circle;">Allow moving the map with one finger: {{allowOneFingerPan}}</li>
       <li style="list-style: circle;">

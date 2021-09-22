@@ -7,19 +7,21 @@ import {HttpClientModule} from '@angular/common/http';
 import {SourceHighlightComponent} from './components/source-highlight/source-highlight.component';
 import {SbbTabsModule} from '@sbb-esta/angular-public';
 import {JourneyMapsClientModule} from '../../../journey-maps-client/src/lib/journey-maps-client.module';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
   declarations: [
     AppComponent,
     SourceHighlightComponent
   ],
-  imports: [
-    BrowserAnimationsModule,
-    HighlightModule,
-    HttpClientModule,
-    SbbTabsModule,
-    JourneyMapsClientModule
-  ],
+    imports: [
+        BrowserAnimationsModule,
+        HighlightModule,
+        HttpClientModule,
+        SbbTabsModule,
+        JourneyMapsClientModule,
+        CommonModule,
+    ],
   providers: [
     {
       provide: HIGHLIGHT_OPTIONS,

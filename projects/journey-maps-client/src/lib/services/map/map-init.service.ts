@@ -10,6 +10,9 @@ import {MultiTouchSupport} from '../multiTouchSupport';
 })
 export class MapInitService {
 
+  public static MIN_ZOOM = 1;
+  public static MAX_ZOOM = 23; /* same as in mobile-clients */
+
   private readonly defaultZoom = 7.5;
   private readonly defaultMapCenter: LngLatLike = [7.299265, 47.072120];
   private readonly defaultBoundingBox: LngLatBoundsLike = [[5.7, 47.9], [10.6, 45.7]]; // CH bounds;
@@ -72,8 +75,8 @@ export class MapInitService {
     boundingBoxPadding?: number): MapboxOptions {
     const options: mapboxgl.MapboxOptions = {
       container,
-      minZoom: 1,
-      maxZoom: 23, /* same as in mobile-clients */
+      minZoom: MapInitService.MIN_ZOOM,
+      maxZoom: MapInitService.MAX_ZOOM,
       scrollZoom,
       dragRotate: false,
       fadeDuration: 10

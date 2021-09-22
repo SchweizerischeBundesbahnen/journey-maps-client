@@ -24,6 +24,7 @@
 
     <div class="map-widgets">
       <rokas-zoom-controls
+        *ngIf="showZoomControls"
         [map]="mapReady | async"
       ></rokas-zoom-controls>
       <rokas-level-switch
