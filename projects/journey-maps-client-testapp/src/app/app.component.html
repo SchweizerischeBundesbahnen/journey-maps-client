@@ -13,8 +13,7 @@
       [boundingBox]="boundingBox"
       [showLevelSwitch]="showLevelSwitch"
       (visibleLevelsChange)="visibleLevels=$event"
-      [selectedLevel]="selectedLevel"
-      (selectedLevelChange)="selectedLevelOutput=$event"
+      [(selectedLevel)]="selectedLevel"
       [showZoomControls]="showZoomControls"
       (mapCenterChanged)="mapCenterChanged.next($event)"
       (zoomLevelChanged)="zoomLevelChanged.next($event)"
@@ -67,7 +66,7 @@
         >Zoom Out
         </button>
       </li>
-      <li style="list-style: circle;">Selected level: {{selectedLevelOutput}}</li>
+      <li style="list-style: circle;">Selected level: {{selectedLevel}}</li>
       <li style="list-style: circle;">
         Level switch: <span *ngIf="!visibleLevels.length">There are no visible levels.</span>
         <ng-container *ngFor="let level of visibleLevels">
