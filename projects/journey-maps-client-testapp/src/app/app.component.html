@@ -11,10 +11,9 @@
       [transfer]="transfer"
       [routes]="routes"
       [boundingBox]="boundingBox"
-      [showLevelSwitch]="showLevelSwitch"
+      [enabled]="enabled"
       (visibleLevelsChange)="visibleLevels=$event"
       [(selectedLevel)]="selectedLevel"
-      [showZoomControls]="showZoomControls"
       (mapCenterChanged)="mapCenterChanged.next($event)"
       (zoomLevelChanged)="zoomLevelChanged.next($event)"
       (minZoomLevelChanged)="minZoomLevel=$event"
@@ -24,7 +23,7 @@
       [allowOneFingerPan]="allowOneFingerPan"
       [popup]="popup"
       [scrollZoom]="true"
-      [styleMode]="styleMode"
+      [styles]="styles"
       (mapReady)="onMapRecieved($event)"
       #client
     >
@@ -71,7 +70,7 @@
         Level switch: <span *ngIf="!visibleLevels.length">There are no visible levels.</span>
         <ng-container *ngFor="let level of visibleLevels">
           <button
-            [disabled]="!visibleLevels?.includes(level)"
+            [disabled]="!visibleLevels?.+includes(level)"
             [style]="customButtonStyle"
             (click)="setSelectedLevel(level)"
           >Level {{level}}

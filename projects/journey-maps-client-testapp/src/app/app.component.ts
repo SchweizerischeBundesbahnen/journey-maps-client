@@ -9,6 +9,7 @@ import {MarkerColor} from '../../../journey-maps-client/src/lib/model/marker-col
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
+import {Enabled, Styles} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 
 @Component({
   selector: 'app-root',
@@ -32,15 +33,17 @@ export class AppComponent implements OnInit, OnDestroy {
   private _routes: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
 
-  showLevelSwitch = true;
-  showZoomControls = true;
+  enabled: Enabled = {
+    levelSwitch: true,
+    zoomControls: true,
+  };
   selectedMarkerId: string;
   visibleLevels: number[];
   selectedLevel: number;
   boundingBox: LngLatBoundsLike = [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]];
   allowOneFingerPan = true;
   popup = true;
-  styleMode: StyleMode;
+  styles: Styles = {};
 
   geoJsonInputs = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
   journey: GeoJSON.FeatureCollection;
@@ -226,7 +229,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   setStyleModeInput(event: Event): void {
     this.selectedMarkerId = undefined;
-    this.styleMode = StyleMode[(event.target as HTMLOptionElement).value];
+    // replace the entire object to fire change detection
+    this.styles = {
+      mode: StyleMode[(event.target as HTMLOptionElement).value]
+    };
   }
 
   zoomIn(): void {

@@ -60,23 +60,50 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
 
-  /** Overwrite this value if you want to use a custom style id. */
-  @Input() styleId = 'base_bright_v2_ki';
+  private _defaultStyles: Styles = {
+    /** Overwrite this value if you want to use a custom style id. */
+    brightId: 'base_bright_v2_ki',
+    /** Overwrite this value if you want to use a custom style id for the dark mode. */
+    darkId: 'base_dark_v2_ki',
+    /**
+     * Overwrite this value if you want to use a style from a different source.
+     * Actually you should not need this.
+     */
+    url: 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}',
+    /** Select the style mode between BRIGHT and DARK. */
+    mode: StyleMode.BRIGHT,
+  };
 
-  /** Overwrite this value if you want to use a custom style id for the dark mode. */
-  @Input() styleIdDark = 'base_dark_v2_ki';
+  private _styles: Styles;
+  get styles(): Styles {
+    return {
+      ...this._defaultStyles,
+      ...this._styles,
+    };
+  }
+  @Input() set styles(styes: Styles) {
+    this._styles = styes;
+  }
 
-  /**
-   * Overwrite this value if you want to use a style from a different source.
-   * Actually you should not need this.
-   */
-  @Input() styleUrl = 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}';
+  private _defaultEnabled: Enabled = {
+    /** If the search bar - to filter markers - should be enabled or not. */
+    searchBar: true,
+    /** Should show level switch control or not. */
+    levelSwitch: false,
+    /** Should show zoom level control or not. */
+    zoomControls: false,
+  };
 
-  /** Select the style mode between BRIGHT and DARK. */
-  @Input() styleMode = StyleMode.BRIGHT;
-
-  /** If the search bar - to filter markers - should be enabled or not. */
-  @Input() enableSearchBar = true;
+  private _enabled: Enabled;
+  get enabled(): Enabled {
+    return {
+      ...this._defaultEnabled,
+      ...this._enabled,
+    };
+  }
+  @Input() set enabled(enabled: Enabled) {
+    this._enabled = enabled;
+  }
 
   /**
    * The initial center of the map. You should pass an array with two numbers.
@@ -86,12 +113,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   /** The initial zoom level of the map. */
   @Input() zoomLevel?: number;
-
-  /** Should show level switch control or not. */
-  @Input() showLevelSwitch = false;
-
-  /** Should show zoom level control or not. */
-  @Input() showZoomControls = false;
 
   /** The initial bounding box of the map. */
   @Input() boundingBox?: LngLatBoundsLike;
@@ -289,7 +310,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private updateMarkers(): void {
     this.selectedMarker = this.markers?.find(marker => this.selectedMarker?.id === marker.id);
     this.executeWhenMapStyleLoaded(() => {
-      this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker, this.styleMode);
+      this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker, this.styles.mode);
       this.cd.detectChanges();
     });
   }
@@ -338,9 +359,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   ngOnChanges(changes: SimpleChanges): void {
     this.mapConfigService.updateConfigs(
       this.popup,
-      this.allowOneFingerPan,
-      this.enableSearchBar,
-      this.showLevelSwitch,
     );
 
     if (changes.markers) {
@@ -381,7 +399,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.mapParameterChanged.next();
     }
 
-    if (changes.styleMode) {
+    if (changes.styles?.currentValue?.mode) {
       this.mapStyleModeChanged.next();
     }
 
@@ -434,13 +452,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private getStyleUrl(): string {
-    return this.styleUrl
+    return this.styles.url
       .replace('{styleId}', this.getStyleId())
       .replace('{apiKey}', this.apiKey);
   }
 
   private getStyleId(): string {
-    return this.styleMode === StyleMode.DARK ? this.styleIdDark : this.styleId;
+    return this.styles.mode === StyleMode.DARK ? this.styles.darkId : this.styles.brightId;
   }
 
   ngOnDestroy(): void {
@@ -501,7 +519,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       switchMap(() => this.mapInitService.fetchStyle(this.getStyleUrl()))
     ).subscribe(style => {
         this.map.setStyle(style, {diff: false});
-        this.map.once('styledata', () => this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker, this.styleMode));
+        this.map.once('styledata',
+          () => this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker, this.styles.mode));
       });
 
     this.zoomLevelChangeDebouncer.pipe(
@@ -590,4 +609,17 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     });
     return bounds;
   }
+}
+
+export interface Styles {
+  brightId?: string;
+  darkId?: string;
+  url?: string;
+  mode?: StyleMode;
+}
+
+export interface Enabled {
+  searchBar?: boolean;
+  zoomControls?: boolean;
+  levelSwitch?: boolean;
 }
