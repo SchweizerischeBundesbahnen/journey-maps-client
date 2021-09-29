@@ -9,7 +9,7 @@ import {MarkerColor} from '../../../journey-maps-client/src/lib/model/marker-col
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
-import {Enabled, Styles} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
+import {Controls, Styles} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 
 @Component({
   selector: 'app-root',
@@ -33,9 +33,9 @@ export class AppComponent implements OnInit, OnDestroy {
   private _routes: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
 
-  enabled: Enabled = {
-    levelSwitch: true,
-    zoomControls: true,
+  controls: Controls = {
+    showLevelSwitch: true,
+    showZoomControls: true,
   };
   selectedMarkerId: string;
   visibleLevels: number[];

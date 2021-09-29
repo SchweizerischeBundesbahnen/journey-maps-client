@@ -60,49 +60,39 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
 
-  private _defaultStyles: Styles = {
-    /** Overwrite this value if you want to use a custom style id. */
-    brightId: 'base_bright_v2_ki',
-    /** Overwrite this value if you want to use a custom style id for the dark mode. */
-    darkId: 'base_dark_v2_ki',
-    /**
-     * Overwrite this value if you want to use a style from a different source.
-     * Actually you should not need this.
-     */
-    url: 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}',
-    /** Select the style mode between BRIGHT and DARK. */
-    mode: StyleMode.BRIGHT,
-  };
-
   private _styles: Styles;
+  @Input()
   get styles(): Styles {
+    const defaultStyles: Styles = {
+        brightId: 'base_bright_v2_ki',
+        darkId: 'base_dark_v2_ki',
+        url: 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}',
+        mode: StyleMode.BRIGHT,
+    };
     return {
-      ...this._defaultStyles,
+      ...defaultStyles,
       ...this._styles,
     };
   }
-  @Input() set styles(styes: Styles) {
-    this._styles = styes;
+  set styles(styles: Styles) {
+    this._styles = styles;
   }
 
-  private _defaultEnabled: Enabled = {
-    /** If the search bar - to filter markers - should be enabled or not. */
-    searchBar: true,
-    /** Should show level switch control or not. */
-    levelSwitch: false,
-    /** Should show zoom level control or not. */
-    zoomControls: false,
-  };
-
-  private _enabled: Enabled;
-  get enabled(): Enabled {
+  private _controls: Controls;
+  @Input()
+  get controls(): Controls {
+    const defaultControls: Controls = {
+      showSearchBar: true,
+      showLevelSwitch: false,
+      showZoomControls: false,
+    };
     return {
-      ...this._defaultEnabled,
-      ...this._enabled,
+      ...defaultControls,
+      ...this._controls,
     };
   }
-  @Input() set enabled(enabled: Enabled) {
-    this._enabled = enabled;
+  set controls(controls: Controls) {
+    this._controls = controls;
   }
 
   /**
@@ -612,14 +602,24 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 }
 
 export interface Styles {
+  /** Overwrite this value if you want to use a custom style id. */
   brightId?: string;
+  /** Overwrite this value if you want to use a custom style id for the dark mode. */
   darkId?: string;
+  /**
+   * Overwrite this value if you want to use a style from a different source.
+   * Actually you should not need this.
+   */
   url?: string;
+  /** Select the style mode between BRIGHT and DARK. */
   mode?: StyleMode;
 }
 
-export interface Enabled {
-  searchBar?: boolean;
-  zoomControls?: boolean;
-  levelSwitch?: boolean;
+export interface Controls {
+  /** If the search bar - to filter markers - should be enabled or not. */
+  showSearchBar?: boolean;
+  /** Should show level switch control or not. */
+  showZoomControls?: boolean;
+  /** Should show zoom level control or not. */
+  showLevelSwitch?: boolean;
 }

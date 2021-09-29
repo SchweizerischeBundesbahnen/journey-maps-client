@@ -11,7 +11,7 @@
       [transfer]="transfer"
       [routes]="routes"
       [boundingBox]="boundingBox"
-      [enabled]="enabled"
+      [controls]="controls"
       (visibleLevelsChange)="visibleLevels=$event"
       [(selectedLevel)]="selectedLevel"
       (mapCenterChanged)="mapCenterChanged.next($event)"
@@ -70,7 +70,7 @@
         Level switch: <span *ngIf="!visibleLevels.length">There are no visible levels.</span>
         <ng-container *ngFor="let level of visibleLevels">
           <button
-            [disabled]="!visibleLevels?.+includes(level)"
+            [disabled]="!visibleLevels?.includes(level)"
             [style]="customButtonStyle"
             (click)="setSelectedLevel(level)"
           >Level {{level}}
