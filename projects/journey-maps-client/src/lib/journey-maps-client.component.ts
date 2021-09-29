@@ -60,55 +60,64 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
 
-  private _styles: Styles;
+  /**
+   * Settings to control the map (bright and dark) styles
+   */
   @Input()
   get styles(): Styles {
-    const defaultStyles: Styles = {
-        brightId: 'base_bright_v2_ki',
-        darkId: 'base_dark_v2_ki',
-        url: 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}',
-        mode: StyleMode.BRIGHT,
-    };
-    return {
-      ...defaultStyles,
-      ...this._styles,
-    };
+    return this._styles;
   }
   set styles(styles: Styles) {
-    this._styles = styles;
+    const defaultStyles: Styles = {
+      brightId: 'base_bright_v2_ki',
+      darkId: 'base_dark_v2_ki',
+      url: 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}',
+      mode: StyleMode.BRIGHT,
+    };
+    this._styles = {
+      ...defaultStyles,
+      ...styles,
+    };
   }
+  private _styles: Styles;
 
-  private _controls: Controls;
+  /**
+   * Settings to enable/disable widgets that control the map
+   */
   @Input()
   get controls(): Controls {
+    return this._controls;
+  }
+  set controls(controls: Controls) {
     const defaultControls: Controls = {
       showSearchBar: true,
       showLevelSwitch: false,
       showZoomControls: false,
     };
-    return {
+    this._controls = {
       ...defaultControls,
-      ...this._controls,
+      ...controls,
     };
   }
-  set controls(controls: Controls) {
-    this._controls = controls;
-  }
+  private _controls: Controls;
 
-  private _initialSettings: InitialSettings;
+  /**
+   * Settings that control what portion of the map is shown initially
+   */
   @Input()
   get initialSettings(): InitialSettings {
+    return this._initialSettings;
+  }
+  set initialSettings(initialSettings: InitialSettings) {
     const defaultinitialSettings: InitialSettings = {
       boundingBoxPadding: 0,
     };
-    return {
+    this._initialSettings = {
       ...defaultinitialSettings,
-      ...this._initialSettings,
+      ...initialSettings,
     };
   }
-  set initialSettings(initialSettings: InitialSettings) {
-    this._initialSettings = initialSettings;
-  }
+  private _initialSettings: InitialSettings;
 
   /**
    * GeoJSON as returned by the <code>/journey</code> operation of Journey Maps.
