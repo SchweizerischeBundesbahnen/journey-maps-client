@@ -95,22 +95,20 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this._controls = controls;
   }
 
-  /**
-   * The initial center of the map. You should pass an array with two numbers.
-   * The first one is the longitude and the second one the latitude.
-   */
-  @Input() mapCenter?: LngLatLike;
-
-  /** The initial zoom level of the map. */
-  @Input() zoomLevel?: number;
-
-  /** The initial bounding box of the map. */
-  @Input() boundingBox?: LngLatBoundsLike;
-  /** The amount of padding in pixels to add to the given boundingBox. */
-  @Input() boundingBoxPadding = 0;
-
-  /** Wrap all markers in view if true. */
-  @Input() zoomToMarkers?: boolean;
+  private _initialSettings: InitialSettings;
+  @Input()
+  get initialSettings(): InitialSettings {
+    const defaultinitialSettings: InitialSettings = {
+      boundingBoxPadding: 0,
+    };
+    return {
+      ...defaultinitialSettings,
+      ...this._initialSettings,
+    };
+  }
+  set initialSettings(initialSettings: InitialSettings) {
+    this._initialSettings = initialSettings;
+  }
 
   /**
    * GeoJSON as returned by the <code>/journey</code> operation of Journey Maps.
@@ -317,7 +315,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   get getMarkersBounds(): LngLatBounds {
-    return this.zoomToMarkers ? this.computeMarkersBounds(this.markers) : undefined;
+    return this.initialSettings.zoomToMarkers ? this.computeMarkersBounds(this.markers) : undefined;
   }
 
   /**
@@ -385,7 +383,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       return;
     }
 
-    if (changes.mapCenter || changes.zoomLevel || changes.boundingBox || changes.zoomToMarkers) {
+    if (changes.initialSettings?.currentValue?.mapCenter
+      || changes.initialSettings?.currentValue?.zoomLevel
+      || changes.initialSettings?.currentValue?.boundingBox
+      || changes.initialSettings?.currentValue?.boundingBoxPadding
+      || changes.initialSettings?.currentValue?.zoomToMarkers
+    ) {
       this.mapParameterChanged.next();
     }
 
@@ -408,10 +411,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.i18n.language,
       styleUrl,
       this.scrollZoom,
-      this.zoomLevel,
-      this.mapCenter,
-      this.boundingBox ?? this.getMarkersBounds,
-      this.boundingBox ? this.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING,
+      this.initialSettings.zoomLevel,
+      this.initialSettings.mapCenter,
+      this.initialSettings.boundingBox ?? this.getMarkersBounds,
+      this.initialSettings.boundingBox ? this.initialSettings.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING,
       this.allowOneFingerPan,
     ).subscribe(
       m => {
@@ -498,10 +501,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       debounceTime(200),
       takeUntil(this.destroyed)
     ).subscribe(() => this.mapService.moveMap(this.map,
-      this.mapCenter,
-      this.zoomLevel,
-      this.boundingBox ?? this.getMarkersBounds,
-      this.boundingBox ? this.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING));
+      this.initialSettings.mapCenter,
+      this.initialSettings.zoomLevel,
+      this.initialSettings.boundingBox ?? this.getMarkersBounds,
+      this.initialSettings.boundingBox ? this.initialSettings.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING));
 
     this.mapStyleModeChanged.pipe(
       debounceTime(200),
@@ -622,4 +625,20 @@ export interface Controls {
   showZoomControls?: boolean;
   /** Should show zoom level control or not. */
   showLevelSwitch?: boolean;
+}
+
+export interface InitialSettings {
+  /**
+   * The initial center of the map. You should pass an array with two numbers.
+   * The first one is the longitude and the second one the latitude.
+   */
+  mapCenter?: LngLatLike;
+  /** The initial zoom level of the map. */
+  zoomLevel?: number;
+  /** The initial bounding box of the map. */
+  boundingBox?: LngLatBoundsLike;
+  /** The amount of padding in pixels to add to the given boundingBox. */
+  boundingBoxPadding?: number;
+  /** Wrap all markers in view if true. */
+  zoomToMarkers?: boolean;
 }

@@ -2,14 +2,14 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Marker} from '../../../journey-maps-client/src/lib/model/marker';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 import {InfoBlockFactoryService} from '../../../journey-maps-client/src/lib/services/info-block-factory.service';
-import {LngLatBoundsLike, LngLatLike, Map} from 'mapbox-gl';
+import {LngLatLike, Map} from 'mapbox-gl';
 import {LoremIpsum} from 'lorem-ipsum';
 import {AssetReaderService} from './services/asset-reader.service';
 import {MarkerColor} from '../../../journey-maps-client/src/lib/model/marker-color.enum';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
-import {Controls, Styles} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
+import {Controls, InitialSettings, Styles} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 
 @Component({
   selector: 'app-root',
@@ -40,7 +40,9 @@ export class AppComponent implements OnInit, OnDestroy {
   selectedMarkerId: string;
   visibleLevels: number[];
   selectedLevel: number;
-  boundingBox: LngLatBoundsLike = [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]];
+  initialSettings: InitialSettings = {
+    boundingBox: [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]],
+  };
   allowOneFingerPan = true;
   popup = true;
   styles: Styles = {};
@@ -231,7 +233,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.selectedMarkerId = undefined;
     // replace the entire object to fire change detection
     this.styles = {
-      mode: StyleMode[(event.target as HTMLOptionElement).value]
+      ...this.styles,
+      mode: StyleMode[(event.target as HTMLOptionElement).value],
     };
   }
 
@@ -244,6 +247,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setBbox(bbox: number[]): void {
-    this.boundingBox = [[bbox[0], bbox[1]], [bbox[2], bbox[3]]];
+    this.initialSettings = {
+      ...this.initialSettings,
+      boundingBox: [[bbox[0], bbox[1]], [bbox[2], bbox[3]]],
+    };
   }
 }
