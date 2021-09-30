@@ -63,12 +63,11 @@
         >Zoom Out
         </button>
       </li>
-      <li style="list-style: circle;">Selected level: {{selectedLevel}}</li>
       <li style="list-style: circle;">
         Level switch: <span *ngIf="!visibleLevels.length">There are no visible levels.</span>
         <ng-container *ngFor="let level of visibleLevels">
           <button
-            [disabled]="!visibleLevels?.includes(level)"
+            [disabled]="level == selectedLevel"
             [style]="customButtonStyle"
             (click)="setSelectedLevel(level)"
           >Level {{level}}
