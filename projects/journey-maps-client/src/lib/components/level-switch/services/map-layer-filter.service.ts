@@ -1,19 +1,20 @@
 import {Injectable} from '@angular/core';
-import * as maplibregl from 'maplibre-gl';
+import {Map as MaplibreMap} from 'maplibre-gl';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapLayerFilterService {
 
-  private map: maplibregl.Map;
+  private map: MaplibreMap;
   private knownLayerTypes = ['fill', 'fill-extrusion', 'line', 'symbol'];
   private knownLvlLayerIds: string[] = [];
 
   constructor() {
   }
 
-  setMap(map: maplibregl.Map): void {
+  setMap(map: MaplibreMap): void {
     this.map = map;
     this.collectLvlLayers();
   }

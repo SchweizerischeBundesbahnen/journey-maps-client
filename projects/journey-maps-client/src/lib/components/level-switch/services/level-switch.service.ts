@@ -1,5 +1,4 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import * as maplibregl from 'maplibre-gl';
 import {Map as MaplibreMap} from 'maplibre-gl';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {LocaleService} from '../../../services/locale.service';
@@ -13,7 +12,7 @@ import {MapLayerFilterService} from './map-layer-filter.service';
 })
 export class LevelSwitchService {
 
-  private map: maplibregl.Map;
+  private map: MaplibreMap;
   private lastZoom: number; // needed to detect when we cross zoom threshold to show or hide the level switcher component
 
   private readonly defaultLevel = 0;

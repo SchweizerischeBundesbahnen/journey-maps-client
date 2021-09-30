@@ -7,7 +7,7 @@ import {
   Injectable,
   Injector
 } from '@angular/core';
-import * as maplibregl from 'maplibre-gl';
+import {Map as MaplibreMap, Popup} from 'maplibre-gl';
 import {LeitPoiComponent} from '../../components/leit-poi/leit-poi.component';
 import {LeitPoiFeature} from '../../components/leit-poi/model/leit-poi-feature';
 import {LeitPoiPlacement} from '../../components/leit-poi/model/leit-poi-placement';
@@ -32,13 +32,13 @@ export class MapLeitPoiCreatorService {
     );
   }
 
-  createMapLeitPoi(map: maplibregl.Map, feature: LeitPoiFeature): MapLeitPoi {
+  createMapLeitPoi(map: MaplibreMap, feature: LeitPoiFeature): MapLeitPoi {
     const componentRef = this.componentFactory.create(this.injector);
     this.appRef.attachView(componentRef.hostView);
     const component = componentRef.instance;
     component.feature = feature;
 
-    const popup = new maplibregl.Popup(MapLeitPoiCreatorService.POPUP_OPTIONS)
+    const popup = new Popup(MapLeitPoiCreatorService.POPUP_OPTIONS)
       .setDOMContent(this.getNativeElement(componentRef))
       .addTo(map);
 
