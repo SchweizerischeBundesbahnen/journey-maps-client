@@ -61,6 +61,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
 
+  private defaultStyles: Styles = {
+    brightId: 'base_bright_v2_ki',
+    darkId: 'base_dark_v2_ki',
+    url: 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}',
+    mode: StyleMode.BRIGHT,
+  };
   /**
    * Settings to control the map (bright and dark) styles
    */
@@ -69,19 +75,18 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     return this._styles;
   }
   set styles(styles: Styles) {
-    const defaultStyles: Styles = {
-      brightId: 'base_bright_v2_ki',
-      darkId: 'base_dark_v2_ki',
-      url: 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}',
-      mode: StyleMode.BRIGHT,
-    };
     this._styles = {
-      ...defaultStyles,
+      ...this.defaultStyles,
       ...styles,
     };
   }
-  private _styles: Styles;
+  private _styles: Styles = this.defaultStyles;
 
+  private defaultControls: Controls = {
+    showSearchBar: true,
+    showLevelSwitch: false,
+    showZoomControls: false,
+  };
   /**
    * Settings to enable/disable widgets that control the map
    */
@@ -90,18 +95,16 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     return this._controls;
   }
   set controls(controls: Controls) {
-    const defaultControls: Controls = {
-      showSearchBar: true,
-      showLevelSwitch: false,
-      showZoomControls: false,
-    };
     this._controls = {
-      ...defaultControls,
+      ...this.defaultControls,
       ...controls,
     };
   }
-  private _controls: Controls;
+  private _controls: Controls = this.defaultControls;
 
+  private defaultInitialSettings: InitialSettings = {
+    boundingBoxPadding: 0,
+  };
   /**
    * Settings that control what portion of the map is shown initially
    */
@@ -110,15 +113,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     return this._initialSettings;
   }
   set initialSettings(initialSettings: InitialSettings) {
-    const defaultInitialSettings: InitialSettings = {
-      boundingBoxPadding: 0,
-    };
     this._initialSettings = {
-      ...defaultInitialSettings,
+      ...this.defaultInitialSettings,
       ...initialSettings,
     };
   }
-  private _initialSettings: InitialSettings;
+  private _initialSettings: InitialSettings = this.defaultInitialSettings;
 
   /**
    * Input to display GeoJson data on the map.

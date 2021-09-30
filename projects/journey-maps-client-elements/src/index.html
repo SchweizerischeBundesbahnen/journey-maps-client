@@ -25,10 +25,14 @@
       var client = document.createElement('journey-maps-client');
       client.language = 'de';
       client.apiKey = 'e500c71b8c83c1cfb2170608582ae9c8';
-      client.zoomLevel = 7.5;
-      client.showLevelSwitch = true;
-      client.showZoomControls = true;
-      client.mapCenter = [7.4391326448171196, 46.948834547463086];
+      client.initialSettings = {
+        zoomLevel: 7.5,
+        mapCenter: [7.4391326448171196, 46.948834547463086],
+      };
+      client.controls = {
+        showLevelSwitch: true,
+        showZoomControls: true,
+      };
       client.scrollZoom = false;
       client.markers = [
         {
