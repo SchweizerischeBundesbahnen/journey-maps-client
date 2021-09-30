@@ -3,7 +3,6 @@ import {JourneyMapsClientComponent} from './journey-maps-client.component';
 import {CommonModule} from '@angular/common';
 import {SbbIconModule} from '@sbb-esta/angular-core';
 import {SbbButtonModule} from '@sbb-esta/angular-public';
-import {ReactiveFormsModule} from '@angular/forms';
 import {AngularResizedEventModule} from 'angular-resize-event';
 import {GlobalStylesComponent} from './components/global-styles/global-styles.component';
 import {MarkerDetailsComponent} from './components/marker-details/marker-details.component';
@@ -37,7 +36,6 @@ import {LeitPoiComponent} from './components/leit-poi/leit-poi.component';
     CommonModule,
     SbbIconModule,
     SbbButtonModule,
-    ReactiveFormsModule,
     AngularResizedEventModule,
   ],
   exports: [JourneyMapsClientComponent],
