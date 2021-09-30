@@ -1,6 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import * as mapboxgl from 'mapbox-gl';
-import {Map as MapboxMap} from 'mapbox-gl';
+import * as maplibregl from 'maplibre-gl';
+import {Map as MaplibreMap} from 'maplibre-gl';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {LocaleService} from '../../../services/locale.service';
 import {QueryMapFeaturesService} from './query-map-features.service';
@@ -13,7 +13,7 @@ import {MapLayerFilterService} from './map-layer-filter.service';
 })
 export class LevelSwitchService {
 
-  private map: mapboxgl.Map;
+  private map: maplibregl.Map;
   private lastZoom: number; // needed to detect when we cross zoom threshold to show or hide the level switcher component
 
   private readonly defaultLevel = 0;
@@ -71,7 +71,7 @@ export class LevelSwitchService {
     return this.isVisibleInCurrentMapZoomLevel() && this.availableLevels.length > 0;
   }
 
-  onInit(map: MapboxMap): void {
+  onInit(map: MaplibreMap): void {
     this.map = map;
     this.lastZoom = this.map.getZoom();
     this.map.on('zoomend', () => this.zoomChanged.next());

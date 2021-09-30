@@ -5,7 +5,7 @@
     "cssUrl": "inline",
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
-      "mapbox-gl": "mapboxgl",
+      "maplibre-gl": "maplibregl",
       "@sbb-esta/angular-core": "sbbEsta.angularCore",
       "@sbb-esta/angular-core/icon-directive": "sbbEsta.angularCore.iconDirective",
       "@sbb-esta/angular-public": "sbbEsta.angularPublic",

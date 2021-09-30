@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
-import {Map as MapboxMap} from 'mapbox-gl';
+import {Map as MaplibreMap} from 'maplibre-gl';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {LocaleService} from '../../services/locale.service';
 import {LevelSwitchService} from './services/level-switch.service';
@@ -24,7 +24,7 @@ import {LevelSwitchService} from './services/level-switch.service';
 })
 export class LevelSwitchComponent {
 
-  @Input() map: MapboxMap;
+  @Input() map: MaplibreMap;
 
   constructor(private ref: ChangeDetectorRef,
               private i18n: LocaleService,

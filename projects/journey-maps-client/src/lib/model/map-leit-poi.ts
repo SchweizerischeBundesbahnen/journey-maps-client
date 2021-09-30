@@ -1,10 +1,10 @@
 import {Subject} from 'rxjs';
 import {ComponentRef} from '@angular/core';
 import {LeitPoiComponent} from '../components/leit-poi/leit-poi.component';
-import * as mapboxgl from 'mapbox-gl';
+import * as maplibregl from 'maplibre-gl';
 
 /**
- * MapLeitPoi groups the LeitPoiComponent and the mapboxgl.Popup container and helps to clenaup both instances on destroy.
+ * MapLeitPoi groups the LeitPoiComponent and the maplibregl.Popup container and helps to clenaup both instances on destroy.
  */
 export class MapLeitPoi {
 
@@ -12,7 +12,7 @@ export class MapLeitPoi {
 
   private destroySub = new Subject<void>();
 
-  constructor(private componentRef: ComponentRef<LeitPoiComponent>, private popup: mapboxgl.Popup) {
+  constructor(private componentRef: ComponentRef<LeitPoiComponent>, private popup: maplibregl.Popup) {
   }
 
   get destroyed(): Subject<void> {
@@ -28,7 +28,7 @@ export class MapLeitPoi {
   }
 
   toggleHidden(): void {
-    return this.popup.toggleClassName(MapLeitPoi.HIDDEN_CLASS_NAME);
+    this.popup.toggleClassName(MapLeitPoi.HIDDEN_CLASS_NAME);
   }
 
   destroy(): void {

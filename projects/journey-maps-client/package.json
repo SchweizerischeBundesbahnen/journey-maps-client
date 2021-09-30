@@ -7,8 +7,7 @@
     "@angular/core": ">=v9",
     "@sbb-esta/angular-core": ">=v9",
     "@sbb-esta/angular-public": ">=v9",
-    "@types/mapbox-gl": "1.12 - 1.13",
-    "mapbox-gl": "1.12 - 1.13",
+    "maplibre-gl": ">=1.12",
     "angular-resize-event": ">=v2"
   },
   "dependencies": {

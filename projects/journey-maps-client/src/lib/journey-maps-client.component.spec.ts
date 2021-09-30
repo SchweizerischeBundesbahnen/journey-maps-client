@@ -122,10 +122,13 @@ const configureTestingModule = () => TestBed.configureTestingModule({
       useValue: {
         initializeMap: () => of({
           isStyleLoaded: () => false,
-          on: () => {},
-          addControl: () => {},
-          resize: () => {},
-        } as unknown as mapboxgl.Map),
+          on: () => {
+          },
+          addControl: () => {
+          },
+          resize: () => {
+          },
+        } as unknown as maplibregl.Map),
       }
     },
   ]

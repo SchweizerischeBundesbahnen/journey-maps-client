@@ -14,7 +14,7 @@ export class MapJourneyService {
   ) {
   }
 
-  updateJourney(map: mapboxgl.Map, journey: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
+  updateJourney(map: maplibregl.Map, journey: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
     const routeFeatures: GeoJSON.Feature[] = [];
     const transferFeatures: GeoJSON.Feature[] = [];
 

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Map as MapboxMap} from 'mapbox-gl';
+import {Map as MaplibreMap} from 'maplibre-gl';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,7 @@ export class QueryMapFeaturesService {
   static readonly SERVICE_POINT_SOURCE_ID = 'service_points';
   private readonly levelsFeaturePropertyName = 'floor_liststring';
 
-  getVisibleLevels(map: MapboxMap): number[] {
+  getVisibleLevels(map: MaplibreMap): number[] {
     if (!map.getStyle().sources[QueryMapFeaturesService.SERVICE_POINT_SOURCE_ID]) {
       console.error(`source '${QueryMapFeaturesService.SERVICE_POINT_SOURCE_ID}' not found in map style.`);
       return [];

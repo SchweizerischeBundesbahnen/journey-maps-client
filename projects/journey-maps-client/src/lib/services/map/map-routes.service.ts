@@ -10,7 +10,7 @@ export class MapRoutesService {
     private mapRouteService: MapRouteService,
   ) {}
 
-  updateRoutes(map: mapboxgl.Map, routes: GeoJSON.FeatureCollection[] = [this.mapService.emptyFeatureCollection]): void {
+  updateRoutes(map: maplibregl.Map, routes: GeoJSON.FeatureCollection[] = [this.mapService.emptyFeatureCollection]): void {
     this.mapRouteService.updateRoute(map, {
       type: 'FeatureCollection',
       // With ES2019 we can replace this with routes.flatMap(({features}) => features)

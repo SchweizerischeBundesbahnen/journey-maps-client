@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Geometry, Point} from 'geojson';
-import {FlyToOptions, LngLat, LngLatBoundsLike, LngLatLike, Map as MapboxMap} from 'mapbox-gl';
+import {FlyToOptions, LngLat, LngLatBoundsLike, LngLatLike, Map as MaplibreMap} from 'maplibre-gl';
 
 @Injectable({providedIn: 'root'})
 export class MapService {
@@ -13,7 +13,7 @@ export class MapService {
   constructor() {
   }
 
-  moveMap(map: MapboxMap, center: LngLatLike, zoomLevel: number, boundingBox: LngLatBoundsLike, boundingBoxPadding: number): void {
+  moveMap(map: MaplibreMap, center: LngLatLike, zoomLevel: number, boundingBox: LngLatBoundsLike, boundingBoxPadding: number): void {
     if (zoomLevel || center) {
       this.centerMap(map, center, zoomLevel);
     } else if (boundingBox) {
@@ -24,7 +24,7 @@ export class MapService {
   /**
    * Emulate moving the map with the keyboard's arrow keys
    */
-  pan(map: MapboxMap, dir: Direction): void {
+  pan(map: MaplibreMap, dir: Direction): void {
     const {NORTH, EAST, SOUTH, WEST} = Direction;
     const xDir = dir === WEST ? 1 : dir === EAST ? -1 : 0;
     const yDir = dir === NORTH ? 1 : dir === SOUTH ? -1 : 0;
@@ -43,11 +43,11 @@ export class MapService {
     return (geometry as Point).coordinates as LngLatLike;
   }
 
-  addMissingImage(map: mapboxgl.Map, name: string, icon: string): void {
+  addMissingImage(map: maplibregl.Map, name: string, icon: string): void {
     map.loadImage(icon, (error, image) => this.imageLoadedCallback(map, name, error, image));
   }
 
-  verifySources(map: MapboxMap, sourceIds: string[]): void {
+  verifySources(map: MaplibreMap, sourceIds: string[]): void {
     for (const id of sourceIds) {
       const source = map.getSource(id);
       if (!source) {
@@ -56,7 +56,7 @@ export class MapService {
     }
   }
 
-  private imageLoadedCallback(map: mapboxgl.Map, name: string, error: any, image: any): void {
+  private imageLoadedCallback(map: maplibregl.Map, name: string, error: any, image: any): void {
     if (error) {
       console.error(error);
     } else {
@@ -64,7 +64,7 @@ export class MapService {
     }
   }
 
-  private centerMap(map: MapboxMap, center: LngLatLike, zoomLevel: number): void {
+  private centerMap(map: MaplibreMap, center: LngLatLike, zoomLevel: number): void {
     const options: FlyToOptions = {};
     if (zoomLevel && map.getZoom() !== zoomLevel) {
       options.zoom = zoomLevel;

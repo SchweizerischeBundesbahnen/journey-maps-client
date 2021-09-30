@@ -1,14 +1,14 @@
 @import '~@sbb-esta/angular-public/styles.scss';
 
-.mapboxgl-ctrl-attrib-button {
+.maplibregl-ctrl-attrib-button {
   display: none;
 }
 
-.mapboxgl-control-container {
+.maplibregl-control-container {
   user-select: none;
 }
 
-.mapboxgl-popup.rokas {
+.maplibregl-popup.rokas {
 
   $closeIconSize: 24px;
 
@@ -27,7 +27,7 @@
     top: unset;
   }
 
-  .mapboxgl-popup-content {
+  .maplibregl-popup-content {
     font-family: $fontSbbRoman;
     box-shadow: 0 0 20px rgb(0 0 0 / 25%);
     border-radius: 8px;
@@ -38,13 +38,13 @@
     }
   }
 
-  .mapboxgl-popup-tip {
+  .maplibregl-popup-tip {
     @include mq($to: tabletPortrait) {
       display: none;
     }
   }
 
-  .mapboxgl-popup-close-button {
+  .maplibregl-popup-close-button {
     background-image: url('./../../assets/close.svg');
     background-color: white;
     font-size: 0;
@@ -54,26 +54,26 @@
     margin-right: 10px;
   }
 
-  &.mapboxgl-popup-anchor- {
-    &bottom-left .mapboxgl-popup-content {
+  &.maplibregl-popup-anchor- {
+    &bottom-left .maplibregl-popup-content {
       @include mq($from: tabletPortrait) {
         border-bottom-left-radius: 0 !important;
       }
     }
 
-    &bottom-right .mapboxgl-popup-content {
+    &bottom-right .maplibregl-popup-content {
       @include mq($from: tabletPortrait) {
         border-bottom-right-radius: 0 !important;
       }
     }
 
-    &top-left .mapboxgl-popup-content {
+    &top-left .maplibregl-popup-content {
       @include mq($from: tabletPortrait) {
         border-top-left-radius: 0 !important;
       }
     }
 
-    &top-right .mapboxgl-popup-content {
+    &top-right .maplibregl-popup-content {
       @include mq($from: tabletPortrait) {
         border-top-right-radius: 0 !important;
       }
@@ -83,13 +83,13 @@
 
 .leit-poi-popup {
 
-  .mapboxgl-popup-tip {
+  .maplibregl-popup-tip {
     padding: 0;
     height: 0;
     display: none;
   }
 
-  .mapboxgl-popup-content {
+  .maplibregl-popup-content {
     border-radius: 25px;
     padding: 6px;
     border: 1px solid #000000;

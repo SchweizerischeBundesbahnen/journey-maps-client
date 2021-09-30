@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {Map as MapboxMap} from 'mapbox-gl';
+import {Map as MaplibreMap} from 'maplibre-gl';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {LocaleService} from '../../services/locale.service';
@@ -11,7 +11,7 @@ import {LocaleService} from '../../services/locale.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() map: MapboxMap;
+  @Input() map: MaplibreMap;
 
   private zoomChanged = new Subject<void>();
   private destroyed = new Subject<void>();

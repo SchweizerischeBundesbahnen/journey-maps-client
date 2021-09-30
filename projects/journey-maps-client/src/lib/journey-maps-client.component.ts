@@ -15,7 +15,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {LngLatBounds, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
+import {LngLatBounds, LngLatBoundsLike, LngLatLike, Map as MaplibreMap, MapLayerMouseEvent} from 'maplibre-gl';
 import {MapInitService} from './services/map/map-init.service';
 import {ReplaySubject, Subject} from 'rxjs';
 import {debounceTime, delay, filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -35,7 +35,7 @@ import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
 
 /**
- * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
+ * This component uses the Maplibre GL JS api to render a map and display the given data on the map.
  * <example-url>/</example-url>
  */
 @Component({
@@ -46,7 +46,7 @@ import {LevelSwitchService} from './components/level-switch/services/level-switc
 })
 export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
-  private map: MapboxMap;
+  private map: MaplibreMap;
   @ViewChild('map') private mapElementRef: ElementRef;
 
   /**
@@ -162,7 +162,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /**
    * This event is emitted whenever the map is ready.
    */
-  @Output() mapReady = new ReplaySubject<MapboxMap>(1);
+  @Output() mapReady = new ReplaySubject<MaplibreMap>(1);
   /**
    * This event is emitted whenever the selected (floor-) level changes
    */
