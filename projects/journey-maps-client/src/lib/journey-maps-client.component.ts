@@ -75,9 +75,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Select the style mode between BRIGHT and DARK. */
   @Input() styleMode = StyleMode.BRIGHT;
 
-  /** If the search bar - to filter markers - should be enabled or not. */
-  @Input() enableSearchBar = true;
-
   /**
    * The initial center of the map. You should pass an array with two numbers.
    * The first one is the longitude and the second one the latitude.
@@ -339,7 +336,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.mapConfigService.updateConfigs(
       this.popup,
       this.allowOneFingerPan,
-      this.enableSearchBar,
       this.showLevelSwitch,
     );
 

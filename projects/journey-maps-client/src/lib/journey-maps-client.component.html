@@ -1,10 +1,6 @@
 <rokas-global-styles></rokas-global-styles>
 
 <div class="container" lang="{{language}}">
-  <rokas-search-bar *ngIf="enableSearchBar"
-                    [markers]="markers"
-                    (markerSelected)="onMarkerSelected($event)"
-  ></rokas-search-bar>
 
   <div class="map-container" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
     <div class="mod_map_container_mobile_overlay" [ngClass]="touchOverlayStyleClass" style="opacity: 0">

@@ -9,6 +9,7 @@
       "@sbb-esta/angular-core": "sbbEsta.angularCore",
       "@sbb-esta/angular-core/icon-directive": "sbbEsta.angularCore.iconDirective",
       "@sbb-esta/angular-public": "sbbEsta.angularPublic",
+      "@sbb-esta/angular-public/option": "sbbEsta.angularPublic.option",
       "angular-resize-event": "angular-resize-event"
     }
   }
