@@ -9,7 +9,7 @@
       [markers]="markers"
       [journeyMapsGeoJson]="journeyMapsGeoJson"
       [initialSettings]="initialSettings"
-      [controls]="controls"
+      [movementControls]="movementControls"
       (visibleLevelsChange)="visibleLevels=$event"
       [(selectedLevel)]="selectedLevel"
       (mapCenterChanged)="mapCenterChanged.next($event)"
@@ -18,9 +18,7 @@
       (maxZoomLevelChanged)="maxZoomLevel=$event"
       [markerDetailsTemplate]=""
       [(selectedMarkerId)]="selectedMarkerId"
-      [allowOneFingerPan]="allowOneFingerPan"
       [popup]="popup"
-      [scrollZoom]="true"
       [styles]="styles"
       (mapReady)="onMapRecieved($event)"
       #client
@@ -98,7 +96,7 @@
         </button>
       </li>
       <li style="list-style: circle;">Map loaded: {{map?.loaded()}}</li>
-      <li style="list-style: circle;">Allow moving the map with one finger: {{allowOneFingerPan}}</li>
+      <li style="list-style: circle;">Allow moving the map with one finger: {{movementControls.allowOneFingerPan}}</li>
       <li style="list-style: circle;">
         <label for="geo-json-select">
           Display Journey-Maps GeoJSON data for:

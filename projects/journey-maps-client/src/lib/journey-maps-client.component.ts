@@ -81,25 +81,30 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
   private _styles: Styles = this.defaultStyles;
 
-  private defaultControls: Controls = {
-    showSearchBar: true,
+  /** Whether the search bar - to filter markers - should be shown or not. */
+  @Input() enableSearchBar = true;
+
+  private defaultMovementControls: Controls = {
     showLevelSwitch: false,
     showZoomControls: false,
+    /** By default, you get a message-overlay if you try to pan with one finger. */
+    allowOneFingerPan: false,
+    allowScrollZoom: false,
   };
   /**
-   * Settings to enable/disable widgets that control the map
+   * Settings to control the movement of the map
    */
   @Input()
-  get controls(): Controls {
-    return this._controls;
+  get movementControls(): Controls {
+    return this._movementControls;
   }
-  set controls(controls: Controls) {
-    this._controls = {
-      ...this.defaultControls,
-      ...controls,
+  set movementControls(movementControls: Controls) {
+    this._movementControls = {
+      ...this.defaultMovementControls,
+      ...movementControls,
     };
   }
-  private _controls: Controls = this.defaultControls;
+  private _movementControls: Controls = this.defaultMovementControls;
 
   private defaultInitialSettings: InitialSettings = {
     boundingBoxPadding: 0,
@@ -128,14 +133,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Input() markers: Marker[];
   private _selectedMarker: Marker;
 
-  /** By default, you get a message-overlay if you try to pan with one finger. */
-  @Input() allowOneFingerPan = false;
-
   /** Open a popup - instead of the teaser - when selecting a marker. */
   @Input() popup = false;
-
-  /** Whether "scroll to zoom" is enabled or not */
-  @Input() scrollZoom = true;
 
   /** Which (floor-)level should be shown */
   @Input() selectedLevel: number;
@@ -254,7 +253,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
-    if (!this.allowOneFingerPan) {
+    if (!this.movementControls.allowOneFingerPan) {
       this.map.dragPan.disable();
     }
     this.touchEventCollector.next(event);
@@ -399,12 +398,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.mapElementRef.nativeElement,
       this.i18n.language,
       styleUrl,
-      this.scrollZoom,
+      this.movementControls.allowScrollZoom,
       this.initialSettings.zoomLevel,
       this.initialSettings.mapCenter,
       this.initialSettings.boundingBox ?? this.getMarkersBounds,
       this.initialSettings.boundingBox ? this.initialSettings.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING,
-      this.allowOneFingerPan,
+      this.movementControls.allowOneFingerPan,
     ).subscribe(
       m => {
         this.map = m;
@@ -426,7 +425,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
       const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
 
-      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.allowOneFingerPan) {
+      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.movementControls.allowOneFingerPan) {
         this.touchOverlayStyleClass = 'is_visible';
         this.cd.detectChanges();
       }

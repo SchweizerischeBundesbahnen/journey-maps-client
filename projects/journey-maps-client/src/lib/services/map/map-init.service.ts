@@ -42,7 +42,7 @@ export class MapInitService {
     mapNativeElement: any,
     language: string,
     styleUrl: string,
-    scrollZoom: boolean,
+    allowScrollZoom: boolean,
     zoomLevel?: number,
     mapCenter?: mapboxgl.LngLatLike,
     boundingBox?: LngLatBoundsLike,
@@ -50,7 +50,7 @@ export class MapInitService {
     allowOneFingerPan?: boolean,
   ): Observable<mapboxgl.Map> {
     const mapboxMap = new MapboxMap(
-      this.createOptions(mapNativeElement, scrollZoom, zoomLevel, mapCenter, boundingBox, boundingBoxPadding)
+      this.createOptions(mapNativeElement, allowScrollZoom, zoomLevel, mapCenter, boundingBox, boundingBoxPadding)
     );
 
     this.translateControlLabels(mapboxMap, language);
@@ -68,7 +68,7 @@ export class MapInitService {
 
   private createOptions(
     container: any,
-    scrollZoom: boolean,
+    allowScrollZoom: boolean,
     zoomLevel?: number,
     mapCenter?: LngLatLike,
     boundingBox?: LngLatBoundsLike,
@@ -77,7 +77,7 @@ export class MapInitService {
       container,
       minZoom: MapInitService.MIN_ZOOM,
       maxZoom: MapInitService.MAX_ZOOM,
-      scrollZoom,
+      scrollZoom: allowScrollZoom,
       dragRotate: false,
       fadeDuration: 10
     };

@@ -38,9 +38,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private _routes: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
 
-  controls: Controls = {
+  movementControls: Controls = {
     showLevelSwitch: true,
     showZoomControls: true,
+    allowOneFingerPan: true,
+    allowScrollZoom: true,
   };
   selectedMarkerId: string;
   visibleLevels: number[];
@@ -48,7 +50,6 @@ export class AppComponent implements OnInit, OnDestroy {
   initialSettings: InitialSettings = {
     boundingBox: [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]],
   };
-  allowOneFingerPan = true;
   popup = true;
   styles: Styles = {};
 

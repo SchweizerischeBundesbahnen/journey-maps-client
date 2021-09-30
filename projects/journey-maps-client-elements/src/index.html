@@ -29,11 +29,12 @@
         zoomLevel: 7.5,
         mapCenter: [7.4391326448171196, 46.948834547463086],
       };
-      client.controls = {
+      client.movementControls = {
         showLevelSwitch: true,
         showZoomControls: true,
+        allowOneFingerPan: false,
+        allowScrollZoom: false,
       };
-      client.scrollZoom = false;
       client.markers = [
         {
           id: 'home',
@@ -69,7 +70,6 @@
           ]
         },
       ];
-      client.allowOneFingerPan = false; // prevent overlay asking for the use of two fingers
       client.popup = true;
 
       document.addEventListener('DOMContentLoaded', function () {

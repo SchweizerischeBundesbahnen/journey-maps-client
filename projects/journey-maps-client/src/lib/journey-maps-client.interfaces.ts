@@ -16,11 +16,15 @@ export interface Styles {
 }
 
 export interface Controls {
-  /** If the search bar - to filter markers - should be enabled or not. */
-  showSearchBar?: boolean;
-  /** Should show level switch control or not. */
+  /** Whether the map should allow panning with one finger or not
+   * If set to false, the users get a message-overlay if they try to pan with one finger.
+   */
+  allowOneFingerPan?: boolean;
+  /** Whether the map can be zoomed by scrolling */
+  allowScrollZoom?: boolean;
+  /** Whether the map should show the level switch control or not. */
   showZoomControls?: boolean;
-  /** Should show zoom level control or not. */
+  /** Whether the map should show the zoom level control or not. */
   showLevelSwitch?: boolean;
 }
 

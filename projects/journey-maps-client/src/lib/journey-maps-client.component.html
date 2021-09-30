@@ -1,7 +1,7 @@
 <rokas-global-styles></rokas-global-styles>
 
 <div class="container" lang="{{language}}">
-  <rokas-search-bar *ngIf="controls.showSearchBar"
+  <rokas-search-bar *ngIf="enableSearchBar"
                     [markers]="markers"
                     (markerSelected)="onMarkerSelected($event)"
   ></rokas-search-bar>
@@ -24,11 +24,11 @@
 
     <div class="map-widgets">
       <rokas-zoom-controls
-        *ngIf="controls.showZoomControls"
+        *ngIf="movementControls.showZoomControls"
         [map]="mapReady | async"
       ></rokas-zoom-controls>
       <rokas-level-switch
-        *ngIf="controls.showLevelSwitch"
+        *ngIf="movementControls.showLevelSwitch"
         [map]="mapReady | async"
       ></rokas-level-switch>
     </div>
