@@ -181,20 +181,20 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /**
    * This event is emitted whenever the min zoom level of the map has changed.
    */
-  @Output() minZoomLevelChanged = new EventEmitter<number>();
+  @Output() minZoomLevelChange = new EventEmitter<number>();
   /**
    * This event is emitted whenever the max zoom level of the map has changed.
    */
-  @Output() maxZoomLevelChanged = new EventEmitter<number>();
+  @Output() maxZoomLevelChange = new EventEmitter<number>();
   /**
    * This event is emitted whenever the zoom level of the map has changed.
    */
-  @Output() zoomLevelChanged = new EventEmitter<number>();
+  @Output() zoomLevelChange = new EventEmitter<number>();
   private zoomLevelChangeDebouncer = new Subject<void>();
   /**
    * This event is emitted whenever the center of the map has changed. (Whenever the map has been moved)
    */
-  @Output() mapCenterChanged = new EventEmitter<LngLatLike>();
+  @Output() mapCenterChange = new EventEmitter<LngLatLike>();
   /**
    * This event is emitted whenever a marker, with property triggerEvent, is selected or unselected.
    */
@@ -507,12 +507,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.zoomLevelChangeDebouncer.pipe(
       debounceTime(200),
       takeUntil(this.destroyed)
-    ).subscribe(() => this.zoomLevelChanged.emit(this.map.getZoom()));
+    ).subscribe(() => this.zoomLevelChange.emit(this.map.getZoom()));
 
     this.mapCenterChangeDebouncer.pipe(
       debounceTime(200),
       takeUntil(this.destroyed)
-    ).subscribe(() => this.mapCenterChanged.emit(this.map.getCenter()));
+    ).subscribe(() => this.mapCenterChange.emit(this.map.getCenter()));
 
     this.levelSwitchService.selectedLevel$.subscribe(level => this.selectedLevelChange.emit(level));
     this.levelSwitchService.visibleLevels$.subscribe(levels => this.visibleLevelsChange.emit(levels));
@@ -550,8 +550,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     // Emit initial values
     this.zoomLevelChangeDebouncer.next();
     this.mapCenterChangeDebouncer.next();
-    this.minZoomLevelChanged.emit(MapInitService.MIN_ZOOM);
-    this.maxZoomLevelChanged.emit(MapInitService.MAX_ZOOM);
+    this.minZoomLevelChange.emit(MapInitService.MIN_ZOOM);
+    this.maxZoomLevelChange.emit(MapInitService.MAX_ZOOM);
 
     this.isStyleLoaded = true;
     this.styleLoaded.next();

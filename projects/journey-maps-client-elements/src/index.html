@@ -81,17 +81,17 @@
         document.getElementById('selected-level').appendChild(document.createTextNode(undefined));
       });
 
-      client.addEventListener('zoomLevelChanged', function (event) {
+      client.addEventListener('zoomLevelChange', function (event) {
         const zoomLevelSpan = document.getElementById('zoom-level');
         zoomLevelSpan.replaceChild(document.createTextNode(event.detail), zoomLevelSpan.firstChild);
       });
 
-      client.addEventListener('minZoomLevelChanged', function (event) {
+      client.addEventListener('minZoomLevelChange', function (event) {
         const minZoomSpan = document.getElementById('min-zoom');
         minZoomSpan.replaceChild(document.createTextNode(event.detail), minZoomSpan.firstChild);
       });
 
-      client.addEventListener('maxZoomLevelChanged', function (event) {
+      client.addEventListener('maxZoomLevelChange', function (event) {
         const maxZoomSpan = document.getElementById('max-zoom');
         maxZoomSpan.replaceChild(document.createTextNode(event.detail), maxZoomSpan.firstChild);
       });

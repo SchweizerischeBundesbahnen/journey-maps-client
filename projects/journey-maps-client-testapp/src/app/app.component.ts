@@ -59,9 +59,9 @@ export class AppComponent implements OnInit, OnDestroy {
   zoomLevel: number;
   minZoomLevel: number;
   maxZoomLevel: number;
-  zoomLevelChanged = new Subject<number>();
+  zoomLevelChange = new Subject<number>();
   mapCenter: LngLatLike;
-  mapCenterChanged = new Subject<LngLatLike>();
+  mapCenterChange = new Subject<LngLatLike>();
   map: Map;
 
   markers: Marker[] = [
@@ -170,8 +170,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
       .subscribe(json => this._routes = json);
 
-    this.zoomLevelChanged.pipe(takeUntil(this.destroyed)).subscribe(_zoomLevel => this.zoomLevel = _zoomLevel);
-    this.mapCenterChanged.pipe(takeUntil(this.destroyed)).subscribe(_mapCenter => this.mapCenter = _mapCenter);
+    this.zoomLevelChange.pipe(takeUntil(this.destroyed)).subscribe(_zoomLevel => this.zoomLevel = _zoomLevel);
+    this.mapCenterChange.pipe(takeUntil(this.destroyed)).subscribe(_mapCenter => this.mapCenter = _mapCenter);
   }
 
   onMapRecieved(map: Map): void {
@@ -222,7 +222,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (bbox) {
       this.setBbox(bbox);
-      this.mapCenterChanged.pipe(take(1)).subscribe(() => updateDataFunction());
+      this.mapCenterChange.pipe(take(1)).subscribe(() => updateDataFunction());
     }
   }
 
