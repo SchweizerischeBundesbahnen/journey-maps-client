@@ -23,7 +23,6 @@ import {MapMarkerService} from './services/map/map-marker.service';
 import {Constants} from './services/constants';
 import {Marker} from './model/marker';
 import {LocaleService} from './services/locale.service';
-import {ResizedEvent} from 'angular-resize-event';
 import {bufferTimeOnValue} from './services/bufferTimeOnValue';
 import {Direction, MapService} from './services/map/map.service';
 import {MapJourneyService} from './services/map/map-journey.service';
@@ -33,7 +32,7 @@ import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
-import {Styles, Controls, InitialSettings, JourneyMapsGeoJsonOption} from './journey-maps-client.interfaces';
+import {Controls, InitialSettings, JourneyMapsGeoJsonOption, Styles} from './journey-maps-client.interfaces';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -181,7 +180,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private cursorChanged = new ReplaySubject<boolean>(1);
   private mapClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private styleLoaded = new ReplaySubject(1);
-  private mapParameterChanged = new Subject<void>();
+  private initialSettingsChanged = new Subject<void>();
   private mapStyleModeChanged = new Subject<void>();
 
   // visible for testing
@@ -345,10 +344,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
 
     // handle journey, transfer, and routes together, otherwise they can overwrite each other's transfer or route data
-    if (changes.journeyMapsGeoJson?.currentValue?.journey
-      || changes.journeyMapsGeoJson?.currentValue?.transfer
-      || changes.journeyMapsGeoJson?.currentValue?.routes
-    ) {
+    if (changes.journeyMapsGeoJson) {
       this.executeWhenMapStyleLoaded(() => {
         // remove previous data from map
         this.mapJourneyService.updateJourney(this.map, undefined);
@@ -377,16 +373,11 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       return;
     }
 
-    if (changes.initialSettings?.currentValue?.mapCenter
-      || changes.initialSettings?.currentValue?.zoomLevel
-      || changes.initialSettings?.currentValue?.boundingBox
-      || changes.initialSettings?.currentValue?.boundingBoxPadding
-      || changes.initialSettings?.currentValue?.zoomToMarkers
-    ) {
-      this.mapParameterChanged.next();
+    if (changes.initialSettings) {
+      this.initialSettingsChanged.next();
     }
 
-    if (changes.styles?.currentValue?.mode) {
+    if (changes.styles?.currentValue?.mode !== changes.styles?.previousValue?.mode) {
       this.mapStyleModeChanged.next();
     }
 
@@ -491,7 +482,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       }
     });
 
-    this.mapParameterChanged.pipe(
+    this.initialSettingsChanged.pipe(
       debounceTime(200),
       takeUntil(this.destroyed)
     ).subscribe(() => this.mapService.moveMap(this.map,
@@ -529,7 +520,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.windowResized.next();
   }
 
-  onResized(event: ResizedEvent): void {
+  onResized(): void {
     if (this.map) {
       this.map.resize();
     }
