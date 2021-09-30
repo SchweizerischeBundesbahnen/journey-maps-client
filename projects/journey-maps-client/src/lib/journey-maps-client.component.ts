@@ -141,6 +141,45 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Input() selectedLevel: number;
 
   /**
+   * The language used for localized labels.
+   * Allowed values are <code>de</code>, <code>fr</code>, <code>it</code>, <code>en</code>.
+   * @param value language to set
+   */
+  @Input()
+  get language(): string {
+    return this.i18n.language;
+  }
+  set language(value: string) {
+    if (value == null) {
+      throw new TypeError('language mustn\'t be null');
+    }
+
+    value = value.toLowerCase();
+    if (value === 'de' || value === 'fr' || value === 'it' || value === 'en') {
+      this.i18n.language = value;
+    } else {
+      throw new TypeError('Illegal value for language. Allowed values are de|fr|it|en.');
+    }
+  }
+
+  /**
+   * Select one of the markers contained in {@link JourneyMapsClientComponent#markers}
+   *
+   * Allowed values are either the ID of a marker to select or <code>undefined</code> to unselect.
+   *
+   * @param value the ID of the marker to select or <code>undefined</code> to unselect the marker
+   */
+  @Input()
+  set selectedMarkerId(value: string | undefined) {
+    if (!!value) {
+      const selectedMarker = this.markers?.find(marker => marker.id === value);
+      this.onMarkerSelected(selectedMarker);
+    } else if (!!this.selectedMarker) {
+      this.onMarkerUnselected();
+    }
+  }
+
+  /**
    * This event is emitted whenever the min zoom level of the map has changed.
    */
   @Output() minZoomLevelChanged = new EventEmitter<number>();
@@ -205,6 +244,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private cd: ChangeDetectorRef,
               private i18n: LocaleService,
               private host: ElementRef) {
+    // binding of 'this' is needed for elements/webcomponent
     // https://github.com/angular/angular/issues/22114#issuecomment-569311422
     this.host.nativeElement.moveNorth = this.moveNorth.bind(this);
     this.host.nativeElement.moveEast = this.moveEast.bind(this);
@@ -225,29 +265,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.touchEventCollector.next(event);
   }
 
-  get language(): string {
-    return this.i18n.language;
-  }
-
-  /**
-   * The language used for localized labels.
-   * Allowed values are <code>de</code>, <code>fr</code>, <code>it</code>, <code>en</code>.
-   * @param value language to set
-   */
-  @Input()
-  set language(value: string) {
-    if (value == null) {
-      throw new TypeError('language mustn\'t be null');
-    }
-
-    value = value.toLowerCase();
-    if (value === 'de' || value === 'fr' || value === 'it' || value === 'en') {
-      this.i18n.language = value;
-    } else {
-      throw new TypeError('Illegal value for language. Allowed values are de|fr|it|en.');
-    }
-  }
-
   public set selectedMarker(value: Marker) {
     if (value && (value.triggerEvent || value.triggerEvent === undefined)) {
       this.selectedMarkerIdChange.emit(value.id);
@@ -265,22 +282,30 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     return this._selectedMarker;
   }
 
-  @Input()
+  /**
+   * Move the map North as if pressing the up arrow key on the keyboard
+   */
   public moveNorth(): void {
     this.mapService.pan(this.map, Direction.NORTH);
   }
 
-  @Input()
+  /**
+   * Move the map East as if pressing the right arrow key on the keyboard
+   */
   public moveEast(): void {
     this.mapService.pan(this.map, Direction.EAST);
   }
 
-  @Input()
+  /**
+   * Move the map South as if pressing the down arrow key on the keyboard
+   */
   public moveSouth(): void {
     this.mapService.pan(this.map, Direction.SOUTH);
   }
 
-  @Input()
+  /**
+   * Move the map West as if pressing the left arrow key on the keyboard
+   */
   public moveWest(): void {
     this.mapService.pan(this.map, Direction.WEST);
   }
@@ -306,27 +331,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   get getMarkersBounds(): LngLatBounds {
     return this.initialSettings.zoomToMarkers ? this.computeMarkersBounds(this.markers) : undefined;
-  }
-
-  /**
-   * Select one of the markers contained in {@link JourneyMapsClientComponent#markers}
-   *
-   * Allowed values are either the ID of a marker to select or <code>undefined</code> to unselect.
-   *
-   * @param value the ID of the marker to select or <code>undefined</code> to unselect the marker
-   */
-  @Input()
-  set selectedMarkerId(value: string | undefined) {
-    if (!!value) {
-      const selectedMarker = this.markers?.find(marker => marker.id === value);
-      this.onMarkerSelected(selectedMarker);
-    } else if (!!this.selectedMarker) {
-      this.onMarkerUnselected();
-    }
-  }
-
-  get selectedMarkerId(): string {
-    return this._selectedMarker?.id;
   }
 
   ngOnInit(): void {
@@ -476,7 +480,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       if (target.properties.cluster) {
         this.mapMarkerService.onClusterClicked(this.map, target);
       } else {
-        const selectedMarkerId = this.mapMarkerService.onMarkerClicked(this.map, target, this.selectedMarkerId);
+        const selectedMarkerId = this.mapMarkerService.onMarkerClicked(this.map, target, this.selectedMarker?.id);
         this.selectedMarker = this.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
         this.cd.detectChanges();
       }
