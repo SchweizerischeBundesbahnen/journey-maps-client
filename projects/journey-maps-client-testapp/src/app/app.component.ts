@@ -10,7 +10,7 @@ import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
-  Controls,
+  MovementControls,
   InitialSettings,
   JourneyMapsGeoJsonOption,
   Styles,
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private _routes: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
 
-  movementControls: Controls = {
+  movementControls: MovementControls = {
     showLevelSwitch: true,
     showZoomControls: true,
     allowOneFingerPan: true,

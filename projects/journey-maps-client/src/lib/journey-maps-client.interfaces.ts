@@ -15,7 +15,7 @@ export interface Styles {
   mode?: StyleMode;
 }
 
-export interface Controls {
+export interface MovementControls {
   /** Whether the map should allow panning with one finger or not
    * If set to false, the users get a message-overlay if they try to pan with one finger.
    */

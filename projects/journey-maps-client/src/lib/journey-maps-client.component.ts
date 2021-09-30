@@ -32,7 +32,7 @@ import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
-import {Controls, InitialSettings, JourneyMapsGeoJsonOption, Styles} from './journey-maps-client.interfaces';
+import {MovementControls, InitialSettings, JourneyMapsGeoJsonOption, Styles} from './journey-maps-client.interfaces';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -84,7 +84,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Whether the search bar - to filter markers - should be shown or not. */
   @Input() enableSearchBar = true;
 
-  private defaultMovementControls: Controls = {
+  private defaultMovementControls: MovementControls = {
     showLevelSwitch: false,
     showZoomControls: false,
     /** By default, you get a message-overlay if you try to pan with one finger. */
@@ -95,16 +95,16 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * Settings to control the movement of the map
    */
   @Input()
-  get movementControls(): Controls {
+  get movementControls(): MovementControls {
     return this._movementControls;
   }
-  set movementControls(movementControls: Controls) {
+  set movementControls(movementControls: MovementControls) {
     this._movementControls = {
       ...this.defaultMovementControls,
       ...movementControls,
     };
   }
-  private _movementControls: Controls = this.defaultMovementControls;
+  private _movementControls: MovementControls = this.defaultMovementControls;
 
   private defaultInitialSettings: InitialSettings = {
     boundingBoxPadding: 0,
