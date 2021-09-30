@@ -15,7 +15,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {LngLatBounds, LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
+import {LngLatBounds, LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
 import {MapInitService} from './services/map/map-init.service';
 import {ReplaySubject, Subject} from 'rxjs';
 import {debounceTime, delay, filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -33,6 +33,7 @@ import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
+import {Styles, Controls, InitialSettings, JourneyMapsGeoJsonOption} from './journey-maps-client.interfaces';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -109,39 +110,20 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     return this._initialSettings;
   }
   set initialSettings(initialSettings: InitialSettings) {
-    const defaultinitialSettings: InitialSettings = {
+    const defaultInitialSettings: InitialSettings = {
       boundingBoxPadding: 0,
     };
     this._initialSettings = {
-      ...defaultinitialSettings,
+      ...defaultInitialSettings,
       ...initialSettings,
     };
   }
   private _initialSettings: InitialSettings;
 
   /**
-   * GeoJSON as returned by the <code>/journey</code> operation of Journey Maps.
-   * All routes and transfers will be displayed on the map.
-   * Indoor routing is not (yet) supported.
-   * Note: journey, transfer and routes cannot be displayed at the same time
+   * Input to display GeoJson data on the map.
    */
-  @Input() journey: GeoJSON.FeatureCollection;
-
-  /**
-   * GeoJSON as returned by the <code>/transfer</code> operation of Journey Maps.
-   * The transfer will be displayed on the map.
-   * Indoor routing is not (yet) supported.
-   * Note: journey, transfer and routes cannot be displayed at the same time
-   */
-  @Input() transfer: GeoJSON.FeatureCollection;
-
-  /**
-   * An array of GeoJSON objects as returned by the <code>/route</code> and <code>/routes</code> operation of Journey Maps.
-   * All routes will be displayed on the map.
-   * Indoor routing is not (yet) supported.
-   * Note: journey, transfer and routes cannot be displayed at the same time
-   */
-  @Input() routes: GeoJSON.FeatureCollection[];
+  @Input() journeyMapsGeoJson: JourneyMapsGeoJsonOption;
 
   /** The list of markers (points) that will be displayed on the map. */
   @Input() markers: Marker[];
@@ -363,7 +345,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
 
     // handle journey, transfer, and routes together, otherwise they can overwrite each other's transfer or route data
-    if (changes.journey || changes.transfer || changes.routes) {
+    if (changes.journeyMapsGeoJson?.currentValue?.journey
+      || changes.journeyMapsGeoJson?.currentValue?.transfer
+      || changes.journeyMapsGeoJson?.currentValue?.routes
+    ) {
       this.executeWhenMapStyleLoaded(() => {
         // remove previous data from map
         this.mapJourneyService.updateJourney(this.map, undefined);
@@ -371,21 +356,21 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         this.mapRoutesService.updateRoutes(this.map, undefined);
         this.mapLeitPoiService.processData(this.map, undefined);
         // only add new data if we have some
-        if (changes.journey?.currentValue) {
-          this.mapJourneyService.updateJourney(this.map, this.journey);
+        if (changes.journeyMapsGeoJson?.currentValue?.journey) {
+          this.mapJourneyService.updateJourney(this.map, this.journeyMapsGeoJson.journey);
         }
-        if (changes.transfer?.currentValue) {
-          this.mapTransferService.updateTransfer(this.map, this.transfer);
-          this.mapLeitPoiService.processData(this.map, this.transfer);
+        if (changes.journeyMapsGeoJson?.currentValue?.transfer) {
+          this.mapTransferService.updateTransfer(this.map, this.journeyMapsGeoJson.transfer);
+          this.mapLeitPoiService.processData(this.map, this.journeyMapsGeoJson.transfer);
         }
-        if (changes.routes?.currentValue) {
-          this.mapRoutesService.updateRoutes(this.map, this.routes);
+        if (changes.journeyMapsGeoJson?.currentValue?.routes) {
+          this.mapRoutesService.updateRoutes(this.map, this.journeyMapsGeoJson.routes);
         }
       });
     }
 
-    if ([this.transfer, this.journey, this.routes].filter(Boolean).length > 1) {
-      console.warn('Use either transfer or journey or routes. It does not work correctly when more than one of these properties is set.');
+    if (Object.keys(this.journeyMapsGeoJson || {}).length > 1) {
+      console.error('journeyMapsGeoJson: Use either transfer or journey or routes. It does not work correctly when more than one of these properties is set.');
     }
 
     if (!this.isStyleLoaded) {
@@ -611,43 +596,4 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     });
     return bounds;
   }
-}
-
-export interface Styles {
-  /** Overwrite this value if you want to use a custom style id. */
-  brightId?: string;
-  /** Overwrite this value if you want to use a custom style id for the dark mode. */
-  darkId?: string;
-  /**
-   * Overwrite this value if you want to use a style from a different source.
-   * Actually you should not need this.
-   */
-  url?: string;
-  /** Select the style mode between BRIGHT and DARK. */
-  mode?: StyleMode;
-}
-
-export interface Controls {
-  /** If the search bar - to filter markers - should be enabled or not. */
-  showSearchBar?: boolean;
-  /** Should show level switch control or not. */
-  showZoomControls?: boolean;
-  /** Should show zoom level control or not. */
-  showLevelSwitch?: boolean;
-}
-
-export interface InitialSettings {
-  /**
-   * The initial center of the map. You should pass an array with two numbers.
-   * The first one is the longitude and the second one the latitude.
-   */
-  mapCenter?: LngLatLike;
-  /** The initial zoom level of the map. */
-  zoomLevel?: number;
-  /** The initial bounding box of the map. */
-  boundingBox?: LngLatBoundsLike;
-  /** The amount of padding in pixels to add to the given boundingBox. */
-  boundingBoxPadding?: number;
-  /** Wrap all markers in view if true. */
-  zoomToMarkers?: boolean;
 }

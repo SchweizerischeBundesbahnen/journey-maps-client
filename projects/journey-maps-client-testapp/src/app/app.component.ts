@@ -9,7 +9,12 @@ import {MarkerColor} from '../../../journey-maps-client/src/lib/model/marker-col
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
-import {Controls, InitialSettings, Styles} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
+import {
+  Controls,
+  InitialSettings,
+  JourneyMapsGeoJsonOption,
+  Styles,
+} from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
 
 @Component({
   selector: 'app-root',
@@ -47,10 +52,8 @@ export class AppComponent implements OnInit, OnDestroy {
   popup = true;
   styles: Styles = {};
 
-  geoJsonInputs = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
-  journey: GeoJSON.FeatureCollection;
-  transfer: GeoJSON.FeatureCollection;
-  routes: GeoJSON.FeatureCollection[] = [];
+  journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
+  journeyMapsGeoJson: JourneyMapsGeoJsonOption;
 
   zoomLevel: number;
   minZoomLevel: number;
@@ -188,34 +191,32 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   setGeoJsonInput(event: Event): void {
-    this.journey = undefined;
-    this.transfer = undefined;
-    this.routes = undefined;
+    this.journeyMapsGeoJson = {};
 
     let bbox;
     let updateDataFunction: () => void;
     if ((event.target as HTMLOptionElement).value === 'journey') {
-      updateDataFunction = () => this.journey = this._journey;
+      updateDataFunction = () => this.journeyMapsGeoJson = {journey: this._journey};
       bbox = this._journey.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'transfer luzern') {
-      updateDataFunction = () => this.transfer = this._transferLuzern;
+      updateDataFunction = () => this.journeyMapsGeoJson = {transfer: this._transferLuzern};
       bbox = this._transferLuzern.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'transfer zurich') {
-      updateDataFunction = () => this.transfer = this._transferZurichIndoor;
+      updateDataFunction = () => this.journeyMapsGeoJson = {transfer: this._transferZurichIndoor};
       bbox = this._transferZurichIndoor.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'transfer bern') {
-      updateDataFunction = () => this.transfer = this._transferBernIndoor;
+      updateDataFunction = () => this.journeyMapsGeoJson = {transfer: this._transferBernIndoor};
       bbox = this._transferBernIndoor.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'transfer geneve') {
-      updateDataFunction = () => this.transfer = this._transferGeneveIndoor;
+      updateDataFunction = () => this.journeyMapsGeoJson = {transfer: this._transferGeneveIndoor};
       bbox = this._transferGeneveIndoor.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'routes') {
-      this.routes = this._routes;
+      this.journeyMapsGeoJson = {routes: this._routes};
     }
 
     if (bbox) {

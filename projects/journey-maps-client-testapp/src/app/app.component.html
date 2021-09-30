@@ -7,9 +7,7 @@
       language="en"
       apiKey="e500c71b8c83c1cfb2170608582ae9c8"
       [markers]="markers"
-      [journey]="journey"
-      [transfer]="transfer"
-      [routes]="routes"
+      [journeyMapsGeoJson]="journeyMapsGeoJson"
       [initialSettings]="initialSettings"
       [controls]="controls"
       (visibleLevelsChange)="visibleLevels=$event"
@@ -104,12 +102,12 @@
       <li style="list-style: circle;">Allow moving the map with one finger: {{allowOneFingerPan}}</li>
       <li style="list-style: circle;">
         <label for="geo-json-select">
-          Display GeoJSON data for:
+          Display Journey-Maps GeoJSON data for:
           <select id="geo-json-select"
                   style="width: 200px; min-height: 10px; padding: 0 5px; background-position: right; color: black;"
                   (change)="setGeoJsonInput($event)">
             <option value="" (change)="setGeoJsonInput($event)">(none)</option>
-            <option *ngFor="let input of geoJsonInputs" [value]="input">{{input}}</option>
+            <option *ngFor="let input of journeyMapsGeoJsonOptions" [value]="input">{{input}}</option>
           </select>
         </label>
       </li>
