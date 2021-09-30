@@ -11,6 +11,7 @@
     "build-testapp": "npm run _testapp-example && ng build journey-maps-client-testapp --configuration production --progress=false",
     "build-elements": "npm run _build-elements && npm run _copy-elements-package",
     "build-elements-with-stats": "ng build journey-maps-client-elements --configuration production --single-bundle --outputHashing=none --stats-json",
+    "build-apps": "concurrently --kill-others-on-fail npm:build-testapp npm:build-elements",
     "lint": "ng lint",
     "test-headless": "concurrently npm:test-lib npm:test-testapp",
     "test-lib": "ng test journey-maps-client --watch=false --browsers=ChromeHeadless",

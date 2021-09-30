@@ -29,14 +29,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'npm run build-lib'
-        // Hack: Save library built without ivy
-        sh 'cp -R dist/journey-maps-client dist/journey-maps-client-original'
-        sh 'npm run build-testapp'
-        // Hack: This step will modify the built library
-        sh 'npm run build-elements'
-        // Hack: Restore library built without ivy
-        sh 'rm -rf dist/journey-maps-client'
-        sh 'mv dist/journey-maps-client-original dist/journey-maps-client'
+        sh 'npm run build-apps'
       }
     }
 
