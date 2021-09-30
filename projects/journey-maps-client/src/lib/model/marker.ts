@@ -68,7 +68,7 @@ export interface Marker {
   markerUrl?: string;
 
   /**
-   * If true or undefined the module will emit an event in output parameter selectedMarkerId:string when this marker is selected.
+   * If true or undefined the module will emit an event in output parameter selections.selectedMarkerId:string when this marker is selected.
    * Default value is true.
    */
   triggerEvent?: boolean;

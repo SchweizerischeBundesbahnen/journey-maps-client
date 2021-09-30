@@ -13,7 +13,7 @@ import {
   MovementControls,
   InitialSettings,
   JourneyMapsGeoJsonOption,
-  Styles,
+  Styles, Selections,
 } from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
 
 @Component({
@@ -44,9 +44,8 @@ export class AppComponent implements OnInit, OnDestroy {
     allowOneFingerPan: true,
     allowScrollZoom: true,
   };
-  selectedMarkerId: string;
+  selections: Selections = {};
   visibleLevels: number[];
-  selectedLevel: number;
   initialSettings: InitialSettings = {
     boundingBox: [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]],
   };
@@ -184,11 +183,17 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   setSelectedMarkerId(selectedMarkerId: string): void {
-    this.selectedMarkerId = selectedMarkerId;
+    this.selections = {
+      ...this.selections,
+      selectedMarkerId,
+    };
   }
 
   setSelectedLevel(selectedLevel: number): void {
-    this.selectedLevel = selectedLevel;
+    this.selections = {
+      ...this.selections,
+      selectedLevel,
+    };
   }
 
   setGeoJsonInput(event: Event): void {
@@ -227,12 +232,12 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   setPopupInput(event: Event): void {
-    this.selectedMarkerId = undefined;
+    this.setSelectedMarkerId(undefined);
     this.popup = (event.target as HTMLOptionElement).value === 'true';
   }
 
   setStyleModeInput(event: Event): void {
-    this.selectedMarkerId = undefined;
+    this.setSelectedMarkerId(undefined);
     // replace the entire object to fire change detection
     this.styles = {
       ...this.styles,

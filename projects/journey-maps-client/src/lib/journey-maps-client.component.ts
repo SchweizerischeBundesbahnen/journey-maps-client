@@ -32,7 +32,7 @@ import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
-import {MovementControls, InitialSettings, JourneyMapsGeoJsonOption, Styles} from './journey-maps-client.interfaces';
+import {MovementControls, InitialSettings, JourneyMapsGeoJsonOption, Styles, Selections} from './journey-maps-client.interfaces';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -129,15 +129,27 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Input() journeyMapsGeoJson: JourneyMapsGeoJsonOption;
 
+  /**
+   * Inputs that can be used to programmatically select things on the map
+   */
+  @Input()
+  get selections(): Selections {
+    return this._selections;
+  }
+  set selections(selections: Selections) {
+    this._selections = {
+      ...this._selections,
+      ...selections,
+    };
+  }
+  private _selections: Selections = {};
+
+
   /** The list of markers (points) that will be displayed on the map. */
   @Input() markers: Marker[];
-  private _selectedMarker: Marker;
 
   /** Open a popup - instead of the teaser - when selecting a marker. */
   @Input() popup = false;
-
-  /** Which (floor-)level should be shown */
-  @Input() selectedLevel: number;
 
   /**
    * The language used for localized labels.
@@ -162,22 +174,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   /**
-   * Select one of the markers contained in {@link JourneyMapsClientComponent#markers}
-   *
-   * Allowed values are either the ID of a marker to select or <code>undefined</code> to unselect.
-   *
-   * @param value the ID of the marker to select or <code>undefined</code> to unselect the marker
+   * This event is emitted whenever one of the {@link Selections} changes
    */
-  @Input()
-  set selectedMarkerId(value: string | undefined) {
-    if (!!value) {
-      const selectedMarker = this.markers?.find(marker => marker.id === value);
-      this.onMarkerSelected(selectedMarker);
-    } else if (!!this.selectedMarker) {
-      this.onMarkerUnselected();
-    }
-  }
-
+  @Output() selectionsChange = new EventEmitter<Selections>();
   /**
    * This event is emitted whenever the min zoom level of the map has changed.
    */
@@ -196,17 +195,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Output() mapCenterChange = new EventEmitter<LngLatLike>();
   /**
-   * This event is emitted whenever a marker, with property triggerEvent, is selected or unselected.
-   */
-  @Output() selectedMarkerIdChange = new EventEmitter<string>();
-  /**
    * This event is emitted whenever the map is ready.
    */
   @Output() mapReady = new ReplaySubject<MapboxMap>(1);
-  /**
-   * This event is emitted whenever the selected (floor-) level changes
-   */
-  @Output() selectedLevelChange = new EventEmitter<number>();
   /**
    * This event is emitted whenever the list of available (floor-) levels changes
    */
@@ -229,6 +220,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   // map.isStyleLoaded() returns sometimes false when sources are being updated.
   // Therefore we set this variable to true once the style has been loaded.
   private isStyleLoaded = false;
+
+  private _selectedMarker: Marker;
 
   /** @internal */
   constructor(private mapInitService: MapInitService,
@@ -266,9 +259,11 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   public set selectedMarker(value: Marker) {
     if (value && (value.triggerEvent || value.triggerEvent === undefined)) {
-      this.selectedMarkerIdChange.emit(value.id);
+      this.selections = {selectedMarkerId: value.id};
+      this.selectionsChange.emit(this.selections);
     } else {
-      this.selectedMarkerIdChange.emit(undefined);
+      this.selections = {selectedMarkerId: undefined};
+      this.selectionsChange.emit(this.selections);
     }
     if (value && value.markerUrl) {
       open(value.markerUrl, '_self'); // Do we need to make target configurable ?
@@ -384,8 +379,18 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.mapStyleModeChanged.next();
     }
 
-    if (changes.selectedLevel?.currentValue !== undefined) {
-      this.levelSwitchService.switchLevel(this.selectedLevel);
+    if (changes.selections?.currentValue.selectedLevel !== undefined) {
+      this.levelSwitchService.switchLevel(this.selections.selectedLevel);
+    }
+
+    if (changes.selections?.currentValue.selectedMarkerId !== changes.selections?.previousValue.selectedMarkerId) {
+      const newValue = this.selections.selectedMarkerId;
+      if (!!newValue) {
+        const selectedMarker = this.markers?.find(marker => marker.id === newValue);
+        this.onMarkerSelected(selectedMarker);
+      } else if (!!this.selectedMarker) {
+        this.onMarkerUnselected();
+      }
     }
   }
 
@@ -514,7 +519,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       takeUntil(this.destroyed)
     ).subscribe(() => this.mapCenterChange.emit(this.map.getCenter()));
 
-    this.levelSwitchService.selectedLevel$.subscribe(level => this.selectedLevelChange.emit(level));
+    this.levelSwitchService.selectedLevel$.subscribe(level => {
+      this.selections = {selectedLevel: level};
+      this.selectionsChange.emit(this.selections);
+    });
     this.levelSwitchService.visibleLevels$.subscribe(levels => this.visibleLevelsChange.emit(levels));
   }
 

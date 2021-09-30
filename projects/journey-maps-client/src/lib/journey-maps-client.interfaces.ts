@@ -72,3 +72,19 @@ export interface JourneyMapsGeoJsonOption {
    */
   routes?: GeoJSON.FeatureCollection[];
 }
+
+/**
+ * fields that can be used both as @Input and @Output (2-Way-Binding)
+ * When used as @Input, they can be used to select things on the map.
+ * When used as @Output, they inform what has been selected on the map.
+ */
+export interface Selections {
+  /**
+   * Which of the markers contained in {@link JourneyMapsClientComponent#markers} is (to be) selected.
+   *
+   * When used as @Input, allowed values are either the ID of a marker to select or <code>undefined</code> to unselect.
+   */
+  selectedMarkerId?: string | undefined;
+  /** Which (floor-)level is (to be) selected */
+  selectedLevel?: number;
+}
