@@ -257,7 +257,7 @@ export class MapMarkerService {
   private simpleHash(value: string): number {
     return Math.abs(
       // https://stackoverflow.com/a/34842797/349169
-      // tslint:disable-next-line:no-bitwise
+      // eslint-disable-next-line no-bitwise
       value.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0)
     );
   }
