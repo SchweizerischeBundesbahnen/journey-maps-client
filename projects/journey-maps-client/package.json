@@ -11,6 +11,6 @@
     "angular-resize-event": ">=v2"
   },
   "dependencies": {
-    "tslib": ">=v2"
+    "tslib": "^2.0.3"
   }
 }
