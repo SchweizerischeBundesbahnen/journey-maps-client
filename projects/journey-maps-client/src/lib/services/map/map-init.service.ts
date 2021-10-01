@@ -44,11 +44,11 @@ export class MapInitService {
     styleUrl: string,
     scrollZoom: boolean,
     zoomLevel?: number,
-    mapCenter?: maplibregl.LngLatLike,
+    mapCenter?: LngLatLike,
     boundingBox?: LngLatBoundsLike,
     boundingBoxPadding?: number,
     allowOneFingerPan?: boolean,
-  ): Observable<maplibregl.Map> {
+  ): Observable<MaplibreMap> {
     const maplibreMap = new MaplibreMap(
       this.createOptions(mapNativeElement, scrollZoom, zoomLevel, mapCenter, boundingBox, boundingBoxPadding)
     );
@@ -73,7 +73,7 @@ export class MapInitService {
     mapCenter?: LngLatLike,
     boundingBox?: LngLatBoundsLike,
     boundingBoxPadding?: number): MapboxOptions {
-    const options: maplibregl.MapboxOptions = {
+    const options: MapboxOptions = {
       container,
       minZoom: MapInitService.MIN_ZOOM,
       maxZoom: MapInitService.MAX_ZOOM,
@@ -109,7 +109,7 @@ export class MapInitService {
     );
   }
 
-  private addControls(maplibreMap: maplibregl.Map, allowOneFingerPan?: boolean): void {
+  private addControls(maplibreMap: MaplibreMap, allowOneFingerPan?: boolean): void {
     if (!allowOneFingerPan) {
       maplibreMap.addControl(new MultiTouchSupport());
     }

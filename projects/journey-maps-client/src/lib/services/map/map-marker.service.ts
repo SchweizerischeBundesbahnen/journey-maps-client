@@ -216,7 +216,7 @@ export class MapMarkerService {
   }
 
   // visible for testing
-  addMissingImages(map: maplibregl.Map, markers: Marker[], isDarkMode: boolean): void {
+  addMissingImages(map: MaplibreMap, markers: Marker[], isDarkMode: boolean): void {
     const images = new Map<string, string>();
 
     (markers ?? [])

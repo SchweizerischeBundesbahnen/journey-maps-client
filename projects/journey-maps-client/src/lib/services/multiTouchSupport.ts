@@ -1,10 +1,12 @@
+import {Map as MaplibreMap} from 'maplibre-gl';
+
 // https://www.npmjs.com/package/mapbox-gl-multitouch
 // https://github.com/mapbox/mapbox-gl-js/issues/2618
 // https://github.com/Pitbi/mapbox-gl-multitouch
 export class MultiTouchSupport {
 
   private state: any;
-  private map: maplibregl.Map;
+  private map: MaplibreMap;
   private container: any;
   private TOUCH_ZOOM_FACTOR = 0.2; // zoom sensibility
   private TOUCH_ZOOM_THRESHOLD = 0.01; // zoom activation

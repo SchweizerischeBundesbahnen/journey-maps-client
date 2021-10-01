@@ -5,7 +5,7 @@ import {Popup} from 'maplibre-gl';
 
 
 /**
- * MapLeitPoi groups the LeitPoiComponent and the maplibregl.Popup container and helps to clenaup both instances on destroy.
+ * MapLeitPoi groups the LeitPoiComponent and the Popup container and helps to clenaup both instances on destroy.
  */
 export class MapLeitPoi {
 

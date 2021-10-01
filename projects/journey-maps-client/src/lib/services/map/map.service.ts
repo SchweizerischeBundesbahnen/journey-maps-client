@@ -43,7 +43,7 @@ export class MapService {
     return (geometry as Point).coordinates as LngLatLike;
   }
 
-  addMissingImage(map: maplibregl.Map, name: string, icon: string): void {
+  addMissingImage(map: MaplibreMap, name: string, icon: string): void {
     map.loadImage(icon, (error, image) => this.imageLoadedCallback(map, name, error, image));
   }
 
@@ -56,7 +56,7 @@ export class MapService {
     }
   }
 
-  private imageLoadedCallback(map: maplibregl.Map, name: string, error: any, image: any): void {
+  private imageLoadedCallback(map: MaplibreMap, name: string, error: any, image: any): void {
     if (error) {
       console.error(error);
     } else {

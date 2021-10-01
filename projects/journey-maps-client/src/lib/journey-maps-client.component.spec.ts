@@ -10,6 +10,7 @@ import {asyncScheduler, Observable, of, scheduled} from 'rxjs';
 import {JourneyMapsClientModule} from './journey-maps-client.module';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
+import {Map as MaplibreMap} from 'maplibre-gl';
 
 let component: JourneyMapsClientComponent;
 let fixture: ComponentFixture<JourneyMapsClientComponent>;
@@ -128,7 +129,7 @@ const configureTestingModule = () => TestBed.configureTestingModule({
           },
           resize: () => {
           },
-        } as unknown as maplibregl.Map),
+        } as unknown as MaplibreMap),
       }
     },
   ]
