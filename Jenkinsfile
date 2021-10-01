@@ -3,7 +3,7 @@
 def releaseVersion
 
 pipeline {
-  agent { label 'nodejs' }
+  agent { label 'nodejs && ncsi' }
   parameters {
     booleanParam(name: 'RELEASE', defaultValue: false, description: 'Release the current branch?')
   }
