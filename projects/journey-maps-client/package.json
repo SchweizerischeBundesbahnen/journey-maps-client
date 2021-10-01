@@ -2,13 +2,13 @@
   "name": "@schweizerischebundesbahnen/journey-maps-client",
   "version": "0.0.0-PLACEHOLDER",
   "peerDependencies": {
-    "@angular/cdk": ">=v9",
-    "@angular/common": ">=v9",
-    "@angular/core": ">=v9",
-    "@sbb-esta/angular-core": ">=v9",
-    "@sbb-esta/angular-public": ">=v9",
+    "@angular/cdk": ">=9",
+    "@angular/common": ">=9",
+    "@angular/core": ">=9",
+    "@sbb-esta/angular-core": ">=9",
+    "@sbb-esta/angular-public": ">=9",
     "maplibre-gl": ">=1.12",
-    "angular-resize-event": ">=v2"
+    "angular-resize-event": ">=2"
   },
   "dependencies": {
     "tslib": "^2.0.3"
