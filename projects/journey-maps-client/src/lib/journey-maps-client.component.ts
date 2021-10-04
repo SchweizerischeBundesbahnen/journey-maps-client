@@ -379,8 +379,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.mapStyleModeChanged.next();
     }
 
-    if (changes.selections?.currentValue.selectedLevel !== changes.selections?.previousValue.selectedLevel
-      && changes.selections?.currentValue.selectedLevel !== undefined) {
+    if (changes.selections?.currentValue.selectedLevel !== undefined) {
       this.levelSwitchService.switchLevel(this.selections.selectedLevel);
     }
 
