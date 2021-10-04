@@ -4,7 +4,7 @@
 
 ### Changed
 
-* Individual @Input() fields have been grouped into 5 main groups:
+* ROKAS-391: Individual @Input() fields have been grouped into 5 main groups:
   * StyleOptions
     * brightId
     * darkId
