@@ -1,8 +1,8 @@
 <rokas-global-styles></rokas-global-styles>
 
 <div class="container" lang="{{language}}">
-  <rokas-search-bar *ngIf="enableSearchBar"
-                    [markers]="markers"
+  <rokas-search-bar *ngIf="markerOptions.enableSearchBar"
+                    [markers]="markerOptions.markers"
                     (markerSelected)="onMarkerSelected($event)"
   ></rokas-search-bar>
 
@@ -17,21 +17,21 @@
       [selectedMarker]="selectedMarker"
       [template]="markerDetailsTemplate"
       [map]="mapReady | async"
-      [popup]="popup"
+      [popup]="markerOptions.popup"
       (closeClicked)="onMarkerUnselected()"
     >
     </rokas-marker-details>
 
     <div class="map-widgets">
       <rokas-zoom-controls
-        *ngIf="showZoomControls"
+        *ngIf="controlOptions.showZoomControls"
         [map]="mapReady | async"
       ></rokas-zoom-controls>
       <rokas-level-switch
-        *ngIf="showLevelSwitch"
+        *ngIf="controlOptions.showLevelSwitch"
         [map]="mapReady | async"
       ></rokas-level-switch>
     </div>
-    <div class="map" (resized)="onResized($event)" #map></div>
+    <div class="map" (resized)="onResized()" #map></div>
   </div>
 </div>

@@ -1,14 +1,20 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Marker} from '../../../journey-maps-client/src/lib/model/marker';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 import {InfoBlockFactoryService} from '../../../journey-maps-client/src/lib/services/info-block-factory.service';
-import {LngLatBoundsLike, LngLatLike, Map} from 'mapbox-gl';
+import {LngLatLike, Map} from 'mapbox-gl';
 import {LoremIpsum} from 'lorem-ipsum';
 import {AssetReaderService} from './services/asset-reader.service';
 import {MarkerColor} from '../../../journey-maps-client/src/lib/model/marker-color.enum';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
+import {
+  ControlOptions,
+  JourneyMapsRoutingOptions,
+  StyleOptions,
+  ViewportOptions,
+  ZoomLevels,
+} from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
 
 @Component({
   selector: 'app-root',
@@ -32,113 +38,115 @@ export class AppComponent implements OnInit, OnDestroy {
   private _routes: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
 
-  showLevelSwitch = true;
-  showZoomControls = true;
+  controlOptions: ControlOptions = {
+    showLevelSwitch: true,
+    showZoomControls: true,
+    allowOneFingerPan: true,
+    allowScrollZoom: true,
+  };
   selectedMarkerId: string;
   visibleLevels: number[];
   selectedLevel: number;
-  boundingBox: LngLatBoundsLike = [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]];
-  allowOneFingerPan = true;
-  popup = true;
-  styleMode: StyleMode;
+  viewportOptions: ViewportOptions = {
+    boundingBox: [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]],
+  };
+  styleOptions: StyleOptions = {};
 
-  geoJsonInputs = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
-  journey: GeoJSON.FeatureCollection;
-  transfer: GeoJSON.FeatureCollection;
-  routes: GeoJSON.FeatureCollection[] = [];
+  journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
+  journeyMapsRoutingOption: JourneyMapsRoutingOptions;
 
-  zoomLevel: number;
-  minZoomLevel: number;
-  maxZoomLevel: number;
-  zoomLevelChanged = new Subject<number>();
+  zoomLevels: ZoomLevels;
   mapCenter: LngLatLike;
-  mapCenterChanged = new Subject<LngLatLike>();
+  mapCenterChange = new Subject<LngLatLike>();
   map: Map;
 
-  markers: Marker[] = [
-    {
-      id: 'velo',
-      title: 'Basel - Bahnhof SBB',
-      subtitle: 'Rent a Bike - Ihr Mietvelo',
-      position: [7.5897, 47.5476],
-      category: MarkerCategory.BICYCLEPARKING,
-      color: MarkerColor.BLACK,
-      infoBlocks: [
-        this.infoBlockFactoryService.createTextInfoBlock(
-          'Verfügbare Velotypen',
-          'Komfortvelo, Countrybikes, Mountainbikes, E-Bikes City, Tandem, E-Bikes Mountain, Kindervelos, Kindertrailer, Kinderanhänger'
-        ),
-        this.infoBlockFactoryService.createTextInfoBlock(
-          'Rückgabe',
-          'An allen Mietstationen von Rent a Bike.'
-        ),
-        this.infoBlockFactoryService.createAddressInfoBlock(
-          'Kontakt',
-          'Centralbahnstrasse 20',
-          '4051',
-          'Basel',
-          'veloparking@iss.ch',
-          '+41 (0)61 272 09 10',
-        ),
-        this.infoBlockFactoryService.createButtonInfoBlock(
-          'Zur Velostation',
-          'https://www.rentabike.ch/stationen?c=152'
-        )
-      ]
-    },
-    {
-      id: 'home',
-      title: 'Home Office',
-      subtitle: 'My home is my castle',
-      position: [7.296515, 47.069815],
-      category: MarkerCategory.WARNING,
-      color: MarkerColor.RED,
-      infoBlocks: [
-        this.infoBlockFactoryService.createTextInfoBlock(
-          this.loremIpsum.generateWords(3),
-          this.loremIpsum.generateSentences(2),
-          'blueText'
-        ),
-        this.infoBlockFactoryService.createTextInfoBlock(
-          this.loremIpsum.generateWords(3),
-          this.loremIpsum.generateParagraphs(3)
-        )
-      ]
-    },
-    {
-      id: 'biel',
-      title: 'Biel, my town, my rules !',
-      position: [7.2468, 47.1368],
-      category: MarkerCategory.DISRUPTION,
-      color: MarkerColor.RED,
-      markerUrl: 'https://www.biel-bienne.ch/',
-      triggerEvent: false
-    },
-    {
-      id: 'playground',
-      title: 'Playground',
-      subtitle: 'Sun, fun and nothing to do',
-      position: [7.299265, 47.072120],
-      category: MarkerCategory.CUSTOM,
-      icon: 'assets/icons/train.png',
-      iconSelected: 'assets/icons/train_selected.png',
-      infoBlocks: [/* no teaser/overlay will be shown unless markerDetailsTemplate is defined on the component */]
-    },
-    {
-      id: 'work',
-      title: 'Office',
-      subtitle: 'SBB Wylerpark',
-      position: [7.446450, 46.961409],
-      category: MarkerCategory.RAIL,
-      color: MarkerColor.DARKBLUE,
-      infoBlocks: [
-        this.infoBlockFactoryService.createButtonInfoBlock(
-          'Show menu plan',
-          'https://zfv.ch/en/microsites/sbb-restaurant-wylerpark/menu-plan'
-        )
-      ]
-    },
-  ];
+  markerOptions = {
+    popup: true,
+    markers: [
+      {
+        id: 'velo',
+        title: 'Basel - Bahnhof SBB',
+        subtitle: 'Rent a Bike - Ihr Mietvelo',
+        position: [7.5897, 47.5476],
+        category: MarkerCategory.BICYCLEPARKING,
+        color: MarkerColor.BLACK,
+        infoBlocks: [
+          this.infoBlockFactoryService.createTextInfoBlock(
+            'Verfügbare Velotypen',
+            'Komfortvelo, Countrybikes, Mountainbikes, E-Bikes City, Tandem, E-Bikes Mountain, Kindervelos, Kindertrailer, Kinderanhänger'
+          ),
+          this.infoBlockFactoryService.createTextInfoBlock(
+            'Rückgabe',
+            'An allen Mietstationen von Rent a Bike.'
+          ),
+          this.infoBlockFactoryService.createAddressInfoBlock(
+            'Kontakt',
+            'Centralbahnstrasse 20',
+            '4051',
+            'Basel',
+            'veloparking@iss.ch',
+            '+41 (0)61 272 09 10',
+          ),
+          this.infoBlockFactoryService.createButtonInfoBlock(
+            'Zur Velostation',
+            'https://www.rentabike.ch/stationen?c=152'
+          )
+        ]
+      },
+      {
+        id: 'home',
+        title: 'Home Office',
+        subtitle: 'My home is my castle',
+        position: [7.296515, 47.069815],
+        category: MarkerCategory.WARNING,
+        color: MarkerColor.RED,
+        infoBlocks: [
+          this.infoBlockFactoryService.createTextInfoBlock(
+            this.loremIpsum.generateWords(3),
+            this.loremIpsum.generateSentences(2),
+            'blueText'
+          ),
+          this.infoBlockFactoryService.createTextInfoBlock(
+            this.loremIpsum.generateWords(3),
+            this.loremIpsum.generateParagraphs(3)
+          )
+        ]
+      },
+      {
+        id: 'biel',
+        title: 'Biel, my town, my rules !',
+        position: [7.2468, 47.1368],
+        category: MarkerCategory.DISRUPTION,
+        color: MarkerColor.RED,
+        markerUrl: 'https://www.biel-bienne.ch/',
+        triggerEvent: false
+      },
+      {
+        id: 'playground',
+        title: 'Playground',
+        subtitle: 'Sun, fun and nothing to do',
+        position: [7.299265, 47.072120],
+        category: MarkerCategory.CUSTOM,
+        icon: 'assets/icons/train.png',
+        iconSelected: 'assets/icons/train_selected.png',
+        infoBlocks: [/* no teaser/overlay will be shown unless markerDetailsTemplate is defined on the component */]
+      },
+      {
+        id: 'work',
+        title: 'Office',
+        subtitle: 'SBB Wylerpark',
+        position: [7.446450, 46.961409],
+        category: MarkerCategory.RAIL,
+        color: MarkerColor.DARKBLUE,
+        infoBlocks: [
+          this.infoBlockFactoryService.createButtonInfoBlock(
+            'Show menu plan',
+            'https://zfv.ch/en/microsites/sbb-restaurant-wylerpark/menu-plan'
+          )
+        ]
+      },
+    ],
+  };
 
   customButtonStyle = 'background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;';
 
@@ -161,8 +169,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
       .subscribe(json => this._routes = json);
 
-    this.zoomLevelChanged.pipe(takeUntil(this.destroyed)).subscribe(_zoomLevel => this.zoomLevel = _zoomLevel);
-    this.mapCenterChanged.pipe(takeUntil(this.destroyed)).subscribe(_mapCenter => this.mapCenter = _mapCenter);
+    this.mapCenterChange.pipe(takeUntil(this.destroyed)).subscribe(mapCenter => this.mapCenter = mapCenter);
   }
 
   onMapRecieved(map: Map): void {
@@ -183,50 +190,55 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   setGeoJsonInput(event: Event): void {
-    this.journey = undefined;
-    this.transfer = undefined;
-    this.routes = undefined;
+    this.journeyMapsRoutingOption = {};
 
     let bbox;
     let updateDataFunction: () => void;
     if ((event.target as HTMLOptionElement).value === 'journey') {
-      updateDataFunction = () => this.journey = this._journey;
+      updateDataFunction = () => this.journeyMapsRoutingOption = {journey: this._journey};
       bbox = this._journey.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'transfer luzern') {
-      updateDataFunction = () => this.transfer = this._transferLuzern;
+      updateDataFunction = () => this.journeyMapsRoutingOption = {transfer: this._transferLuzern};
       bbox = this._transferLuzern.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'transfer zurich') {
-      updateDataFunction = () => this.transfer = this._transferZurichIndoor;
+      updateDataFunction = () => this.journeyMapsRoutingOption = {transfer: this._transferZurichIndoor};
       bbox = this._transferZurichIndoor.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'transfer bern') {
-      updateDataFunction = () => this.transfer = this._transferBernIndoor;
+      updateDataFunction = () => this.journeyMapsRoutingOption = {transfer: this._transferBernIndoor};
       bbox = this._transferBernIndoor.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'transfer geneve') {
-      updateDataFunction = () => this.transfer = this._transferGeneveIndoor;
+      updateDataFunction = () => this.journeyMapsRoutingOption = {transfer: this._transferGeneveIndoor};
       bbox = this._transferGeneveIndoor.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'routes') {
-      this.routes = this._routes;
+      this.journeyMapsRoutingOption = {routes: this._routes};
     }
 
     if (bbox) {
       this.setBbox(bbox);
-      this.mapCenterChanged.pipe(take(1)).subscribe(() => updateDataFunction());
+      this.mapCenterChange.pipe(take(1)).subscribe(() => updateDataFunction());
     }
   }
 
   setPopupInput(event: Event): void {
     this.selectedMarkerId = undefined;
-    this.popup = (event.target as HTMLOptionElement).value === 'true';
+    this.markerOptions = {
+      ...this.markerOptions,
+      popup: (event.target as HTMLOptionElement).value === 'true',
+    };
   }
 
   setStyleModeInput(event: Event): void {
     this.selectedMarkerId = undefined;
-    this.styleMode = StyleMode[(event.target as HTMLOptionElement).value];
+    // replace the entire object to fire change detection
+    this.styleOptions = {
+      ...this.styleOptions,
+      mode: StyleMode[(event.target as HTMLOptionElement).value],
+    };
   }
 
   zoomIn(): void {
@@ -238,6 +250,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setBbox(bbox: number[]): void {
-    this.boundingBox = [[bbox[0], bbox[1]], [bbox[2], bbox[3]]];
+    this.viewportOptions = {
+      ...this.viewportOptions,
+      boundingBox: [[bbox[0], bbox[1]], [bbox[2], bbox[3]]],
+    };
   }
 }
