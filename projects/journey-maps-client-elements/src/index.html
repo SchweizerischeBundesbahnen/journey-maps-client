@@ -96,22 +96,17 @@
         maxZoomSpan.replaceChild(document.createTextNode(event.detail), maxZoomSpan.firstChild);
       });
 
-      client.addEventListener('selectionsChange', function (event) {
-        const selectedMarkerIdChange = event.detail.selectedMarkerId;
-        const selectedLevelChange = event.detail.selectedLevel;
-
-        if (selectedMarkerIdChange) {
-          const selectedMarkerId = document.getElementById('selected-marker-id');
-          if (selectedMarkerId.firstChild) {
-            selectedMarkerId.replaceChild(document.createTextNode(selectedMarkerIdChange), selectedMarkerId.firstChild);
-          }
+      client.addEventListener('selectedMarkerIdChange', function (event) {
+        const selectedMarkerId = document.getElementById('selected-marker-id');
+        if (selectedMarkerId.firstChild) {
+          selectedMarkerId.replaceChild(document.createTextNode(event.detail), selectedMarkerId.firstChild);
         }
+      });
 
-        if (selectedLevelChange) {
-          const selectedLevel = document.getElementById('selected-level');
-          if (selectedLevel.firstChild) {
-            selectedLevel.replaceChild(document.createTextNode(selectedLevelChange), selectedLevel.firstChild);
-          }
+      client.addEventListener('selectedLevelChange', function (event) {
+        const selectedLevel = document.getElementById('selected-level');
+        if (selectedLevel.firstChild) {
+          selectedLevel.replaceChild(document.createTextNode(event.detail), selectedLevel.firstChild);
         }
       });
 
@@ -123,7 +118,7 @@
           visibleLevels.forEach(level => {
             const levelSwitchButton = document.createElement('button');
             levelSwitchButton.innerHTML = 'Level ' + level;
-            levelSwitchButton.onclick = () => client.selections = {selectedLevel: level};
+            levelSwitchButton.onclick = () => client.selectedLevel = level;
             levelSwitchDiv.appendChild(levelSwitchButton);
           });
           levelSwitch.replaceChild(levelSwitchDiv, levelSwitch.firstChild);

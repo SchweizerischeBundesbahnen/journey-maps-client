@@ -11,12 +11,13 @@
       [initialSettings]="initialSettings"
       [movementControls]="movementControls"
       (visibleLevelsChange)="visibleLevels=$event"
-      [(selections)]="selections"
+      [(selectedLevel)]="selectedLevel"
       (mapCenterChange)="mapCenterChange.next($event)"
       (zoomLevelChange)="zoomLevelChange.next($event)"
       (minZoomLevelChange)="minZoomLevel=$event"
       (maxZoomLevelChange)="maxZoomLevel=$event"
       [markerDetailsTemplate]=""
+      [(selectedMarkerId)]="selectedMarkerId"
       [popup]="popup"
       [styles]="styles"
       (mapReady)="onMapRecieved($event)"
@@ -45,7 +46,7 @@
         >Unselect all markers
         </button>
       </li>
-      <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selections.selectedMarkerId">{{selections.selectedMarkerId}}</span>
+      <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span>
       </li>
       <li style="list-style: circle;">Zoom Level (within range {{minZoomLevel}}..{{maxZoomLevel}}): {{zoomLevel}}</li>
       <li style="list-style: circle;">
@@ -64,7 +65,7 @@
         Level switch: <span *ngIf="!visibleLevels.length">There are no visible levels.</span>
         <ng-container *ngFor="let level of visibleLevels">
           <button
-            [disabled]="level == selections.selectedLevel"
+            [disabled]="level == selectedLevel"
             [style]="customButtonStyle"
             (click)="setSelectedLevel(level)"
           >Level {{level}}
