@@ -29,7 +29,7 @@
     * popup
     * zoomToMarkers
 * ROKAS-391: 3 @Output() fields have been combined into the following group:
-  * zoomLevelsChange
+  * ZoomLevels
     * minZoom
     * maxZoom
     * currentZoom
