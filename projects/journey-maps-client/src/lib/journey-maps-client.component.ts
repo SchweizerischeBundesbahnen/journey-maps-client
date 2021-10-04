@@ -32,7 +32,7 @@ import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
-import {MovementControls, InitialSettings, JourneyMapsGeoJsonOption, StyleOptions} from './journey-maps-client.interfaces';
+import {ControlOptions, ViewportOptions, JourneyMapsRoutingOptions, StyleOptions} from './journey-maps-client.interfaces';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -60,31 +60,30 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
 
-  private defaultStyles: Styles = {
+  private defaultStyleOptions: StyleOptions = {
     brightId: 'base_bright_v2_ki',
     darkId: 'base_dark_v2_ki',
-    url: 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}',
     mode: StyleMode.BRIGHT,
   };
   /**
    * Settings to control the map (bright and dark) styles
    */
   @Input()
-  get styles(): Styles {
-    return this._styles;
+  get styleOptions(): StyleOptions {
+    return this._styleOptions;
   }
-  set styles(styles: Styles) {
-    this._styles = {
-      ...this.defaultStyles,
-      ...styles,
+  set styleOptions(styleOptions: StyleOptions) {
+    this._styleOptions = {
+      ...this.defaultStyleOptions,
+      ...styleOptions,
     };
   }
-  private _styles: Styles = this.defaultStyles;
+  private _styleOptions: StyleOptions = this.defaultStyleOptions;
 
   /** Whether the search bar - to filter markers - should be shown or not. */
   @Input() enableSearchBar = true;
 
-  private defaultMovementControls: MovementControls = {
+  private defaultControlOptions: ControlOptions = {
     showLevelSwitch: false,
     showZoomControls: false,
     /** By default, you get a message-overlay if you try to pan with one finger. */
@@ -95,39 +94,41 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * Settings to control the movement of the map
    */
   @Input()
-  get movementControls(): MovementControls {
-    return this._movementControls;
+  get controlOptions(): ControlOptions {
+    return this._controlOptions;
   }
-  set movementControls(movementControls: MovementControls) {
-    this._movementControls = {
-      ...this.defaultMovementControls,
-      ...movementControls,
+  set controlOptions(controlOptions: ControlOptions) {
+    this._controlOptions = {
+      ...this.defaultControlOptions,
+      ...controlOptions,
     };
   }
-  private _movementControls: MovementControls = this.defaultMovementControls;
+  private _controlOptions: ControlOptions = this.defaultControlOptions;
 
-  private defaultInitialSettings: InitialSettings = {
+  private defaultViewportOptions: ViewportOptions = {
     boundingBoxPadding: 0,
   };
   /**
    * Settings that control what portion of the map is shown initially
    */
   @Input()
-  get initialSettings(): InitialSettings {
-    return this._initialSettings;
+  get viewportOptions(): ViewportOptions {
+    return this._viewportOptions;
   }
-  set initialSettings(initialSettings: InitialSettings) {
-    this._initialSettings = {
-      ...this.defaultInitialSettings,
-      ...initialSettings,
+  set viewportOptions(viewportOptions: ViewportOptions) {
+    this._viewportOptions = {
+      ...this.defaultViewportOptions,
+      ...viewportOptions,
     };
   }
-  private _initialSettings: InitialSettings = this.defaultInitialSettings;
+  private _viewportOptions: ViewportOptions = this.defaultViewportOptions;
 
   /**
    * Input to display GeoJson data on the map.
+   *
+   * **WARNING:** The map currently doesn't support more than one of these fields to be set at a time
    */
-  @Input() journeyMapsGeoJson: JourneyMapsGeoJsonOption;
+  @Input() journeyMapsRoutingOption: JourneyMapsRoutingOptions;
 
   /** The list of markers (points) that will be displayed on the map. */
   @Input() markers: Marker[];
@@ -230,6 +231,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   // Therefore we set this variable to true once the style has been loaded.
   private isStyleLoaded = false;
 
+  /**
+   * Overwrite this value if you want to use a style from a different source.
+   * Actually you should not need this.
+   */
+  private url = 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}';
+
   /** @internal */
   constructor(private mapInitService: MapInitService,
               private mapConfigService: MapConfigService,
@@ -253,7 +260,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
-    if (!this.movementControls.allowOneFingerPan) {
+    if (!this.controlOptions.allowOneFingerPan) {
       this.map.dragPan.disable();
     }
     this.touchEventCollector.next(event);
@@ -312,7 +319,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private updateMarkers(): void {
     this.selectedMarker = this.markers?.find(marker => this.selectedMarker?.id === marker.id);
     this.executeWhenMapStyleLoaded(() => {
-      this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker, this.styles.mode);
+      this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker, this.styleOptions.mode);
       this.cd.detectChanges();
     });
   }
@@ -329,7 +336,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   get getMarkersBounds(): LngLatBounds {
-    return this.initialSettings.zoomToMarkers ? this.computeMarkersBounds(this.markers) : undefined;
+    return this.viewportOptions.zoomToMarkers ? this.computeMarkersBounds(this.markers) : undefined;
   }
 
   ngOnInit(): void {
@@ -347,7 +354,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
 
     // handle journey, transfer, and routes together, otherwise they can overwrite each other's transfer or route data
-    if (changes.journeyMapsGeoJson) {
+    if (changes.journeyMapsRoutingOption) {
       this.executeWhenMapStyleLoaded(() => {
         // remove previous data from map
         this.mapJourneyService.updateJourney(this.map, undefined);
@@ -355,32 +362,32 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         this.mapRoutesService.updateRoutes(this.map, undefined);
         this.mapLeitPoiService.processData(this.map, undefined);
         // only add new data if we have some
-        if (changes.journeyMapsGeoJson?.currentValue?.journey) {
-          this.mapJourneyService.updateJourney(this.map, this.journeyMapsGeoJson.journey);
+        if (changes.journeyMapsRoutingOption?.currentValue?.journey) {
+          this.mapJourneyService.updateJourney(this.map, this.journeyMapsRoutingOption.journey);
         }
-        if (changes.journeyMapsGeoJson?.currentValue?.transfer) {
-          this.mapTransferService.updateTransfer(this.map, this.journeyMapsGeoJson.transfer);
-          this.mapLeitPoiService.processData(this.map, this.journeyMapsGeoJson.transfer);
+        if (changes.journeyMapsRoutingOption?.currentValue?.transfer) {
+          this.mapTransferService.updateTransfer(this.map, this.journeyMapsRoutingOption.transfer);
+          this.mapLeitPoiService.processData(this.map, this.journeyMapsRoutingOption.transfer);
         }
-        if (changes.journeyMapsGeoJson?.currentValue?.routes) {
-          this.mapRoutesService.updateRoutes(this.map, this.journeyMapsGeoJson.routes);
+        if (changes.journeyMapsRoutingOption?.currentValue?.routes) {
+          this.mapRoutesService.updateRoutes(this.map, this.journeyMapsRoutingOption.routes);
         }
       });
     }
 
-    if (Object.keys(this.journeyMapsGeoJson || {}).length > 1) {
-      console.error('journeyMapsGeoJson: Use either transfer or journey or routes. It does not work correctly when more than one of these properties is set.');
+    if (Object.keys(this.journeyMapsRoutingOption || {}).length > 1) {
+      console.error('journeyMapsRoutingOption: Use either transfer or journey or routes. It does not work correctly when more than one of these properties is set.');
     }
 
     if (!this.isStyleLoaded) {
       return;
     }
 
-    if (changes.initialSettings) {
+    if (changes.viewportOptions) {
       this.initialSettingsChanged.next();
     }
 
-    if (changes.styles?.currentValue?.mode !== changes.styles?.previousValue?.mode) {
+    if (changes.styleOptions?.currentValue?.mode !== changes.styleOptions?.previousValue?.mode) {
       this.mapStyleModeChanged.next();
     }
 
@@ -398,12 +405,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.mapElementRef.nativeElement,
       this.i18n.language,
       styleUrl,
-      this.movementControls.allowScrollZoom,
-      this.initialSettings.zoomLevel,
-      this.initialSettings.mapCenter,
-      this.initialSettings.boundingBox ?? this.getMarkersBounds,
-      this.initialSettings.boundingBox ? this.initialSettings.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING,
-      this.movementControls.allowOneFingerPan,
+      this.controlOptions.allowScrollZoom,
+      this.viewportOptions.zoomLevel,
+      this.viewportOptions.mapCenter,
+      this.viewportOptions.boundingBox ?? this.getMarkersBounds,
+      this.viewportOptions.boundingBox ? this.viewportOptions.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING,
+      this.controlOptions.allowOneFingerPan,
     ).subscribe(
       m => {
         this.map = m;
@@ -425,7 +432,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
       const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
 
-      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.movementControls.allowOneFingerPan) {
+      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.controlOptions.allowOneFingerPan) {
         this.touchOverlayStyleClass = 'is_visible';
         this.cd.detectChanges();
       }
@@ -433,13 +440,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private getStyleUrl(): string {
-    return this.styles.url
+    return this.url
       .replace('{styleId}', this.getStyleId())
       .replace('{apiKey}', this.apiKey);
   }
 
   private getStyleId(): string {
-    return this.styles.mode === StyleMode.DARK ? this.styles.darkId : this.styles.brightId;
+    return this.styleOptions.mode === StyleMode.DARK ? this.styleOptions.darkId : this.styleOptions.brightId;
   }
 
   ngOnDestroy(): void {
@@ -489,10 +496,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       debounceTime(200),
       takeUntil(this.destroyed)
     ).subscribe(() => this.mapService.moveMap(this.map,
-      this.initialSettings.mapCenter,
-      this.initialSettings.zoomLevel,
-      this.initialSettings.boundingBox ?? this.getMarkersBounds,
-      this.initialSettings.boundingBox ? this.initialSettings.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING));
+      this.viewportOptions.mapCenter,
+      this.viewportOptions.zoomLevel,
+      this.viewportOptions.boundingBox ?? this.getMarkersBounds,
+      this.viewportOptions.boundingBox ? this.viewportOptions.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING));
 
     this.mapStyleModeChanged.pipe(
       debounceTime(200),
@@ -501,7 +508,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     ).subscribe(style => {
         this.map.setStyle(style, {diff: false});
         this.map.once('styledata',
-          () => this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker, this.styles.mode));
+          () => this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker, this.styleOptions.mode));
       });
 
     this.zoomLevelChangeDebouncer.pipe(

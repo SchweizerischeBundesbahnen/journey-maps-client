@@ -24,11 +24,11 @@
 
     <div class="map-widgets">
       <rokas-zoom-controls
-        *ngIf="movementControls.showZoomControls"
+        *ngIf="controlOptions.showZoomControls"
         [map]="mapReady | async"
       ></rokas-zoom-controls>
       <rokas-level-switch
-        *ngIf="movementControls.showLevelSwitch"
+        *ngIf="controlOptions.showLevelSwitch"
         [map]="mapReady | async"
       ></rokas-level-switch>
     </div>

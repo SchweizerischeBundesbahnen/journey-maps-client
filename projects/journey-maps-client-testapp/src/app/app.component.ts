@@ -10,10 +10,10 @@ import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
-  MovementControls,
-  InitialSettings,
-  JourneyMapsGeoJsonOption,
-  Styles,
+  ControlOptions,
+  ViewportOptions,
+  JourneyMapsRoutingOptions,
+  StyleOptions,
 } from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
 
 @Component({
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private _routes: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
 
-  movementControls: MovementControls = {
+  controlOptions: ControlOptions = {
     showLevelSwitch: true,
     showZoomControls: true,
     allowOneFingerPan: true,
@@ -47,14 +47,14 @@ export class AppComponent implements OnInit, OnDestroy {
   selectedMarkerId: string;
   visibleLevels: number[];
   selectedLevel: number;
-  initialSettings: InitialSettings = {
+  viewportOptions: ViewportOptions = {
     boundingBox: [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]],
   };
   popup = true;
-  styles: Styles = {};
+  styleOptions: StyleOptions = {};
 
   journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
-  journeyMapsGeoJson: JourneyMapsGeoJsonOption;
+  journeyMapsRoutingOption: JourneyMapsRoutingOptions;
 
   zoomLevel: number;
   minZoomLevel: number;
@@ -192,32 +192,32 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   setGeoJsonInput(event: Event): void {
-    this.journeyMapsGeoJson = {};
+    this.journeyMapsRoutingOption = {};
 
     let bbox;
     let updateDataFunction: () => void;
     if ((event.target as HTMLOptionElement).value === 'journey') {
-      updateDataFunction = () => this.journeyMapsGeoJson = {journey: this._journey};
+      updateDataFunction = () => this.journeyMapsRoutingOption = {journey: this._journey};
       bbox = this._journey.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'transfer luzern') {
-      updateDataFunction = () => this.journeyMapsGeoJson = {transfer: this._transferLuzern};
+      updateDataFunction = () => this.journeyMapsRoutingOption = {transfer: this._transferLuzern};
       bbox = this._transferLuzern.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'transfer zurich') {
-      updateDataFunction = () => this.journeyMapsGeoJson = {transfer: this._transferZurichIndoor};
+      updateDataFunction = () => this.journeyMapsRoutingOption = {transfer: this._transferZurichIndoor};
       bbox = this._transferZurichIndoor.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'transfer bern') {
-      updateDataFunction = () => this.journeyMapsGeoJson = {transfer: this._transferBernIndoor};
+      updateDataFunction = () => this.journeyMapsRoutingOption = {transfer: this._transferBernIndoor};
       bbox = this._transferBernIndoor.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'transfer geneve') {
-      updateDataFunction = () => this.journeyMapsGeoJson = {transfer: this._transferGeneveIndoor};
+      updateDataFunction = () => this.journeyMapsRoutingOption = {transfer: this._transferGeneveIndoor};
       bbox = this._transferGeneveIndoor.bbox;
     }
     if ((event.target as HTMLOptionElement).value === 'routes') {
-      this.journeyMapsGeoJson = {routes: this._routes};
+      this.journeyMapsRoutingOption = {routes: this._routes};
     }
 
     if (bbox) {
@@ -234,8 +234,8 @@ export class AppComponent implements OnInit, OnDestroy {
   setStyleModeInput(event: Event): void {
     this.selectedMarkerId = undefined;
     // replace the entire object to fire change detection
-    this.styles = {
-      ...this.styles,
+    this.styleOptions = {
+      ...this.styleOptions,
       mode: StyleMode[(event.target as HTMLOptionElement).value],
     };
   }
@@ -249,8 +249,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setBbox(bbox: number[]): void {
-    this.initialSettings = {
-      ...this.initialSettings,
+    this.viewportOptions = {
+      ...this.viewportOptions,
       boundingBox: [[bbox[0], bbox[1]], [bbox[2], bbox[3]]],
     };
   }

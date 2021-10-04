@@ -1,21 +1,16 @@
 import {StyleMode} from './model/style-mode.enum';
 import {LngLatBoundsLike, LngLatLike} from 'mapbox-gl';
 
-export interface Styles {
+export interface StyleOptions {
   /** Overwrite this value if you want to use a custom style id. */
   brightId?: string;
   /** Overwrite this value if you want to use a custom style id for the dark mode. */
   darkId?: string;
-  /**
-   * Overwrite this value if you want to use a style from a different source.
-   * Actually you should not need this.
-   */
-  url?: string;
   /** Select the style mode between BRIGHT and DARK. */
   mode?: StyleMode;
 }
 
-export interface MovementControls {
+export interface ControlOptions {
   /** Whether the map should allow panning with one finger or not
    * If set to false, the users get a message-overlay if they try to pan with one finger.
    */
@@ -28,7 +23,7 @@ export interface MovementControls {
   showLevelSwitch?: boolean;
 }
 
-export interface InitialSettings {
+export interface ViewportOptions {
   /**
    * The initial center of the map. You should pass an array with two numbers.
    * The first one is the longitude and the second one the latitude.
@@ -47,7 +42,7 @@ export interface InitialSettings {
 /**
  * **WARNING:** The map currently doesn't support more than one of these fields to be set at a time
  */
-export interface JourneyMapsGeoJsonOption {
+export interface JourneyMapsRoutingOptions {
   /**
    * GeoJSON as returned by the <code>/journey</code> operation of Journey Maps.
    * All routes and transfers will be displayed on the map.

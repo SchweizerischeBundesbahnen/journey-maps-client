@@ -7,9 +7,9 @@
       language="en"
       apiKey="e500c71b8c83c1cfb2170608582ae9c8"
       [markers]="markers"
-      [journeyMapsGeoJson]="journeyMapsGeoJson"
-      [initialSettings]="initialSettings"
-      [movementControls]="movementControls"
+      [journeyMapsRoutingOption]="journeyMapsRoutingOption"
+      [viewportOptions]="viewportOptions"
+      [controlOptions]="controlOptions"
       (visibleLevelsChange)="visibleLevels=$event"
       [(selectedLevel)]="selectedLevel"
       (mapCenterChange)="mapCenterChange.next($event)"
@@ -19,7 +19,7 @@
       [markerDetailsTemplate]=""
       [(selectedMarkerId)]="selectedMarkerId"
       [popup]="popup"
-      [styles]="styles"
+      [styleOptions]="styleOptions"
       (mapReady)="onMapRecieved($event)"
       #client
     >
@@ -96,7 +96,7 @@
         </button>
       </li>
       <li style="list-style: circle;">Map loaded: {{map?.loaded()}}</li>
-      <li style="list-style: circle;">Allow moving the map with one finger: {{movementControls.allowOneFingerPan}}</li>
+      <li style="list-style: circle;">Allow moving the map with one finger: {{controlOptions.allowOneFingerPan}}</li>
       <li style="list-style: circle;">
         <label for="geo-json-select">
           Display Journey-Maps GeoJSON data for:
