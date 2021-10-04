@@ -180,7 +180,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Input() markerDetailsTemplate?: TemplateRef<any>;
 
-  /***************************************** 2 WAY-BINDING *****************************************/
+  /***************************************** 2 WAY-BINDING (INPUTS) *****************************************/
 
   /**
    * Select one of the markers contained in {@link JourneyMapsClientComponent#markers}
@@ -202,7 +202,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Which (floor-)level should be shown */
   @Input() selectedLevel: number;
 
-  /***************************************** OUTPUTS *****************************************/
+  /***************************************** 2 WAY-BINDING (OUTPUTS) *****************************************/
 
   /**
    * This event is emitted whenever a marker, with property triggerEvent, is selected or unselected.
@@ -212,6 +212,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * This event is emitted whenever the selected (floor-) level changes
    */
   @Output() selectedLevelChange = new EventEmitter<number>();
+
+  /***************************************** OTHER OUTPUTS *****************************************/
+
   /**
    * This event is emitted whenever the list of available (floor-) levels changes
    */
