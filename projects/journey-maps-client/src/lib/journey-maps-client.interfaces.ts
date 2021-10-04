@@ -1,5 +1,6 @@
 import {StyleMode} from './model/style-mode.enum';
 import {LngLatBoundsLike, LngLatLike} from 'mapbox-gl';
+import {Marker} from './model/marker';
 
 export interface StyleOptions {
   /** Overwrite this value if you want to use a custom style id. */
@@ -17,10 +18,10 @@ export interface ControlOptions {
   allowOneFingerPan?: boolean;
   /** Whether the map can be zoomed by scrolling */
   allowScrollZoom?: boolean;
-  /** Whether the map should show the level switch control or not. */
-  showZoomControls?: boolean;
   /** Whether the map should show the zoom level control or not. */
   showLevelSwitch?: boolean;
+  /** Whether the map should show the level switch control or not. */
+  showZoomControls?: boolean;
 }
 
 export interface ViewportOptions {
@@ -35,8 +36,6 @@ export interface ViewportOptions {
   boundingBox?: LngLatBoundsLike;
   /** The amount of padding in pixels to add to the given boundingBox. */
   boundingBoxPadding?: number;
-  /** Wrap all markers in view if true. */
-  zoomToMarkers?: boolean;
 }
 
 /**
@@ -66,4 +65,15 @@ export interface JourneyMapsRoutingOptions {
    * Note: journey, transfer and routes cannot be displayed at the same time
    */
   routes?: GeoJSON.FeatureCollection[];
+}
+
+export interface MarkerOptions {
+  /** Whether the search bar - to filter markers - should be shown or not. */
+  enableSearchBar?: boolean;
+  /** The list of markers (points) that will be displayed on the map. */
+  markers?: Marker[];
+  /** Open a popup - instead of the teaser - when selecting a marker. */
+  popup?: boolean;
+  /** Wrap all markers in view if true. */
+  zoomToMarkers?: boolean;
 }

@@ -35,42 +35,44 @@
         allowOneFingerPan: false,
         allowScrollZoom: false,
       };
-      client.markers = [
-        {
-          id: 'home',
-          title: 'Home Office',
-          subtitle: 'My home is my castle',
-          position: [7.296515, 47.069815],
-          category: 'INFO',
-          infoBlocks: [
-            {
-              type: 'TEXT',
-              title: 'Lorem Ipsum',
-              content: 'Lorem ipsum dolor sit amet, consectetur adipisici elit'
-            },
-            {
-              type: 'BUTTON',
-              title: 'Bavaria Ipsum',
-              url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-            },
-          ]
-        },
-        {
-          id: 'work',
-          title: 'Office',
-          subtitle: 'SBB Wylerpark',
-          position: [7.446450, 46.961409],
-          category: 'MISSED-CONNECTION',
-          infoBlocks: [
-            {
-              type: 'BUTTON',
-              title: 'Show menu plan',
-              url: 'https://zfv.ch/en/microsites/sbb-restaurant-wylerpark/menu-plan'
-            },
-          ]
-        },
-      ];
-      client.popup = true;
+      client.markerOptions = {
+        popup: true,
+        markers: [
+          {
+            id: 'home',
+            title: 'Home Office',
+            subtitle: 'My home is my castle',
+            position: [7.296515, 47.069815],
+            category: 'INFO',
+            infoBlocks: [
+              {
+                type: 'TEXT',
+                title: 'Lorem Ipsum',
+                content: 'Lorem ipsum dolor sit amet, consectetur adipisici elit'
+              },
+              {
+                type: 'BUTTON',
+                title: 'Bavaria Ipsum',
+                url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+              },
+            ]
+          },
+          {
+            id: 'work',
+            title: 'Office',
+            subtitle: 'SBB Wylerpark',
+            position: [7.446450, 46.961409],
+            category: 'MISSED-CONNECTION',
+            infoBlocks: [
+              {
+                type: 'BUTTON',
+                title: 'Show menu plan',
+                url: 'https://zfv.ch/en/microsites/sbb-restaurant-wylerpark/menu-plan'
+              },
+            ]
+          },
+        ],
+      };
 
       document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('container').appendChild(client);

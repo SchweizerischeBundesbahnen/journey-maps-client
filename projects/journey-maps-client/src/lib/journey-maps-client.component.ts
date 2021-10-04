@@ -32,7 +32,7 @@ import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
-import {ControlOptions, ViewportOptions, JourneyMapsRoutingOptions, StyleOptions} from './journey-maps-client.interfaces';
+import {ControlOptions, ViewportOptions, JourneyMapsRoutingOptions, StyleOptions, MarkerOptions} from './journey-maps-client.interfaces';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -49,96 +49,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private map: MapboxMap;
   @ViewChild('map') private mapElementRef: ElementRef;
 
-  /**
-   * Custom <code>ng-template</code> for the marker details. (Popup or Teaser)
-   * See examples for details.
-   *
-   * <b>NOTE:</b> This does not work - at the moment - when using the Web Component version of the library.
-   */
-  @Input() markerDetailsTemplate?: TemplateRef<any>;
-
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
 
-  private defaultStyleOptions: StyleOptions = {
-    brightId: 'base_bright_v2_ki',
-    darkId: 'base_dark_v2_ki',
-    mode: StyleMode.BRIGHT,
-  };
-  /**
-   * Settings to control the map (bright and dark) styles
-   */
-  @Input()
-  get styleOptions(): StyleOptions {
-    return this._styleOptions;
-  }
-  set styleOptions(styleOptions: StyleOptions) {
-    this._styleOptions = {
-      ...this.defaultStyleOptions,
-      ...styleOptions,
-    };
-  }
-  private _styleOptions: StyleOptions = this.defaultStyleOptions;
-
-  /** Whether the search bar - to filter markers - should be shown or not. */
-  @Input() enableSearchBar = true;
-
-  private defaultControlOptions: ControlOptions = {
-    showLevelSwitch: false,
-    showZoomControls: false,
-    /** By default, you get a message-overlay if you try to pan with one finger. */
-    allowOneFingerPan: false,
-    allowScrollZoom: false,
-  };
-  /**
-   * Settings to control the movement of the map
-   */
-  @Input()
-  get controlOptions(): ControlOptions {
-    return this._controlOptions;
-  }
-  set controlOptions(controlOptions: ControlOptions) {
-    this._controlOptions = {
-      ...this.defaultControlOptions,
-      ...controlOptions,
-    };
-  }
-  private _controlOptions: ControlOptions = this.defaultControlOptions;
-
-  private defaultViewportOptions: ViewportOptions = {
-    boundingBoxPadding: 0,
-  };
-  /**
-   * Settings that control what portion of the map is shown initially
-   */
-  @Input()
-  get viewportOptions(): ViewportOptions {
-    return this._viewportOptions;
-  }
-  set viewportOptions(viewportOptions: ViewportOptions) {
-    this._viewportOptions = {
-      ...this.defaultViewportOptions,
-      ...viewportOptions,
-    };
-  }
-  private _viewportOptions: ViewportOptions = this.defaultViewportOptions;
-
-  /**
-   * Input to display GeoJson data on the map.
-   *
-   * **WARNING:** The map currently doesn't support more than one of these fields to be set at a time
-   */
-  @Input() journeyMapsRoutingOption: JourneyMapsRoutingOptions;
-
-  /** The list of markers (points) that will be displayed on the map. */
-  @Input() markers: Marker[];
-  private _selectedMarker: Marker;
-
-  /** Open a popup - instead of the teaser - when selecting a marker. */
-  @Input() popup = false;
-
-  /** Which (floor-)level should be shown */
-  @Input() selectedLevel: number;
+  /***************************************** LANGUAGE *****************************************/
 
   /**
    * The language used for localized labels.
@@ -162,6 +76,112 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
+  /***************************************** STYLE OPTIONS *****************************************/
+
+  private defaultStyleOptions: StyleOptions = {
+    brightId: 'base_bright_v2_ki',
+    darkId: 'base_dark_v2_ki',
+    mode: StyleMode.BRIGHT,
+  };
+  /**
+   * Settings to control the map (bright and dark) styles
+   */
+  @Input()
+  get styleOptions(): StyleOptions {
+    return this._styleOptions;
+  }
+  set styleOptions(styleOptions: StyleOptions) {
+    this._styleOptions = {
+      ...this.defaultStyleOptions,
+      ...styleOptions,
+    };
+  }
+  private _styleOptions: StyleOptions = this.defaultStyleOptions;
+
+  /***************************************** CONTROL OPTIONS *****************************************/
+
+  private defaultControlOptions: ControlOptions = {
+    showLevelSwitch: false,
+    showZoomControls: false,
+    /** By default, you get a message-overlay if you try to pan with one finger. */
+    allowOneFingerPan: false,
+    allowScrollZoom: false,
+  };
+  /**
+   * Settings to control the movement of the map
+   */
+  @Input()
+  get controlOptions(): ControlOptions {
+    return this._controlOptions;
+  }
+  set controlOptions(controlOptions: ControlOptions) {
+    this._controlOptions = {
+      ...this.defaultControlOptions,
+      ...controlOptions,
+    };
+  }
+  private _controlOptions: ControlOptions = this.defaultControlOptions;
+
+  /***************************************** VIEWPORT OPTIONS *****************************************/
+
+  private defaultViewportOptions: ViewportOptions = {
+    boundingBoxPadding: 0,
+  };
+  /**
+   * Settings that control what portion of the map is shown initially
+   */
+  @Input()
+  get viewportOptions(): ViewportOptions {
+    return this._viewportOptions;
+  }
+  set viewportOptions(viewportOptions: ViewportOptions) {
+    this._viewportOptions = {
+      ...this.defaultViewportOptions,
+      ...viewportOptions,
+    };
+  }
+  private _viewportOptions: ViewportOptions = this.defaultViewportOptions;
+
+  /***************************************** JOURNEY-MAPS ROUTING OPTIONS *****************************************/
+
+  /**
+   * Input to display JourneyMaps GeoJson data on the map.
+   *
+   * **WARNING:** The map currently doesn't support more than one of these fields to be set at a time
+   */
+  @Input() journeyMapsRoutingOption: JourneyMapsRoutingOptions;
+
+  /***************************************** MARKER OPTIONS *****************************************/
+
+  private defaultMarkerOptions: MarkerOptions = {
+    enableSearchBar: true,
+    popup: false,
+  };
+  /**
+   * Settings to control interacting with markers on the map
+   */
+  @Input()
+  get markerOptions(): MarkerOptions {
+    return this._markerOptions;
+  }
+  set markerOptions(markerOptions: MarkerOptions) {
+    this._markerOptions = {
+      ...this.defaultMarkerOptions,
+      ...markerOptions,
+    };
+  }
+  private _markerOptions: MarkerOptions = this.defaultMarkerOptions;
+
+  /**
+   * Custom <code>ng-template</code> for the marker details. (Popup or Teaser)
+   * See examples for details.
+   *
+   * <b>NOTE:</b> This does not work - at the moment - when using the Web Component version of the library.
+   */
+  @Input() markerDetailsTemplate?: TemplateRef<any>;
+
+  /***************************************** 2 WAY-BINDING *****************************************/
+
   /**
    * Select one of the markers contained in {@link JourneyMapsClientComponent#markers}
    *
@@ -172,13 +192,30 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Input()
   set selectedMarkerId(value: string | undefined) {
     if (!!value) {
-      const selectedMarker = this.markers?.find(marker => marker.id === value);
+      const selectedMarker = this.markerOptions.markers?.find(marker => marker.id === value);
       this.onMarkerSelected(selectedMarker);
     } else if (!!this.selectedMarker) {
       this.onMarkerUnselected();
     }
   }
 
+  /** Which (floor-)level should be shown */
+  @Input() selectedLevel: number;
+
+  /***************************************** OUTPUTS *****************************************/
+
+  /**
+   * This event is emitted whenever a marker, with property triggerEvent, is selected or unselected.
+   */
+  @Output() selectedMarkerIdChange = new EventEmitter<string>();
+  /**
+   * This event is emitted whenever the selected (floor-) level changes
+   */
+  @Output() selectedLevelChange = new EventEmitter<number>();
+  /**
+   * This event is emitted whenever the list of available (floor-) levels changes
+   */
+  @Output() visibleLevelsChange = new EventEmitter<number[]>();
   /**
    * This event is emitted whenever the min zoom level of the map has changed.
    */
@@ -197,21 +234,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Output() mapCenterChange = new EventEmitter<LngLatLike>();
   /**
-   * This event is emitted whenever a marker, with property triggerEvent, is selected or unselected.
-   */
-  @Output() selectedMarkerIdChange = new EventEmitter<string>();
-  /**
    * This event is emitted whenever the map is ready.
    */
   @Output() mapReady = new ReplaySubject<MapboxMap>(1);
-  /**
-   * This event is emitted whenever the selected (floor-) level changes
-   */
-  @Output() selectedLevelChange = new EventEmitter<number>();
-  /**
-   * This event is emitted whenever the list of available (floor-) levels changes
-   */
-  @Output() visibleLevelsChange = new EventEmitter<number[]>();
 
   private mapCenterChangeDebouncer = new Subject<void>();
   private windowResized = new Subject<void>();
@@ -236,6 +261,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * Actually you should not need this.
    */
   private url = 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}';
+
+  private _selectedMarker: Marker;
 
   /** @internal */
   constructor(private mapInitService: MapInitService,
@@ -317,9 +344,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private updateMarkers(): void {
-    this.selectedMarker = this.markers?.find(marker => this.selectedMarker?.id === marker.id);
+    this.selectedMarker = this.markerOptions.markers?.find(marker => this.selectedMarker?.id === marker.id);
     this.executeWhenMapStyleLoaded(() => {
-      this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker, this.styleOptions.mode);
+      this.mapMarkerService.updateMarkers(this.map, this.markerOptions.markers, this.selectedMarker, this.styleOptions.mode);
       this.cd.detectChanges();
     });
   }
@@ -336,7 +363,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   get getMarkersBounds(): LngLatBounds {
-    return this.viewportOptions.zoomToMarkers ? this.computeMarkersBounds(this.markers) : undefined;
+    return this.markerOptions.zoomToMarkers ? this.computeMarkersBounds(this.markerOptions.markers) : undefined;
   }
 
   ngOnInit(): void {
@@ -346,10 +373,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   ngOnChanges(changes: SimpleChanges): void {
     this.mapConfigService.updateConfigs(
-      this.popup,
+      this.markerOptions.popup,
     );
 
-    if (changes.markers) {
+    if (changes.markerOptions?.currentValue.markers !== changes.markerOptions?.previousValue?.markers) {
       this.updateMarkers();
     }
 
@@ -387,7 +414,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.initialSettingsChanged.next();
     }
 
-    if (changes.styleOptions?.currentValue?.mode !== changes.styleOptions?.previousValue?.mode) {
+    if (changes.styleOptions?.currentValue.mode !== changes.styleOptions?.previousValue?.mode) {
       this.mapStyleModeChanged.next();
     }
 
@@ -487,7 +514,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         this.mapMarkerService.onClusterClicked(this.map, target);
       } else {
         const selectedMarkerId = this.mapMarkerService.onMarkerClicked(this.map, target, this.selectedMarker?.id);
-        this.selectedMarker = this.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
+        this.selectedMarker = this.markerOptions.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
         this.cd.detectChanges();
       }
     });
@@ -508,7 +535,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     ).subscribe(style => {
         this.map.setStyle(style, {diff: false});
         this.map.once('styledata',
-          () => this.mapMarkerService.updateMarkers(this.map, this.markers, this.selectedMarker, this.styleOptions.mode));
+          () => this.mapMarkerService.updateMarkers(this.map, this.markerOptions.markers, this.selectedMarker, this.styleOptions.mode));
       });
 
     this.zoomLevelChangeDebouncer.pipe(

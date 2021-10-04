@@ -1,8 +1,8 @@
 <rokas-global-styles></rokas-global-styles>
 
 <div class="container" lang="{{language}}">
-  <rokas-search-bar *ngIf="enableSearchBar"
-                    [markers]="markers"
+  <rokas-search-bar *ngIf="markerOptions.enableSearchBar"
+                    [markers]="markerOptions.markers"
                     (markerSelected)="onMarkerSelected($event)"
   ></rokas-search-bar>
 
@@ -17,7 +17,7 @@
       [selectedMarker]="selectedMarker"
       [template]="markerDetailsTemplate"
       [map]="mapReady | async"
-      [popup]="popup"
+      [popup]="markerOptions.popup"
       (closeClicked)="onMarkerUnselected()"
     >
     </rokas-marker-details>
