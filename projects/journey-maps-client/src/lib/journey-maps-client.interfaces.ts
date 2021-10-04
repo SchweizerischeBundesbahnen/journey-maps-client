@@ -79,16 +79,10 @@ export interface MarkerOptions {
 }
 
 export interface ZoomLevels {
-  /**
-   * The minimal zoom level of the map.
-   */
+  /** The minimal zoom level of the map. */
   minZoom: number;
-  /**
-   * The maximal zoom level of the map.
-   */
+  /** The maximal zoom level of the map. */
   maxZoom: number;
-  /**
-   * The current zoom level of the map.
-   */
+  /** The current zoom level of the map. */
   currentZoom: number;
 }
