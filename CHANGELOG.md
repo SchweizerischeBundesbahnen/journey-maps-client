@@ -28,6 +28,12 @@
     * markers
     * popup
     * zoomToMarkers
+* ROKAS-391: 3 @Output() fields have been combined into the following group:
+  * zoomLevelsChange
+    * minZoom
+    * maxZoom
+    * currentZoom
+
 
 ## [1.11.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.10.0&sourceBranch=refs%2Ftags%2F1.11.0&targetRepoId=46287) - 2021-09-22
 

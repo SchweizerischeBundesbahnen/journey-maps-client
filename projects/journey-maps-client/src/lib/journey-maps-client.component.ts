@@ -32,7 +32,7 @@ import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
-import {ControlOptions, ViewportOptions, JourneyMapsRoutingOptions, StyleOptions, MarkerOptions} from './journey-maps-client.interfaces';
+import {ControlOptions, ViewportOptions, JourneyMapsRoutingOptions, StyleOptions, MarkerOptions, ZoomLevels} from './journey-maps-client.interfaces';
 
 /**
  * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
@@ -220,18 +220,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Output() visibleLevelsChange = new EventEmitter<number[]>();
   /**
-   * This event is emitted whenever the min zoom level of the map has changed.
+   * This event is emitted whenever one of the {@link ZoomLevels} of the map has changed.
    */
-  @Output() minZoomLevelChange = new EventEmitter<number>();
-  /**
-   * This event is emitted whenever the max zoom level of the map has changed.
-   */
-  @Output() maxZoomLevelChange = new EventEmitter<number>();
-  /**
-   * This event is emitted whenever the zoom level of the map has changed.
-   */
-  @Output() zoomLevelChange = new EventEmitter<number>();
-  private zoomLevelChangeDebouncer = new Subject<void>();
+  @Output() zoomLevelsChange = new EventEmitter<ZoomLevels>();
   /**
    * This event is emitted whenever the center of the map has changed. (Whenever the map has been moved)
    */
@@ -241,6 +232,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Output() mapReady = new ReplaySubject<MapboxMap>(1);
 
+  private currentZoomLevelDebouncer = new Subject<void>();
   private mapCenterChangeDebouncer = new Subject<void>();
   private windowResized = new Subject<void>();
   private destroyed = new Subject<void>();
@@ -541,10 +533,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
           () => this.mapMarkerService.updateMarkers(this.map, this.markerOptions.markers, this.selectedMarker, this.styleOptions.mode));
       });
 
-    this.zoomLevelChangeDebouncer.pipe(
+    this.currentZoomLevelDebouncer.pipe(
       debounceTime(200),
       takeUntil(this.destroyed)
-    ).subscribe(() => this.zoomLevelChange.emit(this.map.getZoom()));
+    ).subscribe(() => this.zoomLevelsChange.emit(this.getZooomLevels()));
 
     this.mapCenterChangeDebouncer.pipe(
       debounceTime(200),
@@ -582,13 +574,11 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.map.on('mouseleave', layer, () => this.cursorChanged.next(false));
       this.map.on('click', layer, event => this.mapClicked.next(event));
     }
-    this.map.on('zoomend', () => this.zoomLevelChangeDebouncer.next());
+    this.map.on('zoomend', () => this.currentZoomLevelDebouncer.next());
     this.map.on('moveend', () => this.mapCenterChangeDebouncer.next());
     // Emit initial values
-    this.zoomLevelChangeDebouncer.next();
+    this.currentZoomLevelDebouncer.next();
     this.mapCenterChangeDebouncer.next();
-    this.minZoomLevelChange.emit(MapInitService.MIN_ZOOM);
-    this.maxZoomLevelChange.emit(MapInitService.MAX_ZOOM);
 
     this.isStyleLoaded = true;
     this.styleLoaded.next();
@@ -601,6 +591,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.selectedMarker = undefined;
     this.mapMarkerService.unselectFeature(this.map);
     this.cd.detectChanges();
+  }
+
+  private getZooomLevels(): ZoomLevels {
+    return {
+      minZoom: MapInitService.MIN_ZOOM,
+      maxZoom: MapInitService.MAX_ZOOM,
+      currentZoom: this.map.getZoom(),
+    };
   }
 
   private validateInputParameter(): void {

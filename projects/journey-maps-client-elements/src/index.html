@@ -83,19 +83,13 @@
         document.getElementById('selected-level').appendChild(document.createTextNode(undefined));
       });
 
-      client.addEventListener('zoomLevelChange', function (event) {
-        const zoomLevelSpan = document.getElementById('zoom-level');
-        zoomLevelSpan.replaceChild(document.createTextNode(event.detail), zoomLevelSpan.firstChild);
-      });
-
-      client.addEventListener('minZoomLevelChange', function (event) {
+      client.addEventListener('zoomLevelsChange', function (event) {
         const minZoomSpan = document.getElementById('min-zoom');
-        minZoomSpan.replaceChild(document.createTextNode(event.detail), minZoomSpan.firstChild);
-      });
-
-      client.addEventListener('maxZoomLevelChange', function (event) {
+        minZoomSpan.replaceChild(document.createTextNode(event.detail.minZoom), minZoomSpan.firstChild);
         const maxZoomSpan = document.getElementById('max-zoom');
-        maxZoomSpan.replaceChild(document.createTextNode(event.detail), maxZoomSpan.firstChild);
+        maxZoomSpan.replaceChild(document.createTextNode(event.detail.maxZoom), maxZoomSpan.firstChild);
+        const zoomLevelSpan = document.getElementById('zoom-level');
+        zoomLevelSpan.replaceChild(document.createTextNode(event.detail.currentZoom), zoomLevelSpan.firstChild);
       });
 
       client.addEventListener('selectedMarkerIdChange', function (event) {

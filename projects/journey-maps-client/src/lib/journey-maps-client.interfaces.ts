@@ -77,3 +77,18 @@ export interface MarkerOptions {
   /** Wrap all markers in view if true. */
   zoomToMarkers?: boolean;
 }
+
+export interface ZoomLevels {
+  /**
+   * The minimal zoom level of the map.
+   */
+  minZoom: number;
+  /**
+   * The maximal zoom level of the map.
+   */
+  maxZoom: number;
+  /**
+   * The current zoom level of the map.
+   */
+  currentZoom: number;
+}

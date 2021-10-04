@@ -13,6 +13,7 @@ import {
   JourneyMapsRoutingOptions,
   StyleOptions,
   ViewportOptions,
+  ZoomLevels,
 } from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
 
 @Component({
@@ -54,10 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
   journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
   journeyMapsRoutingOption: JourneyMapsRoutingOptions;
 
-  zoomLevel: number;
-  minZoomLevel: number;
-  maxZoomLevel: number;
-  zoomLevelChange = new Subject<number>();
+  zoomLevels: ZoomLevels;
   mapCenter: LngLatLike;
   mapCenterChange = new Subject<LngLatLike>();
   map: Map;
@@ -171,8 +169,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
       .subscribe(json => this._routes = json);
 
-    this.zoomLevelChange.pipe(takeUntil(this.destroyed)).subscribe(_zoomLevel => this.zoomLevel = _zoomLevel);
-    this.mapCenterChange.pipe(takeUntil(this.destroyed)).subscribe(_mapCenter => this.mapCenter = _mapCenter);
+    this.mapCenterChange.pipe(takeUntil(this.destroyed)).subscribe(mapCenter => this.mapCenter = mapCenter);
   }
 
   onMapRecieved(map: Map): void {
