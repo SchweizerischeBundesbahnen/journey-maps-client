@@ -35,7 +35,7 @@
     * maxZoom *
     * currentZoom *
 * ROKAS-391: All @Output() fields that used to end with "*Changed" now end with "*Change" for consistency.
-* For the full list of @Input() and @Output() fields, see the documentation for [JourneyMapsClientComponent](./components/JourneyMapsClientComponent.html)
+* ROKAS-391: For the full list of @Input() and @Output() fields, see the documentation for [JourneyMapsClientComponent](./components/JourneyMapsClientComponent.html)
 * ROKAS-391: zoomIn() and zoomOut() can now be called directly on the main component. See our test apps for examples.
 
 
