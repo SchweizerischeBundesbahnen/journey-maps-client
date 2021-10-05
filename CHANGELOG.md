@@ -1,6 +1,6 @@
 # Change Log
 
-## [2.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.11.0&sourceBranch=refs%2Ftags%2F2.0.0&targetRepoId=46287) - 2021-10-05
+## [2.1.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.11.0&sourceBranch=refs%2Ftags%2F2.1.0&targetRepoId=46287) - 2021-10-05
 
 ### Changed
 
