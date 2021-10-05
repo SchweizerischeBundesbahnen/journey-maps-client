@@ -42,19 +42,19 @@ export class MapInitService {
     mapNativeElement: any,
     language: string,
     styleUrl: string,
-    allowScrollZoom: boolean,
+    scrollZoom: boolean,
     zoomLevel?: number,
     mapCenter?: mapboxgl.LngLatLike,
     boundingBox?: LngLatBoundsLike,
     boundingBoxPadding?: number,
-    allowOneFingerPan?: boolean,
+    oneFingerPan?: boolean,
   ): Observable<mapboxgl.Map> {
     const mapboxMap = new MapboxMap(
-      this.createOptions(mapNativeElement, allowScrollZoom, zoomLevel, mapCenter, boundingBox, boundingBoxPadding)
+      this.createOptions(mapNativeElement, scrollZoom, zoomLevel, mapCenter, boundingBox, boundingBoxPadding)
     );
 
     this.translateControlLabels(mapboxMap, language);
-    this.addControls(mapboxMap, allowOneFingerPan);
+    this.addControls(mapboxMap, oneFingerPan);
 
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
     mapboxMap.dragRotate.disable();
@@ -68,7 +68,7 @@ export class MapInitService {
 
   private createOptions(
     container: any,
-    allowScrollZoom: boolean,
+    scrollZoom: boolean,
     zoomLevel?: number,
     mapCenter?: LngLatLike,
     boundingBox?: LngLatBoundsLike,
@@ -77,7 +77,7 @@ export class MapInitService {
       container,
       minZoom: MapInitService.MIN_ZOOM,
       maxZoom: MapInitService.MAX_ZOOM,
-      scrollZoom: allowScrollZoom,
+      scrollZoom,
       dragRotate: false,
       fadeDuration: 10
     };
@@ -109,8 +109,8 @@ export class MapInitService {
     );
   }
 
-  private addControls(mapboxMap: mapboxgl.Map, allowOneFingerPan?: boolean): void {
-    if (!allowOneFingerPan) {
+  private addControls(mapboxMap: mapboxgl.Map, oneFingerPan?: boolean): void {
+    if (!oneFingerPan) {
       mapboxMap.addControl(new MultiTouchSupport());
     }
   }

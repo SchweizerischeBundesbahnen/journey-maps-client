@@ -30,10 +30,10 @@
         mapCenter: [7.4391326448171196, 46.948834547463086],
       };
       client.controlOptions = {
-        showLevelSwitch: true,
-        showZoomControls: true,
-        allowOneFingerPan: false,
-        allowScrollZoom: false,
+        levelSwitch: true,
+        zoomControls: true,
+        oneFingerPan: false,
+        scrollZoom: false,
       };
       client.markerOptions = {
         popup: true,
@@ -141,8 +141,8 @@
         <li>Selected Marker ID: <span id="selected-marker-id"></span></li>
         <li>Zoom Level (within range <span id="min-zoom"></span>..<span id="max-zoom"></span>): <span id="zoom-level"></span></li>
         <li>
-          <button onclick="map.zoomIn();">Zoom In</button>
-          <button onclick="map.zoomOut();">Zoom Out</button>
+          <button onclick="client.zoomIn();">Zoom In</button>
+          <button onclick="client.zoomOut();">Zoom Out</button>
         </li>
         <li>
           Selected level: <span id="selected-level"></span>

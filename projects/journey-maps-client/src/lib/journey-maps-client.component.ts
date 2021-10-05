@@ -52,31 +52,30 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
 
-  /***************************************** LANGUAGE *****************************************/
+  // **************************************** LANGUAGE *****************************************/
 
   /**
    * The language used for localized labels.
    * Allowed values are <code>de</code>, <code>fr</code>, <code>it</code>, <code>en</code>.
-   * @param value language to set
    */
   @Input()
   get language(): string {
     return this.i18n.language;
   }
-  set language(value: string) {
-    if (value == null) {
+  set language(language: string) {
+    if (language == null) {
       throw new TypeError('language mustn\'t be null');
     }
 
-    value = value.toLowerCase();
-    if (value === 'de' || value === 'fr' || value === 'it' || value === 'en') {
-      this.i18n.language = value;
+    language = language.toLowerCase();
+    if (language === 'de' || language === 'fr' || language === 'it' || language === 'en') {
+      this.i18n.language = language;
     } else {
       throw new TypeError('Illegal value for language. Allowed values are de|fr|it|en.');
     }
   }
 
-  /***************************************** STYLE OPTIONS *****************************************/
+  // **************************************** STYLE OPTIONS *****************************************/
 
   private defaultStyleOptions: StyleOptions = {
     brightId: 'base_bright_v2_ki',
@@ -98,14 +97,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
   private _styleOptions: StyleOptions = this.defaultStyleOptions;
 
-  /***************************************** CONTROL OPTIONS *****************************************/
+  // **************************************** CONTROL OPTIONS *****************************************/
 
   private defaultControlOptions: ControlOptions = {
-    showLevelSwitch: false,
-    showZoomControls: false,
+    levelSwitch: false,
+    zoomControls: false,
     /** By default, you get a message-overlay if you try to pan with one finger. */
-    allowOneFingerPan: false,
-    allowScrollZoom: false,
+    oneFingerPan: false,
+    scrollZoom: false,
   };
   /**
    * Settings to control the movement of the map
@@ -122,7 +121,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
   private _controlOptions: ControlOptions = this.defaultControlOptions;
 
-  /***************************************** VIEWPORT OPTIONS *****************************************/
+  // **************************************** VIEWPORT OPTIONS *****************************************/
 
   private defaultViewportOptions: ViewportOptions = {
     boundingBoxPadding: 0,
@@ -142,7 +141,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
   private _viewportOptions: ViewportOptions = this.defaultViewportOptions;
 
-  /***************************************** JOURNEY-MAPS ROUTING OPTIONS *****************************************/
+  /* **************************************** JOURNEY-MAPS ROUTING OPTIONS *****************************************/
 
   /**
    * Input to display JourneyMaps GeoJson data on the map.
@@ -151,7 +150,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Input() journeyMapsRoutingOption: JourneyMapsRoutingOptions;
 
-  /***************************************** MARKER OPTIONS *****************************************/
+  /* **************************************** MARKER OPTIONS *****************************************/
 
   private defaultMarkerOptions: MarkerOptions = {
     enableSearchBar: true,
@@ -180,19 +179,21 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Input() markerDetailsTemplate?: TemplateRef<any>;
 
-  /***************************************** 2 WAY-BINDING (INPUTS) *****************************************/
+  // **************************************** 2 WAY-BINDING (INPUTS) *****************************************/
 
   /**
    * Select one of the markers contained in {@link JourneyMapsClientComponent#markers}
    *
    * Allowed values are either the ID of a marker to select or <code>undefined</code> to unselect.
-   *
-   * @param value the ID of the marker to select or <code>undefined</code> to unselect the marker
    */
   @Input()
-  set selectedMarkerId(value: string | undefined) {
-    if (!!value) {
-      const selectedMarker = this.markerOptions.markers?.find(marker => marker.id === value);
+  get selectedMarkerId(): string {
+    // without this getter, the setter is never called when passing 'undefined' (via the 'elements' web component)
+    return this.selectedMarker?.id;
+  }
+  set selectedMarkerId(markerId: string | undefined) {
+    if (!!markerId) {
+      const selectedMarker = this.markerOptions.markers?.find(marker => marker.id === markerId);
       this.onMarkerSelected(selectedMarker);
     } else if (!!this.selectedMarker) {
       this.onMarkerUnselected();
@@ -202,7 +203,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Which (floor-)level should be shown */
   @Input() selectedLevel: number;
 
-  /***************************************** 2 WAY-BINDING (OUTPUTS) *****************************************/
+  // **************************************** 2 WAY-BINDING (OUTPUTS) *****************************************
 
   /**
    * This event is emitted whenever a marker, with property triggerEvent, is selected or unselected.
@@ -213,7 +214,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Output() selectedLevelChange = new EventEmitter<number>();
 
-  /***************************************** OTHER OUTPUTS *****************************************/
+  // **************************************** OTHER OUTPUTS *****************************************
 
   /**
    * This event is emitted whenever the list of available (floor-) levels changes
@@ -278,11 +279,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.host.nativeElement.moveEast = this.moveEast.bind(this);
     this.host.nativeElement.moveSouth = this.moveSouth.bind(this);
     this.host.nativeElement.moveWest = this.moveWest.bind(this);
+    this.host.nativeElement.zoomIn = this.zoomIn.bind(this);
+    this.host.nativeElement.zoomOut = this.zoomOut.bind(this);
   }
 
   onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
-    if (!this.controlOptions.allowOneFingerPan) {
+    if (!this.controlOptions.oneFingerPan) {
       this.map.dragPan.disable();
     }
     this.touchEventCollector.next(event);
@@ -338,8 +341,22 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.mapService.pan(this.map, Direction.WEST);
   }
 
+  /**
+   * Zoom In
+   */
+  public zoomIn(): void {
+    this.map?.zoomIn();
+  }
+
+  /**
+   * Zoom Out
+   */
+  public zoomOut(): void {
+    this.map?.zoomOut();
+  }
+
   private updateMarkers(): void {
-    this.selectedMarker = this.markerOptions.markers?.find(marker => this.selectedMarker?.id === marker.id);
+    this.selectedMarker = this.markerOptions.markers?.find(marker => this.selectedMarkerId === marker.id);
     this.executeWhenMapStyleLoaded(() => {
       this.mapMarkerService.updateMarkers(this.map, this.markerOptions.markers, this.selectedMarker, this.styleOptions.mode);
       this.cd.detectChanges();
@@ -427,12 +444,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.mapElementRef.nativeElement,
       this.i18n.language,
       styleUrl,
-      this.controlOptions.allowScrollZoom,
+      this.controlOptions.scrollZoom,
       this.viewportOptions.zoomLevel,
       this.viewportOptions.mapCenter,
       this.viewportOptions.boundingBox ?? this.getMarkersBounds,
       this.viewportOptions.boundingBox ? this.viewportOptions.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING,
-      this.controlOptions.allowOneFingerPan,
+      this.controlOptions.oneFingerPan,
     ).subscribe(
       m => {
         this.map = m;
@@ -454,7 +471,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
       const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
 
-      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.controlOptions.allowOneFingerPan) {
+      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.controlOptions.oneFingerPan) {
         this.touchOverlayStyleClass = 'is_visible';
         this.cd.detectChanges();
       }
@@ -508,7 +525,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       if (target.properties.cluster) {
         this.mapMarkerService.onClusterClicked(this.map, target);
       } else {
-        const selectedMarkerId = this.mapMarkerService.onMarkerClicked(this.map, target, this.selectedMarker?.id);
+        const selectedMarkerId = this.mapMarkerService.onMarkerClicked(this.map, target, this.selectedMarkerId);
         this.selectedMarker = this.markerOptions.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
         this.cd.detectChanges();
       }
@@ -610,7 +627,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** @internal */
   // When a marker has been selected from outside the map.
   onMarkerSelected(marker: Marker): void {
-    if (marker?.id !== this.selectedMarker?.id) {
+    if (marker?.id !== this.selectedMarkerId) {
       this.selectedMarker = marker;
       this.mapMarkerService.selectMarker(this.map, marker);
       this.cd.detectChanges();
