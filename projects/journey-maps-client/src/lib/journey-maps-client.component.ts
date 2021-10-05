@@ -57,20 +57,19 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /**
    * The language used for localized labels.
    * Allowed values are <code>de</code>, <code>fr</code>, <code>it</code>, <code>en</code>.
-   * @param value language to set
    */
   @Input()
   get language(): string {
     return this.i18n.language;
   }
-  set language(value: string) {
-    if (value == null) {
+  set language(language: string) {
+    if (language == null) {
       throw new TypeError('language mustn\'t be null');
     }
 
-    value = value.toLowerCase();
-    if (value === 'de' || value === 'fr' || value === 'it' || value === 'en') {
-      this.i18n.language = value;
+    language = language.toLowerCase();
+    if (language === 'de' || language === 'fr' || language === 'it' || language === 'en') {
+      this.i18n.language = language;
     } else {
       throw new TypeError('Illegal value for language. Allowed values are de|fr|it|en.');
     }
@@ -185,13 +184,15 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * Select one of the markers contained in {@link JourneyMapsClientComponent#markers}
    *
    * Allowed values are either the ID of a marker to select or <code>undefined</code> to unselect.
-   *
-   * @param value the ID of the marker to select or <code>undefined</code> to unselect the marker
    */
   @Input()
-  set selectedMarkerId(value: string | undefined) {
-    if (!!value) {
-      const selectedMarker = this.markerOptions.markers?.find(marker => marker.id === value);
+  get selectedMarkerId(): string {
+    // without this getter, the setter is never called when passing 'undefined' (via the 'elements' web component)
+    return this.selectedMarker?.id;
+  }
+  set selectedMarkerId(markerId: string | undefined) {
+    if (!!markerId) {
+      const selectedMarker = this.markerOptions.markers?.find(marker => marker.id === markerId);
       this.onMarkerSelected(selectedMarker);
     } else if (!!this.selectedMarker) {
       this.onMarkerUnselected();
@@ -354,7 +355,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private updateMarkers(): void {
-    this.selectedMarker = this.markerOptions.markers?.find(marker => this.selectedMarker?.id === marker.id);
+    this.selectedMarker = this.markerOptions.markers?.find(marker => this.selectedMarkerId === marker.id);
     this.executeWhenMapStyleLoaded(() => {
       this.mapMarkerService.updateMarkers(this.map, this.markerOptions.markers, this.selectedMarker, this.styleOptions.mode);
       this.cd.detectChanges();
@@ -521,7 +522,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       if (target.properties.cluster) {
         this.mapMarkerService.onClusterClicked(this.map, target);
       } else {
-        const selectedMarkerId = this.mapMarkerService.onMarkerClicked(this.map, target, this.selectedMarker?.id);
+        const selectedMarkerId = this.mapMarkerService.onMarkerClicked(this.map, target, this.selectedMarkerId);
         this.selectedMarker = this.markerOptions.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
         this.cd.detectChanges();
       }
@@ -623,7 +624,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** @internal */
   // When a marker has been selected from outside the map.
   onMarkerSelected(marker: Marker): void {
-    if (marker?.id !== this.selectedMarker?.id) {
+    if (marker?.id !== this.selectedMarkerId) {
       this.selectedMarker = marker;
       this.mapMarkerService.selectMarker(this.map, marker);
       this.cd.detectChanges();
