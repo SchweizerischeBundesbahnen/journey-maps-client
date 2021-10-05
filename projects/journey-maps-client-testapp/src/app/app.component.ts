@@ -39,10 +39,10 @@ export class AppComponent implements OnInit, OnDestroy {
   private destroyed = new Subject<void>();
 
   controlOptions: ControlOptions = {
-    showLevelSwitch: true,
-    showZoomControls: true,
-    allowOneFingerPan: true,
-    allowScrollZoom: true,
+    levelSwitch: true,
+    zoomControls: true,
+    oneFingerPan: true,
+    scrollZoom: true,
   };
   selectedMarkerId: string;
   visibleLevels: number[];
@@ -239,14 +239,6 @@ export class AppComponent implements OnInit, OnDestroy {
       ...this.styleOptions,
       mode: StyleMode[(event.target as HTMLOptionElement).value],
     };
-  }
-
-  zoomIn(): void {
-    this.map.zoomIn();
-  }
-
-  zoomOut(): void {
-    this.map.zoomOut();
   }
 
   private setBbox(bbox: number[]): void {

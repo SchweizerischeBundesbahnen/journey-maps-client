@@ -49,12 +49,12 @@
       <li style="list-style: circle;">
         <button
           [style]="customButtonStyle"
-          (click)="zoomIn()"
+          (click)="client.zoomIn()"
         >Zoom In
         </button>
         <button
           [style]="customButtonStyle"
-          (click)="zoomOut()"
+          (click)="client.zoomOut()"
         >Zoom Out
         </button>
       </li>
@@ -93,7 +93,7 @@
         </button>
       </li>
       <li style="list-style: circle;">Map loaded: {{map?.loaded()}}</li>
-      <li style="list-style: circle;">Allow moving the map with one finger: {{controlOptions.allowOneFingerPan}}</li>
+      <li style="list-style: circle;">Allow moving the map with one finger: {{controlOptions.oneFingerPan}}</li>
       <li style="list-style: circle;">
         <label for="geo-json-select">
           Display Journey-Maps GeoJSON data for:

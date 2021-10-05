@@ -1,21 +1,22 @@
 # Change Log
 
-## [1.12.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.11.0&sourceBranch=refs%2Ftags%2F1.12.0&targetRepoId=46287) - 2021-10-05
+## [2.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.11.0&sourceBranch=refs%2Ftags%2F2.0.0&targetRepoId=46287) - 2021-10-05
 
 ### Changed
 
-* ROKAS-391: Individual @Input() fields have been grouped into 5 main groups:
+* ROKAS-391: Creating a new major release because of breaking changes to the @Input() and @Output() field names and groupings.
+* ROKAS-391: Individual @Input() fields have been grouped into 5 main groups. The ones with an asterisk (*) have been renamed slightly from previous releases
   * StyleOptions
-    * brightId
-    * darkId
-    * mode
+    * brightId *
+    * darkId *
+    * mode *
   * ControlOptions
-    * allowOneFingerPan
-    * allowScrollZoom
-    * showLevelSwitch
-    * showZoomControls
+    * oneFingerPan *
+    * scrollZoom 
+    * levelSwitch *
+    * zoomControls *
   * ViewportOptions
-    * mapCenter
+    * mapCenter 
     * zoomLevel
     * boundingBox
     * boundingBoxPadding
@@ -30,9 +31,12 @@
     * zoomToMarkers
 * ROKAS-391: 3 @Output() fields have been combined into the following group:
   * ZoomLevels
-    * minZoom
-    * maxZoom
-    * currentZoom
+    * minZoom *
+    * maxZoom *
+    * currentZoom *
+* ROKAS-391: All @Output() fields that used to end with "*Changed" now end with "*Change" for consistency.
+* ROKAS-391: For the full list of @Input() and @Output() fields, see the documentation for [JourneyMapsClientComponent](./components/JourneyMapsClientComponent.html)
+* ROKAS-391: zoomIn() and zoomOut() can now be called directly on the main component. See our test apps for examples.
 
 
 ## [1.11.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.10.0&sourceBranch=refs%2Ftags%2F1.11.0&targetRepoId=46287) - 2021-09-22
