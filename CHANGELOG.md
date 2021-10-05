@@ -1,5 +1,40 @@
 # Change Log
 
+## [1.12.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.11.0&sourceBranch=refs%2Ftags%2F1.12.0&targetRepoId=46287) - 2021-10-05
+
+### Changed
+
+* ROKAS-391: Individual @Input() fields have been grouped into 5 main groups:
+  * StyleOptions
+    * brightId
+    * darkId
+    * mode
+  * ControlOptions
+    * allowOneFingerPan
+    * allowScrollZoom
+    * showLevelSwitch
+    * showZoomControls
+  * ViewportOptions
+    * mapCenter
+    * zoomLevel
+    * boundingBox
+    * boundingBoxPadding
+  * JourneyMapsRoutingOptions
+    * journey
+    * transfer
+    * routes
+  * MarkerOptions
+    * enableSearchBar
+    * markers
+    * popup
+    * zoomToMarkers
+* ROKAS-391: 3 @Output() fields have been combined into the following group:
+  * ZoomLevels
+    * minZoom
+    * maxZoom
+    * currentZoom
+
+
 ## [1.11.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.10.0&sourceBranch=refs%2Ftags%2F1.11.0&targetRepoId=46287) - 2021-09-22
 
 ### Added

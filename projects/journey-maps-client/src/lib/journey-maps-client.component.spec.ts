@@ -30,10 +30,10 @@ describe('JourneyMapsClientComponent#selectedMarkerId', () => {
   }
 
   it('should emit when (un-)selecting a marker', async () => {
-    let selectedMarkerId: string;
+    let selectedMarkerId: string = null;
     component.selectedMarkerIdChange.subscribe((id: string) => selectedMarkerId = id);
 
-    expect(selectedMarkerId).toBe(undefined);
+    expect(selectedMarkerId).toBe(null);
 
     setSelectedMarkerId('work');
     expect(selectedMarkerId).toBe('work');
@@ -139,7 +139,7 @@ const setupFixtureAndComponent = () => {
   fixture = TestBed.createComponent(JourneyMapsClientComponent);
   component = fixture.componentInstance;
   component.apiKey = 'apiKey';
-  component.markers = markers;
+  component.markerOptions.markers = markers;
   fixture.detectChanges();
 };
 
