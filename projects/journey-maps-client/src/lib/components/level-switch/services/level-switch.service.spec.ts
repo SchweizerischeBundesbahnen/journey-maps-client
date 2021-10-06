@@ -11,7 +11,7 @@ describe('LevelSwitchService', () => {
   let mapLayerFilterServiceSpy: jasmine.SpyObj<MapLayerFilterService>;
   let mapLeitPoiServiceSpy: jasmine.SpyObj<MapLeitPoiService>;
   let mapTransferService: jasmine.SpyObj<MapTransferService>;
-  let mapMock: any = {};
+  let mapMock: any;
   let onZoomChangedCallbackFn: any;
 
   beforeEach(async () => {

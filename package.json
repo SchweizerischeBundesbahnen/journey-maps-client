@@ -1,12 +1,11 @@
 {
   "name": "@schweizerischebundesbahnen/journey-maps-client",
-  "version": "2.2.0",
+  "version": "1.12.0",
   "scripts": {
     "ng": "ng",
     "start-testapp": "npm run _testapp-example && ng serve journey-maps-client-testapp",
     "start-testapp-with-remote-access": "npm run _testapp-example && ng serve journey-maps-client-testapp --host 0.0.0.0 --disable-host-check",
     "start-elements": "ng serve journey-maps-client-elements --port 4201",
-    "start-elements-with-remote-access": "ng serve journey-maps-client-elements --port 4201 --host 0.0.0.0 --disable-host-check",
     "build-lib": "ng build journey-maps-client --configuration production",
     "build-lib-watch": "ng build journey-maps-client --watch",
     "build-testapp": "npm run _testapp-example && ng build journey-maps-client-testapp --configuration production --progress=false",

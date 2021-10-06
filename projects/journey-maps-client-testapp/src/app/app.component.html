@@ -6,17 +6,25 @@
     <rokas-journey-maps-client
       language="en"
       apiKey="e500c71b8c83c1cfb2170608582ae9c8"
-      [styleOptions]="styleOptions"
-      [controlOptions]="controlOptions"
-      [viewportOptions]="viewportOptions"
-      [journeyMapsRoutingOption]="journeyMapsRoutingOption"
-      [markerOptions]="markerOptions"
+      [markers]="markers"
+      [journey]="journey"
+      [transfer]="transfer"
+      [routes]="routes"
+      [boundingBox]="boundingBox"
+      [showLevelSwitch]="showLevelSwitch"
+      (visibleLevelsChange)="visibleLevels=$event"
+      [(selectedLevel)]="selectedLevel"
+      [showZoomControls]="showZoomControls"
+      (mapCenterChanged)="mapCenterChanged.next($event)"
+      (zoomLevelChanged)="zoomLevelChanged.next($event)"
+      (minZoomLevelChanged)="minZoomLevel=$event"
+      (maxZoomLevelChanged)="maxZoomLevel=$event"
       [markerDetailsTemplate]=""
       [(selectedMarkerId)]="selectedMarkerId"
-      [(selectedLevel)]="selectedLevel"
-      (visibleLevelsChange)="visibleLevels=$event"
-      (zoomLevelsChange)="zoomLevels=$event"
-      (mapCenterChange)="mapCenterChange.next($event)"
+      [allowOneFingerPan]="allowOneFingerPan"
+      [popup]="popup"
+      [scrollZoom]="true"
+      [styleMode]="styleMode"
       (mapReady)="onMapRecieved($event)"
       #client
     >
@@ -45,24 +53,25 @@
       </li>
       <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span>
       </li>
-      <li style="list-style: circle;">Zoom Level (within range {{zoomLevels?.minZoom}}..{{zoomLevels?.maxZoom}}): {{zoomLevels?.currentZoom}}</li>
+      <li style="list-style: circle;">Zoom Level (within range {{minZoomLevel}}..{{maxZoomLevel}}): {{zoomLevel}}</li>
       <li style="list-style: circle;">
         <button
           [style]="customButtonStyle"
-          (click)="client.zoomIn()"
+          (click)="zoomIn()"
         >Zoom In
         </button>
         <button
           [style]="customButtonStyle"
-          (click)="client.zoomOut()"
+          (click)="zoomOut()"
         >Zoom Out
         </button>
       </li>
+      <li style="list-style: circle;">Selected level: {{selectedLevel}}</li>
       <li style="list-style: circle;">
         Level switch: <span *ngIf="!visibleLevels.length">There are no visible levels.</span>
         <ng-container *ngFor="let level of visibleLevels">
           <button
-            [disabled]="level == selectedLevel"
+            [disabled]="!visibleLevels?.includes(level)"
             [style]="customButtonStyle"
             (click)="setSelectedLevel(level)"
           >Level {{level}}
@@ -93,15 +102,15 @@
         </button>
       </li>
       <li style="list-style: circle;">Map loaded: {{map?.loaded()}}</li>
-      <li style="list-style: circle;">Allow moving the map with one finger: {{controlOptions.oneFingerPan}}</li>
+      <li style="list-style: circle;">Allow moving the map with one finger: {{allowOneFingerPan}}</li>
       <li style="list-style: circle;">
         <label for="geo-json-select">
-          Display Journey-Maps GeoJSON data for:
+          Display GeoJSON data for:
           <select id="geo-json-select"
                   style="width: 200px; min-height: 10px; padding: 0 5px; background-position: right; color: black;"
                   (change)="setGeoJsonInput($event)">
             <option value="" (change)="setGeoJsonInput($event)">(none)</option>
-            <option *ngFor="let input of journeyMapsGeoJsonOptions" [value]="input">{{input}}</option>
+            <option *ngFor="let input of geoJsonInputs" [value]="input">{{input}}</option>
           </select>
         </label>
       </li>
