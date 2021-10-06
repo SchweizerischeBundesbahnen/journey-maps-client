@@ -1,6 +1,6 @@
 # Change Log
 
-## [2.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.11.0&sourceBranch=refs%2Ftags%2F2.0.0&targetRepoId=46287) - 2021-10-05
+## [2.2.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.12.0&sourceBranch=refs%2Ftags%2F2.2.0&targetRepoId=46287) - 2021-10-06
 
 ### Changed
 
@@ -38,8 +38,7 @@
 * ROKAS-391: For the full list of @Input() and @Output() fields, see the documentation for [JourneyMapsClientComponent](./components/JourneyMapsClientComponent.html)
 * ROKAS-391: zoomIn() and zoomOut() can now be called directly on the main component. See our test apps for examples.
 
-
-## [1.11.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.10.0&sourceBranch=refs%2Ftags%2F1.11.0&targetRepoId=46287) - 2021-09-22
+## [1.12.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.10.0&sourceBranch=refs%2Ftags%2F1.12.0&targetRepoId=46287) - 2021-10-06
 
 ### Added
 
