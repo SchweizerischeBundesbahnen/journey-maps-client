@@ -2,9 +2,7 @@ import {NgModule} from '@angular/core';
 import {JourneyMapsClientComponent} from './journey-maps-client.component';
 import {CommonModule} from '@angular/common';
 import {SbbIconModule} from '@sbb-esta/angular-core';
-import {SbbAutocompleteModule, SbbButtonModule, SbbSearchModule} from '@sbb-esta/angular-public';
-import {SearchBarComponent} from './components/search-bar/search-bar.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {SbbButtonModule} from '@sbb-esta/angular-public';
 import {AngularResizedEventModule} from 'angular-resize-event';
 import {GlobalStylesComponent} from './components/global-styles/global-styles.component';
 import {MarkerDetailsComponent} from './components/marker-details/marker-details.component';
@@ -16,7 +14,7 @@ import {TeaserComponent} from './components/marker-details/components/teaser/tea
 import {InfoBlockRendererComponent} from './components/marker-details/components/info-block-renderer/info-block-renderer.component';
 import {AddressInfoBlockComponent} from './components/marker-details/components/info-block-renderer/components/address-info-block/address-info-block.component';
 import {ZoomControlsComponent} from './components/zoom-controls/zoom-controls.component';
-import { LeitPoiComponent } from './components/leit-poi/leit-poi.component';
+import {LeitPoiComponent} from './components/leit-poi/leit-poi.component';
 
 
 @NgModule({
@@ -25,7 +23,6 @@ import { LeitPoiComponent } from './components/leit-poi/leit-poi.component';
     TeaserComponent,
     TextInfoBlockComponent,
     ButtonInfoBlockComponent,
-    SearchBarComponent,
     GlobalStylesComponent,
     LevelSwitchComponent,
     ZoomControlsComponent,
@@ -39,9 +36,6 @@ import { LeitPoiComponent } from './components/leit-poi/leit-poi.component';
     CommonModule,
     SbbIconModule,
     SbbButtonModule,
-    SbbAutocompleteModule,
-    SbbSearchModule,
-    ReactiveFormsModule,
     AngularResizedEventModule,
   ],
   exports: [JourneyMapsClientComponent],

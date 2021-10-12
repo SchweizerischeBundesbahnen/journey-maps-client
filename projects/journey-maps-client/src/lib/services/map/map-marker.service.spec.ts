@@ -1,5 +1,5 @@
 import {MapMarkerService} from './map-marker.service';
-import {Map} from 'mapbox-gl';
+import {Map} from 'maplibre-gl';
 import {MarkerCategory} from '../../model/marker-category.enum';
 import {MapService} from './map.service';
 

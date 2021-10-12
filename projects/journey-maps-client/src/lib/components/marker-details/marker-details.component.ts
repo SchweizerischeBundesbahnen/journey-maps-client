@@ -10,7 +10,7 @@ import {
   TemplateRef
 } from '@angular/core';
 import {Marker} from '../../model/marker';
-import {Map as MapboxMap} from 'mapbox-gl';
+import {Map as MaplibreMap} from 'maplibre-gl';
 
 @Component({
   selector: 'rokas-marker-details',
@@ -23,7 +23,7 @@ export class MarkerDetailsComponent implements OnChanges {
   @Input() selectedMarker: Marker;
   @Input() template?: TemplateRef<any>;
   @Input() popup: boolean;
-  @Input() map: MapboxMap;
+  @Input() map: MaplibreMap;
   @Output() closeClicked = new EventEmitter<void>();
 
   shouldRender = false;

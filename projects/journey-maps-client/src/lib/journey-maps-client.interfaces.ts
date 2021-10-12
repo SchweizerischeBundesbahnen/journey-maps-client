@@ -68,8 +68,6 @@ export interface JourneyMapsRoutingOptions {
 }
 
 export interface MarkerOptions {
-  /** Whether the search bar - to filter markers - should be shown or not. */
-  enableSearchBar?: boolean;
   /** The list of markers (points) that will be displayed on the map. */
   markers?: Marker[];
   /** Open a popup - instead of the teaser - when selecting a marker. */

@@ -62,7 +62,7 @@
         Level switch: <span *ngIf="!visibleLevels.length">There are no visible levels.</span>
         <ng-container *ngFor="let level of visibleLevels">
           <button
-            [disabled]="level == selectedLevel"
+            [disabled]="level === selectedLevel"
             [style]="customButtonStyle"
             (click)="setSelectedLevel(level)"
           >Level {{level}}

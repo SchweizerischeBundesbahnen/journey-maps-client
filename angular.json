@@ -30,14 +30,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/journey-maps-client/tsconfig.lib.json",
-              "projects/journey-maps-client/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/journey-maps-client/**/*.ts",
+              "projects/journey-maps-client/**/*.html"
             ]
           }
         }
@@ -154,15 +151,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/journey-maps-client-testapp/tsconfig.app.json",
-              "projects/journey-maps-client-testapp/tsconfig.spec.json",
-              "projects/journey-maps-client-testapp/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/journey-maps-client-testapp/**/*.ts",
+              "projects/journey-maps-client-testapp/**/*.html"
             ]
           }
         },
@@ -227,7 +220,6 @@
               },
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -282,15 +274,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/journey-maps-client-elements/tsconfig.app.json",
-              "projects/journey-maps-client-elements/tsconfig.spec.json",
-              "projects/journey-maps-client-elements/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/journey-maps-client-elements/**/*.ts",
+              "projects/journey-maps-client-elements/**/*.html"
             ]
           }
         },
@@ -310,7 +298,8 @@
     }
   },
   "cli": {
-    "analytics": "6e26677d-3656-40b9-a44f-40078af23bf9"
+    "analytics": "6e26677d-3656-40b9-a44f-40078af23bf9",
+    "defaultCollection": "@angular-eslint/schematics"
   },
   "defaultProject": "journey-maps-client"
 }

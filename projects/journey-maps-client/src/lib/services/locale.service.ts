@@ -10,11 +10,6 @@ export class LocaleService {
   private i18n = {
     de: {
       close: 'Schliessen',
-      searchbar: {
-        placeholder: 'Suchen',
-        arialabel: 'Eingabefeld zum Suchen und Filtern von Kartenelementen.',
-        moreresults: 'weitere Resultate gefunden.'
-      },
       touchOverlay: {
         tip: 'Benutzen Sie 2 Finger um die Karte zu bedienen.'
       },
@@ -27,11 +22,6 @@ export class LocaleService {
     },
     fr: {
       close: 'Fermer',
-      searchbar: {
-        placeholder: 'Rechercher',
-        arialabel: 'Champ de saisie pour la recherche et le filtrage des éléments de la carte.',
-        moreresults: 'autres résultats trouvés.'
-      },
       touchOverlay: {
         tip: 'Utilisez deux doigts pour consulter la carte.'
       },
@@ -44,11 +34,6 @@ export class LocaleService {
     },
     it: {
       close: 'Chiudere',
-      searchbar: {
-        placeholder: 'Ricerca',
-        arialabel: 'Campo di inserimento per la ricerca e il filtraggio degli elementi della mappa.',
-        moreresults: 'altri risultati trovati.'
-      },
       touchOverlay: {
         tip: 'Utilizzate due dita per muovervi nella mappa.'
       },
@@ -61,11 +46,6 @@ export class LocaleService {
     },
     en: {
       close: 'Close',
-      searchbar: {
-        placeholder: 'Search',
-        arialabel: 'Input field for searching and filtering map elements.',
-        moreresults: 'more results found.'
-      },
       touchOverlay: {
         tip: 'Use two fingers to operate the map.'
       },

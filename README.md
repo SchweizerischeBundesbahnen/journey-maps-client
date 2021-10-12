@@ -50,7 +50,7 @@ See [Test App](#testapp)
 
 You have to add the following two CSS files to your application:
 
-* `node_modules/mapbox-gl/dist/mapbox-gl.css`
+* `node_modules/maplibre-gl/dist/maplibre-gl.css`
 * `node_modules/@sbb-esta/angular-public/typography.css`
 
 The neccessary NPM dependencies can be seen in the peer dependency section of the `package.json`.

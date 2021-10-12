@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {LngLatBoundsLike, LngLatLike, Map as MapboxMap, MapboxOptions, Style} from 'mapbox-gl';
+import {LngLatBoundsLike, LngLatLike, Map as MaplibreMap, MapboxOptions, Style} from 'maplibre-gl';
 import {map, tap} from 'rxjs/operators';
 import {MultiTouchSupport} from '../multiTouchSupport';
 
@@ -44,25 +44,25 @@ export class MapInitService {
     styleUrl: string,
     scrollZoom: boolean,
     zoomLevel?: number,
-    mapCenter?: mapboxgl.LngLatLike,
+    mapCenter?: LngLatLike,
     boundingBox?: LngLatBoundsLike,
     boundingBoxPadding?: number,
     oneFingerPan?: boolean,
-  ): Observable<mapboxgl.Map> {
-    const mapboxMap = new MapboxMap(
+  ): Observable<MaplibreMap> {
+    const maplibreMap = new MaplibreMap(
       this.createOptions(mapNativeElement, scrollZoom, zoomLevel, mapCenter, boundingBox, boundingBoxPadding)
     );
 
-    this.translateControlLabels(mapboxMap, language);
-    this.addControls(mapboxMap, oneFingerPan);
+    this.translateControlLabels(maplibreMap, language);
+    this.addControls(maplibreMap, oneFingerPan);
 
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
-    mapboxMap.dragRotate.disable();
-    mapboxMap.touchPitch.disable();
+    maplibreMap.dragRotate.disable();
+    maplibreMap.touchPitch.disable();
 
     return this.fetchStyle(styleUrl).pipe(
-      tap(style => mapboxMap.setStyle(style)),
-      map(() => mapboxMap)
+      tap(style => maplibreMap.setStyle(style)),
+      map(() => maplibreMap)
     );
   }
 
@@ -73,7 +73,7 @@ export class MapInitService {
     mapCenter?: LngLatLike,
     boundingBox?: LngLatBoundsLike,
     boundingBoxPadding?: number): MapboxOptions {
-    const options: mapboxgl.MapboxOptions = {
+    const options: MapboxOptions = {
       container,
       minZoom: MapInitService.MIN_ZOOM,
       maxZoom: MapInitService.MAX_ZOOM,
@@ -101,17 +101,17 @@ export class MapInitService {
     );
   }
 
-  private translateControlLabels(mapboxMap: MapboxMap, language: string): void {
-    (mapboxMap as any)._locale = Object.assign(
+  private translateControlLabels(maplibreMap: MaplibreMap, language: string): void {
+    (maplibreMap as any)._locale = Object.assign(
       {},
-      (mapboxMap as any)._locale,
+      (maplibreMap as any)._locale,
       this.controlLabels[language]
     );
   }
 
-  private addControls(mapboxMap: mapboxgl.Map, oneFingerPan?: boolean): void {
+  private addControls(maplibreMap: MaplibreMap, oneFingerPan?: boolean): void {
     if (!oneFingerPan) {
-      mapboxMap.addControl(new MultiTouchSupport());
+      maplibreMap.addControl(new MultiTouchSupport());
     }
   }
 }

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import * as mapboxgl from 'mapbox-gl';
+import {Map as MaplibreMap} from 'maplibre-gl';
 import {MapService} from './map.service';
 import {Subject} from 'rxjs';
 import {LeitPoiFeature} from '../../components/leit-poi/model/leit-poi-feature';
@@ -32,7 +32,7 @@ export class MapLeitPoiService {
     this.destroyed.complete();
   }
 
-  processData(map: mapboxgl.Map, featureCollection: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
+  processData(map: MaplibreMap, featureCollection: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
     this.removeMapLeitPois();
     if (!featureCollection || !featureCollection.features?.length) {
       return;
@@ -54,11 +54,11 @@ export class MapLeitPoiService {
     }
   }
 
-  setCurrentLevel(map: mapboxgl.Map, currentLevel: number): void {
+  setCurrentLevel(map: MaplibreMap, currentLevel: number): void {
     this.showLeitPoiByLevel(map, currentLevel);
   }
 
-  private registerMapZoomEvent(map: mapboxgl.Map): void {
+  private registerMapZoomEvent(map: MaplibreMap): void {
     if (!this.mapZoomSubscription) {
       this.mapZoomSubscription = map.on('zoomend', () => this.toggleMapLeitPoisVisibility(map.getZoom()));
     }
@@ -84,13 +84,13 @@ export class MapLeitPoiService {
     });
   }
 
-  private showLeitPoiByLevel(map: mapboxgl.Map, currentLevel: number): void {
+  private showLeitPoiByLevel(map: MaplibreMap, currentLevel: number): void {
     this.removeMapLeitPois();
     this.getFeaturesByLevel(currentLevel).forEach(f => this.showLeitPoi(map, f));
     this.toggleMapLeitPoisVisibility(map.getZoom());
   }
 
-  private showLeitPoi(map: mapboxgl.Map, feature: LeitPoiFeature): void {
+  private showLeitPoi(map: MaplibreMap, feature: LeitPoiFeature): void {
     const mapLeitPoi = this.mapLeitPoiCreator.createMapLeitPoi(map, feature);
     this.mapLeitPois.push(mapLeitPoi);
 

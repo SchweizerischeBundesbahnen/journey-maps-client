@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {GeoJSONSource, LngLatLike, Map as MapboxMap, MapboxGeoJSONFeature, PointLike} from 'mapbox-gl';
+import {GeoJSONSource, LngLatLike, Map as MaplibreMap, MapboxGeoJSONFeature, PointLike} from 'maplibre-gl';
 import {Constants} from '../constants';
 import {Marker} from '../../model/marker';
 import {MarkerConverterService} from '../marker-converter.service';
@@ -24,7 +24,7 @@ export class MapMarkerService {
               private mapConfigService: MapConfigService) {
   }
 
-  initStyleData(map: MapboxMap): void {
+  initStyleData(map: MaplibreMap): void {
     this.markerCategoryMappings.clear();
     this.sources = [Constants.MARKER_SOURCE];
     this.markerLayers = [Constants.MARKER_LAYER];
@@ -47,7 +47,7 @@ export class MapMarkerService {
     return [...this.markerLayers, ...this.markerLayersSelected];
   }
 
-  updateMarkers(map: MapboxMap, markers: Marker[], selectedMarker: Marker, styleMode: StyleMode): void {
+  updateMarkers(map: MaplibreMap, markers: Marker[], selectedMarker: Marker, styleMode: StyleMode): void {
     this.verifyMarkers(markers);
     if (!selectedMarker) {
       this.unselectFeature(map);
@@ -73,15 +73,15 @@ export class MapMarkerService {
     }
   }
 
-  private getPrimaryMarkerSource(map: MapboxMap): GeoJSONSource {
+  private getPrimaryMarkerSource(map: MaplibreMap): GeoJSONSource {
     return map.getSource(Constants.MARKER_SOURCE) as GeoJSONSource;
   }
 
-  onClusterClicked(map: MapboxMap, cluster: MapboxGeoJSONFeature): void {
+  onClusterClicked(map: MaplibreMap, cluster: MapboxGeoJSONFeature): void {
     this.zoomToCluster(map, cluster.properties.cluster_id, this.mapService.convertToLngLatLike(cluster.geometry));
   }
 
-  private zoomToCluster(map: MapboxMap, clusterId: any, center: LngLatLike, offset: PointLike = [0, 0]): void {
+  private zoomToCluster(map: MaplibreMap, clusterId: any, center: LngLatLike, offset: PointLike = [0, 0]): void {
     this.getPrimaryMarkerSource(map).getClusterExpansionZoom(
       clusterId,
       (err, zoom) => {
@@ -92,7 +92,7 @@ export class MapMarkerService {
     );
   }
 
-  onMarkerClicked(map: MapboxMap, feature: MapboxGeoJSONFeature, oldSelectedFeatureId: string): string {
+  onMarkerClicked(map: MaplibreMap, feature: MapboxGeoJSONFeature, oldSelectedFeatureId: string): string {
     const selectedFeatureId = feature.properties?.id;
     if (!selectedFeatureId || selectedFeatureId === oldSelectedFeatureId) {
       this.unselectFeature(map);
@@ -109,7 +109,7 @@ export class MapMarkerService {
   }
 
   // When a marker has been selected from outside the map.
-  selectMarker(map: MapboxMap, marker: Marker): void {
+  selectMarker(map: MaplibreMap, marker: Marker): void {
     this.selectFeature(map, marker.id);
     const features = map.queryRenderedFeatures(
       map.project(marker.position as LngLatLike),
@@ -143,7 +143,7 @@ export class MapMarkerService {
     }
   }
 
-  private easeTo(map: MapboxMap, center: LngLatLike, optionsOverride: object = {}): void {
+  private easeTo(map: MaplibreMap, center: LngLatLike, optionsOverride: object = {}): void {
     map.easeTo({
       center,
       offset: this.getSelectedMarkerOffset(map), // can be overridden by optionsOverride
@@ -152,7 +152,7 @@ export class MapMarkerService {
   }
 
   // put the marker 15px above 1/3 from the top of the map
-  private getSelectedMarkerOffset(map: MapboxMap): PointLike {
+  private getSelectedMarkerOffset(map: MaplibreMap): PointLike {
     let yOffset = 0;
     if (this.mapConfigService.popup) {
       const mapHeight = map.getContainer().clientHeight;
@@ -163,7 +163,7 @@ export class MapMarkerService {
     return [0, yOffset];
   }
 
-  private queryClusterAtPosition(map: MapboxMap, position: GeoJSON.Position): MapboxGeoJSONFeature {
+  private queryClusterAtPosition(map: MaplibreMap, position: GeoJSON.Position): MapboxGeoJSONFeature {
     const point = map.project(position as LngLatLike);
     const range = Constants.CLUSTER_RADIUS / 2;
 
@@ -179,7 +179,7 @@ export class MapMarkerService {
     return clusters?.length ? clusters[0] : undefined;
   }
 
-  private zoomUntilMarkerVisible(map: MapboxMap, cluster: GeoJSON.Feature, marker: Marker, found: boolean[] = []): void {
+  private zoomUntilMarkerVisible(map: MaplibreMap, cluster: GeoJSON.Feature, marker: Marker, found: boolean[] = []): void {
     const clusterId = cluster.properties.cluster_id;
     this.getPrimaryMarkerSource(map).getClusterChildren(
       clusterId,
@@ -199,11 +199,11 @@ export class MapMarkerService {
     );
   }
 
-  unselectFeature(map: MapboxMap): void {
+  unselectFeature(map: MaplibreMap): void {
     this.selectFeature(map, undefined);
   }
 
-  private selectFeature(map: MapboxMap, selectedFeatureId: string): void {
+  private selectFeature(map: MaplibreMap, selectedFeatureId: string): void {
     const id = selectedFeatureId ?? '';
     for (let i = 0; i < this.markerLayers.length; i++) {
       map.setFilter(this.markerLayers[i], this.createMarkerFilter(id, false));
@@ -216,7 +216,7 @@ export class MapMarkerService {
   }
 
   // visible for testing
-  addMissingImages(map: mapboxgl.Map, markers: Marker[], isDarkMode: boolean): void {
+  addMissingImages(map: MaplibreMap, markers: Marker[], isDarkMode: boolean): void {
     const images = new Map<string, string>();
 
     (markers ?? [])
@@ -257,7 +257,7 @@ export class MapMarkerService {
   private simpleHash(value: string): number {
     return Math.abs(
       // https://stackoverflow.com/a/34842797/349169
-      // tslint:disable-next-line:no-bitwise
+      // eslint-disable-next-line no-bitwise
       value.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0)
     );
   }

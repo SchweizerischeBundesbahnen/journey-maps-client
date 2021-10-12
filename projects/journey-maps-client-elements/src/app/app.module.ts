@@ -1,4 +1,4 @@
-import {CUSTOM_ELEMENTS_SCHEMA, Injector, NgModule} from '@angular/core';
+import {ApplicationRef, CUSTOM_ELEMENTS_SCHEMA, DoBootstrap, Injector, NgModule} from '@angular/core';
 import {createCustomElement} from '@angular/elements';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
@@ -18,12 +18,12 @@ import {JourneyMapsClientComponent, JourneyMapsClientModule} from 'journey-maps-
   bootstrap: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class AppModule {
+export class AppModule implements DoBootstrap {
 
   constructor(private injector: Injector) {
   }
 
-  ngDoBootstrap(): void {
+  ngDoBootstrap(appRef: ApplicationRef): void {
     const element = createCustomElement(JourneyMapsClientComponent, {injector: this.injector});
     customElements.define('journey-maps-client', element);
   }

@@ -13,7 +13,7 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import {LngLatLike, Map as MapboxMap, Popup} from 'mapbox-gl';
+import {LngLatLike, Map as MaplibreMap, Popup} from 'maplibre-gl';
 import {Marker} from '../../../../model/marker';
 import {combineLatest, ReplaySubject, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -29,7 +29,7 @@ import {MapMarkerService} from '../../../../services/map/map-marker.service';
 export class PopupComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() shouldRender: boolean;
-  @Input() map: MapboxMap;
+  @Input() map: MaplibreMap;
   @Input() selectedMarker: Marker;
   @Input() template?: TemplateRef<any>;
   @Output() closeClicked = new EventEmitter<void>();

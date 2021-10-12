@@ -15,7 +15,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {LngLatBounds, LngLatLike, Map as MapboxMap, MapLayerMouseEvent} from 'mapbox-gl';
+import {LngLatBounds, LngLatLike, Map as MaplibreMap, MapLayerMouseEvent} from 'maplibre-gl';
 import {MapInitService} from './services/map/map-init.service';
 import {ReplaySubject, Subject} from 'rxjs';
 import {debounceTime, delay, filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -35,7 +35,7 @@ import {LevelSwitchService} from './components/level-switch/services/level-switc
 import {ControlOptions, ViewportOptions, JourneyMapsRoutingOptions, StyleOptions, MarkerOptions, ZoomLevels} from './journey-maps-client.interfaces';
 
 /**
- * This component uses the Mapbox GL JS api to render a map and display the given data on the map.
+ * This component uses the Maplibre GL JS api to render a map and display the given data on the map.
  * <example-url>/</example-url>
  */
 @Component({
@@ -46,7 +46,7 @@ import {ControlOptions, ViewportOptions, JourneyMapsRoutingOptions, StyleOptions
 })
 export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
-  private map: MapboxMap;
+  private map: MaplibreMap;
   @ViewChild('map') private mapElementRef: ElementRef;
 
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
@@ -153,7 +153,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /* **************************************** MARKER OPTIONS *****************************************/
 
   private defaultMarkerOptions: MarkerOptions = {
-    enableSearchBar: true,
     popup: false,
   };
   /**
@@ -231,7 +230,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /**
    * This event is emitted whenever the map is ready.
    */
-  @Output() mapReady = new ReplaySubject<MapboxMap>(1);
+  @Output() mapReady = new ReplaySubject<MaplibreMap>(1);
 
   private currentZoomLevelDebouncer = new Subject<void>();
   private mapCenterChangeDebouncer = new Subject<void>();
@@ -384,9 +383,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.mapConfigService.updateConfigs(
-      this.markerOptions.popup,
-    );
+    this.mapConfigService.updateConfigs(this.markerOptions.popup);
 
     if (changes.markerOptions?.currentValue.markers !== changes.markerOptions?.previousValue?.markers) {
       this.updateMarkers();

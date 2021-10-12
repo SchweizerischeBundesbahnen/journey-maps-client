@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {MapService} from './map.service';
 import {MapRouteService} from './map-route.service';
 import {MapTransferService} from './map-transfer.service';
+import {Map as MaplibreMap} from 'maplibre-gl';
+
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export class MapJourneyService {
   ) {
   }
 
-  updateJourney(map: mapboxgl.Map, journey: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
+  updateJourney(map: MaplibreMap, journey: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
     const routeFeatures: GeoJSON.Feature[] = [];
     const transferFeatures: GeoJSON.Feature[] = [];
 

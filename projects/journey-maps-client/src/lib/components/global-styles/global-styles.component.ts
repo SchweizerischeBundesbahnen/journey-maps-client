@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 
 @Component({
   selector: 'rokas-global-styles',
@@ -10,12 +10,9 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 // (AFAIK) We cannot apply global CSS styles via angular.json for a library.
 // This component with ViewEncapsulation.None is a workaround.
 // Styles defined here will be applied to all elements.
-export class GlobalStylesComponent implements OnInit {
+export class GlobalStylesComponent {
 
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
 }
