@@ -1,11 +1,23 @@
 # Change Log
 
+## [2.3.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.2.0&sourceBranch=refs%2Ftags%2F2.3.0&targetRepoId=46287) - 2021-10-14
+
+### Changed
+
+* Switched from Mapbox to MapLibre. **Please update your dependency.**
+* Removed search bar component.
+* Update minor versions of dependencies.
+* Enable Ivy for Angular library.
+* (Internal: Replace TSLint with ESLint.)
+
 ## [2.2.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.12.0&sourceBranch=refs%2Ftags%2F2.2.0&targetRepoId=46287) - 2021-10-06
 
 ### Changed
 
-* ROKAS-391: Creating a new major release because of breaking changes to the @Input() and @Output() field names and groupings.
-* ROKAS-391: Individual @Input() fields have been grouped into 5 main groups. The ones with an asterisk (*) have been renamed slightly from previous releases
+* ROKAS-391: Creating a new major release because of breaking changes to the @Input() and @Output() field names and
+  groupings.
+* ROKAS-391: Individual @Input() fields have been grouped into 5 main groups. The ones with an asterisk (*) have been
+  renamed slightly from previous releases
   * StyleOptions
     * brightId *
     * darkId *
@@ -35,8 +47,13 @@
     * maxZoom *
     * currentZoom *
 * ROKAS-391: All @Output() fields that used to end with "*Changed" now end with "*Change" for consistency.
-* ROKAS-391: For the full list of @Input() and @Output() fields, see the documentation for [JourneyMapsClientComponent](./components/JourneyMapsClientComponent.html)
+* ROKAS-391: For the full list of @Input() and @Output() fields, see the documentation
+  for [JourneyMapsClientComponent](./components/JourneyMapsClientComponent.html)
 * ROKAS-391: zoomIn() and zoomOut() can now be called directly on the main component. See our test apps for examples.
+
+## 2.1.0 - 2021-10-06 [YANKED]
+
+## 2.0.0 - 2021-10-06 [YANKED]
 
 ## [1.12.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F1.10.0&sourceBranch=refs%2Ftags%2F1.12.0&targetRepoId=46287) - 2021-10-06
 

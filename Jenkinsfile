@@ -86,15 +86,15 @@ pipeline {
         }
       }
       environment {
-        GITHUB_ACCESS = credentials('35c4fe78-0d7d-4f6a-91c7-99a512b47665')
+        NPM_TOKEN = credentials('e5579f36-2d03-4f42-bc79-3f7f11491b5b')
       }
       steps {
-        sh "cat dist/journey-maps-client/package.json | jq '.version = \"${releaseVersion}\"' > tmp.json && mv tmp.json dist/journey-maps-client/package.json"
-        sh "cat dist/journey-maps-client-elements/package.json | jq \'.version = \"${releaseVersion}\"' > tmp.json && mv tmp.json dist/journey-maps-client-elements/package.json"
+        sh "cat dist/journey-maps-client/package.json | jq '.version = \"${releaseVersion}\" | .name = \"@sbbch-rokas/journey-maps-client\"' > tmp.json && mv tmp.json dist/journey-maps-client/package.json"
+        sh "cat dist/journey-maps-client-elements/package.json | jq \'.version = \"${releaseVersion}\" | .name = \"@sbbch-rokas/journey-maps-client-elements\"' > tmp.json && mv tmp.json dist/journey-maps-client-elements/package.json"
         // Without sudo I cannot write to /var/data/jenkins/.npmrc
-        sh 'sudo npm set //npm.pkg.github.com/:_authToken $GITHUB_ACCESS'
-        sh 'sudo npm publish dist/journey-maps-client/ --registry=https://npm.pkg.github.com'
-        sh 'sudo npm publish dist/journey-maps-client-elements/ --registry=https://npm.pkg.github.com'
+        sh 'sudo npm set //registry.npmjs.org/:_authToken $NPM_TOKEN'
+        sh 'sudo npm publish dist/journey-maps-client/ --registry=https://registry.npmjs.org'
+        sh 'sudo npm publish dist/journey-maps-client-elements/ --registry=https://registry.npmjs.org'
       }
     }
     stage('Create & deploy testapp docker') {
