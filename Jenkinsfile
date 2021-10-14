@@ -78,7 +78,7 @@ pipeline {
         }
       }
     }
-    stage('Publish to Github-Packages') {
+    stage('Publish to NPM') {
       when {
         allOf {
           branch 'master'
