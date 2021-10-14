@@ -41,8 +41,6 @@ npm install --save @schweizerischebundesbahnen/journey-maps-client
 
 * SBB Repository:  
   https://bin.sbb.ch/artifactory/rokas.npm/%40schweizerischebundesbahnen/journey-maps-client/-/%40schweizerischebundesbahnen/
-* Github Packages:  
-  https://github.com/SchweizerischeBundesbahnen/journey-maps-client/packages/730124
 
 #### Usage
 
@@ -68,8 +66,6 @@ npm install --save @schweizerischebundesbahnen/journey-maps-client-elements
 
 * SBB Repository:  
   https://bin.sbb.ch/artifactory/rokas.npm/%40schweizerischebundesbahnen/journey-maps-client-elements/-/%40schweizerischebundesbahnen/
-* Github Packages:  
-  https://github.com/SchweizerischeBundesbahnen/journey-maps-client/packages/732937
 
 #### Usage
 

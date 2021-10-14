@@ -93,8 +93,8 @@ pipeline {
         sh "cat dist/journey-maps-client-elements/package.json | jq \'.version = \"${releaseVersion}\" | .name = \"@sbbch-rokas/journey-maps-client-elements\"' > tmp.json && mv tmp.json dist/journey-maps-client-elements/package.json"
         // Without sudo I cannot write to /var/data/jenkins/.npmrc
         sh 'sudo npm set //registry.npmjs.org/:_authToken $NPM_TOKEN'
-        sh 'sudo npm publish dist/journey-maps-client/ --registry=https://registry.npmjs.org'
-        sh 'sudo npm publish dist/journey-maps-client-elements/ --registry=https://registry.npmjs.org'
+        sh 'sudo npm publish dist/journey-maps-client/ --registry=https://registry.npmjs.org --access public'
+        sh 'sudo npm publish dist/journey-maps-client-elements/ --registry=https://registry.npmjs.org --access public'
       }
     }
     stage('Create & deploy testapp docker') {
