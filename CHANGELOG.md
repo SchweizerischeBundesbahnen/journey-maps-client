@@ -1,5 +1,11 @@
 # Change Log
 
+## [2.4.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.3.0&sourceBranch=refs%2Ftags%2F2.4.0&targetRepoId=46287) - 2021-10-15
+
+### Changed
+
+* Improved README files for the public NPM repository.
+
 ## [2.3.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.2.0&sourceBranch=refs%2Ftags%2F2.3.0&targetRepoId=46287) - 2021-10-14
 
 ### Changed
