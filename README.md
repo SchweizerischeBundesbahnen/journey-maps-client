@@ -1,5 +1,15 @@
 # Journey Maps Client
 
+This is the map component of the [SBB ROKAS](https://sbb.sharepoint.com/sites/rokas) team based on Angular (Elements)
+and the  [MapLibre](https://maplibre.org/) framework.
+
+You can find more information here:
+
+* [Angular Library](projects/journey-maps-client/README.md)
+* [Web Component](projects/journey-maps-client-elements/README.md)
+
+![ROKAS Logo](ROKAS.png)
+
 ## Test Applications
 
 ### <a name="testapp"></a>Angular
@@ -41,6 +51,8 @@ npm install --save @schweizerischebundesbahnen/journey-maps-client
 
 * SBB Repository:  
   https://bin.sbb.ch/artifactory/rokas.npm/%40schweizerischebundesbahnen/journey-maps-client/-/%40schweizerischebundesbahnen/
+* Public NPM Repository:
+  https://www.npmjs.com/package/@sbbch-rokas/journey-maps-client
 
 #### Usage
 
@@ -66,14 +78,16 @@ npm install --save @schweizerischebundesbahnen/journey-maps-client-elements
 
 * SBB Repository:  
   https://bin.sbb.ch/artifactory/rokas.npm/%40schweizerischebundesbahnen/journey-maps-client-elements/-/%40schweizerischebundesbahnen/
+* Public NPM Repository:
+  https://www.npmjs.com/package/@sbbch-rokas/journey-maps-client-elements
 
 #### Usage
 
 See example code at Web Component [Test App](#elements)
 
 * The custom element is named `journey-maps-client`.
-* You have to include `main-es2015.js` & `polyfills-es2015.js` (or `main-es5.js` & `polyfills-es5.js`) in your
-  application to get the custom element working.
+* You have to include `main-es2015.js`, `polyfills-es2015.js` and `styles.css` in your application to get the custom
+  element working.
 * We recommend declaring and initializing the custom element in
   Javascript `document.createElement('journey-maps-client')` rather than HTML `<journey-maps-client>`.
 * Angular `@Input` properties can be set on the created element directly (See sample code for example).
