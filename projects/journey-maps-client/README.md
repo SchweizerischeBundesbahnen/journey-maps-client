@@ -25,8 +25,8 @@ https://ki-journey-maps-client.app.test04.otc-test.sbb.ch/documentation/componen
 npm install --save @schweizerischebundesbahnen/journey-maps-client
 ```
 
-**NOTE**: We couldn't publish the library on NPM under `@schweizerischebundesbahnen`. (But we are trying to get that
-organization name.)  
+**NOTE**: We couldn't publish the library in the public NPM repository under `@schweizerischebundesbahnen`. (But we are
+trying to get that organization name.)  
 Therefore it's currently published under `@sbbch-rokas`.
 
 * SBB Repository:  

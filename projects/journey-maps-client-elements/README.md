@@ -17,8 +17,8 @@ Source Code:
 https://ki-journey-maps-client.app.test04.otc-test.sbb.ch/documentation/components/JourneyMapsClientComponent.html  
 (Only accessible from within SBB network)
 
-* Angular `@Input` properties can be set on the created element directly.
-* Angular `@Output` are dispatched as HTML custom events.
+* Angular `@Input` properties can be set on the created element directly. (See Test Application)
+* Angular `@Output` are dispatched as HTML custom events. (See Test Application)
 
 ## Usage
 
@@ -28,8 +28,8 @@ https://ki-journey-maps-client.app.test04.otc-test.sbb.ch/documentation/componen
 npm install --save @schweizerischebundesbahnen/journey-maps-client-elements
 ```
 
-**NOTE**: We couldn't publish the library on NPM under `@schweizerischebundesbahnen`. (But we are trying to get that
-organization name.)  
+**NOTE**: We couldn't publish the library in the public NPM repository under `@schweizerischebundesbahnen`. (But we are
+trying to get that organization name.)  
 Therefore it's currently published under `@sbbch-rokas`.
 
 * SBB Repository:  
@@ -41,6 +41,7 @@ Therefore it's currently published under `@sbbch-rokas`.
 
 * The custom element is named `journey-maps-client`.
 * You have to include `main-es2015.js`, `polyfills-es2015.js` and `styles.css` in your application to get it working.
+* See the Test Application for usage examples.
 * At the moment you cannot overwrite the marker teaser or popup with a custom template. (As it is possible
   with `ng-template`
   for the Angular version.)  
