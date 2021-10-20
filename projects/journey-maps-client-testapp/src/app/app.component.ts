@@ -38,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private _routes: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
 
+  apiKey: string = null;
   controlOptions: ControlOptions = {
     levelSwitch: true,
     zoomControls: true,
@@ -168,6 +169,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
       .subscribe(json => this._routes = json);
+
+    this.assetReaderService.loadAssetAsString('secrets/apikey.txt')
+      .subscribe(apiKey => this.apiKey = apiKey);
 
     this.mapCenterChange.pipe(takeUntil(this.destroyed)).subscribe(mapCenter => this.mapCenter = mapCenter);
   }

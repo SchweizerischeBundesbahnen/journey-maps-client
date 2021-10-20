@@ -1,11 +1,11 @@
-<div class="page-container">
+<div class="page-container" *ngIf="apiKey">
   <h2>Journey-Maps-Client</h2>
 
   <div class="map">
     <!--  Do not use this API key in production. Contact dlrokas@sbb.ch to get your own.-->
     <rokas-journey-maps-client
       language="en"
-      apiKey="e500c71b8c83c1cfb2170608582ae9c8"
+      [apiKey]="apiKey"
       [styleOptions]="styleOptions"
       [controlOptions]="controlOptions"
       [viewportOptions]="viewportOptions"
