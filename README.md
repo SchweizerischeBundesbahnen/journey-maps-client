@@ -6,6 +6,7 @@ and the  [MapLibre](https://maplibre.org/) framework.
 You can find more information here:
 
 * [Angular Library](projects/journey-maps-client/README.md)
+* [Testapp](projects/journey-maps-client-testapp/README.md)
 * [Web Component](projects/journey-maps-client-elements/README.md)
 
 ![ROKAS Logo](ROKAS.png)

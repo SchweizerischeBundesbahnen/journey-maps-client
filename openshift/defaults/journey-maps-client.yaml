@@ -47,10 +47,32 @@ objects:
               resources: { }
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
+              volumeMounts:
+                - mountPath: /home/node/dist/journey-maps-client-testapp/assets/secrets/apikey.txt
+                  name: journey-maps-client-testapp-apikey
+                  readOnly: true
+                  subPath: apikey.txt
+                - mountPath: /home/node/dist/journey-maps-client-testapp/journey-maps-client-elements/assets/secrets/apikey.txt
+                  name: journey-maps-client-elements-apikey
+                  readOnly: true
+                  subPath: apikey.txt
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           securityContext: { }
           terminationGracePeriodSeconds: 30
+          volumes:
+            - name: journey-maps-client-testapp-apikey
+              configMap:
+                name: journey-maps-client-testapp-apikey-config
+                items:
+                  - key: apikey.txt
+                    path: apikey.txt
+            - name: journey-maps-client-elements-apikey
+              configMap:
+                name: journey-maps-client-testapp-apikey-config
+                items:
+                  - key: apikey.txt
+                    path: apikey.txt
       test: false
       triggers:
         - type: ConfigChange

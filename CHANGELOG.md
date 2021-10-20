@@ -2,6 +2,10 @@
 
 ## [2.5.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.4.0&sourceBranch=refs%2Ftags%2F2.5.0&targetRepoId=46287) - 2021-10-20
 
+### Changed
+
+* The api key is no longer exposed in the `testapp` and `elements` `.html` files, but needs to be put into a file called `assets/secrets/apikey.txt` in the respective test apps.
+
 ### Fixed
 
 * Memory leak when reinitializing the map.
