@@ -25,7 +25,7 @@
       var map;
       var client = document.createElement('journey-maps-client');
       client.language = 'de';
-      client.apiKey = 'e500c71b8c83c1cfb2170608582ae9c8';
+      client.apiKey = 'DUMMY'; // gets replaced below
       client.viewportOptions = {
         zoomLevel: 7.5,
         mapCenter: [7.4391326448171196, 46.948834547463086],
@@ -76,7 +76,13 @@
       };
 
       document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('container').appendChild(client);
+        fetch('assets/secrets/apikey.txt')
+          .then(response => response.text())
+          .then(data => {
+            client.apiKey = data;
+            document.getElementById('container').appendChild(client);
+          });
+
         document.getElementById('zoom-level').appendChild(document.createTextNode(client.zoomLevel));
         document.getElementById('min-zoom').appendChild(document.createTextNode(undefined));
         document.getElementById('max-zoom').appendChild(document.createTextNode(undefined));
