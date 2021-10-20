@@ -3,7 +3,8 @@ import {Map as MaplibreMap} from 'maplibre-gl';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {LocaleService} from '../../services/locale.service';
 import {LevelSwitchService} from './services/level-switch.service';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'rokas-level-switch',
@@ -27,13 +28,15 @@ export class LevelSwitchComponent implements OnDestroy {
 
   @Input() map: MaplibreMap;
 
-  private sub: Subscription;
+  private destroyed = new Subject<void>();
 
   constructor(private ref: ChangeDetectorRef,
               private i18n: LocaleService,
               private levelSwitchService: LevelSwitchService,
   ) {
-    this.sub = this.levelSwitchService.changeDetectionEmitter.subscribe(
+    this.levelSwitchService.changeDetectionEmitter.pipe(
+      takeUntil(this.destroyed)
+    ).subscribe(
       () => this.ref.detectChanges()
     );
   }
@@ -57,6 +60,7 @@ export class LevelSwitchComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub?.unsubscribe();
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 }
