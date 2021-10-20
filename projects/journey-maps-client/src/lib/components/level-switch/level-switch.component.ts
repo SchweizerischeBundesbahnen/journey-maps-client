@@ -1,8 +1,10 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy} from '@angular/core';
 import {Map as MaplibreMap} from 'maplibre-gl';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {LocaleService} from '../../services/locale.service';
 import {LevelSwitchService} from './services/level-switch.service';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'rokas-level-switch',
@@ -22,15 +24,19 @@ import {LevelSwitchService} from './services/level-switch.service';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LevelSwitchComponent {
+export class LevelSwitchComponent implements OnDestroy {
 
   @Input() map: MaplibreMap;
+
+  private destroyed = new Subject<void>();
 
   constructor(private ref: ChangeDetectorRef,
               private i18n: LocaleService,
               private levelSwitchService: LevelSwitchService,
   ) {
-    this.levelSwitchService.changeDetectionEmitter.subscribe(
+    this.levelSwitchService.changeDetectionEmitter.pipe(
+      takeUntil(this.destroyed)
+    ).subscribe(
       () => this.ref.detectChanges()
     );
   }
@@ -51,5 +57,10 @@ export class LevelSwitchComponent {
     const txt1 = this.i18n.getText('a4a.visualFunction');
     const txt2 = this.i18n.getTextWithParams('a4a.selectFloor', level);
     return `${txt1} ${txt2}`;
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 }

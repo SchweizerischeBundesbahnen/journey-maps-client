@@ -32,7 +32,14 @@ import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
-import {ControlOptions, ViewportOptions, JourneyMapsRoutingOptions, StyleOptions, MarkerOptions, ZoomLevels} from './journey-maps-client.interfaces';
+import {
+  ControlOptions,
+  JourneyMapsRoutingOptions,
+  MarkerOptions,
+  StyleOptions,
+  ViewportOptions,
+  ZoomLevels
+} from './journey-maps-client.interfaces';
 
 /**
  * This component uses the Maplibre GL JS api to render a map and display the given data on the map.
@@ -62,6 +69,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   get language(): string {
     return this.i18n.language;
   }
+
   set language(language: string) {
     if (language == null) {
       throw new TypeError('language mustn\'t be null');
@@ -82,6 +90,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     darkId: 'base_dark_v2_ki',
     mode: StyleMode.BRIGHT,
   };
+
   /**
    * Settings to control the map (bright and dark) styles
    */
@@ -89,12 +98,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   get styleOptions(): StyleOptions {
     return this._styleOptions;
   }
+
   set styleOptions(styleOptions: StyleOptions) {
     this._styleOptions = {
       ...this.defaultStyleOptions,
       ...styleOptions,
     };
   }
+
   private _styleOptions: StyleOptions = this.defaultStyleOptions;
 
   // **************************************** CONTROL OPTIONS *****************************************/
@@ -106,6 +117,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     oneFingerPan: false,
     scrollZoom: false,
   };
+
   /**
    * Settings to control the movement of the map
    */
@@ -113,12 +125,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   get controlOptions(): ControlOptions {
     return this._controlOptions;
   }
+
   set controlOptions(controlOptions: ControlOptions) {
     this._controlOptions = {
       ...this.defaultControlOptions,
       ...controlOptions,
     };
   }
+
   private _controlOptions: ControlOptions = this.defaultControlOptions;
 
   // **************************************** VIEWPORT OPTIONS *****************************************/
@@ -126,6 +140,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private defaultViewportOptions: ViewportOptions = {
     boundingBoxPadding: 0,
   };
+
   /**
    * Settings that control what portion of the map is shown initially
    */
@@ -133,12 +148,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   get viewportOptions(): ViewportOptions {
     return this._viewportOptions;
   }
+
   set viewportOptions(viewportOptions: ViewportOptions) {
     this._viewportOptions = {
       ...this.defaultViewportOptions,
       ...viewportOptions,
     };
   }
+
   private _viewportOptions: ViewportOptions = this.defaultViewportOptions;
 
   /* **************************************** JOURNEY-MAPS ROUTING OPTIONS *****************************************/
@@ -155,6 +172,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private defaultMarkerOptions: MarkerOptions = {
     popup: false,
   };
+
   /**
    * Settings to control interacting with markers on the map
    */
@@ -162,12 +180,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   get markerOptions(): MarkerOptions {
     return this._markerOptions;
   }
+
   set markerOptions(markerOptions: MarkerOptions) {
     this._markerOptions = {
       ...this.defaultMarkerOptions,
       ...markerOptions,
     };
   }
+
   private _markerOptions: MarkerOptions = this.defaultMarkerOptions;
 
   /**
@@ -190,6 +210,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     // without this getter, the setter is never called when passing 'undefined' (via the 'elements' web component)
     return this.selectedMarker?.id;
   }
+
   set selectedMarkerId(markerId: string | undefined) {
     if (!!markerId) {
       const selectedMarker = this.markerOptions.markers?.find(marker => marker.id === markerId);
@@ -486,6 +507,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnDestroy(): void {
+    this.map?.remove();
+
     this.destroyed.next();
     this.destroyed.complete();
     this.mapLeitPoiService.destroy();
@@ -539,13 +562,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
     this.mapStyleModeChanged.pipe(
       debounceTime(200),
-      takeUntil(this.destroyed),
-      switchMap(() => this.mapInitService.fetchStyle(this.getStyleUrl()))
+      switchMap(() => this.mapInitService.fetchStyle(this.getStyleUrl())),
+      takeUntil(this.destroyed)
     ).subscribe(style => {
-        this.map.setStyle(style, {diff: false});
-        this.map.once('styledata',
-          () => this.mapMarkerService.updateMarkers(this.map, this.markerOptions.markers, this.selectedMarker, this.styleOptions.mode));
-      });
+      this.map.setStyle(style, {diff: false});
+      this.map.once('styledata',
+        () => this.mapMarkerService.updateMarkers(this.map, this.markerOptions.markers, this.selectedMarker, this.styleOptions.mode));
+    });
 
     this.currentZoomLevelDebouncer.pipe(
       debounceTime(200),
@@ -557,8 +580,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       takeUntil(this.destroyed)
     ).subscribe(() => this.mapCenterChange.emit(this.map.getCenter()));
 
-    this.levelSwitchService.selectedLevel$.subscribe(level => this.selectedLevelChange.emit(level));
-    this.levelSwitchService.visibleLevels$.subscribe(levels => this.visibleLevelsChange.emit(levels));
+    this.levelSwitchService.selectedLevel$.pipe(
+      takeUntil(this.destroyed)
+    ).subscribe(level => this.selectedLevelChange.emit(level));
+    this.levelSwitchService.visibleLevels$.pipe(
+      takeUntil(this.destroyed)
+    ).subscribe(levels => this.visibleLevelsChange.emit(levels));
   }
 
   @HostListener('window:resize')

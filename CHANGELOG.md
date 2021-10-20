@@ -1,5 +1,11 @@
 # Change Log
 
+## [2.5.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.4.0&sourceBranch=refs%2Ftags%2F2.5.0&targetRepoId=46287) - 2021-10-20
+
+### Fixed
+
+* Memory leak when reinitializing the map.
+
 ## [2.4.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.3.0&sourceBranch=refs%2Ftags%2F2.4.0&targetRepoId=46287) - 2021-10-15
 
 ### Changed
