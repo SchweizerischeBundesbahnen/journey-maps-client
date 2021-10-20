@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 import {InfoBlockFactoryService} from '../../../journey-maps-client/src/lib/services/info-block-factory.service';
 import {LngLatLike, Map} from 'maplibre-gl';
@@ -15,6 +15,7 @@ import {
   ViewportOptions,
   ZoomLevels,
 } from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
+import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private assetReaderService: AssetReaderService
   ) {
   }
+
+  @ViewChild(JourneyMapsClientComponent)
+  client: JourneyMapsClientComponent;
 
   private loremIpsum = new LoremIpsum();
   private _journey: GeoJSON.FeatureCollection;
@@ -60,6 +64,8 @@ export class AppComponent implements OnInit, OnDestroy {
   mapCenter: LngLatLike;
   mapCenterChange = new Subject<LngLatLike>();
   map: Map;
+
+  mapVisible = true;
 
   markerOptions = {
     popup: true,
@@ -148,8 +154,6 @@ export class AppComponent implements OnInit, OnDestroy {
       },
     ],
   };
-
-  customButtonStyle = 'background-color: white; border-width: 1px; border-radius: 5px; margin: 5px 5px 0 0;';
 
   ngOnInit(): void {
     this.assetReaderService.loadAssetAsJSON('journey/zh-sh_waldfriedhof.json')

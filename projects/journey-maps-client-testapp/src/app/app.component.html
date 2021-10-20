@@ -1,24 +1,23 @@
-<div class="page-container" *ngIf="apiKey">
+<div class="page-container">
   <h2>Journey-Maps-Client</h2>
 
   <div class="map">
     <!--  Do not use this API key in production. Contact dlrokas@sbb.ch to get your own.-->
-    <rokas-journey-maps-client
-      language="en"
-      [apiKey]="apiKey"
-      [styleOptions]="styleOptions"
-      [controlOptions]="controlOptions"
-      [viewportOptions]="viewportOptions"
-      [journeyMapsRoutingOption]="journeyMapsRoutingOption"
-      [markerOptions]="markerOptions"
-      [markerDetailsTemplate]=""
-      [(selectedMarkerId)]="selectedMarkerId"
-      [(selectedLevel)]="selectedLevel"
-      (visibleLevelsChange)="visibleLevels=$event"
-      (zoomLevelsChange)="zoomLevels=$event"
-      (mapCenterChange)="mapCenterChange.next($event)"
-      (mapReady)="onMapRecieved($event)"
-      #client
+    <rokas-journey-maps-client *ngIf="mapVisible && apiKey"
+                               language="en"
+                               [apiKey]="apiKey"
+                               [styleOptions]="styleOptions"
+                               [controlOptions]="controlOptions"
+                               [viewportOptions]="viewportOptions"
+                               [journeyMapsRoutingOption]="journeyMapsRoutingOption"
+                               [markerOptions]="markerOptions"
+                               [markerDetailsTemplate]=""
+                               [(selectedMarkerId)]="selectedMarkerId"
+                               [(selectedLevel)]="selectedLevel"
+                               (visibleLevelsChange)="visibleLevels=$event"
+                               (zoomLevelsChange)="zoomLevels=$event"
+                               (mapCenterChange)="mapCenterChange.next($event)"
+                               (mapReady)="onMapRecieved($event)"
     >
     </rokas-journey-maps-client>
 
@@ -31,75 +30,44 @@
 
   <div>
     <ul>
-      <li style="list-style: circle;">
-        <button
-          [style]="customButtonStyle"
-          (click)="setSelectedMarkerId('home')"
-        >Select 'Home Office' marker
-        </button>
-        <button
-          [style]="customButtonStyle"
-          (click)="setSelectedMarkerId(undefined)"
-        >Unselect all markers
-        </button>
+      <li>
+        <button (click)="mapVisible = !mapVisible">Toggle Map Visibility</button>
       </li>
-      <li style="list-style: circle;">Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span>
+      <li>
+        <button (click)="setSelectedMarkerId('home')">Select 'Home Office' marker</button>
+        <button (click)="setSelectedMarkerId(undefined)">Unselect all markers</button>
       </li>
-      <li style="list-style: circle;">Zoom Level (within range {{zoomLevels?.minZoom}}..{{zoomLevels?.maxZoom}}): {{zoomLevels?.currentZoom}}</li>
-      <li style="list-style: circle;">
-        <button
-          [style]="customButtonStyle"
-          (click)="client.zoomIn()"
-        >Zoom In
-        </button>
-        <button
-          [style]="customButtonStyle"
-          (click)="client.zoomOut()"
-        >Zoom Out
-        </button>
+      <li>Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span>
       </li>
-      <li style="list-style: circle;">
-        Level switch: <span *ngIf="!visibleLevels.length">There are no visible levels.</span>
+      <li>Zoom Level (within range {{zoomLevels?.minZoom}}..{{zoomLevels?.maxZoom}}): {{zoomLevels?.currentZoom}}</li>
+      <li>
+        <button (click)="client.zoomIn()">Zoom In</button>
+        <button (click)="client.zoomOut()">Zoom Out</button>
+      </li>
+      <li>
+        Level switch:
+        <span *ngIf="!visibleLevels?.length">There are no visible levels.</span>
         <ng-container *ngFor="let level of visibleLevels">
           <button
             [disabled]="level === selectedLevel"
-            [style]="customButtonStyle"
-            (click)="setSelectedLevel(level)"
-          >Level {{level}}
+            (click)="setSelectedLevel(level)">
+            Level {{level}}
           </button>
         </ng-container>
       </li>
-      <li style="list-style: circle;">Map center: {{mapCenter}}</li>
-      <li style="list-style: circle;">
-        <button
-          [style]="customButtonStyle"
-          (click)="client.moveNorth()"
-        >Move North
-        </button>
-        <button
-          [style]="customButtonStyle"
-          (click)="client.moveEast()"
-        >Move East
-        </button>
-        <button
-          [style]="customButtonStyle"
-          (click)="client.moveSouth()"
-        >Move South
-        </button>
-        <button
-          [style]="customButtonStyle"
-          (click)="client.moveWest()"
-        >Move West
-        </button>
+      <li>Map center: {{mapCenter}}</li>
+      <li>
+        <button (click)="client.moveNorth()">Move North</button>
+        <button (click)="client.moveEast()">Move East</button>
+        <button (click)="client.moveSouth()">Move South</button>
+        <button (click)="client.moveWest()">Move West</button>
       </li>
-      <li style="list-style: circle;">Map loaded: {{map?.loaded()}}</li>
-      <li style="list-style: circle;">Allow moving the map with one finger: {{controlOptions.oneFingerPan}}</li>
-      <li style="list-style: circle;">
+      <li>Map loaded: {{map?.loaded()}}</li>
+      <li>Allow moving the map with one finger: {{controlOptions.oneFingerPan}}</li>
+      <li>
         <label for="geo-json-select">
           Display Journey-Maps GeoJSON data for:
-          <select id="geo-json-select"
-                  style="width: 200px; min-height: 10px; padding: 0 5px; background-position: right; color: black;"
-                  (change)="setGeoJsonInput($event)">
+          <select id="geo-json-select" (change)="setGeoJsonInput($event)">
             <option value="" (change)="setGeoJsonInput($event)">(none)</option>
             <option *ngFor="let input of journeyMapsGeoJsonOptions" [value]="input">{{input}}</option>
           </select>
@@ -108,10 +76,7 @@
       <li>
         <label for="popup-select">
           Show marker details as:
-          <select id="popup-select"
-                  style="width: 200px; min-height: 10px; padding: 0 5px; background-position: right; color: black;"
-                  (change)="setPopupInput($event)"
-          >
+          <select id="popup-select" (change)="setPopupInput($event)">
             <option value="true">Popup</option>
             <option value="false">Teaser</option>
           </select>
@@ -120,10 +85,7 @@
       <li>
         <label for="styleMode-select">
           Change style mode:
-          <select id="styleMode-select"
-                  style="width: 200px; min-height: 10px; padding: 0 5px; background-position: right; color: black;"
-                  (change)="setStyleModeInput($event)"
-          >
+          <select id="styleMode-select" (change)="setStyleModeInput($event)">
             <option value="BRIGHT">Bright Mode</option>
             <option value="DARK">Dark Mode</option>
           </select>
