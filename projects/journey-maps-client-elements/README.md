@@ -2,7 +2,7 @@
 
 ## <a name="testapp"></a>Test Application
 
-https://ki-journey-maps-client.app.test04.otc-test.sbb.ch/journey-maps-client-elements/  
+https://ki-journey-maps-client.apps.aws01t.sbb-aws-test.net/journey-maps-client-elements/  
 (Only accessible from within SBB network)
 
 Source Code:
@@ -14,7 +14,7 @@ Source Code:
 
 ## API Documentation
 
-https://ki-journey-maps-client.app.test04.otc-test.sbb.ch/documentation/components/JourneyMapsClientComponent.html  
+https://ki-journey-maps-client.apps.aws01t.sbb-aws-test.net/documentation/components/JourneyMapsClientComponent.html  
 (Only accessible from within SBB network)
 
 * Angular `@Input` properties can be set on the created element directly. (See Test Application)
