@@ -111,14 +111,14 @@ pipeline {
           )
 
           cloud_mergeConfigAndUpdateOpenShift(
-            cluster: 'otc_test_04',
-            credentialId: 'ea1bfded-bc12-4db2-8429-e204a28195d1',
+            cluster: 'aws_aws01t',
+            credentialId: '3561396d-b39e-44ff-a871-ed1017266f57',
             projects: 'ki-journey-maps-client'
           )
 
           cloud_callDeploy(
-            cluster: 'otc_test_04',
-            credentialId: 'ea1bfded-bc12-4db2-8429-e204a28195d1',
+            cluster: 'aws_aws01t',
+            credentialId: '3561396d-b39e-44ff-a871-ed1017266f57',
             dc: 'journey-maps-client',
             project: 'ki-journey-maps-client',
             doNotFailOnRunningDeployment: true

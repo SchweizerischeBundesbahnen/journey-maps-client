@@ -99,7 +99,7 @@ objects:
         app: journey-maps-client
       name: journey-maps-client
     spec:
-      host: ki-journey-maps-client.app.test04.otc-test.sbb.ch
+      host: ki-journey-maps-client.apps.aws01t.sbb-aws-test.net
       port:
         targetPort: network-port
       tls:
