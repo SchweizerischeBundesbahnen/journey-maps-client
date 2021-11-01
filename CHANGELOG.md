@@ -5,7 +5,6 @@
 ### Changed
 
 * new configuration for running the test application on AWS01T Cloud (OCP).
-  * https://ki-journey-maps-client.apps.aws01t.sbb-aws-test.net
 
 ## [2.5.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.4.0&sourceBranch=refs%2Ftags%2F2.5.0&targetRepoId=46287) - 2021-10-20
 
