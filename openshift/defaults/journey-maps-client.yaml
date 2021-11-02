@@ -8,7 +8,7 @@ objects:
         app: journey-maps-client
       name: journey-maps-client
     spec:
-      replicas: ${REPLICAS}
+      replicas: 1
       selector:
         app: journey-maps-client
       template:
@@ -114,8 +114,3 @@ metadata:
   name: journey-maps-client-app-template
   labels:
     app: journey-maps-client
-
-parameters:
-  - name: REPLICAS
-    description: Replicas, baby
-    required: true
