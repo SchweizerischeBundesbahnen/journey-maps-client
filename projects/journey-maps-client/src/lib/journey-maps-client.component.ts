@@ -86,6 +86,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   // **************************************** STYLE OPTIONS *****************************************/
 
   private defaultStyleOptions: StyleOptions = {
+    url: 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}',
     brightId: 'base_bright_v2_ki',
     darkId: 'base_dark_v2_ki',
     mode: StyleMode.BRIGHT,
@@ -271,12 +272,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   // map.isStyleLoaded() returns sometimes false when sources are being updated.
   // Therefore we set this variable to true once the style has been loaded.
   private isStyleLoaded = false;
-
-  /**
-   * Overwrite this value if you want to use a style from a different source.
-   * Actually you should not need this.
-   */
-  private url = 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}';
 
   private _selectedMarker: Marker;
 
@@ -497,7 +492,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private getStyleUrl(): string {
-    return this.url
+    return this.styleOptions.url
       .replace('{styleId}', this.getStyleId())
       .replace('{apiKey}', this.apiKey);
   }

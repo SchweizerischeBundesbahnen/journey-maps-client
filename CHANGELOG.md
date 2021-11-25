@@ -1,10 +1,11 @@
 # Change Log
 
-## TODO => [2.6.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.5.0&sourceBranch=refs%2Ftags%2F2.6.0&targetRepoId=46287) - TODO
+## [2.6.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.5.0&sourceBranch=refs%2Ftags%2F2.6.0&targetRepoId=46287) - TODO
 
 ### Changed
 
 * new configuration for running the test application on AWS01T Cloud (OCP).
+* Add optional url to StyleOptions.
 
 ## [2.5.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.4.0&sourceBranch=refs%2Ftags%2F2.5.0&targetRepoId=46287) - 2021-10-20
 

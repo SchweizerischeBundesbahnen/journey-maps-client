@@ -3,6 +3,8 @@ import {LngLatBoundsLike, LngLatLike} from 'mapbox-gl';
 import {Marker} from './model/marker';
 
 export interface StyleOptions {
+  /** Overwrite this value if you want to use a style from a different source. */
+  url?: string;
   /** Overwrite this value if you want to use a custom style id. */
   brightId?: string;
   /** Overwrite this value if you want to use a custom style id for the dark mode. */
