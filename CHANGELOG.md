@@ -7,6 +7,10 @@
 * new configuration for running the test application on AWS01T Cloud (OCP).
 * Add optional url to StyleOptions.
 
+### Fixed
+
+* Scope css style to the Web Component itself.
+
 ## [2.5.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.4.0&sourceBranch=refs%2Ftags%2F2.5.0&targetRepoId=46287) - 2021-10-20
 
 ### Changed
