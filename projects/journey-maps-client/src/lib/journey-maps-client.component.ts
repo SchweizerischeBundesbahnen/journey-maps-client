@@ -607,6 +607,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.map.resize();
     // @ts-ignore
     this.mapService.verifySources(this.map, [Constants.ROUTE_SOURCE, Constants.WALK_SOURCE, ...this.mapMarkerService.sources]);
+    JourneyMapsClientComponent.addSatelliteSource(this.map);
 
     for (const layer of this.mapMarkerService.allMarkerAndClusterLayers) {
       this.map.on('mouseenter', layer, () => this.cursorChanged.next(true));
@@ -622,6 +623,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.isStyleLoaded = true;
     this.styleLoaded.next();
     this.mapReady.next(this.map);
+  }
+
+  private static addSatelliteSource(map: maplibregl.Map) {
+    map.addSource("wi", {
+      type: "raster",
+      tiles: ["https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
+      tileSize: 128,
+    });
   }
 
   /** @internal */
@@ -666,6 +675,17 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   onToggleBasemap() {
+    const satelliteLayerId = "rasterlayer";
+
     this.isSatelliteMap = !this.isSatelliteMap;
+    if (this.isSatelliteMap) {
+      this.map.addLayer({
+        id: satelliteLayerId,
+        type: "raster",
+        source: "wi",
+      }, "waterName_point_other");
+    } else {
+      this.map.removeLayer(satelliteLayerId);
+    }
   }
 }
