@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.7.0 SNAPSHOT
+
+### Changed 
+
+* Allow the user to switch between vector and satellite image map.
+
 ## [2.6.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.5.0&sourceBranch=refs%2Ftags%2F2.6.0&targetRepoId=46287) - 2021-11-29
 
 ### Changed
