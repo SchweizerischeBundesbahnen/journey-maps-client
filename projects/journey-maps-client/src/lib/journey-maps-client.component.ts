@@ -277,6 +277,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private _selectedMarker: Marker;
 
   private isSatelliteMap = false;
+  private satelliteImageSourceName = "esriWorldImagery";
 
   /** @internal */
   constructor(private mapInitService: MapInitService,
@@ -607,7 +608,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.map.resize();
     // @ts-ignore
     this.mapService.verifySources(this.map, [Constants.ROUTE_SOURCE, Constants.WALK_SOURCE, ...this.mapMarkerService.sources]);
-    JourneyMapsClientComponent.addSatelliteSource(this.map);
+    this.addSatelliteSource(this.map);
 
     for (const layer of this.mapMarkerService.allMarkerAndClusterLayers) {
       this.map.on('mouseenter', layer, () => this.cursorChanged.next(true));
@@ -625,8 +626,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.mapReady.next(this.map);
   }
 
-  private static addSatelliteSource(map: maplibregl.Map) {
-    map.addSource("wi", {
+  private addSatelliteSource(map: maplibregl.Map) {
+    map.addSource(this.satelliteImageSourceName, {
       type: "raster",
       tiles: ["https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
       tileSize: 128,
@@ -682,7 +683,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.map.addLayer({
         id: satelliteLayerId,
         type: "raster",
-        source: "wi",
+        source: this.satelliteImageSourceName,
       }, "waterName_point_other");
     } else {
       this.map.removeLayer(satelliteLayerId);
