@@ -17,7 +17,8 @@ export class LocaleService {
         visualFunction: 'Visuelle Funktion, nicht für Screenreader gedacht.',
         zoomIn: 'Kartenausschnitt vergrössern.',
         zoomOut: 'Kartenausschnitt verkleinern.',
-        selectFloor: 'Stockwerk [0] anzeigen.'
+        selectFloor: 'Stockwerk [0] anzeigen.',
+        basemapSwitch: 'Kartentyp ändern.',
       }
     },
     fr: {
@@ -29,7 +30,8 @@ export class LocaleService {
         visualFunction: 'Fonction visuelle, non destinée aux lecteurs d\'écran.',
         zoomIn: 'Zoomer.',
         zoomOut: 'Dézoomer.',
-        selectFloor: 'Afficher l\'étage [0].'
+        selectFloor: 'Afficher l\'étage [0].',
+        basemapSwitch: 'Changer le type de la carte.',
       }
     },
     it: {
@@ -41,7 +43,8 @@ export class LocaleService {
         visualFunction: 'Funzione visiva, non destinata ai lettori di schermo.',
         zoomIn: 'Ingrandire la sezione della mappa.',
         zoomOut: 'Ridurre la sezione della mappa.',
-        selectFloor: 'Mostra il piano [0].'
+        selectFloor: 'Mostra il piano [0].',
+        basemapSwitch: 'Cambiare il tipo di mappa',
       }
     },
     en: {
@@ -53,7 +56,8 @@ export class LocaleService {
         visualFunction: 'Visual function, not intended for screen readers.',
         zoomIn: 'Zoom in on map.',
         zoomOut: 'Zoom out on map.',
-        selectFloor: 'Select floor [0].'
+        selectFloor: 'Select floor [0].',
+        basemapSwitch: 'Change the map type',
       }
     }
   };

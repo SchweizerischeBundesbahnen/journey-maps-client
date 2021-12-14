@@ -117,6 +117,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     /** By default, you get a message-overlay if you try to pan with one finger. */
     oneFingerPan: false,
     scrollZoom: false,
+    basemapSwitch: false,
   };
 
   /**
@@ -274,6 +275,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private isStyleLoaded = false;
 
   private _selectedMarker: Marker;
+
+  private isSatelliteMap = false;
 
   /** @internal */
   constructor(private mapInitService: MapInitService,
@@ -660,5 +663,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       bounds.extend(marker.position as LngLatLike);
     });
     return bounds;
+  }
+
+  onToggleBasemap() {
+    this.isSatelliteMap = !this.isSatelliteMap;
   }
 }

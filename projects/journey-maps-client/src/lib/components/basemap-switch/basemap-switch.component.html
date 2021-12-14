@@ -1,0 +1,8 @@
+<div class="basemap-switch-buttons-container" *ngIf="map">
+  <div class="basemap-switch-button">
+    <button (click)="doToggleBasemap()" class="basemap-switch-button-content"
+            [attr.aria-label]="basemapSwitchLabel">
+      <sbb-icon svgIcon="kom:layers-medium"></sbb-icon>
+    </button>
+  </div>
+</div>

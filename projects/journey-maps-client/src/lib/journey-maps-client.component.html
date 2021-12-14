@@ -23,6 +23,11 @@
         *ngIf="controlOptions.zoomControls"
         [map]="mapReady | async"
       ></rokas-zoom-controls>
+      <rokas-basemap-switch
+        *ngIf="controlOptions.basemapSwitch"
+        [map]="mapReady | async"
+        (toggleBasemap)="onToggleBasemap()"
+      ></rokas-basemap-switch>
       <rokas-level-switch
         *ngIf="controlOptions.levelSwitch"
         [map]="mapReady | async"
