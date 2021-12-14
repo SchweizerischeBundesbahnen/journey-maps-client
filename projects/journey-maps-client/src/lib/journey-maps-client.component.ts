@@ -683,6 +683,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         id: this.satelliteLayerId,
         type: "raster",
         source: this.satelliteImageSourceName,
+        maxzoom: 19.2,
       }, "waterName_point_other");
     } else {
       this.map.removeLayer(this.satelliteLayerId);
