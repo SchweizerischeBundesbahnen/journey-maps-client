@@ -277,7 +277,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private _selectedMarker: Marker;
 
   private isSatelliteMap = false;
-  private satelliteImageSourceName = "esriWorldImagery";
+  private satelliteLayerId = "esriWorldImageryLayer";
+  private satelliteImageSourceName = "esriWorldImagerySource";
 
   /** @internal */
   constructor(private mapInitService: MapInitService,
@@ -676,17 +677,15 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   onToggleBasemap() {
-    const satelliteLayerId = "rasterlayer";
-
     this.isSatelliteMap = !this.isSatelliteMap;
     if (this.isSatelliteMap) {
       this.map.addLayer({
-        id: satelliteLayerId,
+        id: this.satelliteLayerId,
         type: "raster",
         source: this.satelliteImageSourceName,
       }, "waterName_point_other");
     } else {
-      this.map.removeLayer(satelliteLayerId);
+      this.map.removeLayer(this.satelliteLayerId);
     }
   }
 }
