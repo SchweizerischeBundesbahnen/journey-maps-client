@@ -24,6 +24,8 @@ export interface ControlOptions {
   levelSwitch?: boolean;
   /** Whether the map should show the level switch control or not. */
   zoomControls?: boolean;
+  /** Whether the map should show the basemap switch control or not. */
+  basemapSwitch?: boolean;
 }
 
 export interface ViewportOptions {

@@ -117,6 +117,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     /** By default, you get a message-overlay if you try to pan with one finger. */
     oneFingerPan: false,
     scrollZoom: false,
+    basemapSwitch: false,
   };
 
   /**
@@ -274,6 +275,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private isStyleLoaded = false;
 
   private _selectedMarker: Marker;
+
+  private isSatelliteMap = false;
+  private satelliteLayerId = "esriWorldImageryLayer";
+  private satelliteImageSourceName = "esriWorldImagerySource";
 
   /** @internal */
   constructor(private mapInitService: MapInitService,
@@ -604,6 +609,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.map.resize();
     // @ts-ignore
     this.mapService.verifySources(this.map, [Constants.ROUTE_SOURCE, Constants.WALK_SOURCE, ...this.mapMarkerService.sources]);
+    this.addSatelliteSource(this.map);
 
     for (const layer of this.mapMarkerService.allMarkerAndClusterLayers) {
       this.map.on('mouseenter', layer, () => this.cursorChanged.next(true));
@@ -619,6 +625,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.isStyleLoaded = true;
     this.styleLoaded.next();
     this.mapReady.next(this.map);
+  }
+
+  private addSatelliteSource(map: maplibregl.Map) {
+    map.addSource(this.satelliteImageSourceName, {
+      type: "raster",
+      tiles: ["https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
+      tileSize: 128,
+    });
   }
 
   /** @internal */
@@ -660,5 +674,19 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       bounds.extend(marker.position as LngLatLike);
     });
     return bounds;
+  }
+
+  onToggleBasemap() {
+    this.isSatelliteMap = !this.isSatelliteMap;
+    if (this.isSatelliteMap) {
+      this.map.addLayer({
+        id: this.satelliteLayerId,
+        type: "raster",
+        source: this.satelliteImageSourceName,
+        maxzoom: 19.2,
+      }, "waterName_point_other");
+    } else {
+      this.map.removeLayer(this.satelliteLayerId);
+    }
   }
 }

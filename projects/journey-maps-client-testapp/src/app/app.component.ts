@@ -48,6 +48,7 @@ export class AppComponent implements OnInit, OnDestroy {
     zoomControls: true,
     oneFingerPan: true,
     scrollZoom: true,
+    basemapSwitch: true,
   };
   selectedMarkerId: string;
   visibleLevels: number[];

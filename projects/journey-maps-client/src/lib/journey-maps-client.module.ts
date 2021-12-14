@@ -15,6 +15,7 @@ import {InfoBlockRendererComponent} from './components/marker-details/components
 import {AddressInfoBlockComponent} from './components/marker-details/components/info-block-renderer/components/address-info-block/address-info-block.component';
 import {ZoomControlsComponent} from './components/zoom-controls/zoom-controls.component';
 import {LeitPoiComponent} from './components/leit-poi/leit-poi.component';
+import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch.component';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import {LeitPoiComponent} from './components/leit-poi/leit-poi.component';
     GlobalStylesComponent,
     LevelSwitchComponent,
     ZoomControlsComponent,
+    BasemapSwitchComponent,
     PopupComponent,
     MarkerDetailsComponent,
     InfoBlockRendererComponent,
