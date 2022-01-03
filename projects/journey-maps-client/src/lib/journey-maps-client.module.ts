@@ -16,6 +16,7 @@ import {AddressInfoBlockComponent} from './components/marker-details/components/
 import {ZoomControlsComponent} from './components/zoom-controls/zoom-controls.component';
 import {LeitPoiComponent} from './components/leit-poi/leit-poi.component';
 import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch.component';
+import { FeatureLayerComponent } from './components/feature-layer/feature-layer.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch
     MarkerDetailsComponent,
     InfoBlockRendererComponent,
     AddressInfoBlockComponent,
-    LeitPoiComponent
+    LeitPoiComponent,
+    FeatureLayerComponent
   ],
   imports: [
     CommonModule,
