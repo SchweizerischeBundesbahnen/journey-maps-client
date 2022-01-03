@@ -1,0 +1,10 @@
+.loader {
+    position: absolute;
+    left: 1%;
+    top: 1%;
+    z-index: 10000;
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+    border: 1px solid #CCCCCC;
+}

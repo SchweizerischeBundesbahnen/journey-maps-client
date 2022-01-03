@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {Map as MaplibreMap} from 'maplibre-gl';
 import {Subject} from 'rxjs';
 import {FeatureLayerService} from './services/feature-layer.service';
@@ -16,9 +16,12 @@ export class FeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
   @Input() url: string;
   @Input() secure?: boolean;
 
+  isLoading = false;
+
   private destroyed = new Subject<void>();
 
-  constructor(private featureLayerService: FeatureLayerService,
+  constructor(private ref: ChangeDetectorRef,
+              private featureLayerService: FeatureLayerService,
               private symbolParserService: FeatureLayerRendererSymbolParserService) {
   }
 
@@ -51,9 +54,12 @@ export class FeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private loadFeatures(config: FeatureLayerConfig): void {
+    this.isLoading = true;
     this.featureLayerService.getFeatures(this.url, config.maxRecordCount, this.secure)
       .pipe(takeUntil(this.destroyed))
       .subscribe(features => {
+        this.isLoading = false;
+        this.ref.detectChanges();
         this.showLayer(features, config);
       });
   }
