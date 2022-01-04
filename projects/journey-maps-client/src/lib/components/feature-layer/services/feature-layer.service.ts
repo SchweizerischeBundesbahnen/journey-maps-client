@@ -3,6 +3,7 @@ import {EMPTY, Observable, of} from 'rxjs';
 import {FeatureLayerConfig} from '../model/feature-layer-config';
 import {HttpClient} from '@angular/common/http';
 import {expand, map, reduce} from 'rxjs/operators';
+import {FeatureLayerOptions} from '../model/feature-layer-options';
 
 @Injectable({
   providedIn: 'root'
@@ -15,19 +16,19 @@ export class FeatureLayerService {
   constructor(private http: HttpClient) {
   }
 
-  getFeatureLayerConfig(url: string, secure: boolean): Observable<FeatureLayerConfig> {
-    const requestUrl = new URL(url);
+  getFeatureLayerConfig(options: FeatureLayerOptions): Observable<FeatureLayerConfig> {
+    const requestUrl = new URL(options.url);
     requestUrl.searchParams.append('f', 'json');
-    return this.http.get<FeatureLayerConfig>(requestUrl.toString(), this.getHttpOptions(secure));
+    return this.http.get<FeatureLayerConfig>(requestUrl.toString(), this.getHttpOptions(options.requestWithCredentials));
   }
 
-  getFeatures(url: string, resultLimit: number, secure: boolean): Observable<any> {
+  getFeatures(options: FeatureLayerOptions): Observable<GeoJSON.Feature<GeoJSON.Geometry>[]> {
     let resultOffset = 0;
-    return this.loadFeatures(url, resultLimit, 0, secure).pipe(
+    return this.loadFeatures(options, 0).pipe(
       expand((response: any) => {
         if (response.exceededTransferLimit) {
-          resultOffset = resultOffset + resultLimit;
-          return this.loadFeatures(url, resultLimit, resultOffset, secure);
+          resultOffset = resultOffset + options.featuresPerRequestLimit;
+          return this.loadFeatures(options, resultOffset);
         } else {
           return EMPTY;
         }
@@ -40,29 +41,31 @@ export class FeatureLayerService {
       }, []));
   }
 
-  scaleToLevel(scale: number): number {
+  convertScaleToLevel(scale: number): number {
     if (scale === 0) {
       return 0;
     }
-    return this.arcgisLODs.find(lod => lod.scale < scale).level - 1;
+
+    const lower = this.arcgisLODs.find(lod => lod.scale < scale);
+    return (lower.level - 1) + (scale / (lower.scale * 2));
   }
 
   private getHttpOptions(secure: boolean): { [header: string]: string } | undefined {
     return secure ? {withCredentials: 'true'} : undefined;
   }
 
-  private loadFeatures(url: string, resultLimit: number, resultOffset: number, secure: boolean): Observable<any> {
-    const requestUrl = new URL(`${url}/query`);
-    requestUrl.searchParams.append('where', '1=1');
+  private loadFeatures(options: FeatureLayerOptions, resultOffset: number): Observable<any> {
+    const requestUrl = new URL(`${options.url}/query`);
+    requestUrl.searchParams.append('where', options.filter ?? '1=1');
     requestUrl.searchParams.append('resultOffset', String(resultOffset));
-    requestUrl.searchParams.append('resultRecordCount', String(resultLimit));
+    requestUrl.searchParams.append('resultRecordCount', String(options.featuresPerRequestLimit));
     requestUrl.searchParams.append('token', '');
     requestUrl.searchParams.append('f', 'geojson');
     requestUrl.searchParams.append('returnExceededLimitFeatures', 'true');
     requestUrl.searchParams.append('outSR', this.wgs84wkid);
     requestUrl.searchParams.append('returnGeometry', 'true');
-    requestUrl.searchParams.append('outFields', ''); // TODO: provide list with fields for popup
-    return this.http.get(requestUrl.toString(), this.getHttpOptions(secure));
+    requestUrl.searchParams.append('outFields', options.outFields ? options.outFields.join() : '');
+    return this.http.get(requestUrl.toString(), this.getHttpOptions(options.requestWithCredentials));
   }
 
   private readonly arcgisLODs = [
@@ -90,5 +93,6 @@ export class FeatureLayerService {
       'level': 21, 'scale': 282.124294
     }, {'level': 22, 'scale': 141.062147}, {
       'level': 23, 'scale': 70.5310735
-    }];
+    }, {'level': 24, 'scale': 0}
+  ];
 }

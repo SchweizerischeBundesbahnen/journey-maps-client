@@ -1,47 +1,51 @@
 <rokas-global-styles></rokas-global-styles>
-
 <div class="container" lang="{{language}}">
-
-  <div class="map-container" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
-    <div class="mod_map_container_mobile_overlay" [ngClass]="touchOverlayStyleClass" style="opacity: 0">
+    <div class="map-container" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+        <div class="mod_map_container_mobile_overlay" [ngClass]="touchOverlayStyleClass" style="opacity: 0">
         <span class="mod_map_container_mobile_overlay_icon_wrapper">
             <div class="mod_svgsprite_icon mod_map_container_mobile_overlay_icon" focusable="false"> </div>
         </span>
-        <p class="mod_map_container_mobile_overlay_text">{{touchOverlayText}}</p>
+            <p class="mod_map_container_mobile_overlay_text">{{touchOverlayText}}</p>
+        </div>
+        <rokas-marker-details
+                [selectedMarker]="selectedMarker"
+                [template]="markerDetailsTemplate"
+                [map]="mapReady | async"
+                [popup]="markerOptions.popup"
+                (closeClicked)="onMarkerUnselected()"
+        >
+        </rokas-marker-details>
+        <div class="map-widgets">
+            <rokas-zoom-controls
+                    *ngIf="controlOptions.zoomControls"
+                    [map]="mapReady | async"
+            ></rokas-zoom-controls>
+            <rokas-basemap-switch
+                    *ngIf="controlOptions.basemapSwitch"
+                    [map]="mapReady | async"
+                    (toggleBasemap)="onToggleBasemap()"
+            ></rokas-basemap-switch>
+            <rokas-level-switch
+                    *ngIf="controlOptions.levelSwitch"
+                    [map]="mapReady | async"
+            ></rokas-level-switch>
+        </div>
+        <div class="map" (resized)="onResized()" #map></div>
+        <rokas-feature-layer
+                [map]="mapReady | async"
+                [options]="{
+                url:'https://geo.sbb.ch/site/rest/services/ROKAS_PUBLIC/POIService/FeatureServer/0',
+                requestWithCredentials:true,
+                minZoom:7,
+                addLayerBefore: 'rokas_background_mask'
+            }"
+        ></rokas-feature-layer>
+        <rokas-feature-layer
+                [map]="mapReady | async"
+                [options]="{
+                url:'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/ArcGIS/rest/services/PROD_ROKAS_DATAPROCESSING_VIEW/FeatureServer/0',
+                addLayerBefore: 'rokas_background_mask'
+                }"
+        ></rokas-feature-layer>
     </div>
-    <rokas-marker-details
-      [selectedMarker]="selectedMarker"
-      [template]="markerDetailsTemplate"
-      [map]="mapReady | async"
-      [popup]="markerOptions.popup"
-      (closeClicked)="onMarkerUnselected()"
-    >
-    </rokas-marker-details>
-
-    <div class="map-widgets">
-      <rokas-zoom-controls
-        *ngIf="controlOptions.zoomControls"
-        [map]="mapReady | async"
-      ></rokas-zoom-controls>
-      <rokas-basemap-switch
-        *ngIf="controlOptions.basemapSwitch"
-        [map]="mapReady | async"
-        (toggleBasemap)="onToggleBasemap()"
-      ></rokas-basemap-switch>
-      <rokas-level-switch
-        *ngIf="controlOptions.levelSwitch"
-        [map]="mapReady | async"
-      ></rokas-level-switch>
-    </div>
-    <div class="map" (resized)="onResized()" #map></div>
-    <rokas-feature-layer
-            [map]="mapReady | async"
-            url="https://geo.sbb.ch/site/rest/services/ROKAS_PUBLIC/POIService/FeatureServer/0"
-            [secure]="true"
-    ></rokas-feature-layer>
-    <rokas-feature-layer
-            [map]="mapReady | async"
-            url="https://services7.arcgis.com/RZYPa9cXL4L1fYTj/ArcGIS/rest/services/PROD_ROKAS_DATAPROCESSING_VIEW/FeatureServer/0"
-    ></rokas-feature-layer>
-  </div>
 </div>
