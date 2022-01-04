@@ -43,6 +43,7 @@ export class FeatureLayerUtilService {
       return 0;
     }
 
+    // TODO: not sure if this is ok:
     const lower = this.arcgisLODs.find(lod => lod.scale < scale);
     return (lower.level - 1) + (scale / (lower.scale * 2));
   }

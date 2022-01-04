@@ -47,15 +47,16 @@ export class FeatureLayerService {
 
   private loadFeatures(options: FeatureLayerOptions, resultOffset: number): Observable<any> {
     const requestUrl = new URL(`${options.url}/query`);
-    requestUrl.searchParams.append('where', options.filter ?? '1=1');
-    requestUrl.searchParams.append('resultOffset', String(resultOffset));
-    requestUrl.searchParams.append('resultRecordCount', String(options.featuresPerRequestLimit));
-    requestUrl.searchParams.append('token', '');
-    requestUrl.searchParams.append('f', 'geojson');
-    requestUrl.searchParams.append('returnExceededLimitFeatures', 'true');
-    requestUrl.searchParams.append('outSR', this.wgs84wkid);
-    requestUrl.searchParams.append('returnGeometry', 'true');
-    requestUrl.searchParams.append('outFields', options.outFields ? options.outFields.join() : '');
+    const searchParams = requestUrl.searchParams;
+    searchParams.append('where', options.filter ?? '1=1');
+    searchParams.append('resultOffset', String(resultOffset));
+    searchParams.append('resultRecordCount', String(options.featuresPerRequestLimit));
+    searchParams.append('token', '');
+    searchParams.append('f', 'geojson');
+    searchParams.append('returnExceededLimitFeatures', 'true');
+    searchParams.append('outSR', this.wgs84wkid);
+    searchParams.append('returnGeometry', 'true');
+    searchParams.append('outFields', options.outFields ? options.outFields.join() : '*');
     return this.http.get(requestUrl.toString(), this.getHttpOptions(options.requestWithCredentials));
   }
 }
