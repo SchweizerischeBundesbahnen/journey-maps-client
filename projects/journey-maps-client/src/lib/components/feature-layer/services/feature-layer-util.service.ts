@@ -8,48 +8,6 @@ export class FeatureLayerUtilService {
 
   private readonly defaultColor = 'black';
 
-  /*
-        {
-   "renderer":{
-      "type":"uniqueValue",
-      "field1":"category",
-      "uniqueValueInfos":[
-         {
-            "value":"a",
-            "label":"a",
-            "symbol":{
-               "color":[
-                  237,
-                  81,
-                  81,
-                  255
-               ],
-               "width":1.5,
-               "type":"esriSLS",
-               "style":"esriSLSSolid"
-            }
-         },
-         {
-            "value":"b",
-            "label":"b",
-            "symbol":{
-               "color":[
-                  20,
-                  158,
-                  206,
-                  255
-               ],
-               "width":1.5,
-               "type":"esriSLS",
-               "style":"esriSLSSolid"
-            }
-         }
-      ]
-   },
-   "transparency":0
-}
-        * */
-
   uniqueValueInfosToColor(featureProperty: string, uniqueValueInfos: { symbol: ArcgisSymbolDefinition; value: any }[], byOutlineColor?: boolean) {
     const valueMapping: any[] = ['match', ['get', featureProperty]];
     const uniqueValueColorMapping: any[] = ['interpolate', ['linear'], valueMapping, 0, this.defaultColor];
@@ -68,7 +26,6 @@ export class FeatureLayerUtilService {
     // fallback (default) value:
     valueMapping.push(0);
 
-    console.debug(uniqueValueColorMapping);
     return uniqueValueColorMapping;
   }
 
@@ -77,9 +34,8 @@ export class FeatureLayerUtilService {
       return;
     }
     const rgb = color.slice(0, 3).join();
-    const alpha = color.slice(-1)[0] / 255.0;
+    const alpha = (color.slice(-1)[0] / 255.0).toFixed(2);
     return `rgba(${rgb},${alpha})`;
-
   }
 
   convertScaleToLevel(scale: number): number {
