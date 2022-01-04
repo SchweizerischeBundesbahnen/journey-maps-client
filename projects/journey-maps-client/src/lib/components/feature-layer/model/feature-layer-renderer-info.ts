@@ -1,3 +1,10 @@
+import {ArcgisSymbolDefinition} from './arcgis-symbol-definition';
+
 export interface FeatureLayerRendererInfo {
-  [key: string]: string
+  symbol: ArcgisSymbolDefinition;
+  uniqueValueInfos?: { symbol: ArcgisSymbolDefinition, value: any }[];
+  field1?: string;
+  type: 'simple' | 'uniqueValue';
+
+  [key: string]: any;
 }

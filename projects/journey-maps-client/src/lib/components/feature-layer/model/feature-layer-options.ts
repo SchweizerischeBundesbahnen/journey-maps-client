@@ -1,4 +1,5 @@
 export interface FeatureLayerOptions {
+  id?: string;
   url: string;
   requestWithCredentials?: boolean;
   featuresPerRequestLimit?: number;

@@ -6,6 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {FeatureLayerRendererSymbolParserService} from './services/feature-layer-renderer-symbol-parser.service';
 import {FeatureLayerConfig} from './model/feature-layer-config';
 import {FeatureLayerOptions} from './model/feature-layer-options';
+import {FeatureLayerUtilService} from './services/feature-layer-util.service';
 
 @Component({
   selector: 'rokas-feature-layer',
@@ -22,6 +23,7 @@ export class FeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(private ref: ChangeDetectorRef,
               private featureLayerService: FeatureLayerService,
+              private utilService: FeatureLayerUtilService,
               private symbolParserService: FeatureLayerRendererSymbolParserService) {
   }
 
@@ -63,7 +65,11 @@ export class FeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(features => {
         this.isLoading = false;
         this.ref.detectChanges();
-        this.showLayer(features, config);
+        try {
+          this.showLayer(features, config);
+        } catch (error) {
+          console.error(`Failed to initialize layer ${this.getId()} | ${error.stack}`);
+        }
       });
   }
 
@@ -73,8 +79,8 @@ export class FeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
       ...layerPaintSettings,
       'id': `${this.getId()}-layer`,
       'source': `${this.getId()}-source`,
-      'minzoom': this.options.minZoom ?? this.featureLayerService.convertScaleToLevel(config.minScale),
-      'maxzoom': this.options.maxZoom ?? this.featureLayerService.convertScaleToLevel(config.maxScale)
+      'minzoom': this.options.minZoom ?? this.utilService.convertScaleToLevel(config.minScale),
+      'maxzoom': this.options.maxZoom ?? this.utilService.convertScaleToLevel(config.maxScale)
     };
 
     this.map.addSource(`${this.getId()}-source`, {
@@ -86,17 +92,17 @@ export class FeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private getId(): string {
-    return this.options.url.replace(/\W/g, '_');
+    return this.options.id ?? this.options.url.replace(/\W/g, '_');
   }
 
   private parseArcgisStyle(config: FeatureLayerConfig): Layer {
     const renderer = config.drawingInfo.renderer;
-    if (renderer['type'] !== 'simple') {
-      console.log(renderer);
-      throw new Error('only simple renderer are supported!');
+    switch (renderer.type) {
+      case 'simple':
+      case 'uniqueValue':
+        return this.symbolParserService.parseFeatureLayerRenderer(renderer);
+      default:
+        throw new Error('Renderer type not supported!');
     }
-
-    const symbol = renderer['symbol'];
-    return this.symbolParserService.parseArcgisSymbol(symbol);
   }
 }
