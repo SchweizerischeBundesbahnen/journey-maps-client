@@ -33,11 +33,11 @@ export class FeatureLayerService {
           return EMPTY;
         }
       }),
-      map((obj: any) => {
-        return obj.features ?? [];
+      map((collection: any) => {
+        return collection.features ?? [];
       }),
-      reduce((acc, x) => {
-        return acc.concat(x);
+      reduce((all, latest) => {
+        return all.concat(latest);
       }, []));
   }
 
