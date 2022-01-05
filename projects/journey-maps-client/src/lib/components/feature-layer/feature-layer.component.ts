@@ -60,6 +60,7 @@ export class FeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
 
   private loadFeatures(config: FeatureLayerConfig): void {
     this.isLoading = true;
+    this.extendOutFields(config);
     this.featureLayerService.getFeatures(this.options)
       .pipe(takeUntil(this.destroyed))
       .subscribe(features => {
@@ -71,6 +72,18 @@ export class FeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
           console.error(`Failed to initialize layer ${this.getLayerId()} | ${error.stack}`);
         }
       });
+  }
+
+  private extendOutFields(config: FeatureLayerConfig) {
+    if (config.drawingInfo.renderer.uniqueValueInfos?.length) {
+      if (!this.options.outFields) {
+        this.options.outFields = [];
+      }
+      const styleValueField = config.drawingInfo.renderer.field1;
+      if (styleValueField && !this.options.outFields.includes(styleValueField)) {
+        this.options.outFields.push(styleValueField);
+      }
+    }
   }
 
   private addFeaturesToMap(features: GeoJSON.Feature<GeoJSON.Geometry>[], config: FeatureLayerConfig): void {
