@@ -49,7 +49,7 @@ export class FeatureLayerRendererSymbolParserService {
       'id': '',
       'type': 'line',
       'paint': {
-        'line-color': this.utilService.colorToRgba(symbol.color),
+        'line-color': this.utilService.convertColorToRgba(symbol.color),
         'line-width': symbol.width
       }
     };
@@ -68,9 +68,9 @@ export class FeatureLayerRendererSymbolParserService {
       'id': '',
       'type': 'circle',
       'paint': {
-        'circle-color': this.utilService.colorToRgba(symbol.color),
+        'circle-color': this.utilService.convertColorToRgba(symbol.color),
         'circle-radius': symbol.size,
-        'circle-stroke-color': this.utilService.colorToRgba(symbol.outline.color),
+        'circle-stroke-color': this.utilService.convertColorToRgba(symbol.outline.color),
         'circle-stroke-width': symbol.outline.width,
         'circle-translate': [symbol['xoffset'], symbol['yoffset']]
       }
@@ -82,26 +82,26 @@ export class FeatureLayerRendererSymbolParserService {
       'id': '',
       'type': 'fill',
       'paint': {
-        'fill-color': this.utilService.colorToRgba(symbol.color),
-        'fill-outline-color': this.utilService.colorToRgba(symbol.outline.color),
+        'fill-color': this.utilService.convertColorToRgba(symbol.color),
+        'fill-outline-color': this.utilService.convertColorToRgba(symbol.outline.color),
       }
     } as FillLayer;
   }
 
   private createUniqueColors(layer: Layer, renderer: FeatureLayerRendererInfo): void {
-    const paintColorDef = this.utilService.uniqueValueInfosToColor(renderer);
+    const paintColorDef = this.utilService.convertUniqueValueInfosToPaintColor(renderer);
     switch (layer.type) {
       case 'line':
         layer.paint['line-color'] = paintColorDef;
         break;
       case 'circle':
         layer.paint['circle-color'] = paintColorDef;
-        const circleOutlineColorDef = this.utilService.uniqueValueInfosToColor(renderer, true);
+        const circleOutlineColorDef = this.utilService.convertUniqueValueInfosToPaintColor(renderer, true);
         layer.paint['circle-stroke-color'] = circleOutlineColorDef;
         break;
       case 'fill':
         layer.paint['fill-color'] = paintColorDef;
-        const fillOutlineColorDef = this.utilService.uniqueValueInfosToColor(renderer, true);
+        const fillOutlineColorDef = this.utilService.convertUniqueValueInfosToPaintColor(renderer, true);
         layer.paint['fill-outline-color'] = fillOutlineColorDef;
         break;
       default:

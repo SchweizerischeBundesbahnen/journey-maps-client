@@ -6,14 +6,14 @@ import {FeatureLayerRendererInfo} from '../model/feature-layer-renderer-info';
 })
 export class FeatureLayerUtilService {
 
-  uniqueValueInfosToColor(renderer: FeatureLayerRendererInfo, byOutlineColor?: boolean) {
+  convertUniqueValueInfosToPaintColor(renderer: FeatureLayerRendererInfo, byOutlineColor?: boolean) {
     const invisibleColor = [0, 0, 0, 0];
     const fallbackValue = 0;
 
     const featurePropertyName = renderer.field1;
     const uniqueValueInfos = renderer.uniqueValueInfos;
     const defaultSymbolColor = renderer.defaultSymbol?.color;
-    const fallbackColor = this.colorToRgba(defaultSymbolColor ?? invisibleColor);
+    const fallbackColor = this.convertColorToRgba(defaultSymbolColor ?? invisibleColor);
 
     const valueMapping: any[] = ['match', ['get', featurePropertyName]];
 
@@ -22,7 +22,7 @@ export class FeatureLayerUtilService {
       const colorDef = {
         id: idx + 1,
         value: info['value'],
-        color: this.colorToRgba(byOutlineColor ? info['symbol']['outline']['color'] : info['symbol']['color'])
+        color: this.convertColorToRgba(byOutlineColor ? info['symbol']['outline']['color'] : info['symbol']['color'])
       };
       valueMapping.push(colorDef.value);
       valueMapping.push(colorDef.id);
@@ -36,7 +36,7 @@ export class FeatureLayerUtilService {
     return uniqueValueColorMapping;
   }
 
-  colorToRgba(color: number[]): string | undefined {
+  convertColorToRgba(color: number[]): string | undefined {
     if (!color || !color.length) {
       return;
     }
