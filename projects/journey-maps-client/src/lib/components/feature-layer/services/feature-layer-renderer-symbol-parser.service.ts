@@ -45,15 +45,22 @@ export class FeatureLayerRendererSymbolParserService {
   }
 
   private createLineLayer(symbol: ArcgisSymbolDefinition): LineLayer {
-    return {
+    const lineLayer = {
       'id': '',
       'type': 'line',
       'paint': {
         'line-color': this.utilService.colorToRgba(symbol.color),
-        'line-width': symbol.width,
-        'line-dasharray': symbol.style === 'esriSLSDot' ? [1, 1] : (symbol.style === 'esriSLSDash' ? [2, 1] : undefined),
+        'line-width': symbol.width
       }
-    } as LineLayer;
+    };
+
+    if (symbol.style === 'esriSLSDot') {
+      lineLayer['line-dasharray'] = [0.5, 1];
+    } else if (symbol.style === 'esriSLSDash') {
+      lineLayer['line-dasharray'] = [3, 3];
+    }
+
+    return lineLayer as LineLayer;
   }
 
   private createCircleLayer(symbol: ArcgisSymbolDefinition): CircleLayer {

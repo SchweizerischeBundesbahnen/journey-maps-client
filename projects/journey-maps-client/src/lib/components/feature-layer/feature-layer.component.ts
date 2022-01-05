@@ -7,7 +7,6 @@ import {FeatureLayerRendererSymbolParserService} from './services/feature-layer-
 import {FeatureLayerConfig} from './model/feature-layer-config';
 import {FeatureLayerOptions} from './model/feature-layer-options';
 import {FeatureLayerUtilService} from './services/feature-layer-util.service';
-import {Feature, Geometry} from 'geojson';
 
 @Component({
   selector: 'rokas-feature-layer',

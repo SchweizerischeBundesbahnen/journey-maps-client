@@ -56,7 +56,7 @@ export class FeatureLayerService {
     searchParams.append('returnExceededLimitFeatures', 'true');
     searchParams.append('outSR', this.wgs84wkid);
     searchParams.append('returnGeometry', 'true');
-    searchParams.append('outFields', options.outFields ? options.outFields.join() : '*');
+    searchParams.append('outFields', options.outFields ? options.outFields.join() : '');
     return this.http.get(requestUrl.toString(), this.getHttpOptions(options.requestWithCredentials));
   }
 }
