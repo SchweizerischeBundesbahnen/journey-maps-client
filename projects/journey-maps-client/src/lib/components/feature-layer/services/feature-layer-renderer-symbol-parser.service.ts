@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {CircleLayer, FillLayer, Layer, LineLayer} from 'maplibre-gl';
+import {CircleLayer, CirclePaint, FillLayer, FillPaint, HeatmapLayer, HeatmapPaint, Layer, LineLayer, LinePaint} from 'maplibre-gl';
 import {ArcgisSymbolDefinition} from '../model/arcgis-symbol-definition';
 import {FeatureLayerUtilService} from './feature-layer-util.service';
 import {FeatureLayerRendererInfo} from '../model/feature-layer-renderer-info';
@@ -17,6 +17,9 @@ export class FeatureLayerRendererSymbolParserService {
       const layer = this.createSimpleSymbolLayer(renderer.uniqueValueInfos[0].symbol);
       this.createUniqueColors(layer, renderer);
       return layer;
+    }
+    if (renderer.colorStops) {
+      return this.createHeatmapLayer(renderer.colorStops, renderer.maxPixelIntensity);
     }
 
     return this.createSimpleSymbolLayer(renderer.symbol);
@@ -51,7 +54,7 @@ export class FeatureLayerRendererSymbolParserService {
       'paint': {
         'line-color': this.utilService.convertColorToRgba(symbol.color),
         'line-width': symbol.width
-      }
+      } as LinePaint
     };
 
     if (symbol.style === 'esriSLSDot') {
@@ -73,8 +76,29 @@ export class FeatureLayerRendererSymbolParserService {
         'circle-stroke-color': this.utilService.convertColorToRgba(symbol.outline.color),
         'circle-stroke-width': symbol.outline.width,
         'circle-translate': [symbol['xoffset'], symbol['yoffset']]
-      }
+      } as CirclePaint
     } as CircleLayer;
+  }
+
+  private createHeatmapLayer(colorStops: { ratio: number; color: number[] }[], maxIntensity: number): HeatmapLayer {
+    const heatmapStops: any[] = ['interpolate', ['linear'], ['heatmap-density']];
+    let duplicates = 0;
+    colorStops.forEach(colorStop => {
+      if (heatmapStops.some(def => def === colorStop.ratio)) {
+        colorStop.ratio += ++duplicates * 0.00000000000000001;
+      }
+      heatmapStops.push(colorStop.ratio);
+      heatmapStops.push(this.utilService.convertColorToRgba(colorStop.color));
+    });
+
+    return {
+      'id': '',
+      'type': 'heatmap',
+      'paint': {
+        'heatmap-color': heatmapStops,
+        'heatmap-intensity': maxIntensity,
+      } as HeatmapPaint
+    } as HeatmapLayer;
   }
 
   private createFillLayer(symbol: ArcgisSymbolDefinition): FillLayer {
@@ -84,7 +108,7 @@ export class FeatureLayerRendererSymbolParserService {
       'paint': {
         'fill-color': this.utilService.convertColorToRgba(symbol.color),
         'fill-outline-color': this.utilService.convertColorToRgba(symbol.outline.color),
-      }
+      } as FillPaint
     } as FillLayer;
   }
 

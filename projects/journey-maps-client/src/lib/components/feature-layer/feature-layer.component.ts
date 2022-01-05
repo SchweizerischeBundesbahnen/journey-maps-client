@@ -135,6 +135,7 @@ export class FeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
     switch (renderer.type) {
       case 'simple':
       case 'uniqueValue':
+      case 'heatmap':
         return this.symbolParserService.parseFeatureLayerRenderer(renderer);
       default:
         throw new Error('Renderer type not supported!');

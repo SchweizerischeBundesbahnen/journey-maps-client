@@ -6,4 +6,5 @@ export interface FeatureLayerConfig {
   maxRecordCount: number;
   displayField?: string;
   drawingInfo: { renderer: FeatureLayerRendererInfo };
+  transparency: number;
 }
