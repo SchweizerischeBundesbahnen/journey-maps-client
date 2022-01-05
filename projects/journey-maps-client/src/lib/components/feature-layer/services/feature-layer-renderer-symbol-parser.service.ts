@@ -89,19 +89,19 @@ export class FeatureLayerRendererSymbolParserService {
   }
 
   private createUniqueColors(layer: Layer, renderer: FeatureLayerRendererInfo): void {
-    const paintColorDef = this.utilService.uniqueValueInfosToColor(renderer.field1, renderer.uniqueValueInfos);
+    const paintColorDef = this.utilService.uniqueValueInfosToColor(renderer);
     switch (layer.type) {
       case 'line':
         layer.paint['line-color'] = paintColorDef;
         break;
       case 'circle':
         layer.paint['circle-color'] = paintColorDef;
-        const circleOutlineColorDef = this.utilService.uniqueValueInfosToColor(renderer.field1, renderer.uniqueValueInfos, true);
+        const circleOutlineColorDef = this.utilService.uniqueValueInfosToColor(renderer, true);
         layer.paint['circle-stroke-color'] = circleOutlineColorDef;
         break;
       case 'fill':
         layer.paint['fill-color'] = paintColorDef;
-        const fillOutlineColorDef = this.utilService.uniqueValueInfosToColor(renderer.field1, renderer.uniqueValueInfos, true);
+        const fillOutlineColorDef = this.utilService.uniqueValueInfosToColor(renderer, true);
         layer.paint['fill-outline-color'] = fillOutlineColorDef;
         break;
       default:

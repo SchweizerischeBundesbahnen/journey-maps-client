@@ -1,16 +1,23 @@
 import {Injectable} from '@angular/core';
-import {ArcgisSymbolDefinition} from '../model/arcgis-symbol-definition';
+import {FeatureLayerRendererInfo} from '../model/feature-layer-renderer-info';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FeatureLayerUtilService {
 
-  private readonly defaultColor = 'black';
+  uniqueValueInfosToColor(renderer: FeatureLayerRendererInfo, byOutlineColor?: boolean) {
+    const invisibleColor = [0, 0, 0, 0];
+    const fallbackValue = 0;
 
-  uniqueValueInfosToColor(featureProperty: string, uniqueValueInfos: { symbol: ArcgisSymbolDefinition; value: any }[], byOutlineColor?: boolean) {
-    const valueMapping: any[] = ['match', ['get', featureProperty]];
-    const uniqueValueColorMapping: any[] = ['interpolate', ['linear'], valueMapping, 0, this.defaultColor];
+    const featurePropertyName = renderer.field1;
+    const uniqueValueInfos = renderer.uniqueValueInfos;
+    const defaultSymbolColor = renderer.defaultSymbol?.color;
+    const fallbackColor = this.colorToRgba(defaultSymbolColor ?? invisibleColor);
+
+    const valueMapping: any[] = ['match', ['get', featurePropertyName]];
+
+    const uniqueValueColorMapping: any[] = ['interpolate', ['linear'], valueMapping, fallbackValue, fallbackColor];
     uniqueValueInfos.forEach((info, idx) => {
       const colorDef = {
         id: idx + 1,
@@ -24,7 +31,7 @@ export class FeatureLayerUtilService {
     });
 
     // fallback (default) value:
-    valueMapping.push(0);
+    valueMapping.push(fallbackValue);
 
     return uniqueValueColorMapping;
   }
