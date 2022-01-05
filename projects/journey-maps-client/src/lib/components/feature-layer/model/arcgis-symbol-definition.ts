@@ -3,5 +3,6 @@ export interface ArcgisSymbolDefinition {
   color: number[];
   width?: number;
   size?: number;
+  style?: 'esriSLSSolid' | 'esriSLSDash' | 'esriSLSDot';
   outline?: { color: number[], width?: number };
 }

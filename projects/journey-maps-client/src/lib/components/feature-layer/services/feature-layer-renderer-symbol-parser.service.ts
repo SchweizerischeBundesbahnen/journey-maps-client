@@ -50,7 +50,8 @@ export class FeatureLayerRendererSymbolParserService {
       'type': 'line',
       'paint': {
         'line-color': this.utilService.colorToRgba(symbol.color),
-        'line-width': symbol.width
+        'line-width': symbol.width,
+        'line-dasharray': symbol.style === 'esriSLSDot' ? [1, 1] : (symbol.style === 'esriSLSDash' ? [2, 1] : undefined),
       }
     } as LineLayer;
   }

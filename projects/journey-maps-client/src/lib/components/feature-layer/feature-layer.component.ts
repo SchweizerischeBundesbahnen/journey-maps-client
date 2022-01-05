@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {Layer, Map as MaplibreMap} from 'maplibre-gl';
+import {AnyLayer, Layer, Map as MaplibreMap} from 'maplibre-gl';
 import {Subject} from 'rxjs';
 import {FeatureLayerService} from './services/feature-layer.service';
 import {takeUntil} from 'rxjs/operators';
@@ -7,6 +7,7 @@ import {FeatureLayerRendererSymbolParserService} from './services/feature-layer-
 import {FeatureLayerConfig} from './model/feature-layer-config';
 import {FeatureLayerOptions} from './model/feature-layer-options';
 import {FeatureLayerUtilService} from './services/feature-layer-util.service';
+import {Feature, Geometry} from 'geojson';
 
 @Component({
   selector: 'rokas-feature-layer',
@@ -66,36 +67,50 @@ export class FeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
         this.isLoading = false;
         this.ref.detectChanges();
         try {
-          this.showLayer(features, config);
+          this.addFeaturesToMap(features, config);
         } catch (error) {
-          console.error(`Failed to initialize layer ${this.getId()} | ${error.stack}`);
+          console.error(`Failed to initialize layer ${this.getLayerId()} | ${error.stack}`);
         }
       });
   }
 
-  private showLayer(features: GeoJSON.Feature<GeoJSON.Geometry>[], config: FeatureLayerConfig): void {
-    const layerPaintSettings = this.options.style ?? this.parseArcgisStyle(config);
-    const layerDef = {
-      ...layerPaintSettings,
-      'id': `${this.getId()}-layer`,
-      'source': `${this.getId()}-source`,
-      'minzoom': this.options.minZoom ?? this.utilService.convertScaleToLevel(config.minScale),
-      'maxzoom': this.options.maxZoom ?? this.utilService.convertScaleToLevel(config.maxScale)
-    };
-
-    this.map.addSource(`${this.getId()}-source`, {
-      type: 'geojson',
-      data: {type: 'FeatureCollection', features}
-    });
-
-    this.map.addLayer(layerDef as any, this.options.addLayerBefore);
+  private addFeaturesToMap(features: GeoJSON.Feature<GeoJSON.Geometry>[], config: FeatureLayerConfig): void {
+    this.addFeaturesAsMapSource(features);
+    this.addFeaturesAsMapLayer(config);
   }
 
-  private getId(): string {
+  private getMapLayerDefinition(config: FeatureLayerConfig): AnyLayer {
+    const layerPaintStyle = this.options.style ?? this.parseArcgisDrawingInfo(config);
+    return {
+      ...layerPaintStyle,
+      'id': this.getLayerId(),
+      'source': this.getSourceId(),
+      'minzoom': this.options.minZoom ?? this.utilService.convertScaleToLevel(config.minScale),
+      'maxzoom': this.options.maxZoom ?? this.utilService.convertScaleToLevel(config.maxScale)
+    } as AnyLayer;
+  }
+
+  private getSourceId(): string {
+    return `${this.getLayerId()}-source`;
+  }
+
+  private getLayerId(): string {
     return this.options.id ?? this.options.url.replace(/\W/g, '_');
   }
 
-  private parseArcgisStyle(config: FeatureLayerConfig): Layer {
+  private addFeaturesAsMapSource(features: GeoJSON.Feature<GeoJSON.Geometry>[]): void {
+    this.map.addSource(this.getSourceId(), {
+      type: 'geojson',
+      data: {type: 'FeatureCollection', features}
+    });
+  }
+
+  private addFeaturesAsMapLayer(config: FeatureLayerConfig): void {
+    const addLayerBeforeExists = this.options.addLayerBefore && !!this.map.getLayer(this.options.addLayerBefore);
+    this.map.addLayer(this.getMapLayerDefinition(config), addLayerBeforeExists ? this.options.addLayerBefore : undefined);
+  }
+
+  private parseArcgisDrawingInfo(config: FeatureLayerConfig): Layer {
     const renderer = config.drawingInfo.renderer;
     switch (renderer.type) {
       case 'simple':
