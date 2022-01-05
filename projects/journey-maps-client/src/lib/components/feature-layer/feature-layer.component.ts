@@ -75,14 +75,22 @@ export class FeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private extendOutFields(config: FeatureLayerConfig) {
+    if (!this.options.outFields) {
+      this.options.outFields = [];
+    }
+
+    if (config.displayField) {
+      this.addFieldIfNotExists(config.displayField);
+    }
+
     if (config.drawingInfo.renderer.uniqueValueInfos?.length) {
-      if (!this.options.outFields) {
-        this.options.outFields = [];
-      }
-      const styleValueField = config.drawingInfo.renderer.field1;
-      if (styleValueField && !this.options.outFields.includes(styleValueField)) {
-        this.options.outFields.push(styleValueField);
-      }
+      this.addFieldIfNotExists(config.drawingInfo.renderer.field1);
+    }
+  }
+
+  private addFieldIfNotExists(fieldName: string) {
+    if (fieldName && !this.options.outFields.includes(fieldName)) {
+      this.options.outFields.push(fieldName);
     }
   }
 
