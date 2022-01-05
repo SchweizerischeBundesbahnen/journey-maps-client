@@ -1,12 +1,12 @@
 import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {AnyLayer, Layer, Map as MaplibreMap} from 'maplibre-gl';
 import {Subject} from 'rxjs';
-import {FeatureLayerService} from './services/feature-layer.service';
+import {FeatureLayerService} from '../services/feature-layer.service';
 import {takeUntil} from 'rxjs/operators';
-import {FeatureLayerRendererSymbolParserService} from './services/feature-layer-renderer-symbol-parser.service';
-import {FeatureLayerConfig} from './model/feature-layer-config';
-import {FeatureLayerOptions} from './model/feature-layer-options';
-import {FeatureLayerUtilService} from './services/feature-layer-util.service';
+import {FeatureLayerRendererSymbolParserService} from '../services/feature-layer-renderer-symbol-parser.service';
+import {FeatureLayerConfig} from '../model/feature-layer-config';
+import {FeatureLayerOptions} from '../model/feature-layer-options';
+import {FeatureLayerUtilService} from '../services/feature-layer-util.service';
 
 @Component({
   selector: 'rokas-feature-layer',
