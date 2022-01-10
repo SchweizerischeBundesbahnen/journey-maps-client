@@ -23,62 +23,61 @@
             >
             </rokas-journey-maps-client>
 
-            <sbb-arcgis-feature-layer
-                    [map]="theMap.mapReady | async"
-                    [options]="{
-                    url:'https://geo.sbb.ch/site/rest/services/ROKAS_PUBLIC/POIService/FeatureServer/0',
-                    id: 'ROKAS_PUBLIC-POIService',
-                    requestWithCredentials:true,
-                    minZoom:7,
-                    addLayerBefore: 'poi_without_icons'
-                }"
-            ></sbb-arcgis-feature-layer>
-            <!--        <sbb-arcgis-feature-layer-->
-            <!--                *ngIf="true"-->
-            <!--                [map]="theMap.mapReady | async"-->
-            <!--                [options]="{-->
-            <!--                    url:'https://geo.sbb.ch/site/rest/services/ROKAS_PUBLIC/POIService/FeatureServer/0',-->
-            <!--                    id: 'ROKAS_PUBLIC-POIService',-->
-            <!--                    requestWithCredentials:true,-->
-            <!--                    minZoom:7,-->
-            <!--                    addLayerBefore: 'poi_without_icons',-->
-            <!--                    style:{type:'circle', paint:{'circle-color': '#ffcc00', 'circle-radius':5}}-->
-            <!--                }"-->
-            <!--        ></sbb-arcgis-feature-layer>-->
-            <!--        <sbb-arcgis-feature-layer-->
-            <!--                *ngIf="true"-->
-            <!--                [map]="theMap.mapReady | async"-->
-            <!--                [options]="{-->
-            <!--                    url:'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/ArcGIS/rest/services/PROD_ROKAS_DATAPROCESSING_VIEW/FeatureServer/0',-->
-            <!--                    addLayerBefore: 'ROKAS_PUBLIC-POIService'-->
-            <!--                }"-->
-            <!--        ></sbb-arcgis-feature-layer>-->
+<!--            <sbb-arcgis-feature-layer-->
+<!--                    [map]="theMap.mapReady | async"-->
+<!--                    [options]="{-->
+<!--                    url:'https://geo.sbb.ch/site/rest/services/ROKAS_PUBLIC/POIService/FeatureServer/0',-->
+<!--                    id: 'ROKAS_PUBLIC-POIService',-->
+<!--                    requestWithCredentials:true,-->
+<!--                    minZoom:7,-->
+<!--                    addLayerBefore: 'poi_without_icons'-->
+<!--                }"-->
+<!--            ></sbb-arcgis-feature-layer>-->
+<!--            <sbb-arcgis-feature-layer-->
+<!--                    [map]="theMap.mapReady | async"-->
+<!--                    [options]="{-->
+<!--                                url:'https://geo.sbb.ch/site/rest/services/ROKAS_PUBLIC/POIService/FeatureServer/0',-->
+<!--                                id: 'ROKAS_PUBLIC-POIService',-->
+<!--                                requestWithCredentials:true,-->
+<!--                                minZoom:7,-->
+<!--                                addLayerBefore: 'poi_without_icons',-->
+<!--                                style:{type:'circle', paint:{'circle-color': '#ffcc00', 'circle-radius':5}}-->
+<!--                            }"-->
+<!--            ></sbb-arcgis-feature-layer>-->
+<!--            <sbb-arcgis-feature-layer-->
+<!--                    [map]="theMap.mapReady | async"-->
+<!--                    [options]="{-->
+<!--                                url:'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/ArcGIS/rest/services/PROD_ROKAS_DATAPROCESSING_VIEW/FeatureServer/0',-->
+<!--                                addLayerBefore: 'ROKAS_PUBLIC-POIService'-->
+<!--                            }"-->
+<!--            ></sbb-arcgis-feature-layer>-->
             <sbb-arcgis-feature-layer
                     [map]="theMap.mapReady | async"
                     [options]="{
                     url:'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/J-M-C-ArcGIS-TEST/FeatureServer/1'
                 }"
             ></sbb-arcgis-feature-layer>
-            <sbb-arcgis-feature-layer
-                    [map]="theMap.mapReady | async"
-                    [options]="{
-                    url:'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/J-M-C-ArcGIS-TEST/FeatureServer/0'
+<!--            <sbb-arcgis-feature-layer-->
+<!--                    [map]="theMap.mapReady | async"-->
+<!--                    [options]="{-->
+<!--                    url:'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/J-M-C-ArcGIS-TEST/FeatureServer/0'-->
 
-                }"
-            ></sbb-arcgis-feature-layer>
-            <sbb-arcgis-feature-layer
-                    [map]="theMap.mapReady | async"
-                    [options]="{
-                    addLayerBefore:'poi_without_icons',
-                    url:'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/J-M-C-ArcGIS-TEST/FeatureServer/2'
-                }"
-            ></sbb-arcgis-feature-layer>
-            <sbb-arcgis-feature-layer
-                    [map]="theMap.mapReady | async"
-                    [options]="{
-                    url:'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/PROD_Route_Customization_View/FeatureServer/0'
-                }"
-            ></sbb-arcgis-feature-layer>
+<!--                }"-->
+<!--            ></sbb-arcgis-feature-layer>-->
+<!--            <sbb-arcgis-feature-layer-->
+<!--                    [map]="theMap.mapReady | async"-->
+<!--                    [options]="{-->
+<!--                    addLayerBefore:'poi_without_icons',-->
+<!--                    url:'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/J-M-C-ArcGIS-TEST/FeatureServer/2'-->
+<!--                }"-->
+<!--            ></sbb-arcgis-feature-layer>-->
+
+<!--            <sbb-arcgis-feature-layer-->
+<!--                    [map]="theMap.mapReady | async"-->
+<!--                    [options]="{-->
+<!--                    url:'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/PROD_Route_Customization_View/FeatureServer/0'-->
+<!--                }"-->
+<!--            ></sbb-arcgis-feature-layer>-->
         </ng-container>
         <!--  Set [markerDetailsTemplate]="markerDetailsTemplate" to overwrite default template. Example. -->
         <ng-template #markerDetailsTemplate let-marker>

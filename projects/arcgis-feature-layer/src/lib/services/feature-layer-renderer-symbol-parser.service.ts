@@ -80,7 +80,7 @@ export class FeatureLayerRendererSymbolParserService {
     } as CircleLayer;
   }
 
-  private createHeatmapLayer(colorStops: { ratio: number; color: number[] }[], maxIntensity: number): HeatmapLayer {
+  private createHeatmapLayer(colorStops: { ratio: number; color: number[] }[], heatmapRadius: number): HeatmapLayer {
     const heatmapStops: any[] = ['interpolate', ['linear'], ['heatmap-density']];
     let duplicates = 0;
     colorStops.forEach(colorStop => {
@@ -96,7 +96,7 @@ export class FeatureLayerRendererSymbolParserService {
       'type': 'heatmap',
       'paint': {
         'heatmap-color': heatmapStops,
-        'heatmap-intensity': maxIntensity,
+        'heatmap-radius': heatmapRadius + 20/*looks like in arcgis*/,
       } as HeatmapPaint
     } as HeatmapLayer;
   }
