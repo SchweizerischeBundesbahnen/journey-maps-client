@@ -19,7 +19,7 @@ export class FeatureLayerRendererSymbolParserService {
       return layer;
     }
     if (renderer.colorStops) {
-      return this.createHeatmapLayer(renderer.colorStops, renderer.maxPixelIntensity);
+      return this.createHeatmapLayer(renderer.colorStops, renderer.blurRadius, renderer.maxPixelIntensity);
     }
 
     return this.createSimpleSymbolLayer(renderer.symbol);
@@ -80,7 +80,7 @@ export class FeatureLayerRendererSymbolParserService {
     } as CircleLayer;
   }
 
-  private createHeatmapLayer(colorStops: { ratio: number; color: number[] }[], heatmapRadius: number): HeatmapLayer {
+  private createHeatmapLayer(colorStops: { ratio: number; color: number[] }[], heatmapRadius: number, heatmapIntensity: number): HeatmapLayer {
     const heatmapStops: any[] = ['interpolate', ['linear'], ['heatmap-density']];
     let duplicates = 0;
     colorStops.forEach(colorStop => {
@@ -97,6 +97,7 @@ export class FeatureLayerRendererSymbolParserService {
       'paint': {
         'heatmap-color': heatmapStops,
         'heatmap-radius': heatmapRadius + 20/*looks like in arcgis*/,
+        'heatmap-intensity': heatmapIntensity,
       } as HeatmapPaint
     } as HeatmapLayer;
   }
