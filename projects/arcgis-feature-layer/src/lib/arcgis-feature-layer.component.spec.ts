@@ -1,20 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { SbbArcgisFeatureLayerComponent } from './arcgis-feature-layer.component';
+import {ArcgisFeatureLayerComponent} from './arcgis-feature-layer.component';
+import {HttpClientModule} from '@angular/common/http';
 
-describe('SbbArcgisFeatureLayerComponent', () => {
-  let component: SbbArcgisFeatureLayerComponent;
-  let fixture: ComponentFixture<SbbArcgisFeatureLayerComponent>;
+describe('ArcgisFeatureLayerComponent', () => {
+  let component: ArcgisFeatureLayerComponent;
+  let fixture: ComponentFixture<ArcgisFeatureLayerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SbbArcgisFeatureLayerComponent ]
+      imports:[HttpClientModule],
+      declarations: [ArcgisFeatureLayerComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SbbArcgisFeatureLayerComponent);
+    fixture = TestBed.createComponent(ArcgisFeatureLayerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
