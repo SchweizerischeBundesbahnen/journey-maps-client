@@ -1,19 +1,19 @@
 import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {AnyLayer, Layer, Map as MaplibreMap} from 'maplibre-gl';
 import {Subject} from 'rxjs';
-import {FeatureLayerService} from '../services/feature-layer.service';
 import {takeUntil} from 'rxjs/operators';
-import {FeatureLayerRendererSymbolParserService} from '../services/feature-layer-renderer-symbol-parser.service';
-import {FeatureLayerConfig} from '../model/feature-layer-config';
-import {FeatureLayerOptions} from '../model/feature-layer-options';
-import {FeatureLayerUtilService} from '../services/feature-layer-util.service';
+import {FeatureLayerOptions} from './models/feature-layer-options';
+import {FeatureLayerService} from './services/feature-layer.service';
+import {FeatureLayerRendererSymbolParserService} from './services/feature-layer-renderer-symbol-parser.service';
+import {FeatureLayerUtilService} from './services/feature-layer-util.service';
+import {FeatureLayerConfig} from './models/feature-layer-config';
 
 @Component({
-  selector: 'rokas-feature-layer',
-  templateUrl: './feature-layer.component.html',
-  styleUrls: ['./feature-layer.component.css']
+  selector: 'sbb-arcgis-feature-layer',
+  templateUrl: './arcgis-feature-layer.component.html',
+  styleUrls: ['./arcgis-feature-layer.component.css']
 })
-export class FeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
+export class ArcgisFeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
   @Input() map: MaplibreMap;
   @Input() options: FeatureLayerOptions;
 

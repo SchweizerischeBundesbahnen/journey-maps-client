@@ -19,6 +19,10 @@
       "journey-maps-client": [
         "dist/journey-maps-client/journey-maps-client",
         "dist/journey-maps-client"
+      ],
+      "arcgis-feature-layer": [
+        "dist/arcgis-feature-layer/arcgis-feature-layer",
+        "dist/arcgis-feature-layer"
       ]
     }
   }

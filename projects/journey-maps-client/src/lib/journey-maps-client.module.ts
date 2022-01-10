@@ -22,7 +22,6 @@ import {
 import {ZoomControlsComponent} from './components/zoom-controls/zoom-controls.component';
 import {LeitPoiComponent} from './components/leit-poi/leit-poi.component';
 import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch.component';
-import {FeatureLayerModule} from './components/feature-layer/feature-layer.module';
 
 @NgModule({
   declarations: [
@@ -45,7 +44,6 @@ import {FeatureLayerModule} from './components/feature-layer/feature-layer.modul
     SbbIconModule,
     SbbButtonModule,
     AngularResizedEventModule,
-    FeatureLayerModule
   ],
   exports: [JourneyMapsClientComponent],
 })

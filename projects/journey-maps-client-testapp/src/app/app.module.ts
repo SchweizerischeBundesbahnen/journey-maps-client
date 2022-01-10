@@ -7,6 +7,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {SourceHighlightComponent} from './components/source-highlight/source-highlight.component';
 import {SbbTabsModule} from '@sbb-esta/angular-public';
 import {JourneyMapsClientModule} from '../../../journey-maps-client/src/lib/journey-maps-client.module';
+import {ArcgisFeatureLayerModule} from '../../../arcgis-feature-layer/src/lib/arcgis-feature-layer.module';
 import {CommonModule} from '@angular/common';
 
 @NgModule({
@@ -14,14 +15,15 @@ import {CommonModule} from '@angular/common';
     AppComponent,
     SourceHighlightComponent
   ],
-    imports: [
-        BrowserAnimationsModule,
-        HighlightModule,
-        HttpClientModule,
-        SbbTabsModule,
-        JourneyMapsClientModule,
-        CommonModule,
-    ],
+  imports: [
+    BrowserAnimationsModule,
+    HighlightModule,
+    HttpClientModule,
+    SbbTabsModule,
+    JourneyMapsClientModule,
+    ArcgisFeatureLayerModule,
+    CommonModule,
+  ],
   providers: [
     {
       provide: HIGHLIGHT_OPTIONS,

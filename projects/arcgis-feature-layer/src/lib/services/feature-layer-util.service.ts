@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FeatureLayerRendererInfo} from '../model/feature-layer-renderer-info';
+import {FeatureLayerRendererInfo} from '../models/feature-layer-renderer-info';
 
 @Injectable({
   providedIn: 'root'

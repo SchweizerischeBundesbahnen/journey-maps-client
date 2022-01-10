@@ -1,0 +1,13 @@
+{
+  "name": "@schweizerischebundesbahnen/arcgis-feature-layer",
+  "version": "0.0.0-PLACEHOLDER",
+  "peerDependencies": {
+    "@angular/cdk": ">=9",
+    "@angular/common": ">=9",
+    "@angular/core": ">=9",
+    "maplibre-gl": ">=1.12"
+  },
+  "dependencies": {
+    "tslib": "^2.0.3"
+  }
+}

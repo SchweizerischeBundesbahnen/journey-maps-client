@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {EMPTY, Observable, of} from 'rxjs';
-import {FeatureLayerConfig} from '../model/feature-layer-config';
+import {FeatureLayerConfig} from '../models/feature-layer-config';
 import {HttpClient} from '@angular/common/http';
 import {expand, map, reduce} from 'rxjs/operators';
-import {FeatureLayerOptions} from '../model/feature-layer-options';
+import {FeatureLayerOptions} from '../models/feature-layer-options';
 
 @Injectable({
   providedIn: 'root'

@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {CircleLayer, CirclePaint, FillLayer, FillPaint, HeatmapLayer, HeatmapPaint, Layer, LineLayer, LinePaint} from 'maplibre-gl';
-import {ArcgisSymbolDefinition} from '../model/arcgis-symbol-definition';
+import {ArcgisSymbolDefinition} from '../models/arcgis-symbol-definition';
 import {FeatureLayerUtilService} from './feature-layer-util.service';
-import {FeatureLayerRendererInfo} from '../model/feature-layer-renderer-info';
+import {FeatureLayerRendererInfo} from '../models/feature-layer-renderer-info';
 
 @Injectable({
   providedIn: 'root'
