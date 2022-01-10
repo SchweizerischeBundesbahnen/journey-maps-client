@@ -1,10 +1,10 @@
-import {FeatureLayerRendererInfo} from './feature-layer-renderer-info';
+import {AnyFeatureLayerRendererInfo} from './any-feature-layer-renderer-info';
 
 export interface FeatureLayerConfig {
   minScale: number;
   maxScale: number;
   maxRecordCount: number;
   displayField?: string;
-  drawingInfo: { renderer: FeatureLayerRendererInfo };
+  drawingInfo: { renderer: AnyFeatureLayerRendererInfo };
   transparency: number;
 }

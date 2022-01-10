@@ -8,6 +8,10 @@ import {FeatureLayerRendererSymbolParserService} from './services/feature-layer-
 import {FeatureLayerUtilService} from './services/feature-layer-util.service';
 import {FeatureLayerConfig} from './models/feature-layer-config';
 
+/**
+ * This component uses the Maplibre GL JS api to render an ArcGIS Feature Layer and display the given data on the map.
+ * <example-url>/</example-url>
+ */
 @Component({
   selector: 'sbb-arcgis-feature-layer',
   templateUrl: './arcgis-feature-layer.component.html',
@@ -138,7 +142,7 @@ export class ArcgisFeatureLayerComponent implements OnInit, OnChanges, OnDestroy
       case 'heatmap':
         return this.symbolParserService.parseFeatureLayerRenderer(renderer);
       default:
-        throw new Error('Renderer type not supported!');
+        throw new Error(`Renderer type not supported in service ${this.options.url}`);
     }
   }
 }

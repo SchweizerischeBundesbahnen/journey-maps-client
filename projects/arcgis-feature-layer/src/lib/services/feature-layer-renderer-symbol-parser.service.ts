@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {CircleLayer, CirclePaint, FillLayer, FillPaint, HeatmapLayer, HeatmapPaint, Layer, LineLayer, LinePaint} from 'maplibre-gl';
 import {ArcgisSymbolDefinition} from '../models/arcgis-symbol-definition';
 import {FeatureLayerUtilService} from './feature-layer-util.service';
-import {FeatureLayerRendererInfo} from '../models/feature-layer-renderer-info';
+import {AnyFeatureLayerRendererInfo} from '../models/any-feature-layer-renderer-info';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class FeatureLayerRendererSymbolParserService {
   constructor(private utilService: FeatureLayerUtilService) {
   }
 
-  parseFeatureLayerRenderer(renderer: FeatureLayerRendererInfo): Layer {
+  parseFeatureLayerRenderer(renderer: AnyFeatureLayerRendererInfo): Layer {
     if (renderer.uniqueValueInfos) {
       const layer = this.createSimpleSymbolLayer(renderer.uniqueValueInfos[0].symbol);
       this.createUniqueColors(layer, renderer);
@@ -112,7 +112,7 @@ export class FeatureLayerRendererSymbolParserService {
     } as FillLayer;
   }
 
-  private createUniqueColors(layer: Layer, renderer: FeatureLayerRendererInfo): void {
+  private createUniqueColors(layer: Layer, renderer: AnyFeatureLayerRendererInfo): void {
     const paintColorDef = this.utilService.convertUniqueValueInfosToPaintColor(renderer);
     switch (layer.type) {
       case 'line':

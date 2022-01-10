@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {FeatureLayerRendererInfo} from '../models/feature-layer-renderer-info';
+import {AnyFeatureLayerRendererInfo} from '../models/any-feature-layer-renderer-info';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FeatureLayerUtilService {
 
-  convertUniqueValueInfosToPaintColor(renderer: FeatureLayerRendererInfo, byOutlineColor?: boolean) {
+  convertUniqueValueInfosToPaintColor(renderer: AnyFeatureLayerRendererInfo, byOutlineColor?: boolean) {
     const invisibleColor = [0, 0, 0, 0];
     const fallbackValue = 0;
 
