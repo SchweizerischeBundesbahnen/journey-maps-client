@@ -91,6 +91,7 @@ export class FeatureLayerRendererSymbolParserService {
       heatmapStops.push(this.utilService.convertColorToRgba(colorStop.color));
     });
 
+    heatmapIntensity = (heatmapIntensity - 3/*looks like in arcgis*/ < 1) ? 1 : heatmapIntensity - 3;
     return {
       'id': '',
       'type': 'heatmap',
