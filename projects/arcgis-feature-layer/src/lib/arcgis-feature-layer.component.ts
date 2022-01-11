@@ -18,7 +18,7 @@ import {FeatureLayerError} from './models/feature-layer-error';
   templateUrl: './arcgis-feature-layer.component.html',
   styleUrls: ['./arcgis-feature-layer.component.css']
 })
-export class ArcgisFeatureLayerComponent implements OnInit, OnChanges, OnDestroy {
+export class ArcgisFeatureLayerComponent implements OnChanges, OnDestroy {
   @Input() map: MaplibreMap;
   @Input() options: FeatureLayerOptions;
 
@@ -30,9 +30,6 @@ export class ArcgisFeatureLayerComponent implements OnInit, OnChanges, OnDestroy
               private featureLayerService: FeatureLayerService,
               private utilService: FeatureLayerUtilService,
               private symbolParserService: FeatureLayerRendererSymbolParserService) {
-  }
-
-  ngOnInit(): void {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
