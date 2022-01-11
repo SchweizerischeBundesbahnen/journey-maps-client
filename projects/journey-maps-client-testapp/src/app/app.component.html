@@ -1,108 +1,108 @@
 <div class="page-container">
-    <h2>Journey-Maps-Client <a class="changelog" href="./documentation/changelog">changelog</a></h2>
+  <h2>Journey-Maps-Client <a class="changelog" href="./documentation/changelog">changelog</a></h2>
 
-    <div class="map">
-        <ng-container *ngIf="mapVisible && apiKey">
-            <!--  Do not use this API key in production. Contact dlrokas@sbb.ch to get your own.-->
-            <rokas-journey-maps-client
-                #theMap
-                language="en"
-                [apiKey]="apiKey"
-                [styleOptions]="styleOptions"
-                [controlOptions]="controlOptions"
-                [viewportOptions]="viewportOptions"
-                [journeyMapsRoutingOption]="journeyMapsRoutingOption"
-                [markerOptions]="markerOptions"
-                [markerDetailsTemplate]=""
-                [(selectedMarkerId)]="selectedMarkerId"
-                [(selectedLevel)]="selectedLevel"
-                (visibleLevelsChange)="visibleLevels=$event"
-                (zoomLevelsChange)="zoomLevels=$event"
-                (mapCenterChange)="mapCenterChange.next($event)"
-                (mapReady)="onMapRecieved($event)"
-            >
-            </rokas-journey-maps-client>
-            <sbb-arcgis-feature-layer
-                    *ngFor="let options of arcgisFeatureLayers"
-                    [map]="theMap.mapReady | async"
-                    [options]="options"
-            ></sbb-arcgis-feature-layer>
+  <div class="map">
+      <ng-container *ngIf="mapVisible && apiKey">
+          <!--  Do not use this API key in production. Contact dlrokas@sbb.ch to get your own.-->
+          <rokas-journey-maps-client
+              #theMap
+              language="en"
+              [apiKey]="apiKey"
+              [styleOptions]="styleOptions"
+              [controlOptions]="controlOptions"
+              [viewportOptions]="viewportOptions"
+              [journeyMapsRoutingOption]="journeyMapsRoutingOption"
+              [markerOptions]="markerOptions"
+              [markerDetailsTemplate]=""
+              [(selectedMarkerId)]="selectedMarkerId"
+              [(selectedLevel)]="selectedLevel"
+              (visibleLevelsChange)="visibleLevels=$event"
+              (zoomLevelsChange)="zoomLevels=$event"
+              (mapCenterChange)="mapCenterChange.next($event)"
+              (mapReady)="onMapRecieved($event)"
+          >
+          </rokas-journey-maps-client>
+          <sbb-arcgis-feature-layer
+                  *ngFor="let options of arcgisFeatureLayers"
+                  [map]="theMap.mapReady | async"
+                  [options]="options"
+          ></sbb-arcgis-feature-layer>
+      </ng-container>
+
+    <!--  Set [markerDetailsTemplate]="markerDetailsTemplate" to overwrite default template. Example. -->
+    <ng-template #markerDetailsTemplate let-marker>
+      <h1 style="color: red">{{marker.title}}</h1>
+      <div>{{marker.subtitle}}</div>
+    </ng-template>
+  </div>
+
+  <div>
+    <ul>
+      <li>
+        <button (click)="mapVisible = !mapVisible">Toggle Map Visibility</button>
+      </li>
+      <li>
+        <button (click)="setSelectedMarkerId('home')">Select 'Home Office' marker</button>
+        <button (click)="setSelectedMarkerId(undefined)">Unselect all markers</button>
+      </li>
+      <li>Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span>
+      </li>
+      <li>Zoom Level (within range {{zoomLevels?.minZoom}}..{{zoomLevels?.maxZoom}}): {{zoomLevels?.currentZoom}}</li>
+      <li>
+        <button (click)="client.zoomIn()">Zoom In</button>
+        <button (click)="client.zoomOut()">Zoom Out</button>
+      </li>
+      <li>
+        Level switch:
+        <span *ngIf="!visibleLevels?.length">There are no visible levels.</span>
+        <ng-container *ngFor="let level of visibleLevels">
+          <button
+            [disabled]="level === selectedLevel"
+            (click)="setSelectedLevel(level)">
+            Level {{level}}
+          </button>
         </ng-container>
-        <!--  Set [markerDetailsTemplate]="markerDetailsTemplate" to overwrite default template. Example. -->
-        <ng-template #markerDetailsTemplate let-marker>
-            <h1 style="color: red">{{marker.title}}</h1>
-            <div>{{marker.subtitle}}</div>
-        </ng-template>
-    </div>
+      </li>
+      <li>Map center: {{mapCenter}}</li>
+      <li>
+        <button (click)="client.moveNorth()">Move North</button>
+        <button (click)="client.moveEast()">Move East</button>
+        <button (click)="client.moveSouth()">Move South</button>
+        <button (click)="client.moveWest()">Move West</button>
+      </li>
+      <li>Map loaded: {{map?.loaded()}}</li>
+      <li>Allow moving the map with one finger: {{controlOptions.oneFingerPan}}</li>
+      <li>
+        <label for="geo-json-select">
+          Display Journey-Maps GeoJSON data for:
+          <select id="geo-json-select" (change)="setGeoJsonInput($event)">
+            <option value="" (change)="setGeoJsonInput($event)">(none)</option>
+            <option *ngFor="let input of journeyMapsGeoJsonOptions" [value]="input">{{input}}</option>
+          </select>
+        </label>
+      </li>
+      <li>
+        <label for="popup-select">
+          Show marker details as:
+          <select id="popup-select" (change)="setPopupInput($event)">
+            <option value="true">Popup</option>
+            <option value="false">Teaser</option>
+          </select>
+        </label>
+      </li>
+      <li>
+        <label for="styleMode-select">
+          Change style mode:
+          <select id="styleMode-select" (change)="setStyleModeInput($event)">
+            <option value="BRIGHT">Bright Mode</option>
+            <option value="DARK">Dark Mode</option>
+          </select>
+        </label>
+      </li>
+    </ul>
+  </div>
 
-    <div>
-        <ul>
-            <li>
-                <button (click)="mapVisible = !mapVisible">Toggle Map Visibility</button>
-            </li>
-            <li>
-                <button (click)="setSelectedMarkerId('home')">Select 'Home Office' marker</button>
-                <button (click)="setSelectedMarkerId(undefined)">Unselect all markers</button>
-            </li>
-            <li>Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span>
-            </li>
-            <li>Zoom Level (within range {{zoomLevels?.minZoom}}..{{zoomLevels?.maxZoom}}
-                ): {{zoomLevels?.currentZoom}}</li>
-            <li>
-                <button (click)="client.zoomIn()">Zoom In</button>
-                <button (click)="client.zoomOut()">Zoom Out</button>
-            </li>
-            <li>
-                Level switch:
-                <span *ngIf="!visibleLevels?.length">There are no visible levels.</span>
-                <ng-container *ngFor="let level of visibleLevels">
-                    <button
-                            [disabled]="level === selectedLevel"
-                            (click)="setSelectedLevel(level)">
-                        Level {{level}}
-                    </button>
-                </ng-container>
-            </li>
-            <li>Map center: {{mapCenter}}</li>
-            <li>
-                <button (click)="client.moveNorth()">Move North</button>
-                <button (click)="client.moveEast()">Move East</button>
-                <button (click)="client.moveSouth()">Move South</button>
-                <button (click)="client.moveWest()">Move West</button>
-            </li>
-            <li>Map loaded: {{map?.loaded()}}</li>
-            <li>Allow moving the map with one finger: {{controlOptions.oneFingerPan}}</li>
-            <li>
-                <label for="geo-json-select">
-                    Display Journey-Maps GeoJSON data for:
-                    <select id="geo-json-select" (change)="setGeoJsonInput($event)">
-                        <option value="" (change)="setGeoJsonInput($event)">(none)</option>
-                        <option *ngFor="let input of journeyMapsGeoJsonOptions" [value]="input">{{input}}</option>
-                    </select>
-                </label>
-            </li>
-            <li>
-                <label for="popup-select">
-                    Show marker details as:
-                    <select id="popup-select" (change)="setPopupInput($event)">
-                        <option value="true">Popup</option>
-                        <option value="false">Teaser</option>
-                    </select>
-                </label>
-            </li>
-            <li>
-                <label for="styleMode-select">
-                    Change style mode:
-                    <select id="styleMode-select" (change)="setStyleModeInput($event)">
-                        <option value="BRIGHT">Bright Mode</option>
-                        <option value="DARK">Dark Mode</option>
-                    </select>
-                </label>
-            </li>
-        </ul>
-    </div>
-
-    <div class="source">
-        <app-source-highlight></app-source-highlight>
-    </div>
+  <div class="source">
+    <app-source-highlight></app-source-highlight>
+  </div>
 </div>
