@@ -9,3 +9,5 @@ export * from './any-feature-layer-renderer-info';
 export * from './feature-layer-heatmap-renderer-info';
 export * from './feature-layer-simple-renderer-info';
 export * from './feature-layer-unique-value-renderer-info';
+export * from './feature-layer-info-response';
+export * from './feature-layer-error';

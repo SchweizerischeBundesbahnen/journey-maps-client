@@ -9,10 +9,6 @@ export class HttpBasicAuthInterceptor implements HttpInterceptor {
     const url = httpRequest.url;
     return next.handle(httpRequest).pipe(catchError(err => {
       if (err.status === 0) {
-        // auto logout if 401 response returned from api
-        // this.authenticationService.logout();
-        // location.reload(true);
-        console.error('Failed to call service ' + url);
         const iframe = document.createElement('iframe');
         iframe.attributes['id'] = 'iframe-FeatureLayerHttpBasicAuth';
         iframe.src = url;
@@ -32,8 +28,7 @@ export class HttpBasicAuthInterceptor implements HttpInterceptor {
           location.reload();
         };
       }
-      const error = err.error.message || err.statusText;
-      return throwError(error);
+      return throwError(err);
     }));
   }
 }

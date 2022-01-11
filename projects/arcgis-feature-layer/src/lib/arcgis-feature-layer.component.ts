@@ -7,6 +7,7 @@ import {FeatureLayerService} from './services/feature-layer.service';
 import {FeatureLayerRendererSymbolParserService} from './services/feature-layer-renderer-symbol-parser.service';
 import {FeatureLayerUtilService} from './services/feature-layer-util.service';
 import {FeatureLayerConfig} from './models/feature-layer-config';
+import {FeatureLayerError} from './models/feature-layer-error';
 
 /**
  * This component uses the Maplibre GL JS api to render an ArcGIS Feature Layer and display the given data on the map.
@@ -55,10 +56,16 @@ export class ArcgisFeatureLayerComponent implements OnInit, OnChanges, OnDestroy
     this.featureLayerService.getFeatureLayerConfig(this.options)
       .pipe(takeUntil(this.destroyed))
       .subscribe(config => {
-        if (!this.options.featuresPerRequestLimit) {
-          this.options.featuresPerRequestLimit = config.maxRecordCount;
+        const errorResponse = config as FeatureLayerError;
+        const featureLayerConfig = config as FeatureLayerConfig;
+        if (errorResponse?.error) {
+          console.error(`Failed to call service ${this.options.url}`, errorResponse.error);
+          return;
         }
-        this.loadFeatures(config);
+        if (!this.options.featuresPerRequestLimit) {
+          this.options.featuresPerRequestLimit = featureLayerConfig.maxRecordCount;
+        }
+        this.loadFeatures(featureLayerConfig);
       });
   }
 

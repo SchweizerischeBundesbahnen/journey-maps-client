@@ -8,3 +8,4 @@ export interface FeatureLayerConfig {
   drawingInfo: { renderer: AnyFeatureLayerRendererInfo };
   transparency: number;
 }
+

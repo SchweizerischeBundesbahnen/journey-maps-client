@@ -54,6 +54,7 @@
             <sbb-arcgis-feature-layer
                     [map]="theMap.mapReady | async"
                     [options]="{
+                    accessToken:{'token':'<get your access token>'},
                     url:'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/J-M-C-ArcGIS-TEST/FeatureServer/1'
                 }"
             ></sbb-arcgis-feature-layer>
