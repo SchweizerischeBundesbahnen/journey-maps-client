@@ -16,6 +16,7 @@ import {
   ZoomLevels,
 } from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
 import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
+import {FeatureLayerOptions} from '../../../arcgis-feature-layer/src/lib/models/feature-layer-options';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,8 @@ import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/j
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+
+  public arcgisFeatureLayers: FeatureLayerOptions[] = [];
 
   constructor(
     private infoBlockFactoryService: InfoBlockFactoryService,
@@ -177,6 +180,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.assetReaderService.loadAssetAsString('secrets/apikey.txt')
       .subscribe(apiKey => this.apiKey = apiKey);
+
+    this.assetReaderService.loadAssetAsJSON('arcgis/arcgis-layers.json').subscribe(layers => this.arcgisFeatureLayers = layers);
+    //this.assetReaderService.loadAssetAsJSON('arcgis/arcgis-layers-gsharp.json').subscribe(layers => this.arcgisFeatureLayers = layers);
+    //this.assetReaderService.loadAssetAsJSON('arcgis/arcgis-layers-gsharp-custom.json').subscribe(layers => this.arcgisFeatureLayers = layers);
 
     this.mapCenterChange.pipe(takeUntil(this.destroyed)).subscribe(mapCenter => this.mapCenter = mapCenter);
   }
