@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: journey-maps-client
+spec:
+  ports:
+    - name: network-port
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: journey-maps-client
+  sessionAffinity: None
+  type: ClusterIP

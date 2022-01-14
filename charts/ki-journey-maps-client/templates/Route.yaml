@@ -1,0 +1,16 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    clew.sbb.ch/cluster-independent-dns: 'true'
+  name: journey-maps-client
+spec:
+  host: ki-journey-maps-client.sbb-cloud.net
+  port:
+    targetPort: network-port
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: journey-maps-client
