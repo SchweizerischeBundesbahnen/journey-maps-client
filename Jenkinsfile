@@ -112,9 +112,9 @@ pipeline {
 
           cloud_helmchartsDeploy(
             cluster: 'aws_aws01t',
-            project: 'ki-journey-maps-client'
+            project: 'ki-journey-maps-client',
             credentialId: '3561396d-b39e-44ff-a871-ed1017266f57',
-            chart: 'ki-journey-maps-client'
+            chart: 'ki-journey-maps-client',
             release: 'ki-journey-maps-client'
           )
         }
