@@ -1,6 +1,5 @@
 import {Position} from 'geojson';
 import {MarkerCategory} from './marker-category.enum';
-import {InfoBlock} from './infoblock/info-block';
 import {MarkerPriority} from './marker-priority.enum';
 import {MarkerColor} from './marker-color.enum';
 
@@ -53,14 +52,6 @@ export interface Marker {
 
   /** Subtitle of the marker. */
   subtitle?: string;
-
-  /**
-   * List of info blocks that will be displayed in the overlay when the marker is selected.
-   *
-   * Unless you have defined a {@link JourneyMapsClientComponent#markerDetailsTemplate},
-   * the overlay will only appear if this field is set and contains at least one infoBlock.
-   */
-  infoBlocks?: InfoBlock[];
 
   /**
    * Url that will be opened if the marker is selected instead of the overlay.

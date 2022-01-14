@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
-import {InfoBlockFactoryService} from '../../../journey-maps-client/src/lib/services/info-block-factory.service';
 import {LngLatLike, Map} from 'maplibre-gl';
 import {LoremIpsum} from 'lorem-ipsum';
 import {AssetReaderService} from './services/asset-reader.service';
@@ -25,7 +24,6 @@ import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/j
 export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
-    private infoBlockFactoryService: InfoBlockFactoryService,
     private assetReaderService: AssetReaderService
   ) {
   }
@@ -77,29 +75,7 @@ export class AppComponent implements OnInit, OnDestroy {
         subtitle: 'Rent a Bike - Ihr Mietvelo',
         position: [7.5897, 47.5476],
         category: MarkerCategory.BICYCLEPARKING,
-        color: MarkerColor.BLACK,
-        infoBlocks: [
-          this.infoBlockFactoryService.createTextInfoBlock(
-            'Verfügbare Velotypen',
-            'Komfortvelo, Countrybikes, Mountainbikes, E-Bikes City, Tandem, E-Bikes Mountain, Kindervelos, Kindertrailer, Kinderanhänger'
-          ),
-          this.infoBlockFactoryService.createTextInfoBlock(
-            'Rückgabe',
-            'An allen Mietstationen von Rent a Bike.'
-          ),
-          this.infoBlockFactoryService.createAddressInfoBlock(
-            'Kontakt',
-            'Centralbahnstrasse 20',
-            '4051',
-            'Basel',
-            'veloparking@iss.ch',
-            '+41 (0)61 272 09 10',
-          ),
-          this.infoBlockFactoryService.createButtonInfoBlock(
-            'Zur Velostation',
-            'https://www.rentabike.ch/stationen?c=152'
-          )
-        ]
+        color: MarkerColor.BLACK
       },
       {
         id: 'home',
@@ -108,17 +84,6 @@ export class AppComponent implements OnInit, OnDestroy {
         position: [7.296515, 47.069815],
         category: MarkerCategory.WARNING,
         color: MarkerColor.RED,
-        infoBlocks: [
-          this.infoBlockFactoryService.createTextInfoBlock(
-            this.loremIpsum.generateWords(3),
-            this.loremIpsum.generateSentences(2),
-            'blueText'
-          ),
-          this.infoBlockFactoryService.createTextInfoBlock(
-            this.loremIpsum.generateWords(3),
-            this.loremIpsum.generateParagraphs(3)
-          )
-        ]
       },
       {
         id: 'biel',
@@ -137,7 +102,6 @@ export class AppComponent implements OnInit, OnDestroy {
         category: MarkerCategory.CUSTOM,
         icon: 'assets/icons/train.png',
         iconSelected: 'assets/icons/train_selected.png',
-        infoBlocks: [/* no teaser/overlay will be shown unless markerDetailsTemplate is defined on the component */]
       },
       {
         id: 'work',
@@ -146,12 +110,6 @@ export class AppComponent implements OnInit, OnDestroy {
         position: [7.446450, 46.961409],
         category: MarkerCategory.RAIL,
         color: MarkerColor.DARKBLUE,
-        infoBlocks: [
-          this.infoBlockFactoryService.createButtonInfoBlock(
-            'Show menu plan',
-            'https://zfv.ch/en/microsites/sbb-restaurant-wylerpark/menu-plan'
-          )
-        ]
       },
     ],
   };

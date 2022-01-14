@@ -32,8 +32,7 @@ export class MarkerDetailsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.shouldRender = !!this.selectedMarker
-      && (this.selectedMarker.infoBlocks?.length > 0 || !!this.template);
+    this.shouldRender = !!this.selectedMarker;
   }
 
   @HostListener('document:keyup.escape')

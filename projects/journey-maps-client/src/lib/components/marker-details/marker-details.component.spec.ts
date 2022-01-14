@@ -1,4 +1,3 @@
-import {TemplateRef} from '@angular/core';
 import {MarkerDetailsComponent} from './marker-details.component';
 import {TestDataService} from '../../services/test-data.service';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
@@ -31,38 +30,15 @@ describe('MarkerDetailsComponent', () => {
     });
   });
 
-  it('shouldRender should return false if !selectedMarker.infoBlocks and !template', () => {
-    component.selectedMarker = {...testData.createMarkerWithoutInfoBlocks()};
-    component.ngOnChanges(undefined);
-    expect(component.shouldRender).toBeFalse();
-  });
-
-  it('shouldRender should return false if !selectedMarker.infoBlocks.length and !template', () => {
-    component.selectedMarker = {
-      ...testData.createMarkerWithoutInfoBlocks(),
-      infoBlocks: [],
-    };
-    component.ngOnChanges(undefined);
-    expect(component.shouldRender).toBeFalse();
-  });
-
-  it('shouldRender should return true if template', () => {
-    component.selectedMarker = testData.createMarkerWithoutInfoBlocks();
-    // dirty hack
-    component.template = 1 as unknown as TemplateRef<any>;
-    component.ngOnChanges(undefined);
-    expect(component.shouldRender).toBeTrue();
-  });
-
-  it('shouldRender should return true if selectedMarker.infoBlocks.length', () => {
-    component.selectedMarker = testData.createMarkerWithInfoBlocks();
+  it('shouldRender should return true if selectedMarker', () => {
+    component.selectedMarker = testData.createMarker();
     component.ngOnChanges(undefined);
     expect(component.shouldRender).toBeTrue();
   });
 
   it('should emit closeClicked event if escape key is clicked', () => {
     component.closeClicked.subscribe(() => closeClicked = true);
-    component.selectedMarker = testData.createMarkerWithInfoBlocks();
+    component.selectedMarker = testData.createMarker();
     fixture.detectChanges();
     expect(closeClicked).toBeFalse();
     component.onEscapePressed();

@@ -6,7 +6,7 @@
   </div>
 
   <ng-template #defaultTemplate>
-    <rokas-info-block-renderer [infoBlocks]="selectedMarker.infoBlocks">
-    </rokas-info-block-renderer>
+    <div style="font-size: x-large">{{selectedMarker.title}}</div>
+    <div style="font-size: large" *ngIf="selectedMarker.subtitle">{{selectedMarker.subtitle}}</div>
   </ng-template>
 </ng-container>
