@@ -7,6 +7,7 @@ import {HttpBasicAuthInterceptorConfig} from '../models/http-basic-auth-intercep
 
 /**
  * This http interceptor is forcing in some web browsers (e.g. Safari) to display the basic-auth popup window in cross-origin requests.
+ * Use HTTP_BASIC_AUTH_INTERCEPTOR_CONFIG_TOKEN to specify the service urls to use this interceptor.
  */
 @Injectable()
 export class HttpBasicAuthInterceptor implements HttpInterceptor {
