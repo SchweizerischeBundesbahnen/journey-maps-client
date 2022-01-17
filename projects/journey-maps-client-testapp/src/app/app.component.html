@@ -14,7 +14,7 @@
                                [markerDetailsTemplate]=""
                                [(selectedMarkerId)]="selectedMarkerId"
                                [(selectedLevel)]="selectedLevel"
-                               (visibleLevelsChange)="visibleLevels=$event"
+                               (visibleLevelsChange)="visibleLevels$.next($event)"
                                (zoomLevelsChange)="zoomLevels=$event"
                                (mapCenterChange)="mapCenterChange.next($event)"
                                (mapReady)="onMapRecieved($event)"
@@ -44,9 +44,9 @@
         <button (click)="client.zoomIn()">Zoom In</button>
         <button (click)="client.zoomOut()">Zoom Out</button>
       </li>
-      <li>
+      <li *ngIf="visibleLevels$ | async as visibleLevels">
         Level switch:
-        <span *ngIf="!visibleLevels?.length">There are no visible levels.</span>
+        <span *ngIf="!visibleLevels.length">There are no visible levels.</span>
         <ng-container *ngFor="let level of visibleLevels">
           <button
             [disabled]="level === selectedLevel"
@@ -62,7 +62,6 @@
         <button (click)="client.moveSouth()">Move South</button>
         <button (click)="client.moveWest()">Move West</button>
       </li>
-      <li>Map loaded: {{map?.loaded()}}</li>
       <li>Allow moving the map with one finger: {{controlOptions.oneFingerPan}}</li>
       <li>
         <label for="geo-json-select">

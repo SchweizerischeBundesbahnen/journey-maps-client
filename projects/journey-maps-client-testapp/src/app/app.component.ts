@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 import {LngLatLike, Map} from 'maplibre-gl';
 import {LoremIpsum} from 'lorem-ipsum';
 import {AssetReaderService} from './services/asset-reader.service';
 import {MarkerColor} from '../../../journey-maps-client/src/lib/model/marker-color.enum';
-import {Subject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
@@ -24,7 +24,8 @@ import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/j
 export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
-    private assetReaderService: AssetReaderService
+    private assetReaderService: AssetReaderService,
+    private cd: ChangeDetectorRef
   ) {
   }
 
@@ -49,8 +50,8 @@ export class AppComponent implements OnInit, OnDestroy {
     basemapSwitch: true,
   };
   selectedMarkerId: string;
-  visibleLevels: number[];
-  selectedLevel: number;
+  visibleLevels$ = new BehaviorSubject<number[]>([]);
+  selectedLevel = 0;
   viewportOptions: ViewportOptions = {
     boundingBox: [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]],
   };
@@ -187,7 +188,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (bbox) {
       this.setBbox(bbox);
-      this.mapCenterChange.pipe(take(1)).subscribe(() => updateDataFunction());
+      this.mapCenterChange.pipe(take(1)).subscribe(() => {
+          updateDataFunction();
+          this.cd.detectChanges();
+        }
+      );
     }
   }
 
