@@ -1,6 +1,6 @@
-import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {AnyLayer, Layer, Map as MaplibreMap} from 'maplibre-gl';
-import {Subject} from 'rxjs';
+import {BehaviorSubject, ReplaySubject, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {FeatureLayerOptions} from './models/feature-layer-options';
 import {FeatureLayerService} from './services/feature-layer.service';
@@ -21,6 +21,9 @@ import {FeatureLayerError} from './models/feature-layer-error';
 export class ArcgisFeatureLayerComponent implements OnChanges, OnDestroy {
   @Input() map: MaplibreMap;
   @Input() options: FeatureLayerOptions;
+
+  @Output() mapSourceAdded = new BehaviorSubject<string>(undefined);
+  @Output() mapLayerAdded = new BehaviorSubject<string>(undefined);
 
   isLoading = false;
 
@@ -131,11 +134,14 @@ export class ArcgisFeatureLayerComponent implements OnChanges, OnDestroy {
       type: 'geojson',
       data: {type: 'FeatureCollection', features}
     });
+
+    this.mapSourceAdded.next(this.getSourceId());
   }
 
   private addFeaturesAsMapLayer(config: FeatureLayerConfig): void {
     const addLayerBeforeExists = this.options.addLayerBefore && !!this.map.getLayer(this.options.addLayerBefore);
     this.map.addLayer(this.getMapLayerDefinition(config), addLayerBeforeExists ? this.options.addLayerBefore : undefined);
+    this.mapLayerAdded.next(this.getLayerId());
   }
 
   private parseArcgisDrawingInfo(config: FeatureLayerConfig): Layer {
