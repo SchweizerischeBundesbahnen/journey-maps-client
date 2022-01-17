@@ -19,5 +19,8 @@
     },
     "addLayerBefore": "poi_without_icons",
     "url": "https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/J-M-C-ArcGIS-TEST/FeatureServer/2"
+  },
+  {
+    "url": "https://services7.arcgis.com/RZYPa9cXL4L1fYTj/ArcGIS/rest/services/PROD_ROKAS_DATAPROCESSING_VIEW/FeatureServer/0"
   }
 ]

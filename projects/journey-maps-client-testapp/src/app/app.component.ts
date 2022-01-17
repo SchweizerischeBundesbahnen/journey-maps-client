@@ -183,7 +183,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     //this.assetReaderService.loadAssetAsJSON('arcgis/arcgis-layers.json').subscribe(layers => this.arcgisFeatureLayers = layers);
     this.assetReaderService.loadAssetAsJSON('arcgis/arcgis-layers-more.json').subscribe(layers => this.arcgisFeatureLayers = layers);
-    //this.assetReaderService.loadAssetAsJSON('arcgis/arcgis-layers-gsharp.json').subscribe(layers => this.arcgisFeatureLayers = layers);
+    // this.assetReaderService.loadAssetAsJSON('arcgis/arcgis-layers-gsharp.json').subscribe(layers => this.arcgisFeatureLayers = layers);
     // this.assetReaderService.loadAssetAsJSON('arcgis/arcgis-layers-gsharp-custom.json').subscribe(layers => this.arcgisFeatureLayers = layers);
 
     this.mapCenterChange.pipe(takeUntil(this.destroyed)).subscribe(mapCenter => this.mapCenter = mapCenter);
