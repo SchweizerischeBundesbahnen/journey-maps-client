@@ -1,12 +1,6 @@
 <ng-container *ngIf="shouldRender">
   <div #popupContent>
-    <ng-container
-      *ngTemplateOutlet="template ? template : defaultTemplate;context:getTemplateContext()">
+    <ng-container *ngTemplateOutlet="template;context:getTemplateContext()">
     </ng-container>
   </div>
-
-  <ng-template #defaultTemplate>
-    <div style="font-size: x-large">{{selectedMarker.title}}</div>
-    <div style="font-size: large" *ngIf="selectedMarker.subtitle">{{selectedMarker.subtitle}}</div>
-  </ng-template>
 </ng-container>

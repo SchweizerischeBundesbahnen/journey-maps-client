@@ -1,16 +1,10 @@
 <ng-container *ngIf="shouldRender">
   <div class="infoboxContainer" @showHideTrigger>
-    <ng-container
-      *ngTemplateOutlet="template ? template : defaultTemplate;context:getTemplateContext()">
+    <ng-container *ngTemplateOutlet="template;context:getTemplateContext()">
     </ng-container>
 
     <button class="close" (click)="closeClicked.emit()" [attr.aria-label]="closeLabel" data-testid="close-button">
       <sbb-icon svgIcon="kom:circle-cross-medium" class="sbb-icon-fit"></sbb-icon>
     </button>
   </div>
-
-  <ng-template #defaultTemplate>
-    <div class="title">{{selectedMarker.title}}</div>
-    <div class="subtitle" *ngIf="selectedMarker.subtitle">{{selectedMarker.subtitle}}</div>
-  </ng-template>
 </ng-container>

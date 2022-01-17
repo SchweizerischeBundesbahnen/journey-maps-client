@@ -11,7 +11,7 @@
                                [viewportOptions]="viewportOptions"
                                [journeyMapsRoutingOption]="journeyMapsRoutingOption"
                                [markerOptions]="markerOptions"
-                               [markerDetailsTemplate]=""
+                               [markerDetailsTemplate]="markerDetailsTemplate"
                                [(selectedMarkerId)]="selectedMarkerId"
                                [(selectedLevel)]="selectedLevel"
                                (visibleLevelsChange)="visibleLevels$.next($event)"
@@ -21,10 +21,9 @@
     >
     </rokas-journey-maps-client>
 
-    <!--  Set [markerDetailsTemplate]="markerDetailsTemplate" to overwrite default template. Example. -->
     <ng-template #markerDetailsTemplate let-marker>
-      <h1 style="color: red">{{marker.title}}</h1>
-      <div>{{marker.subtitle}}</div>
+      <div class="markerdetails-title">{{marker.title}}</div>
+      <div class="markerdetails-subtitle">{{marker.subtitle}}</div>
     </ng-template>
   </div>
 

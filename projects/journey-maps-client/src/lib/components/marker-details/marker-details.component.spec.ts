@@ -4,6 +4,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {JourneyMapsClientModule} from '../../journey-maps-client.module';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
+import {TemplateRef} from '@angular/core';
 
 
 describe('MarkerDetailsComponent', () => {
@@ -25,13 +26,21 @@ describe('MarkerDetailsComponent', () => {
   it('shouldRender should return false if !selectedMarker', () => {
     [null, undefined, null].forEach(selectedMarker => {
       component.selectedMarker = selectedMarker;
+      component.template = 1 as unknown as TemplateRef<any>;
       component.ngOnChanges(undefined);
       expect(component.shouldRender).toBeFalse();
     });
   });
 
-  it('shouldRender should return true if selectedMarker', () => {
+  it('shouldRender should return false if !template', () => {
     component.selectedMarker = testData.createMarker();
+    component.ngOnChanges(undefined);
+    expect(component.shouldRender).toBeTrue();
+  });
+
+  it('shouldRender should return true if selectedMarker and template', () => {
+    component.selectedMarker = testData.createMarker();
+    component.template = 1 as unknown as TemplateRef<any>;
     component.ngOnChanges(undefined);
     expect(component.shouldRender).toBeTrue();
   });

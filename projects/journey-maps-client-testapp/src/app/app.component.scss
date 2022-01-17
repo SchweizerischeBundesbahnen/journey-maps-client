@@ -45,3 +45,13 @@ select {
 a.changelog {
   font-size: 16px;
 }
+
+.markerdetails {
+  &-title {
+    font-size: x-large;
+  }
+
+  &-subtitle {
+    font-size: large;
+  }
+}
