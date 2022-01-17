@@ -11,6 +11,6 @@
 
   <ng-template #defaultTemplate>
     <div class="title">{{selectedMarker.title}}</div>
-    <div class="subtitle">{{selectedMarker.subtitle}}</div>
+    <div class="subtitle" *ngIf="selectedMarker.subtitle">{{selectedMarker.subtitle}}</div>
   </ng-template>
 </ng-container>
