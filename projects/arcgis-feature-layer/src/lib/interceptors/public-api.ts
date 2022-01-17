@@ -3,3 +3,4 @@
  */
 
 export * from './http-basic-auth-interceptor';
+export * from './http-basic-auth-interceptor-config';
