@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: journey-maps-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: journey-maps-client
+  template:
+    metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }} # Force redeployment on Helm upgrade
+        collectord.io/logs-index: 'sbb_rokas_internal_dev_events'
+        collectord.io/logs-output: 'splunk::prod'
+      labels:
+        app: journey-maps-client
+    spec:
+      containers:
+        - image: "docker.bin.sbb.ch/rokas/journey-maps-client-testapp:latest"
+          imagePullPolicy: Always
+          name: journey-maps-client
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+            - mountPath: /home/node/dist/journey-maps-client-testapp/assets/secrets/apikey.txt
+              name: journey-maps-client-testapp-apikey
+              readOnly: true
+              subPath: apikey.txt
+            - mountPath: /home/node/dist/journey-maps-client-testapp/journey-maps-client-elements/assets/secrets/apikey.txt
+              name: journey-maps-client-elements-apikey
+              readOnly: true
+              subPath: apikey.txt
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: journey-maps-client-testapp-apikey
+          configMap:
+            name: journey-maps-client-testapp-apikey-config
+            items:
+              - key: apikey.txt
+                path: apikey.txt
+        - name: journey-maps-client-elements-apikey
+          configMap:
+            name: journey-maps-client-testapp-apikey-config
+            items:
+              - key: apikey.txt
+                path: apikey.txt

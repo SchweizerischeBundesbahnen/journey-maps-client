@@ -110,18 +110,12 @@ pipeline {
             ocAppVersion: 'latest'
           )
 
-          cloud_mergeConfigAndUpdateOpenShift(
+          cloud_helmchartsDeploy(
             cluster: 'aws_aws01t',
-            credentialId: '3561396d-b39e-44ff-a871-ed1017266f57',
-            projects: 'ki-journey-maps-client'
-          )
-
-          cloud_callDeploy(
-            cluster: 'aws_aws01t',
-            credentialId: '3561396d-b39e-44ff-a871-ed1017266f57',
-            dc: 'journey-maps-client',
             project: 'ki-journey-maps-client',
-            doNotFailOnRunningDeployment: true
+            credentialId: '3561396d-b39e-44ff-a871-ed1017266f57',
+            chart: 'ki-journey-maps-client',
+            release: 'ki-journey-maps-client'
           )
         }
       }

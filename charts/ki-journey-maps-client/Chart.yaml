@@ -1,0 +1,11 @@
+# This file is generated automatically - edit with care!
+# Generation date Fri Jan 14 11:12:36 CET 2022
+# Cf. https://code.sbb.ch/scm/kd_esta/esta-openshift-to-helm.git for generator details
+apiVersion: v2
+appVersion: 2.7.0-SNAPSHOT
+description: A Helm chart for the ki-journey-maps-client application
+name: ki-journey-maps-client
+# The effective version will be computed during Helm generation
+version: 2.7.0-SNAPSHOT
+# This is only added to make `helm lint` happy - configure your own icon!
+icon: https://i.postimg.cc/htXLj8Hm/ROKAS.png
