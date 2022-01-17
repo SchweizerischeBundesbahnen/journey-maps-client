@@ -35,7 +35,7 @@ describe('MarkerDetailsComponent', () => {
   it('shouldRender should return false if !template', () => {
     component.selectedMarker = testData.createMarker();
     component.ngOnChanges(undefined);
-    expect(component.shouldRender).toBeTrue();
+    expect(component.shouldRender).toBeFalse();
   });
 
   it('shouldRender should return true if selectedMarker and template', () => {
