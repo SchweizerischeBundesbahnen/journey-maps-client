@@ -1,8 +1,0 @@
-[
-  {
-    "url": "https://geo.sbb.ch/site/rest/services/ROKAS_PUBLIC/POIService/FeatureServer/0",
-    "id": "ROKAS_PUBLIC-POIService",
-    "requestWithCredentials": true,
-    "minZoom": 7
-  }
-]

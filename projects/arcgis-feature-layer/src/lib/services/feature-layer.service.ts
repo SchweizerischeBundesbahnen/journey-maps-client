@@ -2,13 +2,16 @@ import {Injectable} from '@angular/core';
 import {EMPTY, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {expand, map, reduce} from 'rxjs/operators';
-import {FeatureLayerOptions} from '../models/feature-layer-options';
+import {ArcgisFeatureLayerOptions} from '../arcgis-feature-layer-options';
 import {FeatureLayerInfoResponse} from '../models/feature-layer-info-response';
 
 @Injectable({
   providedIn: 'root'
 })
 
+/**
+ * This service loads the Arcgis feature layer data and configuration.
+ */
 export class FeatureLayerService {
 
   private readonly wgs84wkid = '4326';
@@ -16,13 +19,13 @@ export class FeatureLayerService {
   constructor(private http: HttpClient) {
   }
 
-  getFeatureLayerConfig(options: FeatureLayerOptions): Observable<FeatureLayerInfoResponse> {
+  getFeatureLayerConfig(options: ArcgisFeatureLayerOptions): Observable<FeatureLayerInfoResponse> {
     const requestUrl = new URL(options.url);
     requestUrl.searchParams.append('f', 'json');
     return this.http.get<FeatureLayerInfoResponse>(requestUrl.toString(), this.getHttpOptions(options.requestWithCredentials, options.accessToken));
   }
 
-  getFeatures(options: FeatureLayerOptions): Observable<GeoJSON.Feature<GeoJSON.Geometry>[]> {
+  getFeatures(options: ArcgisFeatureLayerOptions): Observable<GeoJSON.Feature<GeoJSON.Geometry>[]> {
     let resultOffset = 0;
     return this.loadFeatures(options, 0).pipe(
       expand((response: any) => {
@@ -56,7 +59,7 @@ export class FeatureLayerService {
     return options;
   }
 
-  private loadFeatures(options: FeatureLayerOptions, resultOffset: number): Observable<any> {
+  private loadFeatures(options: ArcgisFeatureLayerOptions, resultOffset: number): Observable<any> {
     const requestUrl = new URL(`${options.url}/query`);
     const searchParams = requestUrl.searchParams;
     searchParams.append('where', options.filter ?? '1=1');

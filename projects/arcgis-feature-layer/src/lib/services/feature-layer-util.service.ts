@@ -1,6 +1,9 @@
 import {Injectable} from '@angular/core';
 import {AnyFeatureLayerRendererInfo} from '../models/any-feature-layer-renderer-info';
 
+/**
+ * This service helps to parse the Arcgis specific feature layer renderer info and convert it to a mapbox style definition.
+ */
 @Injectable({
   providedIn: 'root'
 })

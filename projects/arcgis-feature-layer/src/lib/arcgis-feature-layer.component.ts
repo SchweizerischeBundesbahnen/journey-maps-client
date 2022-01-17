@@ -1,8 +1,8 @@
-import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
 import {AnyLayer, Layer, Map as MaplibreMap} from 'maplibre-gl';
-import {BehaviorSubject, ReplaySubject, Subject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {FeatureLayerOptions} from './models/feature-layer-options';
+import {ArcgisFeatureLayerOptions} from './arcgis-feature-layer-options';
 import {FeatureLayerService} from './services/feature-layer.service';
 import {FeatureLayerRendererSymbolParserService} from './services/feature-layer-renderer-symbol-parser.service';
 import {FeatureLayerUtilService} from './services/feature-layer-util.service';
@@ -19,12 +19,28 @@ import {FeatureLayerError} from './models/feature-layer-error';
   styleUrls: ['./arcgis-feature-layer.component.css']
 })
 export class ArcgisFeatureLayerComponent implements OnChanges, OnDestroy {
-  @Input() map: MaplibreMap;
-  @Input() options: FeatureLayerOptions;
 
+  /**
+   * The map instance, where this feature layer should be added.
+   */
+  @Input() map: MaplibreMap;
+  /**
+   * The options of this feature layer.
+   */
+  @Input() options: ArcgisFeatureLayerOptions;
+
+  /**
+   * Event that occurs, when the feature layer geojson map source was created and added to the map. Returns the map source id.
+   */
   @Output() mapSourceAdded = new BehaviorSubject<string>(undefined);
+  /**
+   * Event that occurs, when the feature layer map layer was created and added to the map (inc. layer data). Returns the map layer id.
+   */
   @Output() mapLayerAdded = new BehaviorSubject<string>(undefined);
 
+  /**
+   * Whether loading feature data or not.
+   */
   isLoading = false;
 
   private destroyed = new Subject<void>();

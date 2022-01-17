@@ -23,9 +23,8 @@
           >
           </rokas-journey-maps-client>
           <sbb-arcgis-feature-layer
-                  *ngFor="let options of arcgisFeatureLayers"
                   [map]="theMap.mapReady | async"
-                  [options]="options"
+                  [options]="{'url':'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/PROD_Route_Customization_View/FeatureServer/0'}"
           ></sbb-arcgis-feature-layer>
       </ng-container>
 

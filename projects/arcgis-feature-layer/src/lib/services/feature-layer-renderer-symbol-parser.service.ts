@@ -4,6 +4,9 @@ import {ArcgisSymbolDefinition} from '../models/arcgis-symbol-definition';
 import {FeatureLayerUtilService} from './feature-layer-util.service';
 import {AnyFeatureLayerRendererInfo} from '../models/any-feature-layer-renderer-info';
 
+/**
+ * This service helps to parse the Arcgis specific feature layer definition and create a corresponding mapbox layer.
+ */
 @Injectable({
   providedIn: 'root'
 })

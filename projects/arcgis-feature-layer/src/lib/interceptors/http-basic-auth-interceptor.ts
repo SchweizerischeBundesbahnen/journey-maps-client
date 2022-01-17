@@ -5,6 +5,9 @@ import {catchError} from 'rxjs/operators';
 import {HTTP_BASIC_AUTH_INTERCEPTOR_CONFIG_TOKEN} from './http-basic-auth-interceptor-config';
 import {HttpBasicAuthInterceptorConfig} from '../models/http-basic-auth-interceptor-config';
 
+/**
+ * This http interceptor is forcing in some web browsers (e.g. Safari) to display the basic-auth popup window in cross-origin requests.
+ */
 @Injectable()
 export class HttpBasicAuthInterceptor implements HttpInterceptor {
 
