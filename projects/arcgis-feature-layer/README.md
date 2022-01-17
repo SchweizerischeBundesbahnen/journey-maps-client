@@ -18,3 +18,19 @@ Source Code:
 
 https://ki-journey-maps-client.apps.aws01t.sbb-aws-test.net/documentation/components/ArcgisFeatureLayerComponent.html  
 (Only accessible from within SBB network)
+
+## Usage
+
+### Installation
+
+```
+npm install --save @schweizerischebundesbahnen/arcgis-feature-layer
+```
+
+### Dependencies
+
+The arcgis-feature-layer need a mapliber/mapbox map instance to be present. E.g.:
+```
+<rokas-journey-maps-client #theMap ...></rokas-journey-maps-client>
+<sbb-arcgis-feature-layer [map]="theMap.mapReady | async" [options]="options" ></sbb-arcgis-feature-layer>
+```
