@@ -40,6 +40,7 @@ import {
   ViewportOptions,
   ZoomLevels
 } from './journey-maps-client.interfaces';
+import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
 
 /**
  * This component uses the Maplibre GL JS api to render a map and display the given data on the map.
@@ -277,8 +278,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private _selectedMarker: Marker;
 
   private isSatelliteMap = false;
-  private satelliteLayerId = "esriWorldImageryLayer";
-  private satelliteImageSourceName = "esriWorldImagerySource";
+  private satelliteLayerId = 'esriWorldImageryLayer';
+  private satelliteImageSourceName = 'esriWorldImagerySource';
 
   /** @internal */
   constructor(private mapInitService: MapInitService,
@@ -290,6 +291,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapRoutesService: MapRoutesService,
               private mapLeitPoiService: MapLeitPoiService,
               private levelSwitchService: LevelSwitchService,
+              private mapLayerFilterService: MapLayerFilterService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService,
               private host: ElementRef) {
@@ -567,7 +569,11 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     ).subscribe(style => {
       this.map.setStyle(style, {diff: false});
       this.map.once('styledata',
-        () => this.mapMarkerService.updateMarkers(this.map, this.markerOptions.markers, this.selectedMarker, this.styleOptions.mode));
+        () => {
+          this.mapMarkerService.updateMarkers(this.map, this.markerOptions.markers, this.selectedMarker, this.styleOptions.mode);
+          this.mapLayerFilterService.collectLvlLayers();
+          this.levelSwitchService.switchLevel(this.levelSwitchService.selectedLevel);
+        });
     });
 
     this.currentZoomLevelDebouncer.pipe(
@@ -629,8 +635,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   private addSatelliteSource(map: maplibregl.Map) {
     map.addSource(this.satelliteImageSourceName, {
-      type: "raster",
-      tiles: ["https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
+      type: 'raster',
+      tiles: ['https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
       tileSize: 128,
     });
   }
@@ -681,10 +687,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     if (this.isSatelliteMap) {
       this.map.addLayer({
         id: this.satelliteLayerId,
-        type: "raster",
+        type: 'raster',
         source: this.satelliteImageSourceName,
         maxzoom: 19.2,
-      }, "waterName_point_other");
+      }, 'waterName_point_other');
     } else {
       this.map.removeLayer(this.satelliteLayerId);
     }
