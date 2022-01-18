@@ -2,11 +2,15 @@
 
 ## 2.7.0 SNAPSHOT
 
-### Changed 
+### Changed
 
 * Allow the user to switch between vector and satellite image map.
-* Remove `InfoBlock` mechanism for marker details overlay. (popup or teaser)
+* Remove `InfoBlock` mechanism and default template for marker details overlay. (popup or teaser)
   * Therefore marker details are - at the moment - not supported in the Web Component.
+
+### Fixed
+
+* Keep level switcher and map in sync when switching style mode. (bright, dark)
 
 ## [2.6.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.5.0&sourceBranch=refs%2Ftags%2F2.6.0&targetRepoId=46287) - 2021-11-29
 
