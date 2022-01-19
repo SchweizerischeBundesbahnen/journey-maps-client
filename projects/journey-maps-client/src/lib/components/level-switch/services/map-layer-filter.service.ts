@@ -90,7 +90,9 @@ export class MapLayerFilterService {
     return innerPartString.indexOf('floor') !== -1;
   }
 
-  private collectLvlLayers(): void {
+  collectLvlLayers(): void {
+    this.knownLvlLayerIds = [];
+
     this.map.getStyle().layers.forEach(layer => {
       if (this.knownLayerTypes.includes(layer.type) &&
         (layer.id.endsWith('-lvl')
