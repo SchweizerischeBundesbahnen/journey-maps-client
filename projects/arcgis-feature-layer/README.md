@@ -4,20 +4,11 @@ This library can read GeoJSON data from an ArcGIS Feature Layer and display in a
 
 ## Test Application
 
-https://ki-journey-maps-client.apps.aws01t.sbb-aws-test.net/  
+https://ki-journey-maps-client.sbb-cloud.net/ 
 (Only accessible from within SBB network)
 
-Source Code:
-
-* SBB Bitbucket:  
-  https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client
-* Github:  
-  https://github.com/SchweizerischeBundesbahnen/journey-maps-client
-
-## API Documentation
-
-https://ki-journey-maps-client.apps.aws01t.sbb-aws-test.net/documentation/components/ArcgisFeatureLayerComponent.html  
-(Only accessible from within SBB network)
+## Source Code
+https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client
 
 ## Usage
 
@@ -43,6 +34,7 @@ The arcgis-feature-layer need a mapliber/mapbox map instance to be present.
 ### Advanced examples
 
 #### Advanced example 1: using GSharp basic-auth secured feature layer
+https://sbb.sharepoint.com/sites/gsharpsbb/
 ```
 <sbb-arcgis-feature-layer [map]="theMap.mapReady | async" [options]="{
     'url': 'https://geo.sbb.ch/site/rest/services/ROKAS_PUBLIC/POIService/FeatureServer/0',
@@ -54,7 +46,7 @@ The arcgis-feature-layer need a mapliber/mapbox map instance to be present.
 ```
 <sbb-arcgis-feature-layer [map]="theMap.mapReady | async" [options]="{
     'accessToken': {
-      'token': ''
+      'token': '<YOUR_ARCGIS_AUTH_TOKEN>'
     },
     'url': 'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/J-M-C-ArcGIS-TEST/FeatureServer/1'
 }"></sbb-arcgis-feature-layer>
@@ -83,27 +75,13 @@ The arcgis-feature-layer need a mapliber/mapbox map instance to be present.
 }"></sbb-arcgis-feature-layer>
 ```
 
-### How to force the basic auth popup on cross-origin requests
-In all web browsers, when running an app in incognito-window, it's not possible to call a service, that was configured to use Basic-Auth.
-Using browser normal-window/tab, it depends on the web browser version, if the Basic-auth popup ist displayed or not.
-
-When using the provided HttpBasicAuthInterceptor and configuration from this library, it (at least) forces to display the Basic-auth popup (tested in Chrome, Edge and Safari).
-
-Check this configuration example below using NgModule.providers:
+#### Advanced example 5: define feature layer filter
 ```
-import {HTTP_BASIC_AUTH_INTERCEPTOR_CONFIG_TOKEN} from './interceptors/http-basic-auth-interceptor-config';
-import {HttpBasicAuthInterceptor} from './interceptors/http-basic-auth-interceptor';
-
-@NgModule({
-...
-providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: HttpBasicAuthInterceptor,
-    multi: true
-  }, {
-    provide: HTTP_BASIC_AUTH_INTERCEPTOR_CONFIG_TOKEN,
-    useValue: {serviceUrls: ['geo.sbb.ch', 'geo-int.sbb.ch', 'geo-dev.sbb.ch']},
-    multi: true
-  }],
-...
+<sbb-arcgis-feature-layer
+      [map]="theMap.mapReady | async"
+      [options]="{
+        'url': 'https://geo.sbb.ch/site/rest/services/ROKAS_PUBLIC/POIService/FeatureServer/0',
+        'filter':'CATEGORY=\'parking\'',
+        'requestWithCredentials': true}"
+></sbb-arcgis-feature-layer>
 ```
