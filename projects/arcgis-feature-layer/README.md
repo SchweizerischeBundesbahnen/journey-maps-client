@@ -82,3 +82,28 @@ The arcgis-feature-layer need a mapliber/mapbox map instance to be present.
     'addLayerBefore': 'poi_without_icons'
 }"></sbb-arcgis-feature-layer>
 ```
+
+### How to force the basic auth popup on cross-origin requests
+In all web browsers, when running an app in incognito-window, it's not possible to call a service, that was configured to use Basic-Auth.
+Using browser normal-window/tab, it depends on the web browser version, if the Basic-auth popup ist displayed or not.
+
+When using the provided HttpBasicAuthInterceptor and configuration from this library, it (at least) forces to display the Basic-auth popup (tested in Chrome, Edge and Safari).
+
+Check this configuration example below using NgModule.providers:
+```
+import {HTTP_BASIC_AUTH_INTERCEPTOR_CONFIG_TOKEN} from './interceptors/http-basic-auth-interceptor-config';
+import {HttpBasicAuthInterceptor} from './interceptors/http-basic-auth-interceptor';
+
+@NgModule({
+...
+providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpBasicAuthInterceptor,
+    multi: true
+  }, {
+    provide: HTTP_BASIC_AUTH_INTERCEPTOR_CONFIG_TOKEN,
+    useValue: {serviceUrls: ['geo.sbb.ch', 'geo-int.sbb.ch', 'geo-dev.sbb.ch']},
+    multi: true
+  }],
+...
+```
