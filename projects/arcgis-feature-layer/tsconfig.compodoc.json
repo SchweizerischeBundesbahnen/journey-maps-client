@@ -4,7 +4,6 @@
     "src/lib/arcgis-feature-layer.component.ts",
     "src/lib/arcgis-feature-layer.module.ts",
     "src/lib/services/**",
-    "src/lib/models/**",
-    "src/lib/interceptors/**"
+    "src/lib/models/**"
   ]
 }
