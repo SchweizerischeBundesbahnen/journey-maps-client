@@ -3,44 +3,41 @@
 
   <div class="map">
       <ng-container *ngIf="mapVisible && apiKey">
-          <!--  Do not use this API key in production. Contact dlrokas@sbb.ch to get your own.-->
-          <rokas-journey-maps-client
-              #theMap
-              language="en"
-              [apiKey]="apiKey"
-              [styleOptions]="styleOptions"
-              [controlOptions]="controlOptions"
-              [viewportOptions]="viewportOptions"
-              [journeyMapsRoutingOption]="journeyMapsRoutingOption"
-              [markerOptions]="markerOptions"
-              [markerDetailsTemplate]=""
-              [(selectedMarkerId)]="selectedMarkerId"
-              [(selectedLevel)]="selectedLevel"
-              (visibleLevelsChange)="visibleLevels=$event"
-              (zoomLevelsChange)="zoomLevels=$event"
-              (mapCenterChange)="mapCenterChange.next($event)"
-              (mapReady)="onMapRecieved($event)"
-          >
-          </rokas-journey-maps-client>
-          <!-- ArcGIS Online Public Feature Service -->
-          <sbb-arcgis-feature-layer
+            <!--  Do not use this API key in production. Contact dlrokas@sbb.ch to get your own.-->
+            <rokas-journey-maps-client #theMap
+                                       language="en"
+                                       [apiKey]="apiKey"
+                                       [styleOptions]="styleOptions"
+                                       [controlOptions]="controlOptions"
+                                       [viewportOptions]="viewportOptions"
+                                       [journeyMapsRoutingOption]="journeyMapsRoutingOption"
+                                       [markerOptions]="markerOptions"
+                                       [markerDetailsTemplate]="markerDetailsTemplate"
+                                       [(selectedMarkerId)]="selectedMarkerId"
+                                       [(selectedLevel)]="selectedLevel"
+                                       (visibleLevelsChange)="visibleLevels$.next($event)"
+                                       (zoomLevelsChange)="zoomLevels=$event"
+                                       (mapCenterChange)="mapCenterChange.next($event)"
+                                       (mapReady)="onMapRecieved($event)"
+            >
+            </rokas-journey-maps-client>
+            <!-- ArcGIS Online Public Feature Service -->
+            <sbb-arcgis-feature-layer
                   [map]="theMap.mapReady | async"
                   [options]="{'url':'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/PROD_Route_Customization_View/FeatureServer/0'}"
-          ></sbb-arcgis-feature-layer>
-          <!-- GSharp Basic-Auth secured Feature Service -->
-          <sbb-arcgis-feature-layer
+            ></sbb-arcgis-feature-layer>
+            <!-- GSharp Basic-Auth secured Feature Service -->
+            <sbb-arcgis-feature-layer
                   [map]="theMap.mapReady | async"
                   [options]="{
                     'url': 'https://geo.sbb.ch/site/rest/services/ROKAS_PUBLIC/POIService/FeatureServer/0',
                     'filter':'CATEGORY=\'parking\'',
                     'requestWithCredentials': true}"
-          ></sbb-arcgis-feature-layer>
+            ></sbb-arcgis-feature-layer>
       </ng-container>
-
-    <!--  Set [markerDetailsTemplate]="markerDetailsTemplate" to overwrite default template. Example. -->
     <ng-template #markerDetailsTemplate let-marker>
-      <h1 style="color: red">{{marker.title}}</h1>
-      <div>{{marker.subtitle}}</div>
+      <div class="markerdetails-title">{{marker.title}}</div>
+      <div class="markerdetails-subtitle">{{marker.subtitle}}</div>
     </ng-template>
   </div>
 
@@ -60,9 +57,9 @@
         <button (click)="client.zoomIn()">Zoom In</button>
         <button (click)="client.zoomOut()">Zoom Out</button>
       </li>
-      <li>
+      <li *ngIf="visibleLevels$ | async as visibleLevels">
         Level switch:
-        <span *ngIf="!visibleLevels?.length">There are no visible levels.</span>
+        <span *ngIf="!visibleLevels.length">There are no visible levels.</span>
         <ng-container *ngFor="let level of visibleLevels">
           <button
             [disabled]="level === selectedLevel"
@@ -78,7 +75,6 @@
         <button (click)="client.moveSouth()">Move South</button>
         <button (click)="client.moveWest()">Move West</button>
       </li>
-      <li>Map loaded: {{map?.loaded()}}</li>
       <li>Allow moving the map with one finger: {{controlOptions.oneFingerPan}}</li>
       <li>
         <label for="geo-json-select">

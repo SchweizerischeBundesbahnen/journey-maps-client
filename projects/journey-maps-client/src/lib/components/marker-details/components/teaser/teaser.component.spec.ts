@@ -25,7 +25,7 @@ describe('TeaserComponent', () => {
 
   it('should emit closeClicked event if close button is clicked', () => {
     component.closeClicked.subscribe(() => closeClicked = true);
-    component.selectedMarker = testData.createMarkerWithInfoBlocks();
+    component.selectedMarker = testData.createMarker();
     fixture.detectChanges();
     expect(closeClicked).toBeFalse();
     getCloseButtonDe().nativeElement.click();

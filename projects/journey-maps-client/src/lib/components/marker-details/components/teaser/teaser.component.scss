@@ -23,16 +23,6 @@
     border: none;
   }
 
-  .title {
-    font-size: x-large;
-    margin-top: 0.5em;
-  }
-
-  .subtitle {
-    font-size: large;
-    margin-bottom: 1rem;
-  }
-
   width: 100%;
   @include mq($from: tabletPortrait) {
     width: 20rem;

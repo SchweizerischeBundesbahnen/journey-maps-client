@@ -2,8 +2,6 @@ import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing'
 
 import {JourneyMapsClientComponent} from './journey-maps-client.component';
 import {Marker} from './model/marker';
-import {TextInfoBlock} from './model/infoblock/text-info-block';
-import {ButtonInfoBlock} from './model/infoblock/button-info-block';
 import {MapMarkerService} from './services/map/map-marker.service';
 import {MapInitService} from './services/map/map-init.service';
 import {asyncScheduler, Observable, of, scheduled} from 'rxjs';
@@ -150,31 +148,12 @@ const markers: Marker[] = [
     subtitle: 'My home is my castle',
     position: [7.296515, 47.069815],
     category: 'INFORMATION', // or WARNING or CUSTOM
-    infoBlocks: [
-      {
-        type: 'TEXT',
-        title: 'Lorem Ipsum',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipisici elit'
-      } as TextInfoBlock,
-      {
-        type: 'BUTTON',
-        title: 'Bavaria Ipsum',
-        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-      } as ButtonInfoBlock,
-    ]
   },
   {
     id: 'work',
     title: 'Office',
     subtitle: 'SBB Wylerpark',
     position: [7.446450, 46.961409],
-    category: 'WARNING',
-    infoBlocks: [
-      {
-        type: 'BUTTON',
-        title: 'Show menu plan',
-        url: 'https://zfv.ch/en/microsites/sbb-restaurant-wylerpark/menu-plan'
-      } as ButtonInfoBlock,
-    ]
+    category: 'WARNING'
   },
 ];
