@@ -16,7 +16,7 @@ import {FeatureLayerError} from './models/feature-layer-error';
 @Component({
   selector: 'sbb-arcgis-feature-layer',
   templateUrl: './arcgis-feature-layer.component.html',
-  styleUrls: ['./arcgis-feature-layer.component.css']
+  styleUrls: ['./arcgis-feature-layer.component.scss']
 })
 export class ArcgisFeatureLayerComponent implements OnChanges, OnDestroy {
 
