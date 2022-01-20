@@ -1,15 +1,13 @@
-<div class="zoom-controls-buttons-container" *ngIf="map">
-  <div class="zoom-controls-button">
-    <button (click)="zoomIn()" class="zoom-controls-button-content" [attr.disabled]="isMaxZoom ? '' : null"
+<div class="map-control-container" *ngIf="map">
+  <div class="map-control-button-wrapper var-plus" [attr.data-disabled]="isMaxZoom">
+    <button (click)="zoomIn()" class="map-control-button" [attr.disabled]="isMaxZoom ? '' : null"
             [attr.aria-label]="zoomInLabel">
-      <sbb-icon svgIcon="kom:plus-small"></sbb-icon>
     </button>
   </div>
 
-  <div class="zoom-controls-button">
-    <button (click)="zoomOut()" class="zoom-controls-button-content" [attr.disabled]="isMinZoom ? '' : null"
+  <div class="map-control-button-wrapper var-minus" [attr.data-disabled]="isMinZoom">
+    <button (click)="zoomOut()" class="map-control-button" [attr.disabled]="isMinZoom ? '' : null"
             [attr.aria-label]="zoomOutLabel">
-      <sbb-icon svgIcon="kom:minus-small"></sbb-icon>
     </button>
   </div>
 </div>
