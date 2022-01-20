@@ -2,25 +2,41 @@
   <h2>Journey-Maps-Client <a class="changelog" href="./documentation/changelog">changelog</a></h2>
 
   <div class="map">
-    <!--  Do not use this API key in production. Contact dlrokas@sbb.ch to get your own.-->
-    <rokas-journey-maps-client *ngIf="mapVisible && apiKey"
-                               language="en"
-                               [apiKey]="apiKey"
-                               [styleOptions]="styleOptions"
-                               [controlOptions]="controlOptions"
-                               [viewportOptions]="viewportOptions"
-                               [journeyMapsRoutingOption]="journeyMapsRoutingOption"
-                               [markerOptions]="markerOptions"
-                               [markerDetailsTemplate]="markerDetailsTemplate"
-                               [(selectedMarkerId)]="selectedMarkerId"
-                               [(selectedLevel)]="selectedLevel"
-                               (visibleLevelsChange)="visibleLevels$.next($event)"
-                               (zoomLevelsChange)="zoomLevels=$event"
-                               (mapCenterChange)="mapCenterChange.next($event)"
-                               (mapReady)="onMapRecieved($event)"
-    >
-    </rokas-journey-maps-client>
-
+      <ng-container *ngIf="mapVisible && apiKey">
+            <!--  Do not use this API key in production. Contact dlrokas@sbb.ch to get your own.-->
+            <rokas-journey-maps-client #theMap
+                                       language="en"
+                                       [apiKey]="apiKey"
+                                       [styleOptions]="styleOptions"
+                                       [controlOptions]="controlOptions"
+                                       [viewportOptions]="viewportOptions"
+                                       [journeyMapsRoutingOption]="journeyMapsRoutingOption"
+                                       [markerOptions]="markerOptions"
+                                       [markerDetailsTemplate]="markerDetailsTemplate"
+                                       [(selectedMarkerId)]="selectedMarkerId"
+                                       [(selectedLevel)]="selectedLevel"
+                                       (visibleLevelsChange)="visibleLevels$.next($event)"
+                                       (zoomLevelsChange)="zoomLevels=$event"
+                                       (mapCenterChange)="mapCenterChange.next($event)"
+                                       (mapReady)="onMapRecieved($event)"
+            >
+            </rokas-journey-maps-client>
+            <!-- ArcGIS Online Public Feature Service -->
+            <sbb-arcgis-feature-layer
+                  [map]="theMap.mapReady | async"
+                  [options]="{'url':'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/PROD_Route_Customization_View/FeatureServer/0'}"
+            ></sbb-arcgis-feature-layer>
+            <!-- GSharp Basic-Auth secured Feature Service -->
+            <sbb-arcgis-feature-layer
+                  [map]="theMap.mapReady | async"
+                  [options]="{
+                    'url': 'https://geo.sbb.ch/site/rest/services/ROKAS_PUBLIC/POIService/FeatureServer/0',
+                    'filter':'CATEGORY=\'parking\'',
+                    'requestWithCredentials': true,
+                    'addLayerBefore':'poi_without_icons'
+                    }"
+            ></sbb-arcgis-feature-layer>
+      </ng-container>
     <ng-template #markerDetailsTemplate let-marker>
       <div class="markerdetails-title">{{marker.title}}</div>
       <div class="markerdetails-subtitle">{{marker.subtitle}}</div>

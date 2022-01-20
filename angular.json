@@ -40,6 +40,46 @@
         }
       }
     },
+    "arcgis-feature-layer": {
+      "projectType": "library",
+      "root": "projects/arcgis-feature-layer",
+      "sourceRoot": "projects/arcgis-feature-layer/src",
+      "prefix": "sbb",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/arcgis-feature-layer/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/arcgis-feature-layer/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/arcgis-feature-layer/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/arcgis-feature-layer/src/test.ts",
+            "tsConfig": "projects/arcgis-feature-layer/tsconfig.spec.json",
+            "karmaConfig": "projects/arcgis-feature-layer/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/arcgis-feature-layer/**/*.ts",
+              "projects/arcgis-feature-layer/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "journey-maps-client-testapp": {
       "projectType": "application",
       "schematics": {

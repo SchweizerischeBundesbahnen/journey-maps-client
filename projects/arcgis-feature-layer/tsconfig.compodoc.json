@@ -1,0 +1,9 @@
+{
+  "extends": "tsconfig.lib.json",
+  "include": [
+    "src/lib/arcgis-feature-layer.component.ts",
+    "src/lib/arcgis-feature-layer.module.ts",
+    "src/lib/services/**",
+    "src/lib/models/**"
+  ]
+}
