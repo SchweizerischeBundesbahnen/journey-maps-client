@@ -5,8 +5,6 @@
     "@angular/cdk": ">=9",
     "@angular/common": ">=9",
     "@angular/core": ">=9",
-    "@sbb-esta/angular-core": ">=9",
-    "@sbb-esta/angular-public": ">=9",
     "maplibre-gl": ">=1.12",
     "angular-resize-event": ">=2"
   },

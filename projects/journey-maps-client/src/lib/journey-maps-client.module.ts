@@ -1,8 +1,6 @@
 import {NgModule} from '@angular/core';
 import {JourneyMapsClientComponent} from './journey-maps-client.component';
 import {CommonModule} from '@angular/common';
-import {SbbIconModule} from '@sbb-esta/angular-core';
-import {SbbButtonModule} from '@sbb-esta/angular-public';
 import {AngularResizedEventModule} from 'angular-resize-event';
 import {GlobalStylesComponent} from './components/global-styles/global-styles.component';
 import {MarkerDetailsComponent} from './components/marker-details/marker-details.component';
@@ -28,8 +26,6 @@ import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch
   ],
   imports: [
     CommonModule,
-    SbbIconModule,
-    SbbButtonModule,
     AngularResizedEventModule,
   ],
   exports: [JourneyMapsClientComponent],
