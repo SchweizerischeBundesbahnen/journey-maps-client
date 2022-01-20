@@ -49,7 +49,7 @@
     background-color: c.$darkgray;
     cursor: pointer;
     height: 36px;
-    mask: url("./../assets/#{$icon}.svg") center no-repeat;
+    mask: url("#{$icon}") center no-repeat;
     pointer-events: auto;
     text-align: center;
 

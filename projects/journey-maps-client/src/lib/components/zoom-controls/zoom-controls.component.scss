@@ -7,7 +7,7 @@
   position: relative;
   border-radius: 24px 24px 12px 12px;
 
-  @include f.map-control-icon-button("plus-small");
+  @include f.map-control-icon-button("./../../assets/plus-small.svg");
 
   &::after {
     content: " ";
@@ -23,5 +23,5 @@
 
 .var-minus {
   border-radius: 12px 12px 24px 24px;
-  @include f.map-control-icon-button("minus-small");
+  @include f.map-control-icon-button("./../../assets/minus-small.svg");
 }

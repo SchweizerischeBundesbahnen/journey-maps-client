@@ -1,4 +1,4 @@
 @use "./../../style/functions" as f;
 
 @include f.map-control-icon;
-@include f.map-control-icon-button("layers-small");
+@include f.map-control-icon-button("./../../assets/layers-small.svg");
