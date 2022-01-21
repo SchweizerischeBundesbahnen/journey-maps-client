@@ -3,10 +3,6 @@
   "dest": "../../dist/journey-maps-client",
   "lib": {
     "cssUrl": "inline",
-    "entryFile": "src/public-api.ts",
-    "umdModuleIds": {
-      "maplibre-gl": "maplibregl",
-      "angular-resize-event": "angular-resize-event"
-    }
+    "entryFile": "src/public-api.ts"
   }
 }
