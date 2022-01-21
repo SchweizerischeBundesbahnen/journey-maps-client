@@ -108,8 +108,7 @@
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
-              "highlight.js",
-              "lorem-ipsum"
+              "highlight.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,

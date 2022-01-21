@@ -41,7 +41,6 @@
     "@types/mapbox-gl": "^1.13.0",
     "@ungap/custom-elements": "^1.0.0",
     "angular-resize-event": "^3.1.1",
-    "lorem-ipsum": "^2.0.3",
     "maplibre-gl": "^1.15.2",
     "ngx-build-plus": "^12.2.0",
     "ngx-highlightjs": "^5.0.0",
