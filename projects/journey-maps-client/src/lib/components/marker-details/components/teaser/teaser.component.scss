@@ -1,5 +1,5 @@
 @use "./../../../../style/colors" as c;
-@use '~@sbb-esta/angular/styles' as esta;
+@use 'node_modules/@sbb-esta/angular/styles' as esta;
 
 .infoboxContainer {
   z-index: 99;
