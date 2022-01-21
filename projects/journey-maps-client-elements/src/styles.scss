@@ -4,7 +4,7 @@
 
 /* Adapted and inlined typogaphy.css from sbb-esta to prevent outerscope changes. */
 /* Should work with the following line but it doesnt, suggestions are welcome. */
-/* @import '~@sbb-esta/angular-public/typography.css'; */
+/* @import '~@sbb-esta/angular/typography.css'; */
 
 @font-face{font-family:"SBBWeb Bold";src:url("https://cdn.app.sbb.ch/fonts/v1_6_subset/SBBWeb-Bold.woff2") format("woff2"),url("https://cdn.app.sbb.ch/fonts/v1_6_subset/SBBWeb-Bold.woff") format("woff");font-display:swap}
 @font-face{font-family:"SBBWeb Light";src:url("https://cdn.app.sbb.ch/fonts/v1_6_subset/SBBWeb-Light.woff2") format("woff2"),url("https://cdn.app.sbb.ch/fonts/v1_6_subset/SBBWeb-Light.woff") format("woff");font-display:swap}
