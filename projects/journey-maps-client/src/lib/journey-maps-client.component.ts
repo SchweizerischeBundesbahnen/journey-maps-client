@@ -636,8 +636,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private addSatelliteSource(map: maplibregl.Map) {
     map.addSource(this.satelliteImageSourceName, {
       type: 'raster',
-      tiles: ['https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
-      tileSize: 128,
+      tiles: ['https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/WMTS/tile/1.0.0/World_Imagery/default/GoogleMapsCompatible/{z}/{y}/{x}.jpg'],
+      tileSize: 256,
     });
   }
 
