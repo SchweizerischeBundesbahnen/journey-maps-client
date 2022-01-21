@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {JourneyMapsClientComponent} from './journey-maps-client.component';
 import {CommonModule} from '@angular/common';
-import {AngularResizedEventModule} from 'angular-resize-event';
+import {AngularResizeEventModule} from 'angular-resize-event';
 import {GlobalStylesComponent} from './components/global-styles/global-styles.component';
 import {MarkerDetailsComponent} from './components/marker-details/marker-details.component';
 import {LevelSwitchComponent} from './components/level-switch/level-switch.component';
@@ -26,7 +26,7 @@ import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch
   ],
   imports: [
     CommonModule,
-    AngularResizedEventModule,
+    AngularResizeEventModule,
   ],
   exports: [JourneyMapsClientComponent],
 })
