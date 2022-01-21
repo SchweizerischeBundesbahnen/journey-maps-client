@@ -49,5 +49,5 @@ import 'zone.js'; // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
-import 'document-register-element';
 import '@angular/localize/init';
+import '@ungap/custom-elements';
