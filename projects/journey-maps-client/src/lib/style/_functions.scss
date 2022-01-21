@@ -44,12 +44,14 @@
   }
 }
 
-@mixin map-control-icon-button($icon) {
+@mixin map-control-icon-button($icon: "") {
   .map-control-button {
     background-color: c.$darkgray;
     cursor: pointer;
     height: 36px;
-    mask: url("#{$icon}") center no-repeat;
+    // CHECKME ses: This somehow doesn't work in the testapp
+    //  when importing the module from src.
+    // mask: url("#{$icon}") center no-repeat;
     pointer-events: auto;
     text-align: center;
 

@@ -1,4 +1,8 @@
 @use "./../../style/functions" as f;
 
 @include f.map-control-icon;
-@include f.map-control-icon-button("./../../assets/layers-small.svg");
+@include f.map-control-icon-button();
+
+.map-control-button {
+  mask: url("./../../assets/layers-small.svg") center no-repeat;
+}

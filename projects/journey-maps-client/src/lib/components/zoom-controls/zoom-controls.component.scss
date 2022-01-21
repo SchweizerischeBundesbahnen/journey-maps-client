@@ -7,7 +7,12 @@
   position: relative;
   border-radius: 24px 24px 12px 12px;
 
-  @include f.map-control-icon-button("./../../assets/plus-small.svg");
+  @include f.map-control-icon-button;
+
+  // Using .map-control-button instead of button does not work when having it twice in this same file... Why??
+  button {
+    mask: url("./../../assets/plus-small.svg") center no-repeat;
+  }
 
   &::after {
     content: " ";
@@ -23,5 +28,9 @@
 
 .var-minus {
   border-radius: 12px 12px 24px 24px;
-  @include f.map-control-icon-button("./../../assets/minus-small.svg");
+  @include f.map-control-icon-button;
+
+  button {
+    mask: url("./../../assets/minus-small.svg") center no-repeat;
+  }
 }
