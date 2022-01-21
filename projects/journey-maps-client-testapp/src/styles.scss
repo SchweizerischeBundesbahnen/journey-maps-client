@@ -1,8 +1,3 @@
-@import '~maplibre-gl/dist/maplibre-gl.css';
-@import '~@sbb-esta/angular-public/typography.css';
-@import '~highlight.js/styles/atom-one-light.css';
-@import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@4/distr/fira_code.css);
-
-.blueText {
-  color: blue;
-}
+@use 'node_modules/maplibre-gl/dist/maplibre-gl.css';
+@use 'node_modules/@sbb-esta/angular-public/typography.css';
+@use 'node_modules/highlight.js/styles/atom-one-light.css';

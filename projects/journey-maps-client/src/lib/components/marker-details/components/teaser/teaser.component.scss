@@ -1,5 +1,5 @@
 @use "./../../../../style/colors" as c;
-@import '~@sbb-esta/angular-public/styles.scss';
+@use '~@sbb-esta/angular-public/styles.scss' as esta;
 
 .infoboxContainer {
   z-index: 99;
@@ -27,7 +27,7 @@
   }
 
   width: 100%;
-  @include mq($from: tabletPortrait) {
+  @include esta.mq($from: tabletPortrait) {
     width: 20rem;
   }
 }

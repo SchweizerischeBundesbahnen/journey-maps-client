@@ -1,4 +1,4 @@
-@import '~@sbb-esta/angular-public/styles.scss';
+@use '~@sbb-esta/angular-public/styles.scss' as esta;
 
 .maplibregl-ctrl-attrib-button {
   display: none;
@@ -16,7 +16,7 @@
   max-height: 75%;
   z-index: 3;
 
-  @include mq($to: tabletPortrait) {
+  @include esta.mq($to: tabletPortrait) {
     max-width: 100% !important;
     transform: none !important;
 
@@ -28,7 +28,7 @@
   }
 
   .maplibregl-popup-content {
-    font-family: $fontSbbRoman;
+    font-family: esta.$fontSbbRoman;
     box-shadow: 0 0 20px rgb(0 0 0 / 25%);
     border-radius: 8px;
     overflow-y: auto;
@@ -39,7 +39,7 @@
   }
 
   .maplibregl-popup-tip {
-    @include mq($to: tabletPortrait) {
+    @include esta.mq($to: tabletPortrait) {
       display: none;
     }
   }
@@ -56,25 +56,25 @@
 
   &.maplibregl-popup-anchor- {
     &bottom-left .maplibregl-popup-content {
-      @include mq($from: tabletPortrait) {
+      @include esta.mq($from: tabletPortrait) {
         border-bottom-left-radius: 0 !important;
       }
     }
 
     &bottom-right .maplibregl-popup-content {
-      @include mq($from: tabletPortrait) {
+      @include esta.mq($from: tabletPortrait) {
         border-bottom-right-radius: 0 !important;
       }
     }
 
     &top-left .maplibregl-popup-content {
-      @include mq($from: tabletPortrait) {
+      @include esta.mq($from: tabletPortrait) {
         border-top-left-radius: 0 !important;
       }
     }
 
     &top-right .maplibregl-popup-content {
-      @include mq($from: tabletPortrait) {
+      @include esta.mq($from: tabletPortrait) {
         border-top-right-radius: 0 !important;
       }
     }

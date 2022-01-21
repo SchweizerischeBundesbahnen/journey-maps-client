@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import '~maplibre-gl/dist/maplibre-gl.css';
+@use "node_modules/maplibre-gl/dist/maplibre-gl.css";
 
 /* Adapted and inlined typogaphy.css from sbb-esta to prevent outerscope changes. */
 /* Should work with the following line but it doesnt, suggestions are welcome. */
