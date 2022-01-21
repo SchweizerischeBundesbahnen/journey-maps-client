@@ -16,7 +16,11 @@
       "dom"
     ],
     "paths": {
-      "journey-maps-client": [
+      "@schweizerischebundesbahnen/journey-maps-client/*": [
+        "projects/journey-maps-client/*",
+        "projects/journey-maps-client"
+      ],
+      "@schweizerischebundesbahnen/journey-maps-client": [
         "dist/journey-maps-client/journey-maps-client",
         "dist/journey-maps-client"
       ]

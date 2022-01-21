@@ -4,7 +4,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
 // Must be imported from dist!
 // Needs rebuilds during local development but otherwise it won't work correctly. (e.g. inline SVG)
-import {JourneyMapsClientComponent, JourneyMapsClientModule} from 'journey-maps-client';
+import {JourneyMapsClientComponent, JourneyMapsClientModule} from '@schweizerischebundesbahnen/journey-maps-client';
 
 
 @NgModule({
