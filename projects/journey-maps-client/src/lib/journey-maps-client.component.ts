@@ -262,7 +262,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private destroyed = new Subject<void>();
   private cursorChanged = new ReplaySubject<boolean>(1);
   private mapClicked = new ReplaySubject<MapLayerMouseEvent>(1);
-  private styleLoaded = new ReplaySubject(1);
+  private styleLoaded = new ReplaySubject<void>(1);
   private initialSettingsChanged = new Subject<void>();
   private mapStyleModeChanged = new Subject<void>();
 

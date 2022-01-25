@@ -16,11 +16,19 @@
       "dom"
     ],
     "paths": {
-      "journey-maps-client": [
+      "@schweizerischebundesbahnen/journey-maps-client/*": [
+        "projects/journey-maps-client/*",
+        "projects/journey-maps-client"
+      ],
+      "@schweizerischebundesbahnen/journey-maps-client": [
         "dist/journey-maps-client/journey-maps-client",
         "dist/journey-maps-client"
       ],
-      "arcgis-feature-layer": [
+      "@schweizerischebundesbahnen/arcgis-feature-layer/*": [
+        "projects/arcgis-feature-layer/*",
+        "projects/arcgis-feature-layer"
+      ],
+      "@schweizerischebundesbahnen/arcgis-feature-layer": [
         "dist/arcgis-feature-layer/arcgis-feature-layer",
         "dist/arcgis-feature-layer"
       ]

@@ -1,70 +1,36 @@
-@import '~@sbb-esta/angular-public/styles.scss';
+@use "./../../style/functions" as f;
+@use "./../../style/colors" as c;
 
-button {
-  display: block;
-  width: 100%;
-  background-color: inherit;
-  border: 0;
-  padding: 0;
-}
+@include f.map-control-icon;
 
-.zoom-controls-buttons-container {
-  margin: 8px;
-  background: #FFFFFF;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-  border-radius: 24px;
-}
+.var-plus {
+  position: relative;
+  border-radius: 24px 24px 12px 12px;
 
-.zoom-controls-button {
-  padding: 6px;
-  width: 48px;
-  line-height: 36px;
-  border-bottom: 1px solid $sbbColorCloud;
-}
+  @include f.map-control-icon-button;
 
-.zoom-controls-button:first-child {
-  border-radius: 24px 24px 0 0;
+  // Using .map-control-button instead of button does not work when having it twice in this same file... Why??
+  button {
+    mask: url("./../../assets/plus-small.svg") center no-repeat;
+  }
 
-  .zoom-controls-button-content {
-    border-radius: 24px 24px 8px 8px;
+  &::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    height: 1px;
+    background: c.$lightgray;
+    width: 100%;
+    left: 0;
+    bottom: -1px;
   }
 }
 
-.zoom-controls-button:last-child {
-  border-radius: 0 0 24px 24px;
-  border-bottom-width: 0;
+.var-minus {
+  border-radius: 12px 12px 24px 24px;
+  @include f.map-control-icon-button;
 
-  .zoom-controls-button-content {
-    border-radius: 8px 8px 24px 24px;
+  button {
+    mask: url("./../../assets/minus-small.svg") center no-repeat;
   }
-}
-
-.zoom-controls-button-content {
-  cursor: pointer;
-  border-radius: 8px;
-  text-align: center;
-}
-
-@media (hover: hover) {
-  .zoom-controls-button-content:not([disabled]):hover {
-    background-color: #212121;
-    color: white;
-  }
-}
-
-.zoom-controls-button-content:not([disabled]):active {
-  background-color: #212121;
-  color: white;
-}
-
-.zoom-controls-button-content[disabled] {
-  cursor: default;
-
-  sbb-icon {
-    color: $sbbColorCloud;
-  }
-}
-
-.sbb-icon {
-  vertical-align: middle;
 }

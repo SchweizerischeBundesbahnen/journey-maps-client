@@ -1,7 +1,6 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 import {LngLatLike, Map} from 'maplibre-gl';
-import {LoremIpsum} from 'lorem-ipsum';
 import {AssetReaderService} from './services/asset-reader.service';
 import {MarkerColor} from '../../../journey-maps-client/src/lib/model/marker-color.enum';
 import {BehaviorSubject, Subject} from 'rxjs';
@@ -32,7 +31,6 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild(JourneyMapsClientComponent)
   client: JourneyMapsClientComponent;
 
-  private loremIpsum = new LoremIpsum();
   private _journey: GeoJSON.FeatureCollection;
   private _transferLuzern: GeoJSON.FeatureCollection;
   private _transferZurichIndoor: GeoJSON.FeatureCollection;

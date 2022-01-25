@@ -5,12 +5,12 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HIGHLIGHT_OPTIONS, HighlightModule} from 'ngx-highlightjs';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {SourceHighlightComponent} from './components/source-highlight/source-highlight.component';
-import {SbbTabsModule} from '@sbb-esta/angular-public';
-import {JourneyMapsClientModule} from '../../../journey-maps-client/src/lib/journey-maps-client.module';
-import {ArcgisFeatureLayerModule} from '../../../arcgis-feature-layer/src/lib/arcgis-feature-layer.module';
 import {CommonModule} from '@angular/common';
 import {HttpBasicAuthInterceptor} from './interceptors/http-basic-auth-interceptor';
 import {HTTP_BASIC_AUTH_INTERCEPTOR_CONFIG_TOKEN} from './interceptors/http-basic-auth-interceptor-config';
+import {JourneyMapsClientModule} from '@schweizerischebundesbahnen/journey-maps-client/src/public-api';
+import {ArcgisFeatureLayerModule} from '@schweizerischebundesbahnen/arcgis-feature-layer/src/public-api';
+import {SbbTabsModule} from '@sbb-esta/angular/tabs';
 
 @NgModule({
   declarations: [
@@ -23,8 +23,7 @@ import {HTTP_BASIC_AUTH_INTERCEPTOR_CONFIG_TOKEN} from './interceptors/http-basi
     HttpClientModule,
     SbbTabsModule,
     JourneyMapsClientModule,
-    ArcgisFeatureLayerModule,
-    CommonModule,
+    ArcgisFeatureLayerModule, CommonModule,
   ],
   providers: [
     {

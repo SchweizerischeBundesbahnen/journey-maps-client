@@ -36,10 +36,13 @@ Therefore it's currently published under `@sbbch-rokas`.
 
 ### Dependencies
 
-You have to add the following two CSS files to your application:
+You need the MapLibre CSS in your application for the map to render correctly:
 
 * `node_modules/maplibre-gl/dist/maplibre-gl.css`
-* `node_modules/@sbb-esta/angular-public/typography.css`
+
+For the appropriate rendering of the fonts we recommend you to use the ESTA typography.
+
+* `node_modules/@sbb-esta/angular/typography.css`
 
 The neccessary NPM dependencies can be seen in the peer dependency section of the `package.json`.
 

@@ -1,52 +1,8 @@
-@import '~@sbb-esta/angular-public/styles.scss';
+@use "./../../style/functions" as f;
 
-button {
-  display: block;
-  width: 100%;
-  background-color: inherit;
-  border: 0;
-  padding: 0;
-}
+@include f.map-control-icon;
+@include f.map-control-icon-button();
 
-.basemap-switch-buttons-container {
-  margin: 8px;
-  background: #FFFFFF;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-  border-radius: 24px;
-}
-
-.basemap-switch-button {
-  border-radius: 24px;
-  padding: 6px;
-  line-height: 36px;
-
-  .basemap-switch-button-content {
-    border-radius: 24px;
-    cursor: pointer;
-    text-align: center;
-  }
-}
-
-@media (hover: hover) {
-  .basemap-switch-button-content:not([disabled]):hover {
-    background-color: #212121;
-    color: white;
-  }
-}
-
-.basemap-switch-button-content:not([disabled]):active {
-  background-color: #212121;
-  color: white;
-}
-
-.basemap-switch-button-content[disabled] {
-  cursor: default;
-
-  sbb-icon {
-    color: $sbbColorCloud;
-  }
-}
-
-.sbb-icon {
-  vertical-align: middle;
+.map-control-button {
+  mask: url("./../../assets/layers-small.svg") center no-repeat;
 }

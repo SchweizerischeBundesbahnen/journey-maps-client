@@ -1,4 +1,5 @@
-@import '~@sbb-esta/angular-public/styles.scss';
+@use "./../../../../style/colors" as c;
+@use 'node_modules/@sbb-esta/angular/styles' as esta;
 
 .infoboxContainer {
   z-index: 99;
@@ -8,7 +9,7 @@
   height: 100%;
   overflow-y: auto;
   padding: 1rem;
-  background-color: $sbbColorWhite;
+  background-color: c.$white;
   box-shadow: -5px 0px 5px -5px rgba(0, 0, 0, .15);
 
   .close {
@@ -21,10 +22,12 @@
     background: none;
     padding: 0;
     border: none;
+    background-color: c.$darkgray;
+    mask: url("./../../../../assets/circle-cross-small.svg") center no-repeat;
   }
 
   width: 100%;
-  @include mq($from: tabletPortrait) {
+  @include esta.mq($from: tabletPortrait) {
     width: 20rem;
   }
 }

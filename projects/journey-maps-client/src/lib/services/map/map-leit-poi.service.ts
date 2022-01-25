@@ -17,7 +17,7 @@ export class MapLeitPoiService {
   // check the rokas map style blue-arrow: 16.5 or 15 like LevelSwitch:
   private static readonly LEIT_POI_MIN_MAP_ZOOM = 15;
   levelSwitched = new Subject<number>();
-  destroyed = new Subject();
+  destroyed = new Subject<void>();
 
   private mapZoomSubscription: any;
   private leitPoiFeatures: LeitPoiFeature[] = [];
