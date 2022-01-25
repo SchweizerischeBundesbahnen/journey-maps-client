@@ -36,7 +36,7 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
 
   private readonly options: any = {
     closeOnClick: false,
-    className: 'rokas text-copy',
+    className: 'rokas',
   };
 
   private readonly defaultOffset = {
