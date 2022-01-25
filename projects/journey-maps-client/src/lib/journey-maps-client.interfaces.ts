@@ -1,6 +1,6 @@
 import {StyleMode} from './model/style-mode.enum';
-import {LngLatBoundsLike, LngLatLike} from 'mapbox-gl';
 import {Marker} from './model/marker';
+import {LngLatBoundsLike, LngLatLike} from 'maplibre-gl';
 
 export interface StyleOptions {
   /** Overwrite this value if you want to use a style from a different source. */

@@ -1,9 +1,13 @@
 # Change Log
 
-## 2.7.0 SNAPSHOT
+## [2.7.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.6.0&sourceBranch=refs%2Ftags%2F2.7.0&targetRepoId=46287) - 2022-01-25
 
 ### Changed
 
+* Remove runtime dependency to `@sbb-esta/angular
+* Update to Angular V13
+* Update various other libraries
+* Remove IE11 from supported browsers
 * Allow the user to switch between vector and satellite image map.
 * Remove `InfoBlock` mechanism and default template for marker details overlay. (popup or teaser)
   * Therefore marker details are - at the moment - not supported in the Web Component.

@@ -2,11 +2,11 @@
   "name": "@schweizerischebundesbahnen/journey-maps-client",
   "version": "0.0.0-PLACEHOLDER",
   "peerDependencies": {
-    "@angular/cdk": ">=9",
-    "@angular/common": ">=9",
-    "@angular/core": ">=9",
-    "maplibre-gl": ">=1.12",
-    "angular-resize-event": ">=2"
+    "@angular/common": ">=12",
+    "@angular/core": ">=12",
+    "@types/geojson": ">=7946",
+    "maplibre-gl": ">=1.12 <2",
+    "angular-resize-event": ">=3"
   },
   "dependencies": {
     "tslib": "^2.0.3"
