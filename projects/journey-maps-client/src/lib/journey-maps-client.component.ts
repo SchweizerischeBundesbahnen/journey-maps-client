@@ -115,7 +115,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private defaultControlOptions: ControlOptions = {
     levelSwitch: true,
     zoomControls: true,
-    oneFingerPan: true,
+    /** Mobile-friendly default: you get a message-overlay if you try to pan with one finger. */
+    oneFingerPan: false,
     scrollZoom: true,
     basemapSwitch: true,
   };
