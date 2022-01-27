@@ -47,7 +47,7 @@ describe('JourneyMapsClientComponent#touchEventCollector', () => {
   });
 
   beforeEach(() => {
-    setupFixtureAndComponent();
+    setupFixtureAndComponent(false);
   });
 
   const oneFinger = new Touch({
@@ -133,11 +133,12 @@ const configureTestingModule = () => TestBed.configureTestingModule({
   ]
 });
 
-const setupFixtureAndComponent = () => {
+const setupFixtureAndComponent = (oneFingerPan: boolean = true) => {
   fixture = TestBed.createComponent(JourneyMapsClientComponent);
   component = fixture.componentInstance;
   component.apiKey = 'apiKey';
   component.markerOptions.markers = markers;
+  component.controlOptions.oneFingerPan = oneFingerPan;
   fixture.detectChanges();
 };
 
