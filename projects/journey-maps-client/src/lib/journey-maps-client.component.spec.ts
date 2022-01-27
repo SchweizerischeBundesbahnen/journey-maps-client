@@ -127,6 +127,8 @@ const configureTestingModule = () => TestBed.configureTestingModule({
           },
           resize: () => {
           },
+          remove: () => {
+          }
         } as unknown as MaplibreMap),
       }
     },
