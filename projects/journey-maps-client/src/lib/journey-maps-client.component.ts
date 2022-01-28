@@ -113,12 +113,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   // **************************************** CONTROL OPTIONS *****************************************/
 
   private defaultControlOptions: ControlOptions = {
-    levelSwitch: false,
-    zoomControls: false,
-    /** By default, you get a message-overlay if you try to pan with one finger. */
+    levelSwitch: true,
+    zoomControls: true,
+    /** Mobile-friendly default: you get a message-overlay if you try to pan with one finger. */
     oneFingerPan: false,
-    scrollZoom: false,
-    basemapSwitch: false,
+    scrollZoom: true,
+    basemapSwitch: true,
   };
 
   /**
@@ -434,7 +434,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       });
     }
 
-    if (Object.keys(this.journeyMapsRoutingOption || {}).length > 1) {
+    if (Object.values(this.journeyMapsRoutingOption ?? {}).filter(val => val).length > 1) {
       console.error('journeyMapsRoutingOption: Use either transfer or journey or routes. It does not work correctly when more than one of these properties is set.');
     }
 

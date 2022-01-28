@@ -78,6 +78,7 @@ pipeline {
         }
       }
     }
+
     stage('Publish to NPM') {
       when {
         allOf {
@@ -97,6 +98,7 @@ pipeline {
         sh 'sudo npm publish dist/journey-maps-client-elements/ --registry=https://registry.npmjs.org --access public'
       }
     }
+
     stage('Create & deploy testapp docker') {
       when {
         branch 'master'
