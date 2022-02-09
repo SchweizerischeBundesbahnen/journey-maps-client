@@ -110,6 +110,14 @@ export class AppComponent implements OnInit, OnDestroy {
         category: MarkerCategory.RAIL,
         color: MarkerColor.DARKBLUE,
       },
+      {
+        id: 'work2',
+        title: 'Office2',
+        subtitle: 'SBB Wylerpark2',
+        position: [7.446490, 46.961409],
+        category: MarkerCategory.RAIL,
+        color: MarkerColor.DARKBLUE,
+      },
     ],
   };
 
@@ -216,5 +224,9 @@ export class AppComponent implements OnInit, OnDestroy {
       ...this.viewportOptions,
       boundingBox: [[bbox[0], bbox[1]], [bbox[2], bbox[3]]],
     };
+  }
+
+  log(data:any) {
+    console.debug(data);
   }
 }

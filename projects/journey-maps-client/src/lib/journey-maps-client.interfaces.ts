@@ -1,6 +1,7 @@
 import {StyleMode} from './model/style-mode.enum';
 import {Marker} from './model/marker';
 import {LngLatBoundsLike, LngLatLike} from 'maplibre-gl';
+import {Point} from 'geojson';
 
 export interface StyleOptions {
   /** Overwrite this value if you want to use a style from a different source. */
@@ -87,4 +88,42 @@ export interface ZoomLevels {
   maxZoom: number;
   /** The current zoom level of the map. */
   currentZoom: number;
+}
+
+export interface FeaturesHoverChangeEventData {
+  /** Event screen position. */
+  eventPoint: { x: number, y: number };
+  /** Event map coordinates. */
+  eventLngLat: { lng: number, lat: number };
+  /** Whether is hovered or not. */
+  hover: boolean;
+  /** Whether is leaving or not. */
+  leave: boolean;
+  /** List of features affected by this event. */
+  features: FeatureEventData[];
+}
+
+export interface FeaturesClickEventData {
+  /** Click screen position. */
+  clickPoint: { x: number, y: number };
+  /** Click map coordinates. */
+  clickLngLat: { lng: number, lat: number };
+  /** List of features affected by this event. */
+  features: FeatureEventData[];
+}
+
+export interface FeatureEventData {
+  /** The map feature. */
+  feature: FeatureData,
+  /** The map layer identifier. */
+  layerId: string,
+  /** The map source identifier. */
+  sourceId: string,
+  /** The map source layer identifier for a vector tiles source .*/
+  sourceLayerId?: string
+}
+
+export interface FeatureData extends GeoJSON.Feature<GeoJSON.Geometry> {
+  /** The feature state. */
+  state: { [key: string]: any };
 }
