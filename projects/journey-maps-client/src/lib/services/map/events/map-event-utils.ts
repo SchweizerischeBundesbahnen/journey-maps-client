@@ -14,7 +14,11 @@ export class MapEventUtils {
       layerId: feature.layer.id,
       sourceId: feature.source,
       sourceLayerId: feature.sourceLayer,
-      feature: {...feature}
+      feature: {
+        // CHECKME ses: Warum wird 'geometry' nicht automatisch gemappt?
+        geometry: feature.geometry,
+        ...feature
+      }
     };
   }
 }

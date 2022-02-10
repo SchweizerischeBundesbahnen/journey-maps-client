@@ -26,11 +26,10 @@ export class FeaturesClickEvent extends ReplaySubject<FeaturesClickEventData> {
         if (!features.length) {
           return;
         }
-
         this.next({
           clickPoint: {x: e.point.x, y: e.point.y},
           clickLngLat: {lng: e.lngLat.lng, lat: e.lngLat.lat},
-          features: {...features}
+          features: [...features]
         });
       });
     this.mapInstance.on('click', event => mapClicked.next(event));
