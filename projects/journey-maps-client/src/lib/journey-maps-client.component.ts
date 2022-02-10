@@ -298,6 +298,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private satelliteLayerId = 'esriWorldImageryLayer';
   private satelliteImageSourceName = 'esriWorldImagerySource';
 
+  private mapCursorStyleEvent: MapCursorStyleEvent;
+
   /** @internal */
   constructor(private mapInitService: MapInitService,
               private mapConfigService: MapConfigService,
@@ -532,6 +534,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.destroyed.next();
     this.destroyed.complete();
     this.mapLeitPoiService.destroy();
+    this.mapCursorStyleEvent.destroy();
   }
 
   private setupSubjects(): void {
@@ -610,7 +613,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       ...this.mapRoutesService.allRouteLayers
     ];
 
-    new MapCursorStyleEvent(this.map, watchOnLayers);
+    this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, watchOnLayers);
     const featuresEvents: FeatureEventSubjects = this.featureEventsService.attachEvents(this.map, watchOnLayers);
 
     featuresEvents.click
