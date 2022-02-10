@@ -534,7 +534,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.destroyed.next();
     this.destroyed.complete();
     this.mapLeitPoiService.destroy();
-    this.mapCursorStyleEvent.destroy();
+    this.mapCursorStyleEvent.complete();
   }
 
   private setupSubjects(): void {
@@ -618,14 +618,24 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
     featuresEvents.click
       .pipe(takeUntil(this.destroyed))
-      .subscribe(eventData => {
-        this.featuresClick.next(eventData);
-        this.handleMarkerOrClusterClick(eventData.features);
-      });
+      .subscribe(
+        eventData => {
+          this.featuresClick.next(eventData);
+          this.handleMarkerOrClusterClick(eventData.features);
+        },
+        () => {
+        },
+        () => featuresEvents.click.complete()
+      );
 
     featuresEvents.hoverChange
       .pipe(takeUntil(this.destroyed))
-      .subscribe(eventData => this.featuresHoverChange.next(eventData));
+      .subscribe(
+        eventData => this.featuresHoverChange.next(eventData),
+        () => {
+        },
+        () => featuresEvents.hoverChange.complete()
+      );
 
     this.map.on('zoomend', () => this.currentZoomLevelDebouncer.next());
     this.map.on('moveend', () => this.mapCenterChangeDebouncer.next());

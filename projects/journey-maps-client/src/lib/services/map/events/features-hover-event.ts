@@ -1,6 +1,6 @@
 import {FeatureEventData, FeaturesHoverChangeEventData} from '../../../journey-maps-client.interfaces';
 import {LngLat, Map as MaplibreMap, Point} from 'maplibre-gl';
-import {ReplaySubject, Subject} from 'rxjs';
+import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {MapEventUtils} from './map-event-utils';
 
@@ -23,12 +23,21 @@ interface MouseHoverState {
 }
 
 export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventData> {
+
+  private subscription: Subscription;
+
   constructor(private mapInstance: MaplibreMap, private layerIds: string[]) {
     super(REPEAT_EVENTS);
     if (!this.layerIds.length) {
       return;
     }
     this.attachEvent();
+  }
+
+
+  complete() {
+    super.complete();
+    this.subscription?.unsubscribe();
   }
 
   private attachEvent(): void {
@@ -45,7 +54,7 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
 
   private getMouseMovedSubject(): Subject<MouseMovedEventData> {
     const mouseMovedSubject = new Subject<MouseMovedEventData>();
-    mouseMovedSubject.pipe(
+    this.subscription = mouseMovedSubject.pipe(
       debounceTime(MAP_MOVE_EVENT_DEBOUNCE_TIME),
     ).subscribe(eventData => {
       // FIXME: beim click und doppel-click passiert nichts :-(

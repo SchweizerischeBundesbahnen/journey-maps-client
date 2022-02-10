@@ -22,7 +22,7 @@ export class MapCursorStyleEvent {
     this.attachEvent();
   }
 
-  destroy(): void {
+  complete(): void {
     this.subject.complete();
     this.subscription?.unsubscribe();
   }
