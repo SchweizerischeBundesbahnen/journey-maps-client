@@ -15,7 +15,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {LngLatBounds, LngLatLike, Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
+import {LngLatBounds, LngLatLike, Map as MaplibreMap} from 'maplibre-gl';
 import {MapInitService} from './services/map/map-init.service';
 import {ReplaySubject, Subject} from 'rxjs';
 import {debounceTime, delay, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -33,7 +33,8 @@ import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
 import {
-  ControlOptions, FeatureData,
+  ControlOptions,
+  FeatureData,
   FeaturesClickEventData,
   FeaturesHoverChangeEventData,
   JourneyMapsRoutingOptions,
@@ -47,7 +48,7 @@ import {MapLayerFilterService} from './components/level-switch/services/map-laye
 import {MapCursorStyleEvent} from './services/map/events/map-cursor-style-event';
 import {FeaturesClickEvent} from './services/map/events/features-click-event';
 import {FeaturesHoverEvent} from './services/map/events/features-hover-event';
-import {MapStationService} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/map-station.service';
+import {MapStationService} from './services/map/map-station.service';
 
 const SATELLITE_MAP_MAX_ZOOM = 19.2;
 const SATELLITE_MAP_TILE_SIZE = 256;
