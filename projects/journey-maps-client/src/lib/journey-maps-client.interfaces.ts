@@ -131,7 +131,7 @@ export interface FeatureEventData {
   sourceLayerId?: string
 }
 
-export interface FeatureData extends GeoJSON.Feature<GeoJSON.Geometry> {
+export type FeatureData = GeoJSON.Feature<GeoJSON.Geometry> & {
   /** The feature state. */
   state: { [key: string]: any };
 }
