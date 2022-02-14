@@ -1,4 +1,4 @@
-import {Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
+import {Map as MaplibreMap, MapboxGeoJSONFeature, PointLike} from 'maplibre-gl';
 import {FeatureEventData} from '../../../journey-maps-client.interfaces';
 
 export class MapEventUtils {

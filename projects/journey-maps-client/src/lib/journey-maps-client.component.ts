@@ -256,6 +256,11 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   @Output() featuresClick = new EventEmitter<FeaturesClickEventData>();
 
   /**
+   * This event is emitted before the featuresHoverChange event.
+   */
+  @Output() featuresBeforeHoverChange = new EventEmitter<FeaturesHoverChangeEventData>();
+
+  /**
    * This event is emitted whenever mouse hovered or leaved map features.
    */
   @Output() featuresHoverChange = new EventEmitter<FeaturesHoverChangeEventData>();
@@ -639,6 +644,15 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         () => {
         },
         () => featuresHoverEvent.complete()
+      );
+
+    featuresHoverEvent
+      .beforeHoverEvent
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(
+        eventData => this.featuresBeforeHoverChange.next(eventData),
+        () => {
+        }
       );
 
     this.map.on('zoomend', () => this.currentZoomLevelDebouncer.next());

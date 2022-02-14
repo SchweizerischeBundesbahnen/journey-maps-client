@@ -1,5 +1,5 @@
 import {FeatureEventData, FeaturesHoverChangeEventData} from '../../../journey-maps-client.interfaces';
-import {LngLat, Map as MaplibreMap, Point} from 'maplibre-gl';
+import {LngLat, Map as MaplibreMap, MapboxGeoJSONFeature, Point} from 'maplibre-gl';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {MapEventUtils} from './map-event-utils';
@@ -9,7 +9,6 @@ const MAP_MOVE_EVENT_DEBOUNCE_TIME = 25;
 
 interface MouseMovedEventData {
   mapEvent: MapEventData,
-  hover: boolean,
   hoverState: MouseHoverState
 }
 
@@ -23,6 +22,8 @@ interface MouseHoverState {
 }
 
 export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventData> {
+
+  beforeHoverEvent = new Subject<FeaturesHoverChangeEventData>();
 
   private subscription: Subscription;
 
@@ -45,7 +46,6 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
     this.mapInstance.on('mousemove', mapEvent => {
       mouseMovedSubject.next({
         mapEvent: this.eventToMapEventData(mapEvent),
-        hover: true,
         hoverState
       });
     });
@@ -64,39 +64,41 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
 
   private onHoverChanged(eventData: MouseMovedEventData) {
     const event = eventData.mapEvent;
-    const hover = eventData.hover;
     const state = eventData.hoverState;
 
     const eventPoint = {x: event.point.x, y: event.point.y};
     const eventLngLat = {lng: event.lngLat.lng, lat: event.lngLat.lat};
 
-    if (hover) {
-      let currentFeatures: FeatureEventData[] =
-        MapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [eventPoint.x, eventPoint.y], this.layerIds);
-      let hasNewFeatures = true;
+    let currentFeatures: FeatureEventData[] =
+      MapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [eventPoint.x, eventPoint.y], this.layerIds);
+    let hasNewFeatures = !!currentFeatures.length;
 
-      if (state.hoveredFeatures.length) {
-        // when any hovered features before:
-        const removeFeatures = state.hoveredFeatures.filter(current => !currentFeatures.find(added => this.featureEventDataEquals(current, added)));
-        if (removeFeatures.length) {
-          this.next(this.eventToHoverChangeEventData(eventPoint, eventLngLat, removeFeatures, false));
-        }
-        const newFeatures = currentFeatures.filter(current => !state.hoveredFeatures.find(added => this.featureEventDataEquals(current, added)));
-        if (newFeatures.length) {
-          currentFeatures = newFeatures;
-        } else {
-          hasNewFeatures = false;
-        }
+    if (state.hoveredFeatures.length) {
+      const removeFeatures = state.hoveredFeatures.filter(current => !currentFeatures.find(added => this.featureEventDataEquals(current, added)));
+      if (removeFeatures.length) {
+        const eventData = this.eventToHoverChangeEventData(eventPoint, eventLngLat, removeFeatures, false);
+        this.beforeHoverEvent.next(eventData);
+        // leave
+        this.setFeatureState(eventData.features, false);
+        this.next(eventData);
       }
-      if (hasNewFeatures && currentFeatures?.length) {
-        this.next(this.eventToHoverChangeEventData(eventPoint, eventLngLat, currentFeatures, true));
+      const newFeatures = currentFeatures.filter(current => !state.hoveredFeatures.find(added => this.featureEventDataEquals(current, added)));
+      if (newFeatures.length) {
+        currentFeatures = newFeatures;
+      } else {
+        hasNewFeatures = false;
       }
-      state.hoveredFeatures = currentFeatures ?? [];
-    } else if (state.hoveredFeatures.length) {
-      // leave
-      this.next(this.eventToHoverChangeEventData(eventPoint, eventLngLat, state.hoveredFeatures, false));
-      state.hoveredFeatures = [];
     }
+    if (hasNewFeatures && currentFeatures?.length) {
+      const eventData = this.eventToHoverChangeEventData(eventPoint, eventLngLat, currentFeatures, true);
+      this.beforeHoverEvent.next(eventData);
+      currentFeatures = eventData.features;
+      // hover
+      this.setFeatureState(currentFeatures, true);
+      this.next(eventData);
+    }
+
+    state.hoveredFeatures = currentFeatures ?? [];
   }
 
   private eventToMapEventData(mapEvent): MapEventData {
@@ -127,5 +129,19 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
       current.sourceId === added.sourceId &&
       current.sourceLayerId === added.sourceLayerId &&
       current.feature.id === added.feature.id;
+  }
+
+  private setFeatureState(featureEventData: FeatureEventData[], hover: boolean) {
+    featureEventData.forEach(data => {
+      const mapFeature: MapboxGeoJSONFeature = {
+        layer: this.mapInstance.getLayer(data.layerId),
+        source: data.sourceId,
+        sourceLayer: data.sourceLayerId,
+        ...data.feature
+      };
+      const state = this.mapInstance.getFeatureState(mapFeature);
+      state.hover = hover;
+      this.mapInstance.setFeatureState(mapFeature, state);
+    });
   }
 }
