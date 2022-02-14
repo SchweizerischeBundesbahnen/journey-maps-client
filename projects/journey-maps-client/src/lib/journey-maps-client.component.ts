@@ -46,6 +46,7 @@ import {
 import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
 import {FeatureEventsService, FeatureEventSubjects} from './services/map/feature-events.service';
 import {MapCursorStyleEvent} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/events/map-cursor-style-event';
+import {MapStationService} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/map-station.service';
 
 const SATELLITE_MAP_MAX_ZOOM = 19.2;
 const SATELLITE_MAP_TILE_SIZE = 256;
@@ -312,6 +313,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private levelSwitchService: LevelSwitchService,
               private mapLayerFilterService: MapLayerFilterService,
               private featureEventsService: FeatureEventsService,
+              private mapStationService: MapStationService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService,
               private host: ElementRef) {
@@ -607,12 +609,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.mapService.verifySources(this.map, [Constants.ROUTE_SOURCE, Constants.WALK_SOURCE, ...this.mapMarkerService.sources]);
     this.addSatelliteSource(this.map);
 
-    // TODO: add base osm_points / stations layer
     const watchOnLayers = [
       ...this.mapMarkerService.allMarkerAndClusterLayers,
-      ...this.mapRoutesService.allRouteLayers
+      ...this.mapRoutesService.allRouteLayers,
+      MapStationService.STATION_LAYER
     ];
 
+    this.mapStationService.registerStationUpdater(this.map);
     this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, watchOnLayers);
     const featuresEvents: FeatureEventSubjects = this.featureEventsService.attachEvents(this.map, watchOnLayers);
 
