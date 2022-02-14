@@ -34,7 +34,6 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
     this.attachEvent();
   }
 
-
   complete() {
     super.complete();
     this.subscription?.unsubscribe();
@@ -72,14 +71,24 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
     const eventLngLat = {lng: event.lngLat.lng, lat: event.lngLat.lat};
 
     if (hover) {
-      // FIXME: check if changed based on feature ids
-      const currentFeatures: FeatureEventData[] =
+      let currentFeatures: FeatureEventData[] =
         MapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [eventPoint.x, eventPoint.y], this.layerIds);
+      let hasNewFeatures = true;
 
       if (state.hoveredFeatures.length) {
-        this.next(this.eventToHoverChangeEventData(eventPoint, eventLngLat, state.hoveredFeatures, false));
+        // when any hovered features before:
+        const removeFeatures = state.hoveredFeatures.filter(current => !currentFeatures.find(added => this.featureEventDataEquals(current, added)));
+        if (removeFeatures.length) {
+          this.next(this.eventToHoverChangeEventData(eventPoint, eventLngLat, removeFeatures, false));
+        }
+        const newFeatures = currentFeatures.filter(current => !state.hoveredFeatures.find(added => this.featureEventDataEquals(current, added)));
+        if (newFeatures.length) {
+          currentFeatures = newFeatures;
+        } else {
+          hasNewFeatures = false;
+        }
       }
-      if (currentFeatures?.length) {
+      if (hasNewFeatures && currentFeatures?.length) {
         this.next(this.eventToHoverChangeEventData(eventPoint, eventLngLat, currentFeatures, true));
       }
       state.hoveredFeatures = currentFeatures ?? [];
@@ -111,5 +120,12 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
       leave,
       features: [...features]
     };
+  }
+
+  private featureEventDataEquals(current: FeatureEventData, added: FeatureEventData): boolean {
+    return current.layerId === added.layerId &&
+      current.sourceId === added.sourceId &&
+      current.sourceLayerId === added.sourceLayerId &&
+      current.feature.id === added.feature.id;
   }
 }

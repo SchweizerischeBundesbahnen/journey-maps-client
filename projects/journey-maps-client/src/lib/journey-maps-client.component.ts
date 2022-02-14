@@ -44,8 +44,9 @@ import {
   ZoomLevels
 } from './journey-maps-client.interfaces';
 import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
-import {FeatureEventsService, FeatureEventSubjects} from './services/map/feature-events.service';
-import {MapCursorStyleEvent} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/events/map-cursor-style-event';
+import {MapCursorStyleEvent} from './services/map/events/map-cursor-style-event';
+import {FeaturesClickEvent} from './services/map/events/features-click-event';
+import {FeaturesHoverEvent} from './services/map/events/features-hover-event';
 import {MapStationService} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/map-station.service';
 
 const SATELLITE_MAP_MAX_ZOOM = 19.2;
@@ -312,7 +313,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapLeitPoiService: MapLeitPoiService,
               private levelSwitchService: LevelSwitchService,
               private mapLayerFilterService: MapLayerFilterService,
-              private featureEventsService: FeatureEventsService,
               private mapStationService: MapStationService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService,
@@ -617,9 +617,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
     this.mapStationService.registerStationUpdater(this.map);
     this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, watchOnLayers);
-    const featuresEvents: FeatureEventSubjects = this.featureEventsService.attachEvents(this.map, watchOnLayers);
 
-    featuresEvents.click
+    const featuresClickEvent = new FeaturesClickEvent(this.map, watchOnLayers);
+    featuresClickEvent
       .pipe(takeUntil(this.destroyed))
       .subscribe(
         eventData => {
@@ -628,16 +628,17 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         },
         () => {
         },
-        () => featuresEvents.click.complete()
+        () => featuresClickEvent.complete()
       );
 
-    featuresEvents.hoverChange
+    const featuresHoverEvent = new FeaturesHoverEvent(this.map, watchOnLayers);
+    featuresHoverEvent
       .pipe(takeUntil(this.destroyed))
       .subscribe(
         eventData => this.featuresHoverChange.next(eventData),
         () => {
         },
-        () => featuresEvents.hoverChange.complete()
+        () => featuresHoverEvent.complete()
       );
 
     this.map.on('zoomend', () => this.currentZoomLevelDebouncer.next());
