@@ -119,6 +119,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     oneFingerPan: false,
     scrollZoom: true,
     basemapSwitch: true,
+    homeButton: true,
   };
 
   /**
@@ -694,5 +695,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     } else {
       this.map.removeLayer(this.satelliteLayerId);
     }
+  }
+
+  onHomeButtonClicked() {
+    // TODO cdi ROKAS-452 implement
   }
 }

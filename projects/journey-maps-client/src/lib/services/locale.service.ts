@@ -19,6 +19,7 @@ export class LocaleService {
         zoomOut: 'Kartenausschnitt verkleinern.',
         selectFloor: 'Stockwerk [0] anzeigen.',
         basemapSwitch: 'Kartentyp ändern.',
+        homeButton: 'Kartenausschnitt zurücksetzen',
       }
     },
     fr: {
@@ -32,6 +33,7 @@ export class LocaleService {
         zoomOut: 'Dézoomer.',
         selectFloor: 'Afficher l\'étage [0].',
         basemapSwitch: 'Changer le type de la carte.',
+        homeButton: 'Kartenausschnitt zurücksetzen',
       }
     },
     it: {
@@ -45,6 +47,7 @@ export class LocaleService {
         zoomOut: 'Ridurre la sezione della mappa.',
         selectFloor: 'Mostra il piano [0].',
         basemapSwitch: 'Cambiare il tipo di mappa',
+        homeButton: 'Kartenausschnitt zurücksetzen',
       }
     },
     en: {
@@ -58,6 +61,7 @@ export class LocaleService {
         zoomOut: 'Zoom out on map.',
         selectFloor: 'Select floor [0].',
         basemapSwitch: 'Change the map type',
+        homeButton: 'Kartenausschnitt zurücksetzen',
       }
     }
   };
