@@ -9,6 +9,7 @@ import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.e
 import {
   ControlOptions,
   JourneyMapsRoutingOptions,
+  ListenerOptions,
   StyleOptions,
   ViewportOptions,
   ZoomLevels,
@@ -54,6 +55,12 @@ export class AppComponent implements OnInit, OnDestroy {
     boundingBox: [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]],
   };
   styleOptions: StyleOptions = {};
+
+  listenerOptions: ListenerOptions = {
+    watchMarkers: true,
+    watchRoutes: true,
+    watchStations: true
+  };
 
   journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
   journeyMapsRoutingOption: JourneyMapsRoutingOptions;

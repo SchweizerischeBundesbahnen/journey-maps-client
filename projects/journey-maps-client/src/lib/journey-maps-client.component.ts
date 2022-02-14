@@ -38,6 +38,7 @@ import {
   FeaturesClickEventData,
   FeaturesHoverChangeEventData,
   JourneyMapsRoutingOptions,
+  ListenerOptions,
   MarkerOptions,
   StyleOptions,
   ViewportOptions,
@@ -236,6 +237,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   /** Which (floor-)level should be shown */
   @Input() selectedLevel: number;
+
+  @Input() listenerOptions: ListenerOptions;
 
   // **************************************** 2 WAY-BINDING (OUTPUTS) *****************************************
 
@@ -460,6 +463,53 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       console.error('journeyMapsRoutingOption: Use either transfer or journey or routes. It does not work correctly when more than one of these properties is set.');
     }
 
+    if (changes.listenerOptions?.firstChange || !this.listenerOptions) {
+      this.listenerOptions = this.listenerOptions ?? {watchMarkers: true};
+
+      this.executeWhenMapStyleLoaded(() => {
+        const watchOnLayers = [];
+        if (this.listenerOptions.watchMarkers) {
+          watchOnLayers.push(...this.mapMarkerService.allMarkerAndClusterLayers);
+        }
+        if (this.listenerOptions.watchRoutes) {
+          watchOnLayers.push(...this.mapRoutesService.allRouteLayers);
+        }
+        if (this.listenerOptions.watchStations) {
+          watchOnLayers.push(MapStationService.STATION_LAYER);
+          this.mapStationService.registerStationUpdater(this.map);
+        }
+
+        if (watchOnLayers.length) {
+          this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, watchOnLayers);
+
+          const featuresClickEvent = new FeaturesClickEvent(this.map, watchOnLayers);
+          featuresClickEvent
+            .pipe(takeUntil(this.destroyed))
+            .subscribe(
+              eventData => {
+                this.featuresClick.next(eventData);
+                this.handleMarkerOrClusterClick(eventData.features);
+              },
+              () => {
+              },
+              () => featuresClickEvent.complete()
+            );
+
+          const featuresHoverEvent = new FeaturesHoverEvent(this.map, watchOnLayers);
+          featuresHoverEvent
+            .pipe(takeUntil(this.destroyed))
+            .subscribe(
+              eventData => this.featuresHoverChange.next(eventData),
+              () => {
+              },
+              () => featuresHoverEvent.complete()
+            );
+        }
+      });
+    } else if (changes.listenerOptions) {
+      console.warn('listenerOptions must be set initially and cannot be changed');
+    }
+
     if (!this.isStyleLoaded) {
       return;
     }
@@ -608,38 +658,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     // @ts-ignore
     this.mapService.verifySources(this.map, [Constants.ROUTE_SOURCE, Constants.WALK_SOURCE, ...this.mapMarkerService.sources]);
     this.addSatelliteSource(this.map);
-
-    const watchOnLayers = [
-      ...this.mapMarkerService.allMarkerAndClusterLayers,
-      ...this.mapRoutesService.allRouteLayers,
-      MapStationService.STATION_LAYER
-    ];
-
-    this.mapStationService.registerStationUpdater(this.map);
-    this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, watchOnLayers);
-
-    const featuresClickEvent = new FeaturesClickEvent(this.map, watchOnLayers);
-    featuresClickEvent
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(
-        eventData => {
-          this.featuresClick.next(eventData);
-          this.handleMarkerOrClusterClick(eventData.features);
-        },
-        () => {
-        },
-        () => featuresClickEvent.complete()
-      );
-
-    const featuresHoverEvent = new FeaturesHoverEvent(this.map, watchOnLayers);
-    featuresHoverEvent
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(
-        eventData => this.featuresHoverChange.next(eventData),
-        () => {
-        },
-        () => featuresHoverEvent.complete()
-      );
 
     this.map.on('zoomend', () => this.currentZoomLevelDebouncer.next());
     this.map.on('moveend', () => this.mapCenterChangeDebouncer.next());
