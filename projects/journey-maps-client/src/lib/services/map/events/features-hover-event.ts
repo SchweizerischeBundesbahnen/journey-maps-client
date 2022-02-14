@@ -1,4 +1,4 @@
-import {FeatureEventData, FeaturesHoverChangeEventData} from '../../../journey-maps-client.interfaces';
+import {FeatureData, FeaturesHoverChangeEventData} from '../../../journey-maps-client.interfaces';
 import {LngLat, Map as MaplibreMap, MapboxGeoJSONFeature, Point} from 'maplibre-gl';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
@@ -18,7 +18,7 @@ interface MapEventData {
 }
 
 interface MouseHoverState {
-  hoveredFeatures: FeatureEventData[];
+  hoveredFeatures: FeatureData[];
 }
 
 export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventData> {
@@ -69,7 +69,7 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
     const eventPoint = {x: event.point.x, y: event.point.y};
     const eventLngLat = {lng: event.lngLat.lng, lat: event.lngLat.lat};
 
-    let currentFeatures: FeatureEventData[] =
+    let currentFeatures: FeatureData[] =
       MapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [eventPoint.x, eventPoint.y], this.layerIds);
     let hasNewFeatures = !!currentFeatures.length;
 
@@ -111,7 +111,7 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
   private eventToHoverChangeEventData(
     eventPoint: { x: number; y: number },
     eventLngLat: { lng: number; lat: number },
-    features: FeatureEventData[],
+    features: FeatureData[],
     hover: boolean
   ): FeaturesHoverChangeEventData {
     const leave = !hover;
@@ -124,24 +124,25 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
     };
   }
 
-  private featureEventDataEquals(current: FeatureEventData, added: FeatureEventData): boolean {
+  private featureEventDataEquals(current: FeatureData, added: FeatureData): boolean {
     return current.layerId === added.layerId &&
       current.sourceId === added.sourceId &&
       current.sourceLayerId === added.sourceLayerId &&
-      current.feature.id === added.feature.id;
+      current.id === added.id;
   }
 
-  private setFeatureState(featureEventData: FeatureEventData[], hover: boolean) {
+  private setFeatureState(featureEventData: FeatureData[], hover: boolean) {
     featureEventData.forEach(data => {
       const mapFeature: MapboxGeoJSONFeature = {
         layer: this.mapInstance.getLayer(data.layerId),
         source: data.sourceId,
         sourceLayer: data.sourceLayerId,
-        ...data.feature
+        ...data
       };
-      const state = this.mapInstance.getFeatureState(mapFeature);
-      state.hover = hover;
-      this.mapInstance.setFeatureState(mapFeature, state);
+
+      // fresh copy
+      data.state.hover = hover;
+      this.mapInstance.setFeatureState(mapFeature, data.state);
     });
   }
 }

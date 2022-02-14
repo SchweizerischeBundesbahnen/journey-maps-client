@@ -108,7 +108,7 @@ export interface FeaturesHoverChangeEventData {
   /** Whether is leaving or not. */
   leave: boolean;
   /** List of features affected by this event. */
-  features: FeatureEventData[];
+  features: FeatureData[];
 }
 
 export interface FeaturesClickEventData {
@@ -117,21 +117,12 @@ export interface FeaturesClickEventData {
   /** Click map coordinates. */
   clickLngLat: { lng: number, lat: number };
   /** List of features affected by this event. */
-  features: FeatureEventData[];
-}
-
-export interface FeatureEventData {
-  /** The map feature. */
-  feature: FeatureData,
-  /** The map layer identifier. */
-  layerId: string,
-  /** The map source identifier. */
-  sourceId: string,
-  /** The map source layer identifier for a vector tiles source .*/
-  sourceLayerId?: string
+  features: FeatureData[];
 }
 
 export type FeatureData = GeoJSON.Feature<GeoJSON.Geometry> & {
-  /** The feature state. */
+  layerId: string;
+  sourceId: string;
+  sourceLayerId: string;
   state: { [key: string]: any };
-}
+};

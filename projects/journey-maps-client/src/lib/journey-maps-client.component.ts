@@ -15,7 +15,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {LngLatBounds, LngLatLike, Map as MaplibreMap} from 'maplibre-gl';
+import {LngLatBounds, LngLatLike, Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
 import {MapInitService} from './services/map/map-init.service';
 import {ReplaySubject, Subject} from 'rxjs';
 import {debounceTime, delay, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -33,8 +33,7 @@ import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
 import {
-  ControlOptions,
-  FeatureEventData,
+  ControlOptions, FeatureData,
   FeaturesClickEventData,
   FeaturesHoverChangeEventData,
   JourneyMapsRoutingOptions,
@@ -747,9 +746,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  private handleMarkerOrClusterClick(features: FeatureEventData[]) {
-    const featureEventDataList = features.filter(featureEventData =>
-      this.mapMarkerService.allMarkerAndClusterLayers.includes(featureEventData.layerId));
+  private handleMarkerOrClusterClick(features: FeatureData[]) {
+    const featureEventDataList = features.filter(feature =>
+      this.mapMarkerService.allMarkerAndClusterLayers.includes(feature.layerId));
 
     if (!featureEventDataList.length) {
       return;
@@ -760,15 +759,15 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     // The topmost rendered feature should be at position 0.
     // But it doesn't work for featureEventDataList within the same layer.
     while (target.layerId === featureEventDataList[++i]?.layerId) {
-      if (target.feature.properties.order < featureEventDataList[i].feature.properties.order) {
+      if (target.properties.order < featureEventDataList[i].properties.order) {
         target = featureEventDataList[i];
       }
     }
 
-    if (target.feature.properties.cluster) {
-      this.mapMarkerService.onClusterClicked(this.map, target.feature);
+    if (target.properties.cluster) {
+      this.mapMarkerService.onClusterClicked(this.map, target);
     } else {
-      const selectedMarkerId = this.mapMarkerService.onMarkerClicked(this.map, target.feature, this.selectedMarkerId);
+      const selectedMarkerId = this.mapMarkerService.onMarkerClicked(this.map, target, this.selectedMarkerId);
       this.selectedMarker = this.markerOptions.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
       this.cd.detectChanges();
     }
