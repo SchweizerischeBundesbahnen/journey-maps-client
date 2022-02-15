@@ -119,7 +119,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     oneFingerPan: false,
     scrollZoom: true,
     basemapSwitch: true,
-    homeButton: true,
+    homeButton: false,
   };
 
   /**
