@@ -26,7 +26,7 @@ export interface ControlOptions {
   zoomControls?: boolean;
   /** Whether the map should show the basemap switch control or not. */
   basemapSwitch?: boolean;
-  /** Whether the map should show the home button control or not. */
+  /** Whether the map should show the home button control or not. Currently this button zooms out to show all of Switzerland. */
   homeButton?: boolean;
 }
 
