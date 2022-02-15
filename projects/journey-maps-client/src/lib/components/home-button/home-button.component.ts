@@ -15,7 +15,7 @@ export class HomeButtonComponent implements OnInit{
   constructor(private i18n: LocaleService) {}
 
   ngOnInit(): void {
-    this.homeButtonLabel = `${this.i18n.getText('a4a.visualFunction')} ${this.i18n.getText('a4a.basemapSwitch')}`;
+    this.homeButtonLabel = `${this.i18n.getText('a4a.visualFunction')} ${this.i18n.getText('a4a.homeButton')}`;
   }
 
   onHomeButtonClicked(): void {
