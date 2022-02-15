@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {Marker} from '../../model/marker';
 import {Map as MaplibreMap, Offset} from 'maplibre-gl';
-import {MapMarkerService} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/map-marker.service';
+import {MapMarkerService} from '../../services/map/map-marker.service';
 
 @Component({
   selector: 'rokas-marker-details',
