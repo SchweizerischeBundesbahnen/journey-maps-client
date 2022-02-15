@@ -19,7 +19,7 @@ export class LocaleService {
         zoomOut: 'Kartenausschnitt verkleinern.',
         selectFloor: 'Stockwerk [0] anzeigen.',
         basemapSwitch: 'Kartentyp ändern.',
-        homeButton: 'Kartenausschnitt zurücksetzen',
+        homeButton: 'Ganze Schweiz',
       }
     },
     fr: {
@@ -33,7 +33,7 @@ export class LocaleService {
         zoomOut: 'Dézoomer.',
         selectFloor: 'Afficher l\'étage [0].',
         basemapSwitch: 'Changer le type de la carte.',
-        homeButton: 'Kartenausschnitt zurücksetzen',
+        homeButton: 'La suisse entière',
       }
     },
     it: {
@@ -47,7 +47,7 @@ export class LocaleService {
         zoomOut: 'Ridurre la sezione della mappa.',
         selectFloor: 'Mostra il piano [0].',
         basemapSwitch: 'Cambiare il tipo di mappa',
-        homeButton: 'Kartenausschnitt zurücksetzen',
+        homeButton: 'tutta la Svizzera',
       }
     },
     en: {
@@ -61,7 +61,7 @@ export class LocaleService {
         zoomOut: 'Zoom out on map.',
         selectFloor: 'Select floor [0].',
         basemapSwitch: 'Change the map type',
-        homeButton: 'Kartenausschnitt zurücksetzen',
+        homeButton: 'All of Switzerland',
       }
     }
   };
