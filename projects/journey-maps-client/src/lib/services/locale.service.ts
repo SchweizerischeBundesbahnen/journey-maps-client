@@ -47,7 +47,7 @@ export class LocaleService {
         zoomOut: 'Ridurre la sezione della mappa.',
         selectFloor: 'Mostra il piano [0].',
         basemapSwitch: 'Cambiare il tipo di mappa',
-        homeButton: 'tutta la Svizzera',
+        homeButton: 'Tutta la Svizzera',
       }
     },
     en: {
