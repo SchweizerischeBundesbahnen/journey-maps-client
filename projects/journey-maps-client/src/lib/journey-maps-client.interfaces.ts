@@ -13,13 +13,16 @@ export interface StyleOptions {
   mode?: StyleMode;
 }
 
-export interface ControlOptions {
+export interface NonButtonControlOptions {
   /** Whether the map should allow panning with one finger or not
    * If set to false, the users get a message-overlay if they try to pan with one finger.
    */
   oneFingerPan?: boolean;
   /** Whether the map can be zoomed by scrolling */
   scrollZoom?: boolean;
+}
+
+export interface ButtonControlOptions {
   /** Whether the map should show the zoom level control or not. */
   levelSwitch?: boolean;
   /** Whether the map should show the level switch control or not. */
@@ -29,6 +32,7 @@ export interface ControlOptions {
   /** Whether the map should show the home button control or not. Currently this button zooms out to show all of Switzerland. */
   homeButton?: boolean;
 }
+
 
 export interface ViewportOptions {
   /**

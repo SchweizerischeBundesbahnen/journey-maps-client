@@ -27,11 +27,13 @@
       client.language = 'de';
       client.apiKey = 'DUMMY'; // gets replaced below
       client.viewportOptions = {};
-      client.controlOptions = {
-        levelSwitch: true,
-        zoomControls: true,
+      client.nonButtonControlOptions = {
         oneFingerPan: false,
         scrollZoom: false,
+      };
+      client.buttonControlOptions = {
+        levelSwitch: true,
+        zoomControls: true,
         basemapSwitch: true,
         homeButton: true,
       };

@@ -33,12 +33,13 @@ import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
 import {
-  ControlOptions,
+  NonButtonControlOptions,
+  ButtonControlOptions,
   JourneyMapsRoutingOptions,
   MarkerOptions,
   StyleOptions,
   ViewportOptions,
-  ZoomLevels
+  ZoomLevels,
 } from './journey-maps-client.interfaces';
 import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
 
@@ -112,32 +113,54 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   // **************************************** CONTROL OPTIONS *****************************************/
 
-  private defaultControlOptions: ControlOptions = {
-    levelSwitch: true,
-    zoomControls: true,
+  private defaultNonButtonControlOptions: NonButtonControlOptions = {
     /** Mobile-friendly default: you get a message-overlay if you try to pan with one finger. */
     oneFingerPan: false,
     scrollZoom: true,
+  };
+
+  /**
+   * Settings to control the movement of the map by means other than via the buttons on the map
+   */
+  @Input()
+  get nonButtonControlOptions(): NonButtonControlOptions {
+    return this._nonButtonControlOptions;
+  }
+
+  set nonButtonControlOptions(nonButtonControlOptions: NonButtonControlOptions) {
+    this._nonButtonControlOptions = {
+      ...this.defaultNonButtonControlOptions,
+      ...nonButtonControlOptions,
+    };
+  }
+
+  private _nonButtonControlOptions: NonButtonControlOptions = this.defaultNonButtonControlOptions;
+
+  // **************************************** BUTTON OPTIONS *****************************************/
+
+  private defaultButtonControlOptions: ButtonControlOptions = {
+    levelSwitch: true,
+    zoomControls: true,
     basemapSwitch: true,
     homeButton: false,
   };
 
   /**
-   * Settings to control the movement of the map
+   * Settings to control which buttons are shown on the map
    */
   @Input()
-  get controlOptions(): ControlOptions {
-    return this._controlOptions;
+  get buttonControlOptions(): ButtonControlOptions {
+    return this._buttonControlOptions;
   }
 
-  set controlOptions(controlOptions: ControlOptions) {
-    this._controlOptions = {
-      ...this.defaultControlOptions,
-      ...controlOptions,
+  set buttonControlOptions(buttonControlOptions: ButtonControlOptions) {
+    this._buttonControlOptions = {
+      ...this.defaultButtonControlOptions,
+      ...buttonControlOptions,
     };
   }
 
-  private _controlOptions: ControlOptions = this.defaultControlOptions;
+  private _buttonControlOptions: ButtonControlOptions = this.defaultButtonControlOptions;
 
   // **************************************** VIEWPORT OPTIONS *****************************************/
 
@@ -310,7 +333,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
-    if (!this.controlOptions.oneFingerPan) {
+    if (!this.nonButtonControlOptions.oneFingerPan) {
       this.map.dragPan.disable();
     }
     this.touchEventCollector.next(event);
@@ -467,12 +490,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.mapElementRef.nativeElement,
       this.i18n.language,
       styleUrl,
-      this.controlOptions.scrollZoom,
+      this.nonButtonControlOptions.scrollZoom,
       this.viewportOptions.zoomLevel,
       this.viewportOptions.mapCenter,
       this.viewportOptions.boundingBox ?? this.getMarkersBounds,
       this.viewportOptions.boundingBox ? this.viewportOptions.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING,
-      this.controlOptions.oneFingerPan,
+      this.nonButtonControlOptions.oneFingerPan,
     ).subscribe(
       m => {
         this.map = m;
@@ -494,7 +517,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
       const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
 
-      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.controlOptions.oneFingerPan) {
+      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.nonButtonControlOptions.oneFingerPan) {
         this.touchOverlayStyleClass = 'is_visible';
         this.cd.detectChanges();
       }

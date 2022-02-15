@@ -20,20 +20,20 @@
 
     <div class="map-widgets">
       <rokas-zoom-controls
-        *ngIf="controlOptions.zoomControls"
+        *ngIf="buttonControlOptions.zoomControls"
         [map]="mapReady | async"
       ></rokas-zoom-controls>
       <rokas-basemap-switch
-        *ngIf="controlOptions.basemapSwitch"
+        *ngIf="buttonControlOptions.basemapSwitch"
         [map]="mapReady | async"
         (toggleBasemap)="onToggleBasemap()"
       ></rokas-basemap-switch>
       <rokas-home-button
-        *ngIf="controlOptions.homeButton"
+        *ngIf="buttonControlOptions.homeButton"
         (homeButtonClicked)="onHomeButtonClicked()"
       ></rokas-home-button>
       <rokas-level-switch
-        *ngIf="controlOptions.levelSwitch"
+        *ngIf="buttonControlOptions.levelSwitch"
         [map]="mapReady | async"
       ></rokas-level-switch>
     </div>

@@ -1,10 +1,13 @@
 # Change Log
 
-## [2.9.0](...) - ...
+## [3.0.0](...) - ...
 
 ### Added
 
 * An optional 'home button' has been added to the controls, allowing the user to zoom all of Switzerland into view.
+
+### Changed
+* Breaking Change: The input field object ControlOptions has been split into ButtonControlOptions and NonButtonControlOptions
 
 ## [2.8.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.7.0&sourceBranch=refs%2Ftags%2F2.8.0&targetRepoId=46287) - ...
 
