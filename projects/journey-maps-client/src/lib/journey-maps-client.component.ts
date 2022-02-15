@@ -698,6 +698,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   onHomeButtonClicked() {
-    // TODO cdi ROKAS-452 implement
+    this.mapService.fitBounds(this.map, this.mapInitService.getDefaultBoundingBox(), this.viewportOptions.boundingBoxPadding);
   }
 }

@@ -17,8 +17,12 @@ export class MapService {
     if (zoomLevel || center) {
       this.centerMap(map, center, zoomLevel);
     } else if (boundingBox) {
-      map.fitBounds(boundingBox, {padding: boundingBoxPadding});
+      this.fitBounds(map, boundingBox, boundingBoxPadding);
     }
+  }
+
+  fitBounds(map: MaplibreMap, boundingBox: LngLatBoundsLike, boundingBoxPadding: number): void {
+    map.fitBounds(boundingBox, {padding: boundingBoxPadding});
   }
 
   /**

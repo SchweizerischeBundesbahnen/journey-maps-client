@@ -15,7 +15,7 @@ export class MapInitService {
 
   private readonly defaultZoom = 7.5;
   private readonly defaultMapCenter: LngLatLike = [7.299265, 47.072120];
-  private readonly defaultBoundingBox: LngLatBoundsLike = [[5.7, 47.9], [10.6, 45.7]]; // CH bounds;
+  private readonly defaultBoundingBox: LngLatBoundsLike = [[5.7349, 47.9163], [10.6677, 45.6755]]; // CH bounds;
   private readonly controlLabels = {
     de: {
       'NavigationControl.ZoomIn': 'Hineinzoomen',
@@ -93,6 +93,10 @@ export class MapInitService {
     }
 
     return options;
+  }
+
+  public getDefaultBoundingBox() {
+    return this.defaultBoundingBox;
   }
 
   public fetchStyle(styleUrl: string): Observable<Style> {
