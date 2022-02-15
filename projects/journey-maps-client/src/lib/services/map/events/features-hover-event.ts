@@ -6,6 +6,7 @@ import {MapEventUtils} from './map-event-utils';
 
 const REPEAT_EVENTS = 1;
 const MAP_MOVE_EVENT_DEBOUNCE_TIME = 25;
+export const ROUTE_ID_PROPERTY_NAME = 'routeId';
 
 interface MouseMovedEventData {
   mapEvent: MapEventData,
@@ -72,6 +73,22 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
     let currentFeatures: FeatureData[] =
       MapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [eventPoint.x, eventPoint.y], this.layers);
     let hasNewFeatures = !!currentFeatures.length;
+
+    const routeFeatures = currentFeatures.filter(hovered => !!hovered.properties[ROUTE_ID_PROPERTY_NAME]);
+    if (routeFeatures.length) {
+      for (let routeFeature of routeFeatures) {
+        const routeId = routeFeature.properties[ROUTE_ID_PROPERTY_NAME];
+        const filter = [
+          'all',
+          ['==', ROUTE_ID_PROPERTY_NAME, routeId],
+          ['!=', '$id', routeFeature.id]
+        ];
+        const relatedFeatures: FeatureData[] = MapEventUtils.queryFeaturesByFilter(this.mapInstance, routeFeature, filter);
+        if (relatedFeatures.length) {
+          currentFeatures.push(...relatedFeatures);
+        }
+      }
+    }
 
     if (state.hoveredFeatures.length) {
       const removeFeatures = state.hoveredFeatures.filter(current => !currentFeatures.find(added => this.featureEventDataEquals(current, added)));

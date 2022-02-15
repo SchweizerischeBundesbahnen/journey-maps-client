@@ -19,7 +19,6 @@ export class FeaturesClickEvent extends ReplaySubject<FeaturesClickEventData> {
     this.attachEvent();
   }
 
-
   complete() {
     super.complete();
     this.subscription?.unsubscribe();
