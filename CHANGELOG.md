@@ -1,11 +1,16 @@
 # Change Log
 
-## [2.8.0](...) - ...
+## [2.9.0](...) - ...
+
+### Added
+
+* An optional 'home button' has been added to the controls, allowing the user to zoom all of Switzerland into view.
+
+## [2.8.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.7.0&sourceBranch=refs%2Ftags%2F2.8.0&targetRepoId=46287) - ...
 
 ### Changed
 
 * The Default ControlOptions have been set to 'true' to enable a more simple, 'zero-configuration' use of the J-M-C. 
-* An optional 'home button' has been added to the controls, allowing the user to zoom all of Switzerland into view.
 
 ## [2.7.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.6.0&sourceBranch=refs%2Ftags%2F2.7.0&targetRepoId=46287) - 2022-01-25
 
