@@ -5,6 +5,7 @@
 ### Added
 
 * An optional 'home button' has been added to the controls, allowing the user to zoom all of Switzerland into view.
+* The option to show the map control buttons in a smaller size.
 
 ### Changed
 * Breaking Change: The input field object ControlOptions has been split into ButtonControlOptions and NonButtonControlOptions

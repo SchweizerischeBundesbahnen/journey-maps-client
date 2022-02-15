@@ -46,6 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
     scrollZoom: true,
   };
   buttonControlOptions: ButtonControlOptions = {
+    showSmallButtons: false,
     levelSwitch: true,
     zoomControls: true,
     basemapSwitch: true,
