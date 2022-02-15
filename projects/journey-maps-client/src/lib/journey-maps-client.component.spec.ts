@@ -114,6 +114,7 @@ const configureTestingModule = () => TestBed.configureTestingModule({
         },
         unselectFeature: () => {
         },
+        markerCategoryMappings: {get: () => null}
       }
     },
     {
