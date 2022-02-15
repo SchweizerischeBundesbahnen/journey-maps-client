@@ -146,7 +146,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   };
 
   /**
-   * Settings to control which buttons are shown on the map
+   * Settings to control which control buttons are shown on the map
    */
   @Input()
   get buttonControlOptions(): ButtonControlOptions {
