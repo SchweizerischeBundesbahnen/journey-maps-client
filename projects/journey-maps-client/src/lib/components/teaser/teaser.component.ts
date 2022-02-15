@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
-import {Marker} from '../../../../model/marker';
-import {LocaleService} from '../../../../services/locale.service';
+import {LocaleService} from '../../services/locale.service';
 
 @Component({
   selector: 'rokas-teaser',
@@ -22,9 +21,9 @@ import {LocaleService} from '../../../../services/locale.service';
 })
 export class TeaserComponent implements OnInit {
 
-  @Input() shouldRender: boolean;
-  @Input() selectedMarker: Marker;
-  @Input() template?: TemplateRef<any>;
+  @Input() rendered: boolean;
+  @Input() templateContext: any;
+  @Input() template: TemplateRef<any>;
   @Output() closeClicked = new EventEmitter<void>();
 
   closeLabel: string;
@@ -38,7 +37,7 @@ export class TeaserComponent implements OnInit {
 
   getTemplateContext(): any {
     return {
-      $implicit: this.selectedMarker
+      $implicit: this.templateContext
     };
   }
 }
