@@ -35,6 +35,7 @@ import {LevelSwitchService} from './components/level-switch/services/level-switc
 import {
   ControlOptions,
   FeatureData,
+  FeatureDataType,
   FeaturesClickEventData,
   FeaturesHoverChangeEventData,
   JourneyMapsRoutingOptions,
@@ -472,20 +473,20 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.listenerOptions = this.listenerOptions ?? {watchMarkers: true};
 
       this.executeWhenMapStyleLoaded(() => {
-        const watchOnLayers = [];
+        const watchOnLayers = new Map<string, FeatureDataType>();
         if (this.listenerOptions.watchMarkers) {
-          watchOnLayers.push(...this.mapMarkerService.allMarkerAndClusterLayers);
+          this.mapMarkerService.allMarkerAndClusterLayers.forEach(id => watchOnLayers.set(id, FeatureDataType.MARKER));
         }
         if (this.listenerOptions.watchRoutes) {
-          watchOnLayers.push(...this.mapRoutesService.allRouteLayers);
+          this.mapRoutesService.allRouteLayers.forEach(id => watchOnLayers.set(id, FeatureDataType.ROUTE));
         }
         if (this.listenerOptions.watchStations) {
-          watchOnLayers.push(MapStationService.STATION_LAYER);
+          watchOnLayers.set(MapStationService.STATION_LAYER, FeatureDataType.STATION);
           this.mapStationService.registerStationUpdater(this.map);
         }
 
-        if (watchOnLayers.length) {
-          this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, watchOnLayers);
+        if (watchOnLayers.size) {
+          this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, [...watchOnLayers.keys()]);
 
           const featuresClickEvent = new FeaturesClickEvent(this.map, watchOnLayers);
           featuresClickEvent

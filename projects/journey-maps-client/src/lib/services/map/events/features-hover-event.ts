@@ -1,4 +1,4 @@
-import {FeatureData, FeaturesHoverChangeEventData} from '../../../journey-maps-client.interfaces';
+import {FeatureData, FeatureDataType, FeaturesHoverChangeEventData} from '../../../journey-maps-client.interfaces';
 import {LngLat, Map as MaplibreMap, MapboxGeoJSONFeature, Point} from 'maplibre-gl';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
@@ -27,9 +27,9 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
 
   private subscription: Subscription;
 
-  constructor(private mapInstance: MaplibreMap, private layerIds: string[]) {
+  constructor(private mapInstance: MaplibreMap, private layers: Map<string, FeatureDataType>) {
     super(REPEAT_EVENTS);
-    if (!this.layerIds.length) {
+    if (!this.layers.size) {
       return;
     }
     this.attachEvent();
@@ -70,7 +70,7 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
     const eventLngLat = {lng: event.lngLat.lng, lat: event.lngLat.lat};
 
     let currentFeatures: FeatureData[] =
-      MapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [eventPoint.x, eventPoint.y], this.layerIds);
+      MapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [eventPoint.x, eventPoint.y], this.layers);
     let hasNewFeatures = !!currentFeatures.length;
 
     if (state.hoveredFeatures.length) {

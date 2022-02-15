@@ -1,4 +1,4 @@
-import {FeaturesClickEventData} from '../../../journey-maps-client.interfaces';
+import {FeatureDataType, FeaturesClickEventData} from '../../../journey-maps-client.interfaces';
 import {Map as MaplibreMap, MapLayerMouseEvent} from 'maplibre-gl';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
@@ -11,9 +11,9 @@ export class FeaturesClickEvent extends ReplaySubject<FeaturesClickEventData> {
 
   private subscription: Subscription;
 
-  constructor(private mapInstance: MaplibreMap, private layerIds: string[]) {
+  constructor(private mapInstance: MaplibreMap, private layers: Map<string, FeatureDataType>) {
     super(REPEAT_EVENTS);
-    if (!this.layerIds.length) {
+    if (!this.layers.size) {
       return;
     }
     this.attachEvent();
@@ -29,7 +29,7 @@ export class FeaturesClickEvent extends ReplaySubject<FeaturesClickEventData> {
     const mapClicked = new Subject<MapLayerMouseEvent>();
     this.subscription = mapClicked.pipe(debounceTime(MAP_CLICK_EVENT_DEBOUNCE_TIME))
       .subscribe(e => {
-        const features = MapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [e.point.x, e.point.y], this.layerIds);
+        const features = MapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [e.point.x, e.point.y], this.layers);
         if (!features.length) {
           return;
         }

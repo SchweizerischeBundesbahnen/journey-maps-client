@@ -121,8 +121,11 @@ export interface FeaturesClickEventData {
 }
 
 export type FeatureData = GeoJSON.Feature<GeoJSON.Geometry> & {
+  featureDataType: FeatureDataType;
   layerId: string;
   sourceId: string;
   sourceLayerId: string;
   state: { [key: string]: any };
 };
+
+export enum FeatureDataType {MARKER = 'MARKER', ROUTE = 'ROUTE', STATION = 'STATION'}
