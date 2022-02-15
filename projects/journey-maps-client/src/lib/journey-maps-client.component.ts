@@ -141,8 +141,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   // **************************************** VIEWPORT OPTIONS *****************************************/
 
+  private readonly homeButtonBoundingBoxPadding = 0;
+
   private defaultViewportOptions: ViewportOptions = {
-    boundingBoxPadding: 0,
+    boundingBoxPadding: this.homeButtonBoundingBoxPadding,
   };
 
   /**
@@ -264,7 +266,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private cursorChanged = new ReplaySubject<boolean>(1);
   private mapClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private styleLoaded = new ReplaySubject<void>(1);
-  private initialSettingsChanged = new Subject<void>();
+  private viewportOptionsChanged = new Subject<void>();
   private mapStyleModeChanged = new Subject<void>();
 
   // visible for testing
@@ -444,7 +446,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
 
     if (changes.viewportOptions) {
-      this.initialSettingsChanged.next();
+      this.viewportOptionsChanged.next();
     }
 
     if (changes.styleOptions?.currentValue.mode !== changes.styleOptions?.previousValue?.mode) {
@@ -554,14 +556,16 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       }
     });
 
-    this.initialSettingsChanged.pipe(
+    this.viewportOptionsChanged.pipe(
       debounceTime(200),
       takeUntil(this.destroyed)
-    ).subscribe(() => this.mapService.moveMap(this.map,
-      this.viewportOptions.mapCenter,
-      this.viewportOptions.zoomLevel,
+    ).subscribe(() => this.mapService.moveMap(
+      this.map,
       this.viewportOptions.boundingBox ?? this.getMarkersBounds,
-      this.viewportOptions.boundingBox ? this.viewportOptions.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING));
+      this.viewportOptions.boundingBox ? this.viewportOptions.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING,
+      this.viewportOptions.zoomLevel,
+      this.viewportOptions.mapCenter
+    ));
 
     this.mapStyleModeChanged.pipe(
       debounceTime(200),
@@ -698,6 +702,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   }
 
   onHomeButtonClicked() {
-    this.mapService.fitBounds(this.map, this.mapInitService.getDefaultBoundingBox(), this.viewportOptions.boundingBoxPadding);
+    this.mapService.moveMap(this.map, this.mapInitService.getDefaultBoundingBox(), this.homeButtonBoundingBoxPadding);
   }
 }
