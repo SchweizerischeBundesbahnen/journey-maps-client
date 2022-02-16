@@ -1,6 +1,6 @@
 import {StyleMode} from './model/style-mode.enum';
 import {Marker} from './model/marker';
-import {LngLatBoundsLike, LngLatLike} from 'maplibre-gl';
+import {LngLatBoundsLike, LngLatLike, MapboxGeoJSONFeature} from 'maplibre-gl';
 
 export interface StyleOptions {
   /** Overwrite this value if you want to use a style from a different source. */
@@ -120,12 +120,8 @@ export interface FeaturesClickEventData {
   features: FeatureData[];
 }
 
-export type FeatureData = GeoJSON.Feature<GeoJSON.Geometry> & {
+export type FeatureData = MapboxGeoJSONFeature & {
   featureDataType: FeatureDataType;
-  layerId: string;
-  sourceId: string;
-  sourceLayerId: string;
-  state: { [key: string]: any };
 };
 
 export enum FeatureDataType {MARKER = 'MARKER', ROUTE = 'ROUTE', STATION = 'STATION'}

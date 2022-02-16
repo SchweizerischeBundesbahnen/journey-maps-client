@@ -50,6 +50,7 @@ import {MapCursorStyleEvent} from './services/map/events/map-cursor-style-event'
 import {FeaturesClickEvent} from './services/map/events/features-click-event';
 import {FeaturesHoverEvent} from './services/map/events/features-hover-event';
 import {MapStationService} from './services/map/map-station.service';
+import {FeatureSelectionHandler} from './services/map/events/feature-selection-handler';
 
 const SATELLITE_MAP_MAX_ZOOM = 19.2;
 const SATELLITE_MAP_TILE_SIZE = 256;
@@ -311,6 +312,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   private watchOnLayers = new Map<string, FeatureDataType>();
   private mapCursorStyleEvent: MapCursorStyleEvent;
+  private featureSelectionHandler: FeatureSelectionHandler;
 
   /** @internal */
   constructor(private mapInitService: MapInitService,
@@ -489,6 +491,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
         this.mapCursorStyleEvent?.complete();
         this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, [...this.watchOnLayers.keys()]);
+        this.featureSelectionHandler = new FeatureSelectionHandler(this.map, [...this.watchOnLayers.keys()]);
 
         if (changes.listenerOptions.isFirstChange()) {
           const featuresClickEvent = new FeaturesClickEvent(this.map, this.watchOnLayers);
@@ -496,6 +499,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
             .pipe(takeUntil(this.destroyed))
             .subscribe(
               eventData => {
+                this.featureSelectionHandler.toggleSelection(eventData);
                 this.featuresClick.next(eventData);
                 this.handleMarkerOrClusterClick(eventData.features);
               },
@@ -751,7 +755,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   private handleMarkerOrClusterClick(features: FeatureData[]) {
     const featureEventDataList = features.filter(feature =>
-      this.mapMarkerService.allMarkerAndClusterLayers.includes(feature.layerId));
+      this.mapMarkerService.allMarkerAndClusterLayers.includes(feature.layer.id));
 
     if (!featureEventDataList.length) {
       return;
@@ -761,7 +765,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     let target = featureEventDataList[0];
     // The topmost rendered feature should be at position 0.
     // But it doesn't work for featureEventDataList within the same layer.
-    while (target.layerId === featureEventDataList[++i]?.layerId) {
+    while (target.layer.id === featureEventDataList[++i]?.layer.id) {
       if (target.properties.order < featureEventDataList[i].properties.order) {
         target = featureEventDataList[i];
       }

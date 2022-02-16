@@ -234,7 +234,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   log(data: any) {
-    console.debug('new:', data.features.map(f => f.state.hover));
+    console.debug('new:', data.features.map(f => JSON.stringify(f.state)));
   }
 
   logBefore(data: any) {
