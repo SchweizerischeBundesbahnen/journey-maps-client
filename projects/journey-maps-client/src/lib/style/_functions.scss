@@ -26,17 +26,27 @@
   }
 }
 
-@mixin map-control-icon {
+@mixin map-control-borders {
   .map-control-button-wrapper {
     border-radius: 24px;
-    line-height: 36px;
-    padding: 6px;
-    pointer-events: none;
-    width: 48px;
 
     @include esta.mq($from: tabletPortrait) {
       @at-root .map-control-container.small-buttons #{&} {
         border-radius: 16px;
+      }
+    }
+  }
+}
+
+@mixin map-control-icon {
+  .map-control-button-wrapper {
+    line-height: 36px;
+    padding: 6px;
+    //pointer-events: none; // Doesn't seem necessary
+    width: 48px;
+
+    @include esta.mq($from: tabletPortrait) {
+      @at-root .map-control-container.small-buttons #{&} {
         line-height: 26px;
         padding: 3px;
         width: 32px;
@@ -97,5 +107,3 @@
     }
   }
 }
-
-

@@ -27,16 +27,16 @@
 }
 
 .map-control-button-wrapper {
+  line-height: 36px;
   padding: 6px;
   width: 48px;
-  line-height: 35px;
   border-bottom: 1px solid #e5e5e5;
 
   @include esta.mq($from: tabletPortrait) {
     @at-root .map-control-container.small-buttons #{&} {
+      line-height: 26px;
       padding: 3px;
       width: 32px;
-      line-height: 26px;
     }
   }
 }
