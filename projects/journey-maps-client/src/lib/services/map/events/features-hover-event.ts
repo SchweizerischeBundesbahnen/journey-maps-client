@@ -3,8 +3,10 @@ import {LngLat, Map as MaplibreMap, MapboxGeoJSONFeature, Point} from 'maplibre-
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {MapEventUtils} from './map-event-utils';
 import {RouteUtils} from './route-utils';
+import {sampleTime} from 'rxjs/operators';
 
 const REPEAT_EVENTS = 1;
+const HOVER_DELAY_TIME = 25;
 
 interface MouseMovedEventData {
   mapEvent: MapEventData,
@@ -49,10 +51,12 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
 
   private getMouseMovedSubject(): Subject<MouseMovedEventData> {
     const mouseMovedSubject = new Subject<MouseMovedEventData>();
-    this.subscription = mouseMovedSubject.pipe().subscribe(eventData => {
-      // FIXME: beim click und doppel-click passiert nichts :-(
-      this.onHoverChanged(eventData);
-    });
+    this.subscription = mouseMovedSubject
+      .pipe(sampleTime(HOVER_DELAY_TIME)).subscribe(eventData => {
+        // FIXME: beim click und doppel-click passiert nichts :-(
+        console.debug(new Date());
+        this.onHoverChanged(eventData);
+      });
     return mouseMovedSubject;
   }
 
