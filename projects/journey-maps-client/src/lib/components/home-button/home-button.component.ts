@@ -1,5 +1,6 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {LocaleService} from '../../services/locale.service';
+import {Map as MaplibreMap} from 'maplibre-gl';
 
 @Component({
   selector: 'rokas-home-button',
@@ -7,6 +8,8 @@ import {LocaleService} from '../../services/locale.service';
   styleUrls: ['./home-button.component.scss']
 })
 export class HomeButtonComponent implements OnInit{
+
+  @Input() map: MaplibreMap;
 
   @Output() homeButtonClicked = new EventEmitter<void>();
 

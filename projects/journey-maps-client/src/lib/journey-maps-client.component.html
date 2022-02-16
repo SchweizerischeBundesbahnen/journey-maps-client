@@ -30,6 +30,7 @@
       ></rokas-basemap-switch>
       <rokas-home-button
         *ngIf="uiOptions.homeButton"
+        [map]="mapReady | async"
         (homeButtonClicked)="onHomeButtonClicked()"
       ></rokas-home-button>
       <rokas-level-switch
