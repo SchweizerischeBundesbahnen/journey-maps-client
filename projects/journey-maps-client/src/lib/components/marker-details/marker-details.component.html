@@ -1,16 +1,18 @@
 <ng-container>
   <rokas-teaser
-    [shouldRender]="shouldRender"
-    [selectedMarker]="selectedMarker"
+    [rendered]="shouldRender"
+    [templateContext]="selectedMarker"
     (closeClicked)="closeClicked.next()"
     [template]="template"
     [attr.aria-live]="'polite'"
     *ngIf="!popup"
   ></rokas-teaser>
   <rokas-popup
-    [shouldRender]="shouldRender"
+    [rendered]="shouldRender"
     [map]="map"
-    [selectedMarker]="selectedMarker"
+    [templateContext]="selectedMarker"
+    [position]="selectedMarker?.position"
+    [offset]="popupOffset"
     (closeClicked)="closeClicked.next()"
     [template]="template"
     *ngIf="popup"

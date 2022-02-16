@@ -5,6 +5,7 @@
 ### Added
 
 * An optional 'home button' has been added to the controls, allowing the user to zoom all of Switzerland into view.
+* `rokas-popup` and `rokas-teaser` components are made available to J-M-C integrators.
 * The option to show the map control buttons in a smaller size.
 
 ### Changed

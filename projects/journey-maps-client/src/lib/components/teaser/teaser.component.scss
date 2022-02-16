@@ -1,7 +1,7 @@
-@use "./../../../../style/colors" as c;
+@use "./../../style/colors" as c;
 @use 'node_modules/@sbb-esta/angular/styles' as esta;
 
-.infoboxContainer {
+.teaser-container {
   z-index: 99;
   position: absolute;
   top: 0;
@@ -23,7 +23,7 @@
     padding: 0;
     border: none;
     background-color: c.$darkgray;
-    mask: url("./../../../../assets/circle-cross-small.svg") center no-repeat;
+    mask: url("./../../assets/circle-cross-small.svg") center no-repeat;
   }
 
   width: 100%;
