@@ -33,7 +33,6 @@ export interface UIOptions {
   homeButton?: boolean;
 }
 
-
 export interface ViewportOptions {
   /**
    * The initial center of the map. You should pass an array with two numbers.
@@ -127,6 +126,11 @@ export interface FeaturesClickEventData {
 }
 
 export type FeatureData = MapboxGeoJSONFeature & {
+  featureDataType: FeatureDataType;
+};
+
+export type FeatureSelection = {
+  featureId: number;
   featureDataType: FeatureDataType;
 };
 

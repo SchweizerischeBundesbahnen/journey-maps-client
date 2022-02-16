@@ -1,12 +1,12 @@
-import {Map as MaplibreMap} from 'maplibre-gl';
-import {FeatureDataType, FeaturesClickEventData} from '../../../journey-maps-client.interfaces';
+import {Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
+import {FeatureDataType, FeaturesClickEventData, FeatureSelection} from '../../../journey-maps-client.interfaces';
 import {RouteUtils} from './route-utils';
 import {MapEventUtils} from './map-event-utils';
 
 export class FeatureSelectionHandler {
 
-  constructor(private mapInstance: MaplibreMap, private layerIds: string[]) {
-    if (!this.layerIds.length) {
+  constructor(private mapInstance: MaplibreMap, private layers: Map<string, FeatureDataType>) {
+    if (!this.layers.size) {
       return;
     }
   }
@@ -27,5 +27,34 @@ export class FeatureSelectionHandler {
         MapEventUtils.setFeatureState(routeMapFeature, this.mapInstance, {selected});
       }
     }
+  }
+
+  selectFeatures(featureSelections: FeatureSelection[]): void {
+    // unselect all
+    const selectedFeatures = this.findSelected();
+    selectedFeatures.forEach(feature => MapEventUtils.setFeatureState(feature, this.mapInstance, {selected: false}));
+
+    // get features by featureSelections
+    const getMapFeatures = this.mapInstance.queryRenderedFeatures(null, {
+      layers: [...this.layers.keys()],
+      filter: ['in', '$id', ...featureSelections.map(f => f.featureId)]
+    });
+    // select features
+    getMapFeatures.forEach(mapFeature => MapEventUtils.setFeatureState(mapFeature, this.mapInstance, {selected: true}));
+  }
+
+  findSelectedFeatures(): FeatureSelection[] {
+    return this.findSelected().map(mapFeature => {
+      return {
+        featureId: Number(mapFeature.id),
+        featureDataType: this.layers.get(mapFeature.layer.id)
+      };
+    });
+  }
+
+  private findSelected(): MapboxGeoJSONFeature[] {
+    return this.mapInstance.queryRenderedFeatures(null, {
+      layers: [...this.layers.keys()]
+    }).filter(feature => feature.state.selected);
   }
 }

@@ -13,7 +13,7 @@ import {
   ListenerOptions,
   StyleOptions,
   ViewportOptions,
-  ZoomLevels,
+  ZoomLevels, FeatureData, FeatureSelection,
 } from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
 import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 
@@ -55,6 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
   selectedMarkerId: string;
   visibleLevels$ = new BehaviorSubject<number[]>([]);
   selectedLevel = 0;
+  selectedFeatures: FeatureSelection[] = [];
   viewportOptions: ViewportOptions = {};
   styleOptions: StyleOptions = {};
 
@@ -170,6 +171,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   setSelectedLevel(selectedLevel: number): void {
     this.selectedLevel = selectedLevel;
+  }
+
+  setSelectedFeatures(selectedFeatures: FeatureSelection[]): void {
+    console.debug(selectedFeatures);
+    this.selectedFeatures = selectedFeatures;
   }
 
   setGeoJsonInput(event: Event): void {

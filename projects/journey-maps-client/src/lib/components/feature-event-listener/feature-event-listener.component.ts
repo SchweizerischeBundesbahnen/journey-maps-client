@@ -1,5 +1,10 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
-import {FeatureDataType, FeaturesClickEventData, FeaturesHoverChangeEventData, ListenerOptions} from '../../journey-maps-client.interfaces';
+import {
+  FeatureDataType,
+  FeaturesClickEventData, FeatureSelection,
+  FeaturesHoverChangeEventData,
+  ListenerOptions
+} from '../../journey-maps-client.interfaces';
 import {MapCursorStyleEvent} from '../../services/map/events/map-cursor-style-event';
 import {MapStationService} from '../../services/map/map-station.service';
 import {FeaturesClickEvent} from '../../services/map/events/features-click-event';
@@ -19,6 +24,9 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
 
   @Input() listenerOptions: ListenerOptions;
   @Input() map: MapLibreMap;
+
+  @Input() featureSelections!: FeatureSelection[];
+  @Output() featureSelectionsChange = new EventEmitter<FeatureSelection[]>();
 
   @Output() featuresClick = new EventEmitter<FeaturesClickEventData>();
   @Output() featuresHoverChange = new EventEmitter<FeaturesHoverChangeEventData>();
@@ -64,7 +72,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
 
       this.mapCursorStyleEvent?.complete();
       this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, [...this.watchOnLayers.keys()]);
-      this.featureSelectionHandler = new FeatureSelectionHandler(this.map, [...this.watchOnLayers.keys()]);
+      this.featureSelectionHandler = new FeatureSelectionHandler(this.map, this.watchOnLayers);
 
       if (!this.featuresClickEvent) {
         this.featuresClickEvent = new FeaturesClickEvent(this.map, this.watchOnLayers);
@@ -72,6 +80,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
           .pipe(takeUntil(this.destroyed))
           .subscribe(eventData => {
             this.featureSelectionHandler.toggleSelection(eventData);
+            this.featureSelectionsChange.next(this.featureSelectionHandler.findSelectedFeatures());
             this.featuresClick.next(eventData);
           });
       }
@@ -81,6 +90,10 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
         this.featuresHoverEvent
           .pipe(takeUntil(this.destroyed))
           .subscribe(eventData => this.featuresHoverChange.next(eventData),);
+      }
+
+      if (changes.featureSelections?.currentValue !== undefined) {
+        this.featureSelectionHandler.selectFeatures(this.featureSelections);
       }
     }
   }
