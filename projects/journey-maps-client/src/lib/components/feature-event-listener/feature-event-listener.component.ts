@@ -29,12 +29,12 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
   private mapCursorStyleEvent: MapCursorStyleEvent;
   private featuresHoverEvent: FeaturesHoverEvent;
   private featuresClickEvent: FeaturesClickEvent;
+  private featureSelectionHandler: FeatureSelectionHandler;
 
   constructor(
     private mapStationService: MapStationService,
     private mapRoutesService: MapRoutesService,
     private mapMarkerService: MapMarkerService,
-    private featureSelectionHandler: FeatureSelectionHandler
   ) {
   }
 
