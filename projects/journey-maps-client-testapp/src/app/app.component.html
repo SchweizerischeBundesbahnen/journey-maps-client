@@ -110,7 +110,7 @@
       <li>
         <label for="small-buttons-checkbox">
           Show Small Buttons:
-          <input id="small-buttons-checkbox" (change)="setShowSmallButtons($event)" value="smallButtons" type="checkbox"/>
+          <input id="small-buttons-checkbox" (change)="setShowSmallButtons($event)" [checked]="uiOptions.showSmallButtons"  value="smallButtons" type="checkbox"/>
         </label>
       </li>
     </ul>
