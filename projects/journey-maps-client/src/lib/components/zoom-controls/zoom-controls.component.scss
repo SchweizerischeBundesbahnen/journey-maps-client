@@ -2,7 +2,7 @@
 @use "./../../style/colors" as c;
 @use 'node_modules/@sbb-esta/angular/styles' as esta;
 
-@include f.map-control-button;
+@include f.button-mixin;
 @include f.map-control-container;
 @include f.map-control-icon;
 

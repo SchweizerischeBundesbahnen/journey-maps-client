@@ -1,7 +1,7 @@
 @use "colors" as c;
 @use 'node_modules/@sbb-esta/angular/styles' as esta;
 
-@mixin map-control-button {
+@mixin button-mixin {
   button {
     display: block;
     width: 100%;

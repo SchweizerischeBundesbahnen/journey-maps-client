@@ -3,7 +3,7 @@
 @use "./../../style/colors" as c;
 @use "./../../style/functions" as f;
 
-@include f.map-control-button;
+@include f.button-mixin;
 @include f.map-control-container;
 
 .map-control-button {
