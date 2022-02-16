@@ -205,6 +205,13 @@ export class AppComponent implements OnInit, OnDestroy {
     };
   }
 
+  setShowSmallButtons(event: Event): void {
+    this.uiOptions = {
+      ...this.uiOptions,
+      showSmallButtons: (event.target as HTMLInputElement).checked,
+    }
+  }
+
   setStyleModeInput(event: Event): void {
     this.selectedMarkerId = undefined;
     // replace the entire object to fire change detection
