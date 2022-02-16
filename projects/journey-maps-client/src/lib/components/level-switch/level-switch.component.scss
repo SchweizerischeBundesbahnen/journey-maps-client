@@ -3,9 +3,7 @@
 @use "./../../style/colors" as c;
 @use "./../../style/functions" as f;
 
-@include f.button-mixin;
-@include f.map-control-container;
-@include f.map-control-button-wrapper;
+@include f.map-controls-shared;
 
 .map-control-button {
   cursor: pointer;

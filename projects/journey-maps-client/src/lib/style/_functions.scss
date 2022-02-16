@@ -1,7 +1,7 @@
 @use "colors" as c;
 @use 'node_modules/@sbb-esta/angular/styles' as esta;
 
-@mixin button-mixin {
+@mixin map-controls-shared {
   button {
     display: block;
     width: 100%;
@@ -9,9 +9,7 @@
     border: 0;
     padding: 0;
   }
-}
 
-@mixin map-control-container {
   .map-control-container {
     margin: 8px;
     background: c.$white;
@@ -24,21 +22,7 @@
       }
     }
   }
-}
 
-@mixin map-control-button-wrapper-borders {
-  .map-control-button-wrapper {
-    border-radius: 24px;
-
-    @include esta.mq($from: tabletPortrait) {
-      @at-root .map-control-container.small-buttons #{&} {
-        border-radius: 16px;
-      }
-    }
-  }
-}
-
-@mixin map-control-button-wrapper {
   .map-control-button-wrapper {
     line-height: 36px;
     padding: 6px;
@@ -57,6 +41,13 @@
 
 @mixin map-control-icon {
   .map-control-button-wrapper {
+    border-radius: 24px;
+
+    @include esta.mq($from: tabletPortrait) {
+      @at-root .map-control-container.small-buttons #{&} {
+        border-radius: 16px;
+      }
+    }
 
     &:not([data-disabled='true']):active {
       @include _map-control-button-wrapper-active

@@ -2,10 +2,7 @@
 @use "./../../style/colors" as c;
 @use 'node_modules/@sbb-esta/angular/styles' as esta;
 
-@include f.button-mixin;
-@include f.map-control-container;
-@include f.map-control-button-wrapper-borders;
-@include f.map-control-button-wrapper;
+@include f.map-controls-shared;
 @include f.map-control-icon;
 
 .var-plus {
