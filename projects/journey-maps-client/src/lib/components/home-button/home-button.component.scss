@@ -2,7 +2,8 @@
 
 @include f.button-mixin;
 @include f.map-control-container;
-@include f.map-control-borders;
+@include f.map-control-button-wrapper-borders;
+@include f.map-control-button-wrapper;
 @include f.map-control-icon;
 @include f.map-control-icon-button();
 

@@ -5,6 +5,7 @@
 
 @include f.button-mixin;
 @include f.map-control-container;
+@include f.map-control-button-wrapper;
 
 .map-control-button {
   cursor: pointer;
@@ -27,18 +28,7 @@
 }
 
 .map-control-button-wrapper {
-  line-height: 36px;
-  padding: 6px;
-  width: 48px;
   border-bottom: 1px solid #e5e5e5;
-
-  @include esta.mq($from: tabletPortrait) {
-    @at-root .map-control-container.small-buttons #{&} {
-      line-height: 26px;
-      padding: 3px;
-      width: 32px;
-    }
-  }
 }
 
 .map-control-button-wrapper:first-child {
