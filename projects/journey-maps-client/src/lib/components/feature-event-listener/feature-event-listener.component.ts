@@ -1,10 +1,16 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
-import {FeatureDataType, FeaturesClickEventData, FeaturesHoverChangeEventData, ListenerOptions} from '../../journey-maps-client.interfaces';
+import {
+  FeatureData,
+  FeatureDataType,
+  FeaturesClickEventData,
+  FeaturesHoverChangeEventData,
+  ListenerOptions
+} from '../../journey-maps-client.interfaces';
 import {MapCursorStyleEvent} from '../../services/map/events/map-cursor-style-event';
 import {MapStationService} from '../../services/map/map-station.service';
 import {FeaturesClickEvent} from '../../services/map/events/features-click-event';
 import {takeUntil} from 'rxjs/operators';
-import {Map as MapLibreMap} from 'maplibre-gl';
+import {LngLatLike, Map as MapLibreMap} from 'maplibre-gl';
 import {Subject} from 'rxjs';
 import {MapRoutesService} from '../../services/map/map-routes.service';
 import {MapMarkerService} from '../../services/map/map-marker.service';
@@ -22,6 +28,11 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
 
   @Output() featuresClick = new EventEmitter<FeaturesClickEventData>();
   @Output() featuresHoverChange = new EventEmitter<FeaturesHoverChangeEventData>();
+
+  // CONTINUE ROKAS-502: Add popup on hover
+  popupVisible = false;
+  popupFeature: FeatureData;
+  popupPosition: LngLatLike;
 
   private destroyed = new Subject<void>();
   private watchOnLayers = new Map<string, FeatureDataType>();
@@ -49,13 +60,13 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     if (this.listenerOptions && this.map) {
       this.watchOnLayers.clear();
 
-      if (this.listenerOptions.watchMarkers) {
+      if (this.listenerOptions.MARKER.watch) {
         this.mapMarkerService.allMarkerAndClusterLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.MARKER));
       }
-      if (this.listenerOptions.watchRoutes) {
+      if (this.listenerOptions.ROUTE.watch) {
         this.mapRoutesService.allRouteLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.ROUTE));
       }
-      if (this.listenerOptions.watchStations) {
+      if (this.listenerOptions.STATION.watch) {
         this.watchOnLayers.set(MapStationService.STATION_LAYER, FeatureDataType.STATION);
         this.mapStationService.registerStationUpdater(this.map);
       } else {
@@ -70,18 +81,38 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
         this.featuresClickEvent = new FeaturesClickEvent(this.map, this.watchOnLayers);
         this.featuresClickEvent
           .pipe(takeUntil(this.destroyed))
-          .subscribe(eventData => {
-            this.featureSelectionHandler.toggleSelection(eventData);
-            this.featuresClick.next(eventData);
-          });
+          .subscribe(data => this.featureClicked(data));
       }
 
       if (!this.featuresHoverEvent) {
         this.featuresHoverEvent = new FeaturesHoverEvent(this.map, this.watchOnLayers);
         this.featuresHoverEvent
           .pipe(takeUntil(this.destroyed))
-          .subscribe(eventData => this.featuresHoverChange.next(eventData),);
+          .subscribe(data => this.featureHovered(data));
       }
     }
+  }
+
+  private featureClicked(data: FeaturesClickEventData) {
+    this.featureSelectionHandler.toggleSelection(data);
+    this.featuresClick.next(data);
+
+    const topMostFeature = data.features[0];
+    const template = this.listenerOptions[topMostFeature.featureDataType]?.clickTemplate;
+    if (template) {
+      this.popupVisible = true;
+      this.popupFeature = topMostFeature;
+      if (topMostFeature.geometry.type === 'Point') {
+        this.popupPosition = topMostFeature.geometry.coordinates as LngLatLike;
+      } else {
+        this.popupPosition = data.clickLngLat;
+      }
+    } else {
+      this.popupVisible = false;
+    }
+  }
+
+  private featureHovered(data: FeaturesHoverChangeEventData) {
+    this.featuresHoverChange.next(data);
   }
 }

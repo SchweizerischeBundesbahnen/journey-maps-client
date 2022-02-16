@@ -1,6 +1,7 @@
 import {StyleMode} from './model/style-mode.enum';
 import {Marker} from './model/marker';
 import {LngLatBoundsLike, LngLatLike, MapboxGeoJSONFeature} from 'maplibre-gl';
+import {TemplateRef} from '@angular/core';
 
 export interface StyleOptions {
   /** Overwrite this value if you want to use a style from a different source. */
@@ -96,13 +97,16 @@ export interface ZoomLevels {
 }
 
 /**
- * Define for which features (layers) you want to be notified of events. (click, hover, etc.)
+ * Define for which feature types you want to be notified of events (click, hover)
+ * and define templates to display in a popup in case of such an event.
  */
-export interface ListenerOptions {
-  watchMarkers?: boolean;
-  watchRoutes?: boolean;
-  watchStations?: boolean;
-}
+export type ListenerOptions = {
+  [type in FeatureDataType]?: {
+    watch: boolean;
+    clickTemplate?: TemplateRef<any>;
+    hoverTemplate?: TemplateRef<any>;
+  };
+};
 
 export interface FeaturesHoverChangeEventData {
   /** Event screen position. */

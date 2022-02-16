@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 import {LngLatLike, Map} from 'maplibre-gl';
 import {AssetReaderService} from './services/asset-reader.service';
@@ -8,10 +8,10 @@ import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
   InteractionOptions,
-  UIOptions,
   JourneyMapsRoutingOptions,
   ListenerOptions,
   StyleOptions,
+  UIOptions,
   ViewportOptions,
   ZoomLevels,
 } from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
@@ -22,7 +22,7 @@ import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/j
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private assetReaderService: AssetReaderService,
@@ -32,6 +32,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @ViewChild(JourneyMapsClientComponent)
   client: JourneyMapsClientComponent;
+  @ViewChild('stationTemplate')
+  stationTemplate: TemplateRef<any>;
 
   private _journey: GeoJSON.FeatureCollection;
   private _transferLuzern: GeoJSON.FeatureCollection;
@@ -59,9 +61,9 @@ export class AppComponent implements OnInit, OnDestroy {
   styleOptions: StyleOptions = {};
 
   listenerOptions: ListenerOptions = {
-    watchMarkers: true,
-    watchRoutes: true,
-    watchStations: true
+    MARKER: {watch: true},
+    ROUTE: {watch: true},
+    STATION: {watch: true}
   };
 
   journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
@@ -153,6 +155,11 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(apiKey => this.apiKey = apiKey);
 
     this.mapCenterChange.pipe(takeUntil(this.destroyed)).subscribe(mapCenter => this.mapCenter = mapCenter);
+  }
+
+  ngAfterViewInit() {
+    this.listenerOptions.STATION.clickTemplate = this.stationTemplate;
+    this.updateListenerOptions();
   }
 
   onMapRecieved(map: Map): void {

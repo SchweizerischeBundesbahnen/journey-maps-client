@@ -45,6 +45,10 @@
       <div class="markerdetails-title">{{marker.title}}</div>
       <div class="markerdetails-subtitle">{{marker.subtitle}}</div>
     </ng-template>
+    <ng-template #stationTemplate let-station>
+      <div class="station-title">{{station.properties.display_name}}</div>
+      <div class="station-subtitle">{{station.properties.sbb_id}}</div>
+    </ng-template>
   </div>
 
   <div>
@@ -116,9 +120,10 @@
   <div>
     Interaction listener for:
     <div class="sbb-checkbox-group-horizontal">
-      <sbb-checkbox [(ngModel)]="listenerOptions.watchMarkers" (change)="updateListenerOptions()">Markers</sbb-checkbox>
-      <sbb-checkbox [(ngModel)]="listenerOptions.watchRoutes" (change)="updateListenerOptions()">Routes</sbb-checkbox>
-      <sbb-checkbox [(ngModel)]="listenerOptions.watchStations" (change)="updateListenerOptions()">Stations
+      <sbb-checkbox [(ngModel)]="listenerOptions?.MARKER.watch" (change)="updateListenerOptions()">Markers
+      </sbb-checkbox>
+      <sbb-checkbox [(ngModel)]="listenerOptions?.ROUTE.watch" (change)="updateListenerOptions()">Routes</sbb-checkbox>
+      <sbb-checkbox [(ngModel)]="listenerOptions?.STATION.watch" (change)="updateListenerOptions()">Stations
       </sbb-checkbox>
     </div>
   </div>
