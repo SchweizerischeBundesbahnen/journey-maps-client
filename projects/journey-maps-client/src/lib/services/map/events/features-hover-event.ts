@@ -54,7 +54,6 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
     this.subscription = mouseMovedSubject
       .pipe(sampleTime(HOVER_DELAY_TIME)).subscribe(eventData => {
         // FIXME: beim click und doppel-click passiert nichts :-(
-        console.debug(new Date());
         this.onHoverChanged(eventData);
       });
     return mouseMovedSubject;

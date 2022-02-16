@@ -95,6 +95,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   // **************************************** STYLE OPTIONS *****************************************/
 
   private defaultStyleOptions: StyleOptions = {
+    // FIXME: revert
     url: 'https://maps.style-dev-rokas.geops.io/styles/{styleId}/style.json?key=tu3yoodayei9ohx3Ohze',
     brightId: 'base_bright_v2_ki_casa',
     darkId: 'base_dark_v2_ki',
