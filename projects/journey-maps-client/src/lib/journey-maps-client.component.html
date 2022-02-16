@@ -2,7 +2,6 @@
 <rokas-feature-event-listener
   [listenerOptions]="listenerOptions"
   [map]="mapReady | async"
-  (featuresBeforeHoverChange)="featuresBeforeHoverChange.next($event)"
   (featuresHoverChange)="featuresHoverChange.next($event)"
   (featuresClick)="featuresClick.next($event); handleMarkerOrClusterClick($event.features);"
 ></rokas-feature-event-listener>

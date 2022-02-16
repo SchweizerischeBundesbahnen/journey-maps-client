@@ -21,9 +21,6 @@ interface MouseHoverState {
 }
 
 export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventData> {
-
-  beforeHoverEvent = new Subject<FeaturesHoverChangeEventData>();
-
   private subscription: Subscription;
 
   constructor(private mapInstance: MaplibreMap, private layers: Map<string, FeatureDataType>) {
@@ -84,7 +81,6 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
       const removeFeatures = state.hoveredFeatures.filter(current => !currentFeatures.find(added => this.featureEventDataEquals(current, added)));
       if (removeFeatures.length) {
         const eventData = this.eventToHoverChangeEventData(eventPoint, eventLngLat, removeFeatures, false);
-        this.beforeHoverEvent.next(eventData);
         // leave
         this.setFeatureHoverState(eventData.features, false);
         this.next(eventData);
@@ -98,7 +94,6 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
     }
     if (hasNewFeatures && currentFeatures?.length) {
       const eventData = this.eventToHoverChangeEventData(eventPoint, eventLngLat, currentFeatures, true);
-      this.beforeHoverEvent.next(eventData);
       currentFeatures = eventData.features;
       // hover
       this.setFeatureHoverState(currentFeatures, true);

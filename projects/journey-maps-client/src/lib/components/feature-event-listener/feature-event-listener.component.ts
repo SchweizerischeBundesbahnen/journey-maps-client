@@ -21,7 +21,6 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
   @Input() map: MapLibreMap;
 
   @Output() featuresClick = new EventEmitter<FeaturesClickEventData>();
-  @Output() featuresBeforeHoverChange = new EventEmitter<FeaturesHoverChangeEventData>();
   @Output() featuresHoverChange = new EventEmitter<FeaturesHoverChangeEventData>();
 
   private destroyed = new Subject<void>();
@@ -82,10 +81,6 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
         this.featuresHoverEvent
           .pipe(takeUntil(this.destroyed))
           .subscribe(eventData => this.featuresHoverChange.next(eventData),);
-
-        this.featuresHoverEvent.beforeHoverEvent
-          .pipe(takeUntil(this.destroyed))
-          .subscribe(eventData => this.featuresBeforeHoverChange.next(eventData));
       }
     }
   }
