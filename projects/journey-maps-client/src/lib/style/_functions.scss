@@ -26,7 +26,6 @@
   .map-control-button-wrapper {
     line-height: 36px;
     padding: 6px;
-    //pointer-events: none; // Doesn't seem necessary
     width: 48px;
 
     @include esta.mq($from: tabletPortrait) {
