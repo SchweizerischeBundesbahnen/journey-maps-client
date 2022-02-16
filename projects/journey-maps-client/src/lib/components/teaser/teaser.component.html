@@ -1,5 +1,5 @@
-<ng-container *ngIf="shouldRender">
-  <div class="infoboxContainer" @showHideTrigger>
+<ng-container *ngIf="rendered">
+  <div class="teaser-container" @showHideTrigger>
     <ng-container *ngTemplateOutlet="template;context:getTemplateContext()">
     </ng-container>
 
