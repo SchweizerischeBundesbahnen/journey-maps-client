@@ -9,6 +9,7 @@ import {Subject} from 'rxjs';
 import {MapRoutesService} from '../../services/map/map-routes.service';
 import {MapMarkerService} from '../../services/map/map-marker.service';
 import {FeaturesHoverEvent} from '../../services/map/events/features-hover-event';
+import {FeatureSelectionHandler} from '../../services/map/events/feature-selection-handler';
 
 @Component({
   selector: 'rokas-feature-event-listener',
@@ -33,6 +34,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     private mapStationService: MapStationService,
     private mapRoutesService: MapRoutesService,
     private mapMarkerService: MapMarkerService,
+    private featureSelectionHandler: FeatureSelectionHandler
   ) {
   }
 
@@ -63,12 +65,16 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
 
       this.mapCursorStyleEvent?.complete();
       this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, [...this.watchOnLayers.keys()]);
+      this.featureSelectionHandler = new FeatureSelectionHandler(this.map, [...this.watchOnLayers.keys()]);
 
       if (!this.featuresClickEvent) {
         this.featuresClickEvent = new FeaturesClickEvent(this.map, this.watchOnLayers);
         this.featuresClickEvent
           .pipe(takeUntil(this.destroyed))
-          .subscribe(eventData => this.featuresClick.next(eventData));
+          .subscribe(eventData => {
+            this.featureSelectionHandler.toggleSelection(eventData);
+            this.featuresClick.next(eventData);
+          });
       }
 
       if (!this.featuresHoverEvent) {

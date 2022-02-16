@@ -685,7 +685,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   handleMarkerOrClusterClick(features: FeatureData[]) {
     const featureEventDataList = features.filter(feature =>
-      this.mapMarkerService.allMarkerAndClusterLayers.includes(feature.layerId));
+      this.mapMarkerService.allMarkerAndClusterLayers.includes(feature.layer.id));
 
     if (!featureEventDataList.length) {
       return;
@@ -695,7 +695,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     let target = featureEventDataList[0];
     // The topmost rendered feature should be at position 0.
     // But it doesn't work for featureEventDataList within the same layer.
-    while (target.layerId === featureEventDataList[++i]?.layerId) {
+    while (target.layer.id === featureEventDataList[++i]?.layer.id) {
       if (target.properties.order < featureEventDataList[i].properties.order) {
         target = featureEventDataList[i];
       }
