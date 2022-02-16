@@ -5,8 +5,8 @@ import {AngularResizeEventModule} from 'angular-resize-event';
 import {GlobalStylesComponent} from './components/global-styles/global-styles.component';
 import {MarkerDetailsComponent} from './components/marker-details/marker-details.component';
 import {LevelSwitchComponent} from './components/level-switch/level-switch.component';
-import {PopupComponent} from './components/marker-details/components/popup/popup.component';
-import {TeaserComponent} from './components/marker-details/components/teaser/teaser.component';
+import {PopupComponent} from './components/popup/popup.component';
+import {TeaserComponent} from './components/teaser/teaser.component';
 import {ZoomControlsComponent} from './components/zoom-controls/zoom-controls.component';
 import {LeitPoiComponent} from './components/leit-poi/leit-poi.component';
 import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch.component';
@@ -30,7 +30,11 @@ import {HomeButtonComponent} from './components/home-button/home-button.componen
     CommonModule,
     AngularResizeEventModule,
   ],
-  exports: [JourneyMapsClientComponent],
+  exports: [
+    JourneyMapsClientComponent,
+    PopupComponent,
+    TeaserComponent
+  ],
 })
 export class JourneyMapsClientModule {
 }

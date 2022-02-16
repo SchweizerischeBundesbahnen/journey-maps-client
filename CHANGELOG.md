@@ -5,6 +5,7 @@
 ### Added
 
 * An optional 'home button' has been added to the controls, allowing the user to zoom all of Switzerland into view.
+* `rokas-popup` and `rokas-teaser` components are made available to J-M-C integrators.
 
 ### Changed
 * Breaking Change: The input field object ControlOptions has been split into UIOptions and InteractionOptions

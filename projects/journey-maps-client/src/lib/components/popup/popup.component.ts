@@ -7,18 +7,13 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   Output,
   SimpleChanges,
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import {LngLatLike, Map as MaplibreMap, Popup} from 'maplibre-gl';
-import {Marker} from '../../../../model/marker';
-import {combineLatest, ReplaySubject, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {LocaleService} from '../../../../services/locale.service';
-import {MapMarkerService} from '../../../../services/map/map-marker.service';
+import {LngLatLike, Map as MaplibreMap, Offset, Popup} from 'maplibre-gl';
+import {LocaleService} from '../../services/locale.service';
 
 @Component({
   selector: 'rokas-popup',
@@ -26,12 +21,14 @@ import {MapMarkerService} from '../../../../services/map/map-marker.service';
   styleUrls: ['./popup.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PopupComponent implements OnChanges, OnInit, OnDestroy {
+export class PopupComponent implements OnChanges, OnDestroy {
 
-  @Input() shouldRender: boolean;
+  @Input() rendered: boolean;
   @Input() map: MaplibreMap;
-  @Input() selectedMarker: Marker;
-  @Input() template?: TemplateRef<any>;
+  @Input() template: TemplateRef<any>;
+  @Input() templateContext: any;
+  @Input() position: LngLatLike;
+  @Input() offset: Offset;
   @Output() closeClicked = new EventEmitter<void>();
 
   private readonly options: any = {
@@ -39,22 +36,8 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
     className: 'rokas',
   };
 
-  private readonly defaultOffset = {
-    right: [-15, -15],
-    left: [15, -15],
-    bottom: [0, -70],
-    'bottom-left': [0, -70],
-    'bottom-right': [0, -70],
-    top: [0, -10],
-    'top-left': [0, -10],
-    'top-right': [0, -10],
-  };
-
   private popup: Popup;
   private popupContent: ElementRef;
-  private templateLoaded = new ReplaySubject<void>(1);
-  private markerSelected = new ReplaySubject<void>(1);
-  private destroyed = new Subject<void>();
 
   // The view child is initially undefined (because of the *ngif in the parent component).
   @ViewChild('popupContent') set content(content: ElementRef) {
@@ -62,50 +45,35 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
     const firstChange = this.popupContent == null && content != null;
     this.popupContent = content;
     if (firstChange) {
-      this.templateLoaded.next();
+      this.showPopup();
     }
   }
 
   constructor(
     private i18n: LocaleService,
     private cd: ChangeDetectorRef,
-    private mapMarkerService: MapMarkerService
   ) {
-  }
-
-  ngOnInit(): void {
-    combineLatest([this.templateLoaded, this.markerSelected])
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(() => this.showPopup());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     // Not sure why this is needed here...
     // Otherwise this.popupContent is not correctly updated.
     this.cd.detectChanges();
-
-    if (changes.selectedMarker?.currentValue) {
-      this.markerSelected.next();
-    } else if (this.popup) {
-      this.popup.remove();
-      this.popup = undefined;
-    }
+    this.showPopup();
   }
 
   ngOnDestroy(): void {
-    this.destroyed.next();
-    this.destroyed.complete();
     this.popup?.remove();
   }
 
   getTemplateContext(): any {
     return {
-      $implicit: this.selectedMarker ?? {}
+      $implicit: this.templateContext ?? {}
     };
   }
 
   private showPopup(): void {
-    if (!this.selectedMarker || !this.popupContent) {
+    if (!this.templateContext || !this.popupContent) {
       this.popup?.remove();
       this.popup = undefined;
       return;
@@ -115,12 +83,7 @@ export class PopupComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     this.popup.setOffset(this.offset);
-    this.popup.setLngLat(this.selectedMarker.position as LngLatLike);
-  }
-
-  private get offset(): any {
-    return this.mapMarkerService.markerCategoryMappings.get(this.selectedMarker.category)
-      ?.popupOffset ?? this.defaultOffset;
+    this.popup.setLngLat(this.position);
   }
 
   private initPopup(): void {
