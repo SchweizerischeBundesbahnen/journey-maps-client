@@ -10,6 +10,7 @@ import {TeaserComponent} from './components/marker-details/components/teaser/tea
 import {ZoomControlsComponent} from './components/zoom-controls/zoom-controls.component';
 import {LeitPoiComponent} from './components/leit-poi/leit-poi.component';
 import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch.component';
+import {HomeButtonComponent} from './components/home-button/home-button.component';
 import {FeatureEventListenerComponent} from './components/feature-event-listener/feature-event-listener.component';
 
 
@@ -23,8 +24,9 @@ import {FeatureEventListenerComponent} from './components/feature-event-listener
     BasemapSwitchComponent,
     PopupComponent,
     MarkerDetailsComponent,
+    FeatureEventListenerComponent,
     LeitPoiComponent,
-    FeatureEventListenerComponent
+    HomeButtonComponent
   ],
   imports: [
     CommonModule,

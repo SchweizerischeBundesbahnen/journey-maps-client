@@ -33,7 +33,8 @@ import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
 import {
-  ControlOptions,
+  InteractionOptions,
+  UIOptions,
   FeatureData,
   FeaturesClickEventData,
   FeaturesHoverChangeEventData,
@@ -42,7 +43,7 @@ import {
   MarkerOptions,
   StyleOptions,
   ViewportOptions,
-  ZoomLevels
+  ZoomLevels,
 } from './journey-maps-client.interfaces';
 import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
 
@@ -121,36 +122,61 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   // **************************************** CONTROL OPTIONS *****************************************/
 
-  private defaultControlOptions: ControlOptions = {
-    levelSwitch: true,
-    zoomControls: true,
+  private defaultInteractionOptions: InteractionOptions = {
     /** Mobile-friendly default: you get a message-overlay if you try to pan with one finger. */
     oneFingerPan: false,
     scrollZoom: true,
-    basemapSwitch: true,
   };
 
   /**
-   * Settings to control the movement of the map
+   * Settings to control the movement of the map by means other than via the buttons on the map
    */
   @Input()
-  get controlOptions(): ControlOptions {
-    return this._controlOptions;
+  get interactionOptions(): InteractionOptions {
+    return this._interactionOptions;
   }
 
-  set controlOptions(controlOptions: ControlOptions) {
-    this._controlOptions = {
-      ...this.defaultControlOptions,
-      ...controlOptions,
+  set interactionOptions(interactionOptions: InteractionOptions) {
+    this._interactionOptions = {
+      ...this.defaultInteractionOptions,
+      ...interactionOptions,
     };
   }
 
-  private _controlOptions: ControlOptions = this.defaultControlOptions;
+  private _interactionOptions: InteractionOptions = this.defaultInteractionOptions;
+
+  // **************************************** BUTTON OPTIONS *****************************************/
+
+  private defaultUIOptions: UIOptions = {
+    levelSwitch: true,
+    zoomControls: true,
+    basemapSwitch: true,
+    homeButton: false,
+  };
+
+  /**
+   * Settings to control which control buttons are shown on the map
+   */
+  @Input()
+  get uiOptions(): UIOptions {
+    return this._uiOptions;
+  }
+
+  set uiOptions(uiOptions: UIOptions) {
+    this._uiOptions = {
+      ...this.defaultUIOptions,
+      ...uiOptions,
+    };
+  }
+
+  private _uiOptions: UIOptions = this.defaultUIOptions;
 
   // **************************************** VIEWPORT OPTIONS *****************************************/
 
+  private readonly homeButtonBoundingBoxPadding = 0;
+
   private defaultViewportOptions: ViewportOptions = {
-    boundingBoxPadding: 0,
+    boundingBoxPadding: this.homeButtonBoundingBoxPadding,
   };
 
   /**
@@ -282,7 +308,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private windowResized = new Subject<void>();
   private destroyed = new Subject<void>();
   private styleLoaded = new ReplaySubject<void>(1);
-  private initialSettingsChanged = new Subject<void>();
+  private viewportOptionsChanged = new Subject<void>();
   private mapStyleModeChanged = new Subject<void>();
 
   // visible for testing
@@ -326,7 +352,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
-    if (!this.controlOptions.oneFingerPan) {
+    if (!this.interactionOptions.oneFingerPan) {
       this.map.dragPan.disable();
     }
     this.touchEventCollector.next(event);
@@ -462,7 +488,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
 
     if (changes.viewportOptions) {
-      this.initialSettingsChanged.next();
+      this.viewportOptionsChanged.next();
     }
 
     if (changes.styleOptions?.currentValue.mode !== changes.styleOptions?.previousValue?.mode) {
@@ -483,12 +509,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.mapElementRef.nativeElement,
       this.i18n.language,
       styleUrl,
-      this.controlOptions.scrollZoom,
+      this.interactionOptions.scrollZoom,
       this.viewportOptions.zoomLevel,
       this.viewportOptions.mapCenter,
       this.viewportOptions.boundingBox ?? this.getMarkersBounds,
       this.viewportOptions.boundingBox ? this.viewportOptions.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING,
-      this.controlOptions.oneFingerPan,
+      this.interactionOptions.oneFingerPan,
     ).subscribe(
       m => {
         this.map = m;
@@ -510,7 +536,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
       const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
 
-      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.controlOptions.oneFingerPan) {
+      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.interactionOptions.oneFingerPan) {
         this.touchOverlayStyleClass = 'is_visible';
         this.cd.detectChanges();
       }
@@ -541,14 +567,16 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       takeUntil(this.destroyed)
     ).subscribe(() => this.map.resize());
 
-    this.initialSettingsChanged.pipe(
+    this.viewportOptionsChanged.pipe(
       debounceTime(200),
       takeUntil(this.destroyed)
-    ).subscribe(() => this.mapService.moveMap(this.map,
-      this.viewportOptions.mapCenter,
-      this.viewportOptions.zoomLevel,
+    ).subscribe(() => this.mapService.moveMap(
+      this.map,
       this.viewportOptions.boundingBox ?? this.getMarkersBounds,
-      this.viewportOptions.boundingBox ? this.viewportOptions.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING));
+      this.viewportOptions.boundingBox ? this.viewportOptions.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING,
+      this.viewportOptions.zoomLevel,
+      this.viewportOptions.mapCenter
+    ));
 
     this.mapStyleModeChanged.pipe(
       debounceTime(200),
@@ -704,5 +732,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.selectedMarker = this.markerOptions.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
       this.cd.detectChanges();
     }
+  }
+
+  onHomeButtonClicked() {
+    this.mapService.moveMap(this.map, this.mapInitService.getDefaultBoundingBox(), this.homeButtonBoundingBoxPadding);
   }
 }

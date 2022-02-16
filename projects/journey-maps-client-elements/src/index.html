@@ -26,16 +26,16 @@
       var client = document.createElement('journey-maps-client');
       client.language = 'de';
       client.apiKey = 'DUMMY'; // gets replaced below
-      client.viewportOptions = {
-        zoomLevel: 7.5,
-        mapCenter: [7.4391326448171196, 46.948834547463086],
-      };
-      client.controlOptions = {
-        levelSwitch: true,
-        zoomControls: true,
+      client.viewportOptions = {};
+      client.interactionOptions = {
         oneFingerPan: false,
         scrollZoom: false,
-        basemapSwitch: true
+      };
+      client.uiOptions = {
+        levelSwitch: true,
+        zoomControls: true,
+        basemapSwitch: true,
+        homeButton: true,
       };
       client.markerOptions = {
         popup: true,
