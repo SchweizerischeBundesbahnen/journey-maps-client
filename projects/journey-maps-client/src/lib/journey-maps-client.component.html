@@ -1,4 +1,11 @@
 <rokas-global-styles></rokas-global-styles>
+<rokas-feature-event-listener
+  [listenerOptions]="listenerOptions"
+  [map]="mapReady | async"
+  (featuresBeforeHoverChange)="featuresBeforeHoverChange.next($event)"
+  (featuresHoverChange)="featuresHoverChange.next($event)"
+  (featuresClick)="featuresClick.next($event); handleMarkerOrClusterClick($event.features);"
+></rokas-feature-event-listener>
 
 <div class="container" lang="{{language}}">
 
@@ -7,7 +14,7 @@
         <span class="mod_map_container_mobile_overlay_icon_wrapper">
             <div class="mod_svgsprite_icon mod_map_container_mobile_overlay_icon" focusable="false"> </div>
         </span>
-        <p class="mod_map_container_mobile_overlay_text">{{touchOverlayText}}</p>
+      <p class="mod_map_container_mobile_overlay_text">{{touchOverlayText}}</p>
     </div>
     <rokas-marker-details
       [selectedMarker]="selectedMarker"
