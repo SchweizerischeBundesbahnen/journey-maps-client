@@ -1,5 +1,8 @@
 import {Map as MaplibreMap} from 'maplibre-gl';
 import {Subject, Subscription} from 'rxjs';
+import {sampleTime} from 'rxjs/operators';
+
+const CURSOR_STYLE_DELAY = 25;
 
 export class MapCursorStyleEvent {
 
@@ -13,7 +16,7 @@ export class MapCursorStyleEvent {
       return;
     }
 
-    this.subscription = this.subject.pipe().subscribe(hover => this.setCursorStyle(hover));
+    this.subscription = this.subject.pipe(sampleTime(CURSOR_STYLE_DELAY)).subscribe(hover => this.setCursorStyle(hover));
 
     this.enterListener = () => this.subject.next(true);
     this.leaveListener = () => this.subject.next(false);
