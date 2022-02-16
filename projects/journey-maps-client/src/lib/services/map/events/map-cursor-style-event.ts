@@ -1,9 +1,5 @@
 import {Map as MaplibreMap} from 'maplibre-gl';
 import {Subject, Subscription} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
-
-/* constants */
-const MAP_CURSOR_STYLE_EVENT_DEBOUNCE_TIME = 10;
 
 export class MapCursorStyleEvent {
 
@@ -17,9 +13,7 @@ export class MapCursorStyleEvent {
       return;
     }
 
-    this.subscription = this.subject.pipe(
-      debounceTime(MAP_CURSOR_STYLE_EVENT_DEBOUNCE_TIME)
-    ).subscribe(hover => this.setCursorStyle(hover));
+    this.subscription = this.subject.pipe().subscribe(hover => this.setCursorStyle(hover));
 
     this.enterListener = () => this.subject.next(true);
     this.leaveListener = () => this.subject.next(false);
@@ -39,6 +33,7 @@ export class MapCursorStyleEvent {
       this.mapInstance.off('mouseleave', layerId, this.leaveListener);
     });
   }
+
   private setCursorStyle(hover: boolean): void {
     this.mapInstance.getCanvas().style.cursor = hover ? 'pointer' : '';
   }
