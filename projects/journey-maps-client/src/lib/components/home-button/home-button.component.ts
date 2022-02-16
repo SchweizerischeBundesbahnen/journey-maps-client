@@ -10,6 +10,7 @@ import {Map as MaplibreMap} from 'maplibre-gl';
 export class HomeButtonComponent implements OnInit{
 
   @Input() map: MaplibreMap;
+  @Input() showSmallButtons: boolean;
 
   @Output() homeButtonClicked = new EventEmitter<void>();
 

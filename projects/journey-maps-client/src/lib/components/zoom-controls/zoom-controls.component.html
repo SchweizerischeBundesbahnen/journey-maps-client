@@ -1,4 +1,4 @@
-<div class="map-control-container" *ngIf="map">
+<div class="map-control-container" [class.small-buttons]="showSmallButtons" *ngIf="map">
   <div class="map-control-button-wrapper var-plus" [attr.data-disabled]="isMaxZoom">
     <button (click)="zoomIn()" class="map-control-button" [attr.disabled]="isMaxZoom ? '' : null"
             [attr.aria-label]="zoomInLabel">

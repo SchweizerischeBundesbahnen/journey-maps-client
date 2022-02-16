@@ -12,6 +12,7 @@ import {LocaleService} from '../../services/locale.service';
 })
 export class ZoomControlsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() map: MaplibreMap;
+  @Input() showSmallButtons: boolean;
 
   private zoomChanged = new Subject<void>();
   private destroyed = new Subject<void>();

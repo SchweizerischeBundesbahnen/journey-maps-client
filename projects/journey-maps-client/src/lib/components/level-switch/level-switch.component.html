@@ -1,4 +1,4 @@
-<div class="level-switch-buttons-container" *ngIf="map && visibleLevels.length" @fade>
+<div class="level-switch-buttons-container" [class.small-buttons]="showSmallButtons" *ngIf="map && visibleLevels.length" @fade>
     <ng-container *ngFor="let level of visibleLevels">
         <div class="level-switch-button">
             <button

@@ -18,24 +18,28 @@
     >
     </rokas-marker-details>
 
-    <div class="map-widgets" [class.small-buttons]="uiOptions.showSmallButtons">
+    <div class="map-widgets">
       <rokas-zoom-controls
         *ngIf="uiOptions.zoomControls"
         [map]="mapReady | async"
+        [showSmallButtons]="uiOptions.showSmallButtons"
       ></rokas-zoom-controls>
       <rokas-basemap-switch
         *ngIf="uiOptions.basemapSwitch"
         [map]="mapReady | async"
+        [showSmallButtons]="uiOptions.showSmallButtons"
         (toggleBasemap)="onToggleBasemap()"
       ></rokas-basemap-switch>
       <rokas-home-button
         *ngIf="uiOptions.homeButton"
         [map]="mapReady | async"
+        [showSmallButtons]="uiOptions.showSmallButtons"
         (homeButtonClicked)="onHomeButtonClicked()"
       ></rokas-home-button>
       <rokas-level-switch
         *ngIf="uiOptions.levelSwitch"
         [map]="mapReady | async"
+        [showSmallButtons]="uiOptions.showSmallButtons"
       ></rokas-level-switch>
     </div>
     <div class="map" (resized)="onResized()" #map></div>

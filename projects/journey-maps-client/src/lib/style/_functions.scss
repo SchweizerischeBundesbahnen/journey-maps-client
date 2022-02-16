@@ -14,14 +14,25 @@
     background: c.$white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
     border-radius: 24px;
+
+    &.small-buttons {
+      margin: 6px;
+    }
   }
 
   .map-control-button-wrapper {
-    border-radius: 24px; // 24 -> 16
-    line-height: 26px; // 36 -> 26
-    padding: 3px; // 6 -> 4
+    border-radius: 24px;
+    line-height: 36px;
+    padding: 6px;
     pointer-events: none;
-    width: 32px; // 48 -> 32
+    width: 48px;
+
+    @at-root .map-control-container.small-buttons #{&} {
+      border-radius: 16px;
+      line-height: 26px;
+      padding: 3px;
+      width: 32px;
+    }
 
     &:not([data-disabled='true']):active {
       @include _map-control-button-wrapper-active
@@ -48,7 +59,7 @@
   .map-control-button {
     background-color: c.$darkgray;
     cursor: pointer;
-    height: 26px; // 36 -> 26
+    height: 36px;
     // CHECKME ses: This somehow doesn't work in the testapp
     //  when importing the module from src.
     // mask: url("#{$icon}") center no-repeat;
@@ -68,6 +79,10 @@
     &:disabled {
       cursor: default;
       background-color: c.$lightgray;
+    }
+
+    @at-root .map-control-container.small-buttons #{&}{
+      height: 26px;
     }
   }
 }
