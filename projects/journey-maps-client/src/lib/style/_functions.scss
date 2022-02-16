@@ -12,14 +12,6 @@
 }
 
 @mixin map-control-icon {
-  button {
-    display: block;
-    width: 100%;
-    background-color: inherit;
-    border: 0;
-    padding: 0;
-  }
-
   .map-control-container {
     margin: 8px;
     background: c.$white;
