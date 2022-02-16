@@ -140,7 +140,7 @@ const setupFixtureAndComponent = (oneFingerPan: boolean = true) => {
   component = fixture.componentInstance;
   component.apiKey = 'apiKey';
   component.markerOptions.markers = markers;
-  component.nonButtonControlOptions.oneFingerPan = oneFingerPan;
+  component.interactionOptions.oneFingerPan = oneFingerPan;
   fixture.detectChanges();
 };
 

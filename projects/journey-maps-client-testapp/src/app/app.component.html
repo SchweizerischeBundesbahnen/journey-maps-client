@@ -8,8 +8,8 @@
                                        language="en"
                                        [apiKey]="apiKey"
                                        [styleOptions]="styleOptions"
-                                       [nonButtonControlOptions]="nonButtonControlOptions"
-                                       [buttonControlOptions]="buttonControlOptions"
+                                       [interactionOptions]="interactionOptions"
+                                       [uiOptions]="uiOptions"
                                        [viewportOptions]="viewportOptions"
                                        [journeyMapsRoutingOption]="journeyMapsRoutingOption"
                                        [markerOptions]="markerOptions"
@@ -78,8 +78,8 @@
         <button (click)="client.moveSouth()">Move South</button>
         <button (click)="client.moveWest()">Move West</button>
       </li>
-      <li>Allow moving the map with one finger: {{nonButtonControlOptions.oneFingerPan}}</li>
-      <li>Allow zooming with the scroll button: {{nonButtonControlOptions.scrollZoom}}</li>
+      <li>Allow moving the map with one finger: {{interactionOptions.oneFingerPan}}</li>
+      <li>Allow zooming with the scroll button: {{interactionOptions.scrollZoom}}</li>
       <li>
         <label for="geo-json-select">
           Display Journey-Maps GeoJSON data for:
