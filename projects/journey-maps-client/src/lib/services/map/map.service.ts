@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Geometry, Point} from 'geojson';
-import {FlyToOptions, LngLat, LngLatBoundsLike, LngLatLike, Map as MaplibreMap} from 'maplibre-gl';
+import {FlyToOptions, LngLat, LngLatLike, Map as MaplibreMap} from 'maplibre-gl';
 
 @Injectable({providedIn: 'root'})
 export class MapService {
@@ -13,7 +13,13 @@ export class MapService {
   constructor() {
   }
 
-  moveMap(map: MaplibreMap, center: LngLatLike, zoomLevel: number, boundingBox: LngLatBoundsLike, boundingBoxPadding: number): void {
+  moveMap(
+    map: maplibregl.Map,
+    boundingBox?: maplibregl.LngLatBoundsLike,
+    boundingBoxPadding?: number,
+    zoomLevel?: number,
+    center?: maplibregl.LngLatLike
+  ): void {
     if (zoomLevel || center) {
       this.centerMap(map, center, zoomLevel);
     } else if (boundingBox) {

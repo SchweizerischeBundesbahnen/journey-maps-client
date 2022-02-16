@@ -7,7 +7,8 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
-  ControlOptions,
+  InteractionOptions,
+  UIOptions,
   JourneyMapsRoutingOptions,
   StyleOptions,
   ViewportOptions,
@@ -40,19 +41,20 @@ export class AppComponent implements OnInit, OnDestroy {
   private destroyed = new Subject<void>();
 
   apiKey: string = null;
-  controlOptions: ControlOptions = {
-    levelSwitch: true,
-    zoomControls: true,
+  interactionOptions: InteractionOptions = {
     oneFingerPan: true,
     scrollZoom: true,
+  };
+  uiOptions: UIOptions = {
+    levelSwitch: true,
+    zoomControls: true,
     basemapSwitch: true,
+    homeButton: true,
   };
   selectedMarkerId: string;
   visibleLevels$ = new BehaviorSubject<number[]>([]);
   selectedLevel = 0;
-  viewportOptions: ViewportOptions = {
-    boundingBox: [[6.02260949059, 45.7769477403], [10.4427014502, 47.8308275417]],
-  };
+  viewportOptions: ViewportOptions = {};
   styleOptions: StyleOptions = {};
 
   journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];

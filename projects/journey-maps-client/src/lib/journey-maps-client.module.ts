@@ -10,6 +10,7 @@ import {TeaserComponent} from './components/teaser/teaser.component';
 import {ZoomControlsComponent} from './components/zoom-controls/zoom-controls.component';
 import {LeitPoiComponent} from './components/leit-poi/leit-poi.component';
 import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch.component';
+import {HomeButtonComponent} from './components/home-button/home-button.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch
     BasemapSwitchComponent,
     PopupComponent,
     MarkerDetailsComponent,
-    LeitPoiComponent
+    LeitPoiComponent,
+    HomeButtonComponent
   ],
   imports: [
     CommonModule,
