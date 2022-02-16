@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {MapService} from './map.service';
 import {MapRouteService} from './map-route.service';
 import {Map as MaplibreMap} from 'maplibre-gl';
+import {ROUTE_ID_PROPERTY_NAME} from './events/route-utils';
 
 @Injectable({providedIn: 'root'})
 export class MapRoutesService {
@@ -22,6 +23,7 @@ export class MapRoutesService {
   }
 
   updateRoutes(map: MaplibreMap, routes: GeoJSON.FeatureCollection[] = [this.mapService.emptyFeatureCollection]): void {
+    routes.forEach((featureCollection, idx) => featureCollection.features.forEach(f => f.properties[ROUTE_ID_PROPERTY_NAME] = ++idx));
     this.mapRouteService.updateRoute(map, {
       type: 'FeatureCollection',
       // With ES2019 we can replace this with routes.flatMap(({features}) => features)
