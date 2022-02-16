@@ -17,11 +17,11 @@
   }
 
   .map-control-button-wrapper {
-    border-radius: 24px;
-    line-height: 36px;
-    padding: 6px;
+    border-radius: 24px; // 24 -> 16
+    line-height: 24px; // 36 -> 24
+    padding: 3px; // 6 -> 4
     pointer-events: none;
-    width: 48px;
+    width: 32px; // 48 -> 32
 
     &:not([data-disabled='true']):active {
       @include _map-control-button-wrapper-active
@@ -48,7 +48,7 @@
   .map-control-button {
     background-color: c.$darkgray;
     cursor: pointer;
-    height: 36px;
+    height: 24px; // 36 -> 24
     // CHECKME ses: This somehow doesn't work in the testapp
     //  when importing the module from src.
     // mask: url("#{$icon}") center no-repeat;

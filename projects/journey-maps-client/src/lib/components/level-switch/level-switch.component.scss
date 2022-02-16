@@ -17,7 +17,7 @@ button {
 
 .level-switch-button-content {
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 6px; // 8 -> 6
   text-align: center;
   vertical-align: middle;
 }
@@ -30,25 +30,25 @@ button {
 }
 
 .level-switch-button {
-  padding: 6px;
-  width: 48px;
-  line-height: 35px;
+  padding: 3px; // 6 -> 3
+  width: 32px; // 48 -> 32
+  line-height: 24px; // 35 -> 24
   border-bottom: 1px solid #e5e5e5;
 }
 
 .level-switch-button:first-child {
-  border-radius: 24px 24px 0 0;
+  border-radius: 16px 16px 0 0; // 24 -> 16
 
   .level-switch-button-content {
-    border-radius: 24px 24px 8px 8px;
+    border-radius: 16px 16px 6px 6px; // 8 -> 6
   }
 }
 
 .level-switch-button:last-child {
-  border-radius: 0 0 24px 24px;
+  border-radius: 0 0 16px 16px; // 24 -> 16
   border-bottom-width: 0;
 
   .level-switch-button-content {
-    border-radius: 8px 8px 24px 24px;
+    border-radius: 6px 6px 16px 16px; // 8 -> 6
   }
 }
