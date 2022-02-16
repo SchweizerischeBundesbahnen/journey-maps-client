@@ -4,8 +4,8 @@
             <button
               (click)="switchLevel(level)"
               [ngClass]="{
-                'level-switch-button-content-selected':level === selectedLevel,
-                'level-switch-button-content':level !== selectedLevel
+                'map-control-button-selected':level === selectedLevel,
+                'map-control-button':level !== selectedLevel
               }"
               [attr.aria-label]="getLevelLabel(level)"
             >{{level}}</button>
