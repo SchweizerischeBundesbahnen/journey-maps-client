@@ -35,7 +35,6 @@ import {LevelSwitchService} from './components/level-switch/services/level-switc
 import {
   ControlOptions,
   FeatureData,
-  FeatureDataType,
   FeaturesClickEventData,
   FeaturesHoverChangeEventData,
   JourneyMapsRoutingOptions,
@@ -46,11 +45,6 @@ import {
   ZoomLevels
 } from './journey-maps-client.interfaces';
 import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
-import {MapCursorStyleEvent} from './services/map/events/map-cursor-style-event';
-import {FeaturesClickEvent} from './services/map/events/features-click-event';
-import {FeaturesHoverEvent} from './services/map/events/features-hover-event';
-import {MapStationService} from './services/map/map-station.service';
-import {FeatureSelectionHandler} from './services/map/events/feature-selection-handler';
 
 const SATELLITE_MAP_MAX_ZOOM = 19.2;
 const SATELLITE_MAP_TILE_SIZE = 256;
@@ -310,10 +304,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private satelliteLayerId = 'esriWorldImageryLayer';
   private satelliteImageSourceName = 'esriWorldImagerySource';
 
-  private watchOnLayers = new Map<string, FeatureDataType>();
-  private mapCursorStyleEvent: MapCursorStyleEvent;
-  private featureSelectionHandler: FeatureSelectionHandler;
-
   /** @internal */
   constructor(private mapInitService: MapInitService,
               private mapConfigService: MapConfigService,
@@ -325,7 +315,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapLeitPoiService: MapLeitPoiService,
               private levelSwitchService: LevelSwitchService,
               private mapLayerFilterService: MapLayerFilterService,
-              private mapStationService: MapStationService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService,
               private host: ElementRef) {
@@ -472,64 +461,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       console.error('journeyMapsRoutingOption: Use either transfer or journey or routes. It does not work correctly when more than one of these properties is set.');
     }
 
-    if (changes.listenerOptions) {
-      this.executeWhenMapStyleLoaded(() => {
-        this.watchOnLayers.clear();
-
-        if (this.listenerOptions.watchMarkers) {
-          this.mapMarkerService.allMarkerAndClusterLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.MARKER));
-        }
-        if (this.listenerOptions.watchRoutes) {
-          this.mapRoutesService.allRouteLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.ROUTE));
-        }
-        if (this.listenerOptions.watchStations) {
-          this.watchOnLayers.set(MapStationService.STATION_LAYER, FeatureDataType.STATION);
-          this.mapStationService.registerStationUpdater(this.map);
-        } else {
-          this.mapStationService.deregisterStationUpdater(this.map);
-        }
-
-        this.mapCursorStyleEvent?.complete();
-        this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, [...this.watchOnLayers.keys()]);
-        this.featureSelectionHandler = new FeatureSelectionHandler(this.map, [...this.watchOnLayers.keys()]);
-
-        if (changes.listenerOptions.isFirstChange()) {
-          const featuresClickEvent = new FeaturesClickEvent(this.map, this.watchOnLayers);
-          featuresClickEvent
-            .pipe(takeUntil(this.destroyed))
-            .subscribe(
-              eventData => {
-                this.featureSelectionHandler.toggleSelection(eventData);
-                this.featuresClick.next(eventData);
-                this.handleMarkerOrClusterClick(eventData.features);
-              },
-              () => {
-              },
-              () => featuresClickEvent.complete()
-            );
-
-          const featuresHoverEvent = new FeaturesHoverEvent(this.map, this.watchOnLayers);
-          featuresHoverEvent
-            .pipe(takeUntil(this.destroyed))
-            .subscribe(
-              eventData => this.featuresHoverChange.next(eventData),
-              () => {
-              },
-              () => featuresHoverEvent.complete()
-            );
-
-          featuresHoverEvent
-            .beforeHoverEvent
-            .pipe(takeUntil(this.destroyed))
-            .subscribe(
-              eventData => this.featuresBeforeHoverChange.next(eventData),
-              () => {
-              }
-            );
-        }
-      });
-    }
-
     if (!this.isStyleLoaded) {
       return;
     }
@@ -606,7 +537,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.destroyed.next();
     this.destroyed.complete();
     this.mapLeitPoiService.destroy();
-    this.mapCursorStyleEvent.complete();
   }
 
   private setupSubjects(): void {
@@ -753,7 +683,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  private handleMarkerOrClusterClick(features: FeatureData[]) {
+  handleMarkerOrClusterClick(features: FeatureData[]) {
     const featureEventDataList = features.filter(feature =>
       this.mapMarkerService.allMarkerAndClusterLayers.includes(feature.layer.id));
 

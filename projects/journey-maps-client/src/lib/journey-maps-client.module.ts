@@ -10,6 +10,7 @@ import {TeaserComponent} from './components/marker-details/components/teaser/tea
 import {ZoomControlsComponent} from './components/zoom-controls/zoom-controls.component';
 import {LeitPoiComponent} from './components/leit-poi/leit-poi.component';
 import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch.component';
+import {FeatureEventListenerComponent} from './components/feature-event-listener/feature-event-listener.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch
     BasemapSwitchComponent,
     PopupComponent,
     MarkerDetailsComponent,
-    LeitPoiComponent
+    LeitPoiComponent,
+    FeatureEventListenerComponent
   ],
   imports: [
     CommonModule,
