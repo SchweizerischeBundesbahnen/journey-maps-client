@@ -1,5 +1,7 @@
 // CHECKME ses: Try to combine with map-control-icon mixins.
 
+@use 'node_modules/@sbb-esta/angular/styles' as esta;
+
 button {
   display: block;
   width: 100%;
@@ -25,8 +27,10 @@ button {
   text-align: center;
   vertical-align: middle;
 
-  @at-root .level-switch-buttons-container.small-buttons #{&} {
-    border-radius: 6px;
+  @include esta.mq($from: tabletPortrait) {
+    @at-root .level-switch-buttons-container.small-buttons #{&} {
+      border-radius: 6px;
+    }
   }
 }
 
@@ -43,25 +47,31 @@ button {
   line-height: 35px;
   border-bottom: 1px solid #e5e5e5;
 
-  @at-root .level-switch-buttons-container.small-buttons #{&} {
-    padding: 3px;
-    width: 32px;
-    line-height: 26px;
+  @include esta.mq($from: tabletPortrait) {
+    @at-root .level-switch-buttons-container.small-buttons #{&} {
+      padding: 3px;
+      width: 32px;
+      line-height: 26px;
+    }
   }
 }
 
 .level-switch-button:first-child {
   border-radius: 24px 24px 0 0;
 
-  @at-root .level-switch-buttons-container.small-buttons #{&} {
-    border-radius: 16px 16px 0 0;
+  @include esta.mq($from: tabletPortrait) {
+    @at-root .level-switch-buttons-container.small-buttons #{&} {
+      border-radius: 16px 16px 0 0;
+    }
   }
 
   .level-switch-button-content {
     border-radius: 24px 24px 8px 8px;
 
-    @at-root .level-switch-buttons-container.small-buttons #{&} {
-      border-radius: 16px 16px 6px 6px;
+    @include esta.mq($from: tabletPortrait) {
+      @at-root .level-switch-buttons-container.small-buttons #{&} {
+        border-radius: 16px 16px 6px 6px;
+      }
     }
   }
 }
@@ -70,15 +80,19 @@ button {
   border-radius: 0 0 24px 24px;
   border-bottom-width: 0;
 
-  @at-root .level-switch-buttons-container.small-buttons #{&} {
-    border-radius: 0 0 16px 16px;
+  @include esta.mq($from: tabletPortrait) {
+    @at-root .level-switch-buttons-container.small-buttons #{&} {
+      border-radius: 0 0 16px 16px;
+    }
   }
 
   .level-switch-button-content {
     border-radius: 8px 8px 24px 24px;
 
-    @at-root .level-switch-buttons-container.small-buttons #{&} {
-      border-radius: 6px 6px 16px 16px;
+    @include esta.mq($from: tabletPortrait) {
+      @at-root .level-switch-buttons-container.small-buttons #{&} {
+        border-radius: 6px 6px 16px 16px;
+      }
     }
   }
 }

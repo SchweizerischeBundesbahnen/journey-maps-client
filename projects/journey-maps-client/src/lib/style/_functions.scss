@@ -1,4 +1,5 @@
 @use "colors" as c;
+@use 'node_modules/@sbb-esta/angular/styles' as esta;
 
 @mixin map-control-icon {
   button {
@@ -15,8 +16,10 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
     border-radius: 24px;
 
-    &.small-buttons {
-      margin: 6px;
+    @include esta.mq($from: tabletPortrait) {
+      &.small-buttons {
+        margin: 6px;
+      }
     }
   }
 
@@ -27,11 +30,13 @@
     pointer-events: none;
     width: 48px;
 
-    @at-root .map-control-container.small-buttons #{&} {
-      border-radius: 16px;
-      line-height: 26px;
-      padding: 3px;
-      width: 32px;
+    @include esta.mq($from: tabletPortrait) {
+      @at-root .map-control-container.small-buttons #{&} {
+        border-radius: 16px;
+        line-height: 26px;
+        padding: 3px;
+        width: 32px;
+      }
     }
 
     &:not([data-disabled='true']):active {
@@ -81,8 +86,10 @@
       background-color: c.$lightgray;
     }
 
-    @at-root .map-control-container.small-buttons #{&}{
-      height: 26px;
+    @include esta.mq($from: tabletPortrait) {
+      @at-root .map-control-container.small-buttons #{&}{
+        height: 26px;
+      }
     }
   }
 }

@@ -1,5 +1,6 @@
 @use "./../../style/functions" as f;
 @use "./../../style/colors" as c;
+@use 'node_modules/@sbb-esta/angular/styles' as esta;
 
 @include f.map-control-icon;
 
@@ -7,8 +8,10 @@
   position: relative;
   border-radius: 24px 24px 12px 12px;
 
-  @at-root .map-control-container.small-buttons #{&} {
-    border-radius: 16px 16px 8px 8px;
+  @include esta.mq($from: tabletPortrait) {
+    @at-root .map-control-container.small-buttons #{&} {
+      border-radius: 16px 16px 8px 8px;
+    }
   }
 
   @include f.map-control-icon-button;
@@ -38,7 +41,9 @@
     mask: url("./../../assets/minus-small.svg") center no-repeat;
   }
 
-  @at-root .map-control-container.small-buttons #{&} {
-    border-radius: 8px 8px 16px 16px;
+  @include esta.mq($from: tabletPortrait) {
+    @at-root .map-control-container.small-buttons #{&} {
+      border-radius: 8px 8px 16px 16px;
+    }
   }
 }
