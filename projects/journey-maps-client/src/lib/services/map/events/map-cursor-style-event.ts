@@ -9,6 +9,8 @@ export class MapCursorStyleEvent {
 
   private subject = new Subject<boolean>();
   private subscription: Subscription;
+  private enterListener: () => void;
+  private leaveListener: () => void;
 
   constructor(private mapInstance: MaplibreMap, private layerIds: string[]) {
     if (!this.layerIds.length) {
@@ -19,21 +21,24 @@ export class MapCursorStyleEvent {
       debounceTime(MAP_CURSOR_STYLE_EVENT_DEBOUNCE_TIME)
     ).subscribe(hover => this.setCursorStyle(hover));
 
-    this.attachEvent();
+    this.enterListener = () => this.subject.next(true);
+    this.leaveListener = () => this.subject.next(false);
+
+    this.layerIds.forEach(layerId => {
+      this.mapInstance.on('mouseenter', layerId, this.enterListener);
+      this.mapInstance.on('mouseleave', layerId, this.leaveListener);
+    });
   }
 
   complete(): void {
     this.subject.complete();
     this.subscription?.unsubscribe();
-  }
 
-  private attachEvent() {
     this.layerIds.forEach(layerId => {
-      this.mapInstance.on('mouseenter', layerId, () => this.subject.next(true));
-      this.mapInstance.on('mouseleave', layerId, () => this.subject.next(false));
+      this.mapInstance.off('mouseenter', layerId, this.enterListener);
+      this.mapInstance.off('mouseleave', layerId, this.leaveListener);
     });
   }
-
   private setCursorStyle(hover: boolean): void {
     this.mapInstance.getCanvas().style.cursor = hover ? 'pointer' : '';
   }

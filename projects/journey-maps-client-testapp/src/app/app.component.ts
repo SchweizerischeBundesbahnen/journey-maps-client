@@ -240,4 +240,8 @@ export class AppComponent implements OnInit, OnDestroy {
   logBefore(data: any) {
     console.debug('before:', data.features.map(f => f.state.hover));
   }
+
+  updateListenerOptions(): void {
+    this.listenerOptions = {...this.listenerOptions};
+  }
 }

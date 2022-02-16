@@ -309,6 +309,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private satelliteLayerId = 'esriWorldImageryLayer';
   private satelliteImageSourceName = 'esriWorldImagerySource';
 
+  private watchOnLayers = new Map<string, FeatureDataType>();
   private mapCursorStyleEvent: MapCursorStyleEvent;
 
   /** @internal */
@@ -469,26 +470,28 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       console.error('journeyMapsRoutingOption: Use either transfer or journey or routes. It does not work correctly when more than one of these properties is set.');
     }
 
-    if (changes.listenerOptions?.firstChange || !this.listenerOptions) {
-      this.listenerOptions = this.listenerOptions ?? {watchMarkers: true};
-
+    if (changes.listenerOptions) {
       this.executeWhenMapStyleLoaded(() => {
-        const watchOnLayers = new Map<string, FeatureDataType>();
+        this.watchOnLayers.clear();
+
         if (this.listenerOptions.watchMarkers) {
-          this.mapMarkerService.allMarkerAndClusterLayers.forEach(id => watchOnLayers.set(id, FeatureDataType.MARKER));
+          this.mapMarkerService.allMarkerAndClusterLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.MARKER));
         }
         if (this.listenerOptions.watchRoutes) {
-          this.mapRoutesService.allRouteLayers.forEach(id => watchOnLayers.set(id, FeatureDataType.ROUTE));
+          this.mapRoutesService.allRouteLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.ROUTE));
         }
         if (this.listenerOptions.watchStations) {
-          watchOnLayers.set(MapStationService.STATION_LAYER, FeatureDataType.STATION);
+          this.watchOnLayers.set(MapStationService.STATION_LAYER, FeatureDataType.STATION);
           this.mapStationService.registerStationUpdater(this.map);
+        } else {
+          this.mapStationService.deregisterStationUpdater(this.map);
         }
 
-        if (watchOnLayers.size) {
-          this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, [...watchOnLayers.keys()]);
+        this.mapCursorStyleEvent?.complete();
+        this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, [...this.watchOnLayers.keys()]);
 
-          const featuresClickEvent = new FeaturesClickEvent(this.map, watchOnLayers);
+        if (changes.listenerOptions.isFirstChange()) {
+          const featuresClickEvent = new FeaturesClickEvent(this.map, this.watchOnLayers);
           featuresClickEvent
             .pipe(takeUntil(this.destroyed))
             .subscribe(
@@ -501,7 +504,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               () => featuresClickEvent.complete()
             );
 
-          const featuresHoverEvent = new FeaturesHoverEvent(this.map, watchOnLayers);
+          const featuresHoverEvent = new FeaturesHoverEvent(this.map, this.watchOnLayers);
           featuresHoverEvent
             .pipe(takeUntil(this.destroyed))
             .subscribe(
@@ -521,8 +524,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
             );
         }
       });
-    } else if (changes.listenerOptions) {
-      console.warn('listenerOptions must be set initially and cannot be changed');
     }
 
     if (!this.isStyleLoaded) {

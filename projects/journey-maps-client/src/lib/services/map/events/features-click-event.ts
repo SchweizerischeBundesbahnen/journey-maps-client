@@ -13,9 +13,6 @@ export class FeaturesClickEvent extends ReplaySubject<FeaturesClickEventData> {
 
   constructor(private mapInstance: MaplibreMap, private layers: Map<string, FeatureDataType>) {
     super(REPEAT_EVENTS);
-    if (!this.layers.size) {
-      return;
-    }
     this.attachEvent();
   }
 

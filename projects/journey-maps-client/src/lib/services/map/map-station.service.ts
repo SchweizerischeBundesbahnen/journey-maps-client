@@ -8,13 +8,25 @@ export class MapStationService {
   static readonly STATION_SOURCE = 'rokas-station-hover-source';
 
   private stationLayers: string[];
+  private listener: () => void;
 
   registerStationUpdater(map: MaplibreMap): void {
     this.stationLayers = this.stationLayers ?? this.extractStationLayers(map);
-    map.once('idle', () => this.updateStationSource(map));
-    map.on('moveend', () =>
-      map.once('idle', () => this.updateStationSource(map))
-    );
+
+    if (map.loaded()) {
+      this.updateStationSource(map);
+    } else {
+      map.once('idle', () => this.updateStationSource(map));
+    }
+
+    this.listener = () => map.once('idle', () => this.updateStationSource(map));
+    map.on('moveend', this.listener);
+  }
+
+  deregisterStationUpdater(map: MaplibreMap): void {
+    if (this.listener) {
+      map.off('moveend', this.listener);
+    }
   }
 
   private updateStationSource(map: MaplibreMap): void {
