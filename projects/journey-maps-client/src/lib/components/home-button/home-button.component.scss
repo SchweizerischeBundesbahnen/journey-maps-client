@@ -1,6 +1,7 @@
 @use "./../../style/functions" as f;
 
 @include f.map-control-button;
+@include f.map-control-container;
 @include f.map-control-icon;
 @include f.map-control-icon-button();
 
