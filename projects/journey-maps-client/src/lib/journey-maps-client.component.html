@@ -4,6 +4,7 @@
   [map]="mapReady | async"
   (featuresHoverChange)="featuresHoverChange.next($event)"
   (featuresClick)="featuresClick.next($event); handleMarkerOrClusterClick($event.features);"
+  [(featureSelections)]="selectedFeatures"
 ></rokas-feature-event-listener>
 
 <div class="container" lang="{{language}}">

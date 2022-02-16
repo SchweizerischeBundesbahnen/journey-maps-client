@@ -43,7 +43,7 @@ import {
   MarkerOptions,
   StyleOptions,
   ViewportOptions,
-  ZoomLevels,
+  ZoomLevels, FeatureSelection,
 } from './journey-maps-client.interfaces';
 import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
 
@@ -260,6 +260,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   /** Which (floor-)level should be shown */
   @Input() selectedLevel: number;
+  /** Which features should be selected. */
+  @Input() selectedFeatures!: FeatureSelection[];
 
   @Input() listenerOptions: ListenerOptions;
 
@@ -270,9 +272,13 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Output() selectedMarkerIdChange = new EventEmitter<string>();
   /**
-   * This event is emitted whenever the selected (floor-) level changes
+   * This event is emitted whenever the selected (floor-) level changes.
    */
   @Output() selectedLevelChange = new EventEmitter<number>();
+  /**
+   * This event is emitted whenever the selected features changes.
+   */
+  @Output() selectedFeaturesChange = new EventEmitter<FeatureSelection[]>();
 
   // **************************************** OTHER OUTPUTS *****************************************
 
@@ -497,6 +503,10 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
     if (changes.selectedLevel?.currentValue !== undefined) {
       this.levelSwitchService.switchLevel(this.selectedLevel);
+    }
+
+    if (changes.selectedFeatures?.currentValue !== undefined) {
+      console.log(this.selectedFeatures);
     }
   }
 

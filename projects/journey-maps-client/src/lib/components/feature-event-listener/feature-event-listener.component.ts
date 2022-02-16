@@ -3,7 +3,7 @@ import {
   FeatureData,
   FeatureDataType,
   FeaturesClickEventData,
-  FeaturesHoverChangeEventData,
+ FeatureSelection, FeaturesHoverChangeEventData,
   ListenerOptions
 } from '../../journey-maps-client.interfaces';
 import {MapCursorStyleEvent} from '../../services/map/events/map-cursor-style-event';
@@ -25,6 +25,9 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
 
   @Input() listenerOptions: ListenerOptions;
   @Input() map: MapLibreMap;
+
+  @Input() featureSelections!: FeatureSelection[];
+  @Output() featureSelectionsChange = new EventEmitter<FeatureSelection[]>();
 
   @Output() featuresClick = new EventEmitter<FeaturesClickEventData>();
   @Output() featuresHoverChange = new EventEmitter<FeaturesHoverChangeEventData>();
@@ -75,7 +78,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
 
       this.mapCursorStyleEvent?.complete();
       this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, [...this.watchOnLayers.keys()]);
-      this.featureSelectionHandler = new FeatureSelectionHandler(this.map, [...this.watchOnLayers.keys()]);
+      this.featureSelectionHandler = new FeatureSelectionHandler(this.map, this.watchOnLayers);
 
       if (!this.featuresClickEvent) {
         this.featuresClickEvent = new FeaturesClickEvent(this.map, this.watchOnLayers);
@@ -90,11 +93,16 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
           .pipe(takeUntil(this.destroyed))
           .subscribe(data => this.featureHovered(data));
       }
+
+      if (changes.featureSelections?.currentValue !== undefined) {
+        this.featureSelectionHandler.selectFeatures(this.featureSelections);
+      }
     }
   }
 
   private featureClicked(data: FeaturesClickEventData) {
     this.featureSelectionHandler.toggleSelection(data);
+    this.featureSelectionsChange.next(this.featureSelectionHandler.findSelectedFeatures());
     this.featuresClick.next(data);
 
     const topMostFeature = data.features[0];
