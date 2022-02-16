@@ -7,8 +7,8 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
-  NonButtonControlOptions,
-  ButtonControlOptions,
+  InteractionOptions,
+  UIOptions,
   JourneyMapsRoutingOptions,
   StyleOptions,
   ViewportOptions,
@@ -41,11 +41,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private destroyed = new Subject<void>();
 
   apiKey: string = null;
-  nonButtonControlOptions: NonButtonControlOptions = {
+  interactionOptions: InteractionOptions = {
     oneFingerPan: true,
     scrollZoom: true,
   };
-  buttonControlOptions: ButtonControlOptions = {
+  uiOptions: UIOptions = {
     showSmallButtons: false,
     levelSwitch: true,
     zoomControls: true,

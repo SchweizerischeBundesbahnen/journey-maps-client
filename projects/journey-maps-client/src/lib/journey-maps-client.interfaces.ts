@@ -13,7 +13,7 @@ export interface StyleOptions {
   mode?: StyleMode;
 }
 
-export interface NonButtonControlOptions {
+export interface InteractionOptions {
   /** Whether the map should allow panning with one finger or not
    * If set to false, the users get a message-overlay if they try to pan with one finger.
    */
@@ -22,7 +22,7 @@ export interface NonButtonControlOptions {
   scrollZoom?: boolean;
 }
 
-export interface ButtonControlOptions {
+export interface UIOptions {
   /** Whether the map should show large (default) or small control buttons. */
   showSmallButtons?: boolean;
   /** Whether the map should show the zoom level control or not. */

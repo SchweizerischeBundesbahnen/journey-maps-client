@@ -33,8 +33,8 @@ import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
 import {
-  NonButtonControlOptions,
-  ButtonControlOptions,
+  InteractionOptions,
+  UIOptions,
   JourneyMapsRoutingOptions,
   MarkerOptions,
   StyleOptions,
@@ -113,7 +113,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   // **************************************** CONTROL OPTIONS *****************************************/
 
-  private defaultNonButtonControlOptions: NonButtonControlOptions = {
+  private defaultInteractionOptions: InteractionOptions = {
     /** Mobile-friendly default: you get a message-overlay if you try to pan with one finger. */
     oneFingerPan: false,
     scrollZoom: true,
@@ -123,22 +123,22 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * Settings to control the movement of the map by means other than via the buttons on the map
    */
   @Input()
-  get nonButtonControlOptions(): NonButtonControlOptions {
-    return this._nonButtonControlOptions;
+  get interactionOptions(): InteractionOptions {
+    return this._interactionOptions;
   }
 
-  set nonButtonControlOptions(nonButtonControlOptions: NonButtonControlOptions) {
-    this._nonButtonControlOptions = {
-      ...this.defaultNonButtonControlOptions,
-      ...nonButtonControlOptions,
+  set interactionOptions(interactionOptions: InteractionOptions) {
+    this._interactionOptions = {
+      ...this.defaultInteractionOptions,
+      ...interactionOptions,
     };
   }
 
-  private _nonButtonControlOptions: NonButtonControlOptions = this.defaultNonButtonControlOptions;
+  private _interactionOptions: InteractionOptions = this.defaultInteractionOptions;
 
   // **************************************** BUTTON OPTIONS *****************************************/
 
-  private defaultButtonControlOptions: ButtonControlOptions = {
+  private defaultUIOptions: UIOptions = {
     showSmallButtons: false,
     levelSwitch: true,
     zoomControls: true,
@@ -150,18 +150,18 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    * Settings to control which control buttons are shown on the map
    */
   @Input()
-  get buttonControlOptions(): ButtonControlOptions {
-    return this._buttonControlOptions;
+  get uiOptions(): UIOptions {
+    return this._uiOptions;
   }
 
-  set buttonControlOptions(buttonControlOptions: ButtonControlOptions) {
-    this._buttonControlOptions = {
-      ...this.defaultButtonControlOptions,
-      ...buttonControlOptions,
+  set uiOptions(uiOptions: UIOptions) {
+    this._uiOptions = {
+      ...this.defaultUIOptions,
+      ...uiOptions,
     };
   }
 
-  private _buttonControlOptions: ButtonControlOptions = this.defaultButtonControlOptions;
+  private _uiOptions: UIOptions = this.defaultUIOptions;
 
   // **************************************** VIEWPORT OPTIONS *****************************************/
 
@@ -334,7 +334,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   onTouchStart(event: TouchEvent): void {
     // https://docs.mapbox.com/mapbox-gl-js/example/toggle-interaction-handlers/
-    if (!this.nonButtonControlOptions.oneFingerPan) {
+    if (!this.interactionOptions.oneFingerPan) {
       this.map.dragPan.disable();
     }
     this.touchEventCollector.next(event);
@@ -491,12 +491,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       this.mapElementRef.nativeElement,
       this.i18n.language,
       styleUrl,
-      this.nonButtonControlOptions.scrollZoom,
+      this.interactionOptions.scrollZoom,
       this.viewportOptions.zoomLevel,
       this.viewportOptions.mapCenter,
       this.viewportOptions.boundingBox ?? this.getMarkersBounds,
       this.viewportOptions.boundingBox ? this.viewportOptions.boundingBoxPadding : Constants.MARKER_BOUNDS_PADDING,
-      this.nonButtonControlOptions.oneFingerPan,
+      this.interactionOptions.oneFingerPan,
     ).subscribe(
       m => {
         this.map = m;
@@ -518,7 +518,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       const containsTwoFingerTouch = touchEvents.some(touchEvent => touchEvent.touches.length === 2);
       const containsTouchEnd = touchEvents.some(touchEvent => touchEvent.type === 'touchend');
 
-      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.nonButtonControlOptions.oneFingerPan) {
+      if (!(containsTwoFingerTouch || containsTouchEnd) && !this.interactionOptions.oneFingerPan) {
         this.touchOverlayStyleClass = 'is_visible';
         this.cd.detectChanges();
       }

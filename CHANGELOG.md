@@ -8,7 +8,7 @@
 * The option to show the map control buttons in a smaller size.
 
 ### Changed
-* Breaking Change: The input field object ControlOptions has been split into ButtonControlOptions and NonButtonControlOptions
+* Breaking Change: The input field object ControlOptions has been split into UIOptions and InteractionOptions
 
 ## [2.8.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.7.0&sourceBranch=refs%2Ftags%2F2.8.0&targetRepoId=46287) - ...
 
