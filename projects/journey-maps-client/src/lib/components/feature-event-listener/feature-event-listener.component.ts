@@ -3,7 +3,8 @@ import {
   FeatureData,
   FeatureDataType,
   FeaturesClickEventData,
- FeatureSelection, FeaturesHoverChangeEventData,
+  FeatureSelection,
+  FeaturesHoverChangeEventData,
   ListenerOptions
 } from '../../journey-maps-client.interfaces';
 import {MapCursorStyleEvent} from '../../services/map/events/map-cursor-style-event';
@@ -32,10 +33,10 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
   @Output() featuresClick = new EventEmitter<FeaturesClickEventData>();
   @Output() featuresHoverChange = new EventEmitter<FeaturesHoverChangeEventData>();
 
-  // CONTINUE ROKAS-502: Add popup on hover
-  popupVisible = false;
-  popupFeature: FeatureData;
-  popupPosition: LngLatLike;
+  // CONTINUE ROKAS-502: Add overlay on hover
+  overlayVisible = false;
+  overlayFeature: FeatureData;
+  overlayPosition: LngLatLike;
 
   private destroyed = new Subject<void>();
   private watchOnLayers = new Map<string, FeatureDataType>();
@@ -63,13 +64,13 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     if (this.listenerOptions && this.map) {
       this.watchOnLayers.clear();
 
-      if (this.listenerOptions.MARKER.watch) {
+      if (this.listenerOptions.MARKER?.watch) {
         this.mapMarkerService.allMarkerAndClusterLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.MARKER));
       }
-      if (this.listenerOptions.ROUTE.watch) {
+      if (this.listenerOptions.ROUTE?.watch) {
         this.mapRoutesService.allRouteLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.ROUTE));
       }
-      if (this.listenerOptions.STATION.watch) {
+      if (this.listenerOptions.STATION?.watch) {
         this.watchOnLayers.set(MapStationService.STATION_LAYER, FeatureDataType.STATION);
         this.mapStationService.registerStationUpdater(this.map);
       } else {
@@ -100,6 +101,14 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     }
   }
 
+  overlayOptions(): any {
+    if (this.listenerOptions && this.overlayFeature) {
+      return this.listenerOptions[this.overlayFeature.featureDataType] ?? {};
+    }
+
+    return {};
+  }
+
   private featureClicked(data: FeaturesClickEventData) {
     this.featureSelectionHandler.toggleSelection(data);
     this.featureSelectionsChange.next(this.featureSelectionHandler.findSelectedFeatures());
@@ -108,15 +117,15 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     const topMostFeature = data.features[0];
     const template = this.listenerOptions[topMostFeature.featureDataType]?.clickTemplate;
     if (template) {
-      this.popupVisible = true;
-      this.popupFeature = topMostFeature;
+      this.overlayVisible = true;
+      this.overlayFeature = topMostFeature;
       if (topMostFeature.geometry.type === 'Point') {
-        this.popupPosition = topMostFeature.geometry.coordinates as LngLatLike;
+        this.overlayPosition = topMostFeature.geometry.coordinates as LngLatLike;
       } else {
-        this.popupPosition = data.clickLngLat;
+        this.overlayPosition = data.clickLngLat;
       }
     } else {
-      this.popupVisible = false;
+      this.overlayVisible = false;
     }
   }
 

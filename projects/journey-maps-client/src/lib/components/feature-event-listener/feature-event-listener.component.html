@@ -1,9 +1,21 @@
 <rokas-popup
-  [rendered]="popupVisible"
+  [rendered]="overlayVisible"
   [map]="map"
-  [template]="listenerOptions[popupFeature?.featureDataType]?.clickTemplate"
-  [templateContext]="popupFeature"
-  [position]="popupPosition"
+  [template]="overlayOptions().clickTemplate"
+  [templateContext]="overlayFeature"
+  [position]="overlayPosition"
+  (closeClicked)="overlayVisible=false"
+  *ngIf="overlayOptions().popup"
 >
 
 </rokas-popup>
+
+<rokas-teaser
+  [rendered]="overlayVisible"
+  [template]="overlayOptions().clickTemplate"
+  [templateContext]="overlayFeature"
+  (closeClicked)="overlayVisible=false"
+  *ngIf="!overlayOptions().popup"
+>
+
+</rokas-teaser>

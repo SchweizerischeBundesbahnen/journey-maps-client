@@ -102,6 +102,7 @@ export interface ZoomLevels {
 export type ListenerOptions = {
   [type in FeatureDataType]?: {
     watch: boolean;
+    popup?: boolean;
     clickTemplate?: TemplateRef<any>;
     hoverTemplate?: TemplateRef<any>;
   };
