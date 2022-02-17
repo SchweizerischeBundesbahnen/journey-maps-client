@@ -41,7 +41,7 @@
 @mixin map-control-icon {
   .map-control-button-wrapper {
     // this makes sure we only show the hover effect when clicking on the button actually has an effect
-    // (when the mouse is hovering over the outer edges of the button)
+    // (i.e. NOT when the mouse is hovering over the outer edges of the button)
     pointer-events: none;
 
     border-radius: 24px;
