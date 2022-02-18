@@ -97,13 +97,18 @@ export interface ZoomLevels {
 
 /**
  * Define for which feature types you want to be notified of events (click, hover)
- * and define templates to display in a popup in case of such an event.
+ * and define templates to display in case of such an event.
  */
 export type ListenerOptions = {
+  /** The feature type for which you want to receive events */
   [type in FeatureDataType]?: {
+    /** True if you want to receive events. Otherwise false. */
     watch: boolean;
+    /** If a template is defined for an event: Should it be displayed in a popup or teaser? */
     popup?: boolean;
+    /** Template to diplay when a feature is clicked */
     clickTemplate?: TemplateRef<any>;
+    /** Template to display when a feature is hovered */
     hoverTemplate?: TemplateRef<any>;
   };
 };
