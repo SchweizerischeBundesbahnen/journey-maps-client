@@ -27,7 +27,6 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
   @Input() listenerOptions: ListenerOptions;
   @Input() map: MapLibreMap;
 
-  @Input() featureSelections!: FeatureSelection[];
   @Output() featureSelectionsChange = new EventEmitter<FeatureSelection[]>();
 
   @Output() featuresClick = new EventEmitter<FeaturesClickEventData>();
@@ -68,7 +67,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
         this.mapMarkerService.allMarkerAndClusterLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.MARKER));
       }
       if (this.listenerOptions.ROUTE?.watch) {
-        this.mapRoutesService.allRouteLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.ROUTE));
+        MapRoutesService.allRouteLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.ROUTE));
       }
       if (this.listenerOptions.STATION?.watch) {
         this.watchOnLayers.set(MapStationService.STATION_LAYER, FeatureDataType.STATION);
@@ -93,10 +92,6 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
         this.featuresHoverEvent
           .pipe(takeUntil(this.destroyed))
           .subscribe(data => this.featureHovered(data));
-      }
-
-      if (changes.featureSelections?.currentValue !== undefined) {
-        this.featureSelectionHandler.selectFeatures(this.featureSelections);
       }
     }
   }

@@ -2,6 +2,7 @@ import {StyleMode} from './model/style-mode.enum';
 import {Marker} from './model/marker';
 import {LngLatBoundsLike, LngLatLike, MapboxGeoJSONFeature} from 'maplibre-gl';
 import {TemplateRef} from '@angular/core';
+import {FeatureCollection} from 'geojson';
 
 export interface StyleOptions {
   /** Overwrite this value if you want to use a style from a different source. */
@@ -74,7 +75,7 @@ export interface JourneyMapsRoutingOptions {
    * Indoor routing is not (yet) supported.
    * Note: journey, transfer and routes cannot be displayed at the same time
    */
-  routes?: GeoJSON.FeatureCollection[];
+  routes?: SelectableFeatureCollection[];
 }
 
 export interface MarkerOptions {
@@ -137,6 +138,11 @@ export interface FeaturesClickEventData {
 
 export type FeatureData = MapboxGeoJSONFeature & {
   featureDataType: FeatureDataType;
+};
+
+export type SelectableFeatureCollection = FeatureCollection & {
+  id?: string;
+  isSelected?: boolean;
 };
 
 export type FeatureSelection = {

@@ -21,7 +21,7 @@
                                  (zoomLevelsChange)="zoomLevels=$event"
                                  (featuresClick)="log($event)"
                                  (featuresHoverChange)="log($event)"
-                                 [(selectedFeatures)]="selectedFeatures"
+                                 (selectedFeaturesChange)="logSelection($event)"
                                  (mapCenterChange)="mapCenterChange.next($event)"
                                  (mapReady)="onMapRecieved($event)"
       >

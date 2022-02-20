@@ -33,17 +33,18 @@ import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
 import {
-  InteractionOptions,
-  UIOptions,
   FeatureData,
   FeaturesClickEventData,
+  FeatureSelection,
   FeaturesHoverChangeEventData,
+  InteractionOptions,
   JourneyMapsRoutingOptions,
   ListenerOptions,
   MarkerOptions,
   StyleOptions,
+  UIOptions,
   ViewportOptions,
-  ZoomLevels, FeatureSelection,
+  ZoomLevels,
 } from './journey-maps-client.interfaces';
 import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
 
@@ -96,9 +97,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   // **************************************** STYLE OPTIONS *****************************************/
 
   private defaultStyleOptions: StyleOptions = {
-    // FIXME: revert
-    url: 'https://maps.style-dev-rokas.geops.io/styles/{styleId}/style.json?key=tu3yoodayei9ohx3Ohze',
-    brightId: 'base_bright_v2_ki_casa',
+    url: 'https://journey-maps-tiles.geocdn.sbb.ch/styles/{styleId}/style.json?api_key={apiKey}',
+    brightId: 'base_bright_v2_ki',
     darkId: 'base_dark_v2_ki',
     mode: StyleMode.BRIGHT,
   };
@@ -260,8 +260,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   /** Which (floor-)level should be shown */
   @Input() selectedLevel: number;
-  /** Which features should be selected. */
-  @Input() selectedFeatures!: FeatureSelection[];
 
   @Input() listenerOptions: ListenerOptions;
 
@@ -503,10 +501,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
     if (changes.selectedLevel?.currentValue !== undefined) {
       this.levelSwitchService.switchLevel(this.selectedLevel);
-    }
-
-    if (changes.selectedFeatures?.currentValue !== undefined) {
-      console.log(this.selectedFeatures);
     }
   }
 

@@ -6,9 +6,6 @@ import {MapEventUtils} from './map-event-utils';
 export class FeatureSelectionHandler {
 
   constructor(private mapInstance: MaplibreMap, private layers: Map<string, FeatureDataType>) {
-    if (!this.layers.size) {
-      return;
-    }
   }
 
   toggleSelection(eventData: FeaturesClickEventData): void {
@@ -27,20 +24,6 @@ export class FeatureSelectionHandler {
         MapEventUtils.setFeatureState(routeMapFeature, this.mapInstance, {selected});
       }
     }
-  }
-
-  selectFeatures(featureSelections: FeatureSelection[]): void {
-    // unselect all
-    const selectedFeatures = this.findSelected();
-    selectedFeatures.forEach(feature => MapEventUtils.setFeatureState(feature, this.mapInstance, {selected: false}));
-
-    // get features by featureSelections
-    const getMapFeatures = this.mapInstance.queryRenderedFeatures(null, {
-      layers: [...this.layers.keys()],
-      filter: ['in', '$id', ...featureSelections.map(f => f.featureId)]
-    });
-    // select features
-    getMapFeatures.forEach(mapFeature => MapEventUtils.setFeatureState(mapFeature, this.mapInstance, {selected: true}));
   }
 
   findSelectedFeatures(): FeatureSelection[] {

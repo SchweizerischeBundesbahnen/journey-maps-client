@@ -1,8 +1,10 @@
 import {FeatureData} from '../../../journey-maps-client.interfaces';
 import {MapEventUtils} from './map-event-utils';
 import {Map as MaplibreMap} from 'maplibre-gl';
+import {MapRoutesService} from '../map-routes.service';
 
 export const ROUTE_ID_PROPERTY_NAME = 'routeId';
+export const SELECTED_PROPERTY_NAME = 'isSelected';
 
 export class RouteUtils {
 
@@ -22,5 +24,15 @@ export class RouteUtils {
       ['!=', '$id', routeFeature.id]
     ];
     return MapEventUtils.queryFeaturesByFilter(mapInstance, routeFeature, filter);
+  }
+
+  // CHECKME ses:
+  //  - Funktioniert nicht mit generalisierten Routen
+  static initSelectedState(mapInstance: MaplibreMap): void {
+    const getMapFeatures = mapInstance.queryRenderedFeatures(null, {
+      layers: MapRoutesService.allRouteLayers,
+      filter: ['==', ['boolean', ['get', SELECTED_PROPERTY_NAME], false], true],
+    });
+    getMapFeatures.forEach(mapFeature => MapEventUtils.setFeatureState(mapFeature, mapInstance, {selected: true}));
   }
 }

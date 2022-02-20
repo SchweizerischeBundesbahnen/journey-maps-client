@@ -7,13 +7,14 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
+  FeatureSelection,
   InteractionOptions,
   JourneyMapsRoutingOptions,
   ListenerOptions,
   StyleOptions,
   UIOptions,
   ViewportOptions,
-  ZoomLevels, FeatureData, FeatureSelection,
+  ZoomLevels,
 } from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
 import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
 
@@ -59,7 +60,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedLevel = 0;
   selectedFeatures: FeatureSelection[] = [];
   viewportOptions: ViewportOptions = {};
-  styleOptions: StyleOptions = {};
+  styleOptions: StyleOptions = {brightId: 'base_bright_v2_ki_casa'};
 
   listenerOptions: ListenerOptions = {
     MARKER: {watch: true},
@@ -249,10 +250,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   log(data: any) {
-    console.debug('new:', data.features.map(f => JSON.stringify(f.state)));
+    console.debug('new:', data.features?.map(f => JSON.stringify(f.state)));
   }
 
   updateListenerOptions(): void {
     this.listenerOptions = {...this.listenerOptions};
+  }
+
+  logSelection(selection: FeatureSelection[]) {
+    console.log(JSON.stringify(selection));
   }
 }
