@@ -3,11 +3,7 @@ import {MapService} from './map.service';
 import {MapRouteService} from './map-route.service';
 import {MapTransferService} from './map-transfer.service';
 import {Map as MaplibreMap} from 'maplibre-gl';
-import {
-  ROUTE_ID_PROPERTY_NAME,
-  SELECTED_PROPERTY_NAME
-} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/events/route-utils';
-
+import {ROUTE_ID_PROPERTY_NAME, SELECTED_PROPERTY_NAME} from './events/route-utils';
 
 @Injectable({
   providedIn: 'root'

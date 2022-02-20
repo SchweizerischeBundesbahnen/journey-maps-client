@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Constants} from '../constants';
 import {GeoJSONSource, Map as MaplibreMap} from 'maplibre-gl';
 import {MapService} from './map.service';
-import {RouteUtils} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/events/route-utils';
+import {RouteUtils} from './events/route-utils';
 
 @Injectable({providedIn: 'root'})
 export class MapRouteService {
