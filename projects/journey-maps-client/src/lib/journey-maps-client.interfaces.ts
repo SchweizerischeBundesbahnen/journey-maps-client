@@ -23,6 +23,8 @@ export interface InteractionOptions {
 }
 
 export interface UIOptions {
+  /** Whether the map should show large (default) or small control buttons. */
+  showSmallButtons?: boolean;
   /** Whether the map should show the zoom level control or not. */
   levelSwitch?: boolean;
   /** Whether the map should show the level switch control or not. */

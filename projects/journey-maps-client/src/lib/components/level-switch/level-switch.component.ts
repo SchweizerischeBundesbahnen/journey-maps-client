@@ -27,6 +27,7 @@ import {takeUntil} from 'rxjs/operators';
 export class LevelSwitchComponent implements OnDestroy {
 
   @Input() map: MaplibreMap;
+  @Input() showSmallButtons: boolean;
 
   private destroyed = new Subject<void>();
 

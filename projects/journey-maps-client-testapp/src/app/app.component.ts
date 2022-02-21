@@ -46,6 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
     scrollZoom: true,
   };
   uiOptions: UIOptions = {
+    showSmallButtons: false,
     levelSwitch: true,
     zoomControls: true,
     basemapSwitch: true,
@@ -202,6 +203,13 @@ export class AppComponent implements OnInit, OnDestroy {
       ...this.markerOptions,
       popup: (event.target as HTMLOptionElement).value === 'true',
     };
+  }
+
+  setShowSmallButtons(event: Event): void {
+    this.uiOptions = {
+      ...this.uiOptions,
+      showSmallButtons: (event.target as HTMLInputElement).checked,
+    }
   }
 
   setStyleModeInput(event: Event): void {
