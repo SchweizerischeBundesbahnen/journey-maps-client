@@ -44,6 +44,9 @@ export class MapEventUtils {
     - override the input feature state -> keep in sync
     - Finally set the new state in map source.
     */
+    if (!mapFeature.source) {
+      throw new Error('Missing source id in feature: ' + mapFeature);
+    }
     mapFeature.state = mapInstance.getFeatureState(mapFeature);
     mapFeature.state = Object.assign(mapFeature.state, state);
     mapInstance.setFeatureState(mapFeature, mapFeature.state);
