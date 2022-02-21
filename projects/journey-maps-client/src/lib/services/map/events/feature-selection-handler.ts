@@ -5,7 +5,9 @@ import {MapEventUtils} from './map-event-utils';
 
 export class FeatureSelectionHandler {
 
-  constructor(private mapInstance: MaplibreMap, private layers: Map<string, FeatureDataType>) {
+  constructor(
+    private mapInstance: MaplibreMap,
+    private layersTypes: Map<string, FeatureDataType>) {
   }
 
   toggleSelection(eventData: FeaturesClickEventData): void {
@@ -30,14 +32,14 @@ export class FeatureSelectionHandler {
     return this.findSelected().map(mapFeature => {
       return {
         featureId: Number(mapFeature.id),
-        featureDataType: this.layers.get(mapFeature.layer.id)
+        featureDataType: this.layersTypes.get(mapFeature.layer.id)
       };
     });
   }
 
   private findSelected(): MapboxGeoJSONFeature[] {
     return this.mapInstance.queryRenderedFeatures(null, {
-      layers: [...this.layers.keys()]
+      layers: [...this.layersTypes.keys()]
     }).filter(feature => feature.state.selected);
   }
 }
