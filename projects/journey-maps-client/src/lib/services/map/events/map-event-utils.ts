@@ -1,5 +1,6 @@
 import {Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
 import {FeatureData, FeatureDataType} from '../../../journey-maps-client.interfaces';
+import {Constants} from '../../constants';
 
 export class MapEventUtils {
 
@@ -72,9 +73,9 @@ export class MapEventUtils {
   private static getSourceMapping(featureDataType: FeatureDataType): string {
     switch (featureDataType) {
       case FeatureDataType.MARKER:
-        return 'rokas-marker-source';
+        return Constants.MARKER_SOURCE;
       case FeatureDataType.ROUTE:
-        return 'rokas-route-source';
+        return Constants.ROUTE_SOURCE;
       default:
         return undefined;
     }
