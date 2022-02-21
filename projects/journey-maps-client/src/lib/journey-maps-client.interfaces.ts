@@ -35,7 +35,6 @@ export interface UIOptions {
   homeButton?: boolean;
 }
 
-
 export interface ViewportOptions {
   /**
    * The initial center of the map. You should pass an array with two numbers.

@@ -5,6 +5,7 @@ export class Constants {
   static readonly MARKER_SOURCE = 'rokas-marker-source';
   static readonly ROUTE_SOURCE = 'rokas-route-source';
   static readonly WALK_SOURCE = 'rokas-walk-source';
+  static readonly AREA_SOURCE = 'rokas-area-source';
 
   static readonly CLUSTER_LAYER = 'rokas-marker-cluster';
   static readonly MARKER_LAYER = 'sbb-marker';

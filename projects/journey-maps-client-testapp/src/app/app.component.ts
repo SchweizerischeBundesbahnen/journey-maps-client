@@ -15,6 +15,7 @@ import {
   ZoomLevels,
 } from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
 import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
+import {GeoJSON} from 'geojson';
 
 @Component({
   selector: 'app-root',
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private _transferZurichIndoor: GeoJSON.FeatureCollection;
   private _transferBernIndoor: GeoJSON.FeatureCollection;
   private _transferGeneveIndoor: GeoJSON.FeatureCollection;
+  private _areasBernBurgdorf: GeoJSON.FeatureCollection;
   private _routes: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
 
@@ -58,8 +60,10 @@ export class AppComponent implements OnInit, OnDestroy {
   viewportOptions: ViewportOptions = {};
   styleOptions: StyleOptions = {};
 
-  journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
+  journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes', 'bern-burgdorf'];
   journeyMapsRoutingOption: JourneyMapsRoutingOptions;
+  areasGeoJsonOptions = ['bern-burgdorf'];
+  areas: GeoJSON.FeatureCollection;
 
   zoomLevels: ZoomLevels;
   mapCenter: LngLatLike;
@@ -135,6 +139,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
       .subscribe(json => this._routes = json);
 
+    this.assetReaderService.loadAssetAsJSON('areas/bern-burgdorf.json')
+      .subscribe(json => this._areasBernBurgdorf = json);
+
     this.assetReaderService.loadAssetAsString('secrets/apikey.txt')
       .subscribe(apiKey => this.apiKey = apiKey);
 
@@ -186,6 +193,11 @@ export class AppComponent implements OnInit, OnDestroy {
     if ((event.target as HTMLOptionElement).value === 'routes') {
       this.journeyMapsRoutingOption = {routes: this._routes};
     }
+    // works
+    // if ((event.target as HTMLOptionElement).value === 'bern-burgdorf') {
+    //   this.areas = this._areasBernBurgdorf;
+    //   bbox = [7.35, 46.85, 7.75, 47.15];
+    // }
 
     if (bbox) {
       this.setBbox(bbox);
@@ -194,6 +206,29 @@ export class AppComponent implements OnInit, OnDestroy {
           this.cd.detectChanges();
         }
       );
+    }
+  }
+
+  // TODO: cdi ROKAS-453 get this to work in this separate dropdown
+  // doesn't work:
+  setAreaGeoJsonInput(event: Event): void {
+    this.areas = {
+      type: 'FeatureCollection',
+      features: []
+    };
+
+    let bbox;
+
+    if ((event.target as HTMLOptionElement).value === 'bern-burgdorf') {
+      this.areas = this._areasBernBurgdorf; // change detection fails at this stage
+      bbox = [7.35, 46.85, 7.75, 47.15];
+    }
+
+    if (bbox) {
+      this.setBbox(bbox);
+      this.mapCenterChange.pipe(take(1)).subscribe(() => {
+        this.cd.detectChanges();
+      });
     }
   }
 

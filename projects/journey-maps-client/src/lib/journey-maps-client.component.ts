@@ -28,6 +28,7 @@ import {Direction, MapService} from './services/map/map.service';
 import {MapJourneyService} from './services/map/map-journey.service';
 import {MapTransferService} from './services/map/map-transfer.service';
 import {MapRoutesService} from './services/map/map-routes.service';
+import {MapAreaService} from './services/map/map-area.service';
 import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
@@ -42,6 +43,7 @@ import {
   ZoomLevels,
 } from './journey-maps-client.interfaces';
 import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
+import {GeoJSON} from 'geojson';
 
 /**
  * This component uses the Maplibre GL JS api to render a map and display the given data on the map.
@@ -191,11 +193,18 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /* **************************************** JOURNEY-MAPS ROUTING OPTIONS *****************************************/
 
   /**
-   * Input to display JourneyMaps GeoJson data on the map.
+   * Input to display JourneyMaps GeoJson line data on the map.
    *
    * **WARNING:** The map currently doesn't support more than one of these fields to be set at a time
    */
   @Input() journeyMapsRoutingOption: JourneyMapsRoutingOptions;
+
+  /* **************************************** JOURNEY-MAPS AREAS *****************************************/
+
+  /**
+   * Input to display JourneyMaps GeoJson area data on the map.
+   */
+  @Input() areas: GeoJSON.FeatureCollection;
 
   /* **************************************** MARKER OPTIONS *****************************************/
 
@@ -316,6 +325,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapJourneyService: MapJourneyService,
               private mapTransferService: MapTransferService,
               private mapRoutesService: MapRoutesService,
+              private mapAreaService: MapAreaService,
               private mapLeitPoiService: MapLeitPoiService,
               private levelSwitchService: LevelSwitchService,
               private mapLayerFilterService: MapLayerFilterService,
@@ -446,6 +456,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         this.mapJourneyService.updateJourney(this.map, undefined);
         this.mapTransferService.updateTransfer(this.map, undefined);
         this.mapRoutesService.updateRoutes(this.map, undefined);
+        this.mapAreaService.updateAreas(this.map, undefined);
         this.mapLeitPoiService.processData(this.map, undefined);
         // only add new data if we have some
         if (changes.journeyMapsRoutingOption?.currentValue?.journey) {
@@ -457,6 +468,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         }
         if (changes.journeyMapsRoutingOption?.currentValue?.routes) {
           this.mapRoutesService.updateRoutes(this.map, this.journeyMapsRoutingOption.routes);
+        }
+        if (changes.areas) {
+          this.mapAreaService.updateAreas(this.map, this.areas);
         }
       });
     }

@@ -12,6 +12,7 @@
                                        [uiOptions]="uiOptions"
                                        [viewportOptions]="viewportOptions"
                                        [journeyMapsRoutingOption]="journeyMapsRoutingOption"
+                                       [areas]="areas"
                                        [markerOptions]="markerOptions"
                                        [markerDetailsTemplate]="markerDetailsTemplate"
                                        [(selectedMarkerId)]="selectedMarkerId"
@@ -90,6 +91,15 @@
         </label>
       </li>
       <li>
+        <label for="areas-geo-json-select">
+          Display Area GeoJSON data for:
+          <select id="areas-geo-json-select" (change)="setAreaGeoJsonInput($event)">
+            <option value="" (change)="setAreaGeoJsonInput($event)">(none)</option>
+            <option *ngFor="let input of areasGeoJsonOptions" [value]="input">{{input}}</option>
+          </select>
+        </label>
+      </li>
+      <li>
         <label for="popup-select">
           Show marker details as:
           <select id="popup-select" (change)="setPopupInput($event)">
@@ -109,7 +119,7 @@
       </li>
       <li>
         <label for="small-buttons-checkbox">
-          Show Small Buttons:
+          Show small buttons:
           <input id="small-buttons-checkbox" (change)="setShowSmallButtons($event)" [checked]="uiOptions.showSmallButtons"  value="smallButtons" type="checkbox"/>
         </label>
       </li>
