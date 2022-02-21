@@ -113,8 +113,16 @@ export type ListenerOptions = {
     clickTemplate?: TemplateRef<any>;
     /** Template to display when a feature is hovered */
     hoverTemplate?: TemplateRef<any>;
+    /** Selection mode */
+    selectionMode?: SelectionMode;
   };
 };
+
+/** Selection mode options */
+export enum SelectionMode {
+  single,
+  multi
+}
 
 export interface FeaturesHoverChangeEventData {
   /** Event screen position. */
@@ -145,11 +153,6 @@ export type FeatureData = MapboxGeoJSONFeature & {
 export type SelectableFeatureCollection = FeatureCollection & {
   id?: string;
   isSelected?: boolean;
-};
-
-export type FeatureSelection = {
-  featureId: number;
-  featureDataType: FeatureDataType;
 };
 
 export enum FeatureDataType {MARKER = 'MARKER', ROUTE = 'ROUTE', STATION = 'STATION'}

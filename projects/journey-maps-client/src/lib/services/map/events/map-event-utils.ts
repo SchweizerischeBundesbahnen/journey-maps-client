@@ -28,6 +28,16 @@ export class MapEventUtils {
     mapInstance.setFeatureState(mapFeature, mapFeature.state);
   }
 
+  static queryFeaturesByProperty(
+    mapInstance: MaplibreMap,
+    layers: Map<string, FeatureDataType>,
+    propertyFilter: (value: MapboxGeoJSONFeature) => boolean
+  ): FeatureData[] {
+    return mapInstance.queryRenderedFeatures(null, {
+      layers: [...layers.keys()]
+    }).filter(propertyFilter).map(f => this.toFeatureEventData(f, layers.get(f.layer.id)));
+  }
+
   /* private functions */
   private static toFeatureEventData(feature: MapboxGeoJSONFeature, featureDataType: FeatureDataType): FeatureData {
     return {

@@ -7,10 +7,10 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
-  FeatureSelection,
+  FeatureData,
   InteractionOptions,
   JourneyMapsRoutingOptions,
-  ListenerOptions,
+  ListenerOptions, SelectionMode,
   StyleOptions,
   UIOptions,
   ViewportOptions,
@@ -59,14 +59,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedMarkerId: string;
   visibleLevels$ = new BehaviorSubject<number[]>([]);
   selectedLevel = 0;
-  selectedFeatures: FeatureSelection[] = [];
+  selectedFeatures: FeatureData[] = [];
   viewportOptions: ViewportOptions = {};
   styleOptions: StyleOptions = {brightId: 'base_bright_v2_ki_casa'};
 
   listenerOptions: ListenerOptions = {
-    MARKER: {watch: true},
-    ROUTE: {watch: true},
-    STATION: {watch: true}
+    MARKER: {watch: true, selectionMode: SelectionMode.single},
+    ROUTE: {watch: true, selectionMode: SelectionMode.multi},
+    STATION: {watch: true},
   };
 
   journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
@@ -182,7 +182,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedLevel = selectedLevel;
   }
 
-  setSelectedFeatures(selectedFeatures: FeatureSelection[]): void {
+  setSelectedFeatures(selectedFeatures: FeatureData[]): void {
     console.debug(selectedFeatures);
     this.selectedFeatures = selectedFeatures;
   }
@@ -238,7 +238,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.uiOptions = {
       ...this.uiOptions,
       showSmallButtons: (event.target as HTMLInputElement).checked,
-    }
+    };
   }
 
   setStyleModeInput(event: Event): void {
@@ -265,7 +265,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.listenerOptions = {...this.listenerOptions};
   }
 
-  logSelection(selection: FeatureSelection[]) {
-    console.log(JSON.stringify(selection));
+  logSelection(selection: FeatureData[]) {
+    console.log(JSON.stringify(selection.map(s => {
+      return {
+        id: s.id,
+        type: s.featureDataType,
+        selected: s.state.selected
+      };
+    })));
   }
 }

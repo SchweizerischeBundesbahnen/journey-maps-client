@@ -3,9 +3,8 @@ import {
   FeatureData,
   FeatureDataType,
   FeaturesClickEventData,
-  FeatureSelection,
   FeaturesHoverChangeEventData,
-  ListenerOptions
+  ListenerOptions, SelectionMode
 } from '../../journey-maps-client.interfaces';
 import {MapCursorStyleEvent} from '../../services/map/events/map-cursor-style-event';
 import {MapStationService} from '../../services/map/map-station.service';
@@ -27,7 +26,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
   @Input() listenerOptions: ListenerOptions;
   @Input() map: MapLibreMap;
 
-  @Output() featureSelectionsChange = new EventEmitter<FeatureSelection[]>();
+  @Output() featureSelectionsChange = new EventEmitter<FeatureData[]>();
 
   @Output() featuresClick = new EventEmitter<FeaturesClickEventData>();
   @Output() featuresHoverChange = new EventEmitter<FeaturesHoverChangeEventData>();
@@ -78,7 +77,9 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
 
       this.mapCursorStyleEvent?.complete();
       this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, [...this.watchOnLayers.keys()]);
-      this.featureSelectionHandler = new FeatureSelectionHandler(this.map, this.watchOnLayers);
+
+      const selectionModes = this.listenerOptionsToSelectionModes();
+      this.featureSelectionHandler = new FeatureSelectionHandler(this.map, this.watchOnLayers, selectionModes);
 
       if (!this.featuresClickEvent) {
         this.featuresClickEvent = new FeaturesClickEvent(this.map, this.watchOnLayers);
@@ -94,6 +95,14 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
           .subscribe(data => this.featureHovered(data));
       }
     }
+  }
+
+  private listenerOptionsToSelectionModes() {
+    const selectionModes = new Map<FeatureDataType, SelectionMode>();
+    selectionModes.set(FeatureDataType.ROUTE, this.listenerOptions.ROUTE.selectionMode);
+    selectionModes.set(FeatureDataType.MARKER, this.listenerOptions.MARKER.selectionMode);
+    selectionModes.set(FeatureDataType.STATION, this.listenerOptions.STATION.selectionMode);
+    return selectionModes;
   }
 
   overlayOptions(): any {

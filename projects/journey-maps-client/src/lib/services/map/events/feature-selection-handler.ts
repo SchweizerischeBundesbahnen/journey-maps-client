@@ -1,18 +1,23 @@
-import {Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
-import {FeatureDataType, FeaturesClickEventData, FeatureSelection} from '../../../journey-maps-client.interfaces';
+import {FeatureDataType, FeaturesClickEventData, FeatureData, SelectionMode} from '../../../journey-maps-client.interfaces';
 import {RouteUtils} from './route-utils';
 import {MapEventUtils} from './map-event-utils';
 
 export class FeatureSelectionHandler {
 
   constructor(
-    private mapInstance: MaplibreMap,
-    private layersTypes: Map<string, FeatureDataType>) {
+    private mapInstance: maplibregl.Map,
+    private layersTypes: Map<string, FeatureDataType>,
+    private selectionModes: Map<FeatureDataType, SelectionMode>) {
   }
 
   toggleSelection(eventData: FeaturesClickEventData): void {
     for (let data of eventData.features) {
       const selected = !data.state.selected;
+
+      if (this.selectionModes[data.featureDataType] === SelectionMode.single) {
+        // TODO
+      }
+
       MapEventUtils.setFeatureState(data, this.mapInstance, {selected});
 
       if (data.featureDataType !== FeatureDataType.ROUTE) {
@@ -28,18 +33,7 @@ export class FeatureSelectionHandler {
     }
   }
 
-  findSelectedFeatures(): FeatureSelection[] {
-    return this.findSelected().map(mapFeature => {
-      return {
-        featureId: Number(mapFeature.id),
-        featureDataType: this.layersTypes.get(mapFeature.layer.id)
-      };
-    });
-  }
-
-  private findSelected(): MapboxGeoJSONFeature[] {
-    return this.mapInstance.queryRenderedFeatures(null, {
-      layers: [...this.layersTypes.keys()]
-    }).filter(feature => feature.state.selected);
+  findSelectedFeatures(): FeatureData[] {
+    return MapEventUtils.queryFeaturesByProperty(this.mapInstance, this.layersTypes, feature => feature.state.selected);
   }
 }

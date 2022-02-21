@@ -35,7 +35,6 @@ import {LevelSwitchService} from './components/level-switch/services/level-switc
 import {
   FeatureData,
   FeaturesClickEventData,
-  FeatureSelection,
   FeaturesHoverChangeEventData,
   InteractionOptions,
   JourneyMapsRoutingOptions,
@@ -277,7 +276,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /**
    * This event is emitted whenever the selected features changes.
    */
-  @Output() selectedFeaturesChange = new EventEmitter<FeatureSelection[]>();
+  @Output() selectedFeaturesChange = new EventEmitter<FeatureData[]>();
 
   // **************************************** OTHER OUTPUTS *****************************************
 
