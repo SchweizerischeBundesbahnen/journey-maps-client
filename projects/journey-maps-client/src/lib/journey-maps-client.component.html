@@ -2,9 +2,9 @@
 <div class="jmc-container" lang="{{language}}">
   <div class="map-container" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
     <div class="mod_map_container_mobile_overlay" [ngClass]="touchOverlayStyleClass" style="opacity: 0">
-        <span class="mod_map_container_mobile_overlay_icon_wrapper">
-            <div class="mod_svgsprite_icon mod_map_container_mobile_overlay_icon"> </div>
-        </span>
+      <span class="mod_map_container_mobile_overlay_icon_wrapper">
+          <div class="mod_svgsprite_icon mod_map_container_mobile_overlay_icon"> </div>
+      </span>
       <p class="mod_map_container_mobile_overlay_text">{{touchOverlayText}}</p>
     </div>
     <rokas-feature-event-listener
@@ -27,20 +27,24 @@
       <rokas-zoom-controls
         *ngIf="uiOptions.zoomControls"
         [map]="mapReady | async"
+        [showSmallButtons]="uiOptions.showSmallButtons"
       ></rokas-zoom-controls>
       <rokas-basemap-switch
         *ngIf="uiOptions.basemapSwitch"
         [map]="mapReady | async"
+        [showSmallButtons]="uiOptions.showSmallButtons"
         (toggleBasemap)="onToggleBasemap()"
       ></rokas-basemap-switch>
       <rokas-home-button
         *ngIf="uiOptions.homeButton"
         [map]="mapReady | async"
+        [showSmallButtons]="uiOptions.showSmallButtons"
         (homeButtonClicked)="onHomeButtonClicked()"
       ></rokas-home-button>
       <rokas-level-switch
         *ngIf="uiOptions.levelSwitch"
         [map]="mapReady | async"
+        [showSmallButtons]="uiOptions.showSmallButtons"
       ></rokas-level-switch>
     </div>
     <div class="map" (resized)="onResized()" #map></div>

@@ -148,6 +148,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   // **************************************** BUTTON OPTIONS *****************************************/
 
   private defaultUIOptions: UIOptions = {
+    showSmallButtons: false,
     levelSwitch: true,
     zoomControls: true,
     basemapSwitch: true,

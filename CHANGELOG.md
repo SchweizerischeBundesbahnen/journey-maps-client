@@ -1,16 +1,25 @@
 # Change Log
 
-## [3.0.0](...) - ...
+## [3.0.0](...) - XXXX-XX-XX
 
 ### Added
 
 * An optional 'home button' has been added to the controls, allowing the user to zoom all of Switzerland into view.
 * `rokas-popup` and `rokas-teaser` components are made available to J-M-C integrators.
+* The option to show the map control buttons in a smaller size.
 
 ### Changed
-* Breaking Change: The input field object ControlOptions has been split into UIOptions and InteractionOptions
+* Breaking Change: The input field type ControlOptions has been split into UIOptions and InteractionOptions. 
+  * 'interactionOptions' now contains:
+    * oneFingerPan
+    * scrollZoom 
+  * 'uiOptions' now contains:
+    * levelSwitch
+    * zoomControls
+    * basemapSwitch
+    * homeButton
 
-## [2.8.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.7.0&sourceBranch=refs%2Ftags%2F2.8.0&targetRepoId=46287) - ...
+## [2.8.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.7.0&sourceBranch=refs%2Ftags%2F2.8.0&targetRepoId=46287) - 2022-01-28
 
 ### Changed
 

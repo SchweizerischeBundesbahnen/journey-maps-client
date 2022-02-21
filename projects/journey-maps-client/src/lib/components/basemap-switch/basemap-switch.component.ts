@@ -10,6 +10,7 @@ import {LocaleService} from '../../services/locale.service';
 export class BasemapSwitchComponent implements OnInit{
 
   @Input() map: MaplibreMap;
+  @Input() showSmallButtons: boolean;
 
   @Output() toggleBasemap = new EventEmitter<void>();
 
