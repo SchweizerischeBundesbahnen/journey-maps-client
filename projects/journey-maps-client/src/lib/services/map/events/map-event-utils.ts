@@ -64,7 +64,6 @@ export class MapEventUtils {
 
   /* private functions */
   private static toFeatureEventData(feature: MapboxGeoJSONFeature, featureDataType: FeatureDataType): FeatureData {
-    console.debug('source:', feature.source);
     return {
       featureDataType,
       // feature geometry is a getter function, so do map manually:
