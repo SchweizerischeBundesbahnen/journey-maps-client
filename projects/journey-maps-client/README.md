@@ -2,7 +2,7 @@
 
 ## Test Application
 
-https://ki-journey-maps-client.apps.aws01t.sbb-aws-test.net/  
+https://ki-journey-maps-client.sbb-cloud.net/  
 (Only accessible from within SBB network)
 
 Source Code:
@@ -14,7 +14,7 @@ Source Code:
 
 ## API Documentation
 
-https://ki-journey-maps-client.apps.aws01t.sbb-aws-test.net/documentation/components/JourneyMapsClientComponent.html  
+https://ki-journey-maps-client.sbb-cloud.net/documentation/components/JourneyMapsClientComponent.html  
 (Only accessible from within SBB network)
 
 ## Usage
