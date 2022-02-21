@@ -3,7 +3,7 @@ import {
   FeatureData,
   FeatureDataType,
   FeaturesClickEventData,
-  FeaturesHoverChangeEventData,
+  FeaturesHoverChangeEventData, FeaturesSelectEventData,
   ListenerOptions, SelectionMode
 } from '../../journey-maps-client.interfaces';
 import {MapCursorStyleEvent} from '../../services/map/events/map-cursor-style-event';
@@ -26,7 +26,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
   @Input() listenerOptions: ListenerOptions;
   @Input() map: MapLibreMap;
 
-  @Output() featureSelectionsChange = new EventEmitter<FeatureData[]>();
+  @Output() featureSelectionsChange = new EventEmitter<FeaturesSelectEventData>();
 
   @Output() featuresClick = new EventEmitter<FeaturesClickEventData>();
   @Output() featuresHoverChange = new EventEmitter<FeaturesHoverChangeEventData>();

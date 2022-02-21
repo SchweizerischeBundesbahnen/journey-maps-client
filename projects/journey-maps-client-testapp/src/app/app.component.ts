@@ -7,7 +7,7 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
-  FeatureData,
+  FeatureData, FeaturesSelectEventData,
   InteractionOptions,
   JourneyMapsRoutingOptions,
   ListenerOptions, SelectionMode,
@@ -265,8 +265,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.listenerOptions = {...this.listenerOptions};
   }
 
-  logSelection(selection: FeatureData[]) {
-    console.log(JSON.stringify(selection.map(s => {
+  logSelection(selection: FeaturesSelectEventData) {
+    console.log(JSON.stringify(selection.features.map(s => {
       return {
         id: s.id,
         type: s.featureDataType,

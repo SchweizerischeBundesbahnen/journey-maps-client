@@ -137,6 +137,11 @@ export interface FeaturesHoverChangeEventData {
   features: FeatureData[];
 }
 
+export interface FeaturesSelectEventData {
+  /** List of features affected by this event. */
+  features: FeatureData[];
+}
+
 export interface FeaturesClickEventData {
   /** Click screen position. */
   clickPoint: { x: number, y: number };

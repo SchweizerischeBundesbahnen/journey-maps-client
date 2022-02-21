@@ -10,16 +10,35 @@ export class MapEventUtils {
     }).map(f => this.toFeatureEventData(f, layers.get(f.layer.id)));
   }
 
-  static queryFeaturesByFilter(mapInstance: MaplibreMap, feature: FeatureData, filter?: any[]): FeatureData[] {
+  static queryVisibleFeaturesByFilter(mapInstance: MaplibreMap, feature: FeatureData, filter?: any[]): FeatureData[] {
     return mapInstance.queryRenderedFeatures(null, {
       layers: [feature.layer.id],
       filter
     }).map(f => this.toFeatureEventData(f, feature.featureDataType));
+
+  }
+
+  /**
+   *  WARNING: in case of vector tiles (geOps source): this function does not check tiles outside the currently visible viewport.
+   */
+  static querySourceFeaturesByFilter(mapInstance: MaplibreMap, featureDataType: FeatureDataType, filter?: any[]): FeatureData[] {
+    const sourceId = this.getSourceMapping(featureDataType);
+    if (!sourceId) {
+      throw new Error('Missing source mapping for feature type: ' + featureDataType);
+    }
+    return mapInstance.querySourceFeatures(sourceId, {filter})
+      .map(f => {
+        const data = this.toFeatureEventData(f, featureDataType);
+        if (!data.source) {
+          data.source = sourceId;
+        }
+        return data;
+      });
   }
 
   static setFeatureState(mapFeature: MapboxGeoJSONFeature, mapInstance: MaplibreMap, state: any) {
     /* This part is important:
-    - get fresh feature state insatance from map source
+    - get fresh feature state instance from map source
     - override the input feature state -> keep in sync
     - Finally set the new state in map source.
     */
@@ -40,11 +59,23 @@ export class MapEventUtils {
 
   /* private functions */
   private static toFeatureEventData(feature: MapboxGeoJSONFeature, featureDataType: FeatureDataType): FeatureData {
+    console.debug('source:', feature.source);
     return {
       featureDataType,
       // feature geometry is a getter function, so do map manually:
       geometry: feature.geometry,
       ...feature
     };
+  }
+
+  private static getSourceMapping(featureDataType: FeatureDataType): string {
+    switch (featureDataType) {
+      case FeatureDataType.MARKER:
+        return 'rokas-marker-source';
+      case FeatureDataType.ROUTE:
+        return 'rokas-route-source';
+      default:
+        return undefined;
+    }
   }
 }

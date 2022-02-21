@@ -73,7 +73,7 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
     const routeFeatures = RouteUtils.filterRouteFeatures(currentFeatures);
     if (routeFeatures.length) {
       for (let routeFeature of routeFeatures) {
-        const relatedFeatures = RouteUtils.findRelatedRoutes(routeFeature, this.mapInstance);
+        const relatedFeatures = RouteUtils.findRelatedRoutes(routeFeature, this.mapInstance, 'visibleOnly');
         if (relatedFeatures.length) {
           currentFeatures.push(...relatedFeatures);
         }
