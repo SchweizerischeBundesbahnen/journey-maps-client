@@ -1,7 +1,6 @@
 import {
   FeatureDataType,
   FeaturesClickEventData,
-  FeatureData,
   SelectionMode,
   FeaturesSelectEventData
 } from '../../../journey-maps-client.interfaces';
@@ -20,12 +19,12 @@ export class FeatureSelectionHandler {
     for (let data of eventData.features) {
       const selected = !data.state.selected;
 
-      /*if (this.selectionModes[data.featureDataType] === SelectionMode.single) {
+      if (this.selectionModes.get(data.featureDataType) === SelectionMode.single) {
         // if multiple features of same type, only the last in the list will be selected:
         this.findSelectedFeatures()
           .features.filter(data => data.featureDataType === data.featureDataType)
           .forEach(data => MapEventUtils.setFeatureState(data, this.mapInstance, {selected: false}));
-      }*/
+      }
 
       MapEventUtils.setFeatureState(data, this.mapInstance, {selected});
 
