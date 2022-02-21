@@ -25,12 +25,12 @@ export class RouteUtils {
     if (find === 'visibleOnly') {
       return MapEventUtils.queryVisibleFeaturesByFilter(mapInstance, routeFeature, filter);
     } else {
-      return MapEventUtils.querySourceFeaturesByFilter(mapInstance, FeatureDataType.ROUTE, filter);
+      return MapEventUtils.queryFeatureSourceByFilter(mapInstance, FeatureDataType.ROUTE, filter);
     }
   }
 
   static initSelectedState(mapInstance: MaplibreMap): void {
-    const getMapFeatures = MapEventUtils.querySourceFeaturesByFilter(mapInstance, FeatureDataType.ROUTE,
+    const getMapFeatures = MapEventUtils.queryFeatureSourceByFilter(mapInstance, FeatureDataType.ROUTE,
       ['==', ['boolean', ['get', SELECTED_PROPERTY_NAME], false], true]
     );
     getMapFeatures.forEach(mapFeature => MapEventUtils.setFeatureState(mapFeature, mapInstance, {selected: true}));

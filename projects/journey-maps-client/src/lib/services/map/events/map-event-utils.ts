@@ -4,6 +4,7 @@ import {FeatureData, FeatureDataType} from '../../../journey-maps-client.interfa
 export class MapEventUtils {
 
   /* PUBLIC */
+
   static queryFeaturesByLayerIds(mapInstance: MaplibreMap, screenPoint: [number, number], layers: Map<string, FeatureDataType>): FeatureData[] {
     return mapInstance.queryRenderedFeatures(screenPoint, {
       layers: [...layers.keys()]
@@ -21,7 +22,7 @@ export class MapEventUtils {
   /**
    *  WARNING: in case of vector tiles (geOps source): this function does not check tiles outside the currently visible viewport.
    */
-  static querySourceFeaturesByFilter(mapInstance: MaplibreMap, featureDataType: FeatureDataType, filter?: any[]): FeatureData[] {
+  static queryFeatureSourceByFilter(mapInstance: MaplibreMap, featureDataType: FeatureDataType, filter?: any[]): FeatureData[] {
     const sourceId = this.getSourceMapping(featureDataType);
     if (!sourceId) {
       throw new Error('Missing source mapping for feature type: ' + featureDataType);
