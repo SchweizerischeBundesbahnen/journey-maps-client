@@ -15,7 +15,10 @@ export class FeatureSelectionHandler {
       const selected = !data.state.selected;
 
       if (this.selectionModes[data.featureDataType] === SelectionMode.single) {
-        // TODO
+        // if multiple features of same type, only the last in the list will be selected:
+        this.findSelectedFeatures()
+          .filter(data => data.featureDataType === data.featureDataType)
+          .forEach(data => MapEventUtils.setFeatureState(data, this.mapInstance, {selected: false}));
       }
 
       MapEventUtils.setFeatureState(data, this.mapInstance, {selected});
