@@ -15,6 +15,10 @@ export class RouteUtils {
     return routeFeature.properties[ROUTE_ID_PROPERTY_NAME];
   }
 
+  /**
+   * 'all' => find all routes in source |
+   * 'visibleOnly' => find all routes in visible layer, means only current visible generalization
+   * */
   static findRelatedRoutes(routeFeature: FeatureData, mapInstance: MaplibreMap, find: 'all' | 'visibleOnly'): FeatureData[] {
     const routeId = RouteUtils.getRouteId(routeFeature);
     const filter = [
