@@ -1,7 +1,6 @@
 import {Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
 import {FeatureData, FeatureDataType} from '../../../journey-maps-client.interfaces';
 import {Constants} from '../../constants';
-import {MapRoutesService} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/map-routes.service';
 
 export class MapEventUtils {
 
