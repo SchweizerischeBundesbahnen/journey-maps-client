@@ -4,13 +4,13 @@ import {GeoJSONSource, Map as MaplibreMap} from 'maplibre-gl';
 import {MapService} from './map.service';
 
 @Injectable({providedIn: 'root'})
-export class MapAreaService {
+export class MapZoneService {
 
   constructor(private mapService: MapService) {
   }
 
-  updateAreas(map: MaplibreMap, areasFeatureCollection: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
-    const source = map.getSource(Constants.AREA_SOURCE) as GeoJSONSource;
-    source.setData(areasFeatureCollection);
+  updateZones(map: MaplibreMap, zonesFeatureCollection: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
+    const source = map.getSource(Constants.ZONE_SOURCE) as GeoJSONSource;
+    source.setData(zonesFeatureCollection);
   }
 }

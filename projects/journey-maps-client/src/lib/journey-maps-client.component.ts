@@ -28,7 +28,7 @@ import {Direction, MapService} from './services/map/map.service';
 import {MapJourneyService} from './services/map/map-journey.service';
 import {MapTransferService} from './services/map/map-transfer.service';
 import {MapRoutesService} from './services/map/map-routes.service';
-import {MapAreaService} from './services/map/map-area.service';
+import {MapZoneService} from './services/map/map-zone.service';
 import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
@@ -199,12 +199,12 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Input() journeyMapsRoutingOption: JourneyMapsRoutingOptions;
 
-  /* **************************************** JOURNEY-MAPS AREAS *****************************************/
+  /* **************************************** JOURNEY-MAPS ZONES *****************************************/
 
   /**
-   * Input to display JourneyMaps GeoJson area data on the map.
+   * Input to display JourneyMaps GeoJson zone data on the map.
    */
-  @Input() areas: GeoJSON.FeatureCollection;
+  @Input() zones: GeoJSON.FeatureCollection;
 
   /* **************************************** MARKER OPTIONS *****************************************/
 
@@ -325,7 +325,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapJourneyService: MapJourneyService,
               private mapTransferService: MapTransferService,
               private mapRoutesService: MapRoutesService,
-              private mapAreaService: MapAreaService,
+              private mapZoneService: MapZoneService,
               private mapLeitPoiService: MapLeitPoiService,
               private levelSwitchService: LevelSwitchService,
               private mapLayerFilterService: MapLayerFilterService,
@@ -471,8 +471,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       });
     }
 
-    if (changes.areas) {
-      this.mapAreaService.updateAreas(this.map, this.areas);
+    if (changes.zones) {
+      this.mapZoneService.updateZones(this.map, this.zones);
     }
 
     if (Object.values(this.journeyMapsRoutingOption ?? {}).filter(val => val).length > 1) {

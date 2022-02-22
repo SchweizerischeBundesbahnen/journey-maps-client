@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private _transferZurichIndoor: GeoJSON.FeatureCollection;
   private _transferBernIndoor: GeoJSON.FeatureCollection;
   private _transferGeneveIndoor: GeoJSON.FeatureCollection;
-  private _areasBernBurgdorf: GeoJSON.FeatureCollection;
+  private _zonesBernBurgdorf: GeoJSON.FeatureCollection;
   private _routes: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
 
@@ -62,8 +62,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes', 'bern-burgdorf'];
   journeyMapsRoutingOption: JourneyMapsRoutingOptions;
-  areasGeoJsonOptions = ['bern-burgdorf'];
-  areas: GeoJSON.FeatureCollection;
+  zonessGeoJsonOptions = ['bern-burgdorf'];
+  zones: GeoJSON.FeatureCollection;
 
   zoomLevels: ZoomLevels;
   mapCenter: LngLatLike;
@@ -139,8 +139,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
       .subscribe(json => this._routes = json);
 
-    this.assetReaderService.loadAssetAsJSON('areas/bern-burgdorf.json')
-      .subscribe(json => this._areasBernBurgdorf = json);
+    this.assetReaderService.loadAssetAsJSON('zones/bern-burgdorf.json')
+      .subscribe(json => this._zonesBernBurgdorf = json);
 
     this.assetReaderService.loadAssetAsString('secrets/apikey.txt')
       .subscribe(apiKey => this.apiKey = apiKey);
@@ -204,9 +204,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  setAreaGeoJsonInput(event: Event): void {
+  setZoneGeoJsonInput(event: Event): void {
     if ((event.target as HTMLOptionElement).value === 'bern-burgdorf') {
-      this.areas = this._areasBernBurgdorf; // change detection fails at this stage
+      this.zones = this._zonesBernBurgdorf; // change detection fails at this stage
       this.setBbox([7.35, 46.85, 7.75, 47.15]);
     }
   }

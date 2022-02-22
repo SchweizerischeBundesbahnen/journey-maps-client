@@ -12,7 +12,7 @@
                                        [uiOptions]="uiOptions"
                                        [viewportOptions]="viewportOptions"
                                        [journeyMapsRoutingOption]="journeyMapsRoutingOption"
-                                       [areas]="areas"
+                                       [zones]="zones"
                                        [markerOptions]="markerOptions"
                                        [markerDetailsTemplate]="markerDetailsTemplate"
                                        [(selectedMarkerId)]="selectedMarkerId"
@@ -91,11 +91,11 @@
         </label>
       </li>
       <li>
-        <label for="areas-geo-json-select">
-          Display Area GeoJSON data for:
-          <select id="areas-geo-json-select" (change)="setAreaGeoJsonInput($event)">
-            <option value="" (change)="setAreaGeoJsonInput($event)">(none)</option>
-            <option *ngFor="let input of areasGeoJsonOptions" [value]="input">{{input}}</option>
+        <label for="zones-geo-json-select">
+          Display Zone GeoJSON data for:
+          <select id="zones-geo-json-select" (change)="setZoneGeoJsonInput($event)">
+            <option value="" (change)="setZoneGeoJsonInput($event)">(none)</option>
+            <option *ngFor="let input of zonessGeoJsonOptions" [value]="input">{{input}}</option>
           </select>
         </label>
       </li>
