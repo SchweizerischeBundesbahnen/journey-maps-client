@@ -160,4 +160,9 @@ export type SelectableFeatureCollection = FeatureCollection & {
   isSelected?: boolean;
 };
 
-export enum FeatureDataType {MARKER = 'MARKER', ROUTE = 'ROUTE', STATION = 'STATION'}
+export enum FeatureDataType {
+  MARKER = 'MARKER',
+  ROUTE = 'ROUTE',
+  STATION = 'STATION',
+  ZONE = 'ZONE',
+}

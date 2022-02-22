@@ -69,6 +69,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     MARKER: {watch: true, selectionMode: SelectionMode.single},
     ROUTE: {watch: true, selectionMode: SelectionMode.multi},
     STATION: {watch: true},
+    ZONE: {watch: true, selectionMode: SelectionMode.multi},
   };
 
   journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes', 'bern-burgdorf'];

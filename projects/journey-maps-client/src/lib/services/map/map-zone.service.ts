@@ -6,6 +6,12 @@ import {MapService} from './map.service';
 @Injectable({providedIn: 'root'})
 export class MapZoneService {
 
+  static allZoneLayers: string[] = [
+    'rokas-zone',
+    'rokas-zone-outline',
+    'rokas-zone-label',
+  ];
+
   constructor(private mapService: MapService) {
   }
 
