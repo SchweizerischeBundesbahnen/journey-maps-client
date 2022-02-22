@@ -1,7 +1,5 @@
 <rokas-global-styles></rokas-global-styles>
-
-<div class="container" lang="{{language}}">
-
+<div class="jmc-container" lang="{{language}}">
   <div class="map-container" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
     <div class="mod_map_container_mobile_overlay" [ngClass]="touchOverlayStyleClass" style="opacity: 0">
       <span class="mod_map_container_mobile_overlay_icon_wrapper">
@@ -9,6 +7,13 @@
       </span>
       <p class="mod_map_container_mobile_overlay_text">{{touchOverlayText}}</p>
     </div>
+    <rokas-feature-event-listener
+      [listenerOptions]="listenerOptions"
+      [map]="mapReady | async"
+      (featuresHoverChange)="featuresHoverChange.next($event)"
+      (featuresClick)="featuresClick.next($event); handleMarkerOrClusterClick($event.features);"
+      (featureSelectionsChange)="selectedFeaturesChange.next($event)"
+    ></rokas-feature-event-listener>
     <rokas-marker-details
       [selectedMarker]="selectedMarker"
       [template]="markerDetailsTemplate"

@@ -11,6 +11,8 @@ import {HTTP_BASIC_AUTH_INTERCEPTOR_CONFIG_TOKEN} from './interceptors/http-basi
 import {JourneyMapsClientModule} from '@schweizerischebundesbahnen/journey-maps-client/src/public-api';
 import {ArcgisFeatureLayerModule} from '@schweizerischebundesbahnen/arcgis-feature-layer/src/public-api';
 import {SbbTabsModule} from '@sbb-esta/angular/tabs';
+import {SbbCheckboxModule} from '@sbb-esta/angular/checkbox';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,9 +23,10 @@ import {SbbTabsModule} from '@sbb-esta/angular/tabs';
     BrowserAnimationsModule,
     HighlightModule,
     HttpClientModule,
+    SbbCheckboxModule,
     SbbTabsModule,
     JourneyMapsClientModule,
-    ArcgisFeatureLayerModule, CommonModule,
+    ArcgisFeatureLayerModule, CommonModule, FormsModule,
   ],
   providers: [
     {

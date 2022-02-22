@@ -9,7 +9,7 @@ import {MapConfigService} from './map-config.service';
 import {Feature} from 'geojson';
 import {MarkerCategoryMapping} from '../../model/marker-category-mapping';
 import {StyleMode} from '../../model/style-mode.enum';
-
+import {FeatureData} from '../../journey-maps-client.interfaces';
 
 @Injectable({providedIn: 'root'})
 export class MapMarkerService {
@@ -77,7 +77,7 @@ export class MapMarkerService {
     return map.getSource(Constants.MARKER_SOURCE) as GeoJSONSource;
   }
 
-  onClusterClicked(map: MaplibreMap, cluster: MapboxGeoJSONFeature): void {
+  onClusterClicked(map: MaplibreMap, cluster: FeatureData): void {
     this.zoomToCluster(map, cluster.properties.cluster_id, this.mapService.convertToLngLatLike(cluster.geometry));
   }
 
@@ -92,7 +92,7 @@ export class MapMarkerService {
     );
   }
 
-  onMarkerClicked(map: MaplibreMap, feature: MapboxGeoJSONFeature, oldSelectedFeatureId: string): string {
+  onMarkerClicked(map: MaplibreMap, feature: FeatureData, oldSelectedFeatureId: string): string {
     const selectedFeatureId = feature.properties?.id;
     if (!selectedFeatureId || selectedFeatureId === oldSelectedFeatureId) {
       this.unselectFeature(map);
