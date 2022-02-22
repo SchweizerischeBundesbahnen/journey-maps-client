@@ -3,7 +3,7 @@ FROM node:12-alpine
 COPY / /home/node/
 WORKDIR /home/node
 
-RUN  rm -rf .npmrc\
+RUN rm -rf .npmrc\
 && apk add --no-cache tini \
 && npm install --global http-server \
 && npm ci --silent \
