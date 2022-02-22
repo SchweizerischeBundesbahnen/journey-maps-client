@@ -62,18 +62,12 @@ pipeline {
       }
       steps {
         script {
-          def packageJson = readJSON file: './package.json'
-          releaseVersion = packageJson.version
-          def (int major, int minor, int patch) = releaseVersion.tokenize('.')
-
           bin_npmLeanPublish(
             targetRepo: 'rokas.npm',
             packageJson: './package.json',
             publishablePackageJsons:
               './dist/journey-maps-client/package.json,' +
               './dist/journey-maps-client-elements/package.json',
-            nextReleaseVersion: "${major}.${minor + 1}.0".toString(),
-            releaseVersion: "${major}.${minor}.${patch}".toString()
           )
         }
       }
