@@ -3,8 +3,10 @@ import {
   FeatureData,
   FeatureDataType,
   FeaturesClickEventData,
-  FeaturesHoverChangeEventData, FeaturesSelectEventData,
-  ListenerOptions, SelectionMode
+  FeaturesHoverChangeEventData,
+  FeaturesSelectEventData,
+  ListenerOptions,
+  SelectionMode
 } from '../../journey-maps-client.interfaces';
 import {MapCursorStyleEvent} from '../../services/map/events/map-cursor-style-event';
 import {MapStationService} from '../../services/map/map-station.service';
@@ -99,9 +101,9 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
 
   private listenerOptionsToSelectionModes() {
     const selectionModes = new Map<FeatureDataType, SelectionMode>();
-    selectionModes.set(FeatureDataType.ROUTE, this.listenerOptions.ROUTE.selectionMode);
-    selectionModes.set(FeatureDataType.MARKER, this.listenerOptions.MARKER.selectionMode);
-    selectionModes.set(FeatureDataType.STATION, this.listenerOptions.STATION.selectionMode);
+    selectionModes.set(FeatureDataType.ROUTE, this.listenerOptions.ROUTE?.selectionMode ?? SelectionMode.single);
+    selectionModes.set(FeatureDataType.MARKER, this.listenerOptions.MARKER?.selectionMode ?? SelectionMode.single);
+    selectionModes.set(FeatureDataType.STATION, this.listenerOptions.STATION?.selectionMode ?? SelectionMode.single);
     return selectionModes;
   }
 
