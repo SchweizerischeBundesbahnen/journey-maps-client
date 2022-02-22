@@ -47,7 +47,6 @@ import {
   ZoomLevels,
 } from './journey-maps-client.interfaces';
 import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
-import {GeoJSON} from 'geojson';
 
 const SATELLITE_MAP_MAX_ZOOM = 19.2;
 const SATELLITE_MAP_TILE_SIZE = 256;

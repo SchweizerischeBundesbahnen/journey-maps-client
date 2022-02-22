@@ -17,7 +17,6 @@ import {
   ZoomLevels,
 } from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
 import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/journey-maps-client.component';
-import {GeoJSON} from 'geojson';
 
 @Component({
   selector: 'app-root',
