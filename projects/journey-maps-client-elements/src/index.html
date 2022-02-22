@@ -57,6 +57,9 @@
           },
         ],
       };
+      client.listenerOptions = {
+        MARKER: {watch: true}
+      };
 
       document.addEventListener('DOMContentLoaded', function () {
         fetch('assets/secrets/apikey.txt')
