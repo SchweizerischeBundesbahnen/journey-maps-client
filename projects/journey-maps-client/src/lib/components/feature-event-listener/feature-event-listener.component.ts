@@ -72,7 +72,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
         this.updateWatchOnLayers(MapRoutesService.allRouteLayers, FeatureDataType.ROUTE);
       }
       if (this.listenerOptions.STATION?.watch) {
-        this.watchOnLayers.set(MapStationService.STATION_LAYER, FeatureDataType.STATION);
+        this.updateWatchOnLayers([MapStationService.STATION_LAYER], FeatureDataType.STATION)
         this.mapStationService.registerStationUpdater(this.map);
       } else {
         this.mapStationService.deregisterStationUpdater(this.map);
