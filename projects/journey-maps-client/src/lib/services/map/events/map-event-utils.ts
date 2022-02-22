@@ -1,6 +1,7 @@
 import {Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
 import {FeatureData, FeatureDataType} from '../../../journey-maps-client.interfaces';
 import {Constants} from '../../constants';
+import {MapRoutesService} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/map-routes.service';
 
 export class MapEventUtils {
 
@@ -12,12 +13,12 @@ export class MapEventUtils {
     }).map(f => this.toFeatureEventData(f, layers.get(f.layer.id)));
   }
 
-  static queryVisibleFeaturesByFilter(mapInstance: MaplibreMap, feature: FeatureData, filter?: any[]): FeatureData[] {
-    return mapInstance.queryRenderedFeatures(null, {
-      layers: [feature.layer.id],
-      filter
-    }).map(f => this.toFeatureEventData(f, feature.featureDataType));
-
+  /**
+   * Query feature in all visible layers in the layers list. Only features that are currently rendered are included.
+   */
+  static queryVisibleFeaturesByFilter(mapInstance: MaplibreMap, feature: FeatureData, layers: string[], filter?: any[]): FeatureData[] {
+    return mapInstance.queryRenderedFeatures(null, {layers, filter})
+      .map(f => this.toFeatureEventData(f, feature.featureDataType));
   }
 
   /**

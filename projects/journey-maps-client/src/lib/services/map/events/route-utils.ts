@@ -1,6 +1,7 @@
 import {FeatureData, FeatureDataType} from '../../../journey-maps-client.interfaces';
 import {MapEventUtils} from './map-event-utils';
 import {Map as MaplibreMap} from 'maplibre-gl';
+import {MapRoutesService} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/map-routes.service';
 
 export const ROUTE_ID_PROPERTY_NAME = 'routeId';
 export const SELECTED_PROPERTY_NAME = 'isSelected';
@@ -27,7 +28,8 @@ export class RouteUtils {
       ['!=', '$id', routeFeature.id]
     ];
     if (find === 'visibleOnly') {
-      return MapEventUtils.queryVisibleFeaturesByFilter(mapInstance, routeFeature, filter);
+      const layers = MapRoutesService.allRouteLayers;
+      return MapEventUtils.queryVisibleFeaturesByFilter(mapInstance, routeFeature, layers, filter);
     } else {
       return MapEventUtils.queryFeatureSourceByFilter(mapInstance, FeatureDataType.ROUTE, filter);
     }
