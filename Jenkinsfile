@@ -62,7 +62,7 @@ pipeline {
       }
       steps {
         script {
-          bin_npmLeanPublish(
+          releaseVersion = bin_npmLeanPublish(
             targetRepo: 'rokas.npm',
             packageJson: './package.json',
             publishablePackageJsons:
@@ -84,8 +84,8 @@ pipeline {
         NPM_TOKEN = credentials('e5579f36-2d03-4f42-bc79-3f7f11491b5b')
       }
       steps {
-        sh "cat dist/journey-maps-client/package.json | jq '.version = \"${releaseVersion}\" | .name = \"@sbbch-rokas/journey-maps-client\"' > tmp.json && mv tmp.json dist/journey-maps-client/package.json"
-        sh "cat dist/journey-maps-client-elements/package.json | jq \'.version = \"${releaseVersion}\" | .name = \"@sbbch-rokas/journey-maps-client-elements\"' > tmp.json && mv tmp.json dist/journey-maps-client-elements/package.json"
+        sh "cat dist/journey-maps-client/package.json | jq '.version = \"${releaseVersion.version}\" | .name = \"@sbbch-rokas/journey-maps-client\"' > tmp.json && mv tmp.json dist/journey-maps-client/package.json"
+        sh "cat dist/journey-maps-client-elements/package.json | jq \'.version = \"${releaseVersion.version}\" | .name = \"@sbbch-rokas/journey-maps-client-elements\"' > tmp.json && mv tmp.json dist/journey-maps-client-elements/package.json"
         sh 'npm publish dist/journey-maps-client/ --registry=https://registry.npmjs.org --access public'
         sh 'npm publish dist/journey-maps-client-elements/ --registry=https://registry.npmjs.org --access public'
       }
