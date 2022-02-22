@@ -1,4 +1,4 @@
-import {Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
+import {GeoJSONSource, Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
 import {FeatureData, FeatureDataType} from '../../../journey-maps-client.interfaces';
 import {Constants} from '../../constants';
 
@@ -21,7 +21,8 @@ export class MapEventUtils {
   }
 
   /**
-   *  WARNING: in case of vector tiles (geOps source): this function does not check tiles outside the currently visible viewport.
+   *  WARNING: This function does not check features outside the currently visible viewport.
+   *  In opposite to queryVisibleFeaturesByFilter, it includes all features: currently rendered or hidden by layer zoom-level or visibility.
    */
   static queryFeatureSourceByFilter(mapInstance: MaplibreMap, featureDataType: FeatureDataType, filter?: any[]): FeatureData[] {
     const sourceId = this.getSourceMapping(featureDataType);

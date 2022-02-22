@@ -58,6 +58,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     this.mapCursorStyleEvent?.complete();
     this.featuresHoverEvent?.complete();
     this.featuresClickEvent?.complete();
+    this.featureSelectionHandler?.complete();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -81,6 +82,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
       this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, [...this.watchOnLayers.keys()]);
 
       const selectionModes = this.listenerOptionsToSelectionModes();
+      this.featureSelectionHandler?.complete();
       this.featureSelectionHandler = new FeatureSelectionHandler(this.map, this.watchOnLayers, selectionModes);
 
       if (!this.featuresClickEvent) {
