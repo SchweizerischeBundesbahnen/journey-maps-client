@@ -205,6 +205,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   setZoneGeoJsonInput(event: Event): void {
+    this.zones = undefined;
+
     if ((event.target as HTMLOptionElement).value === 'bern-burgdorf') {
       this.zones = this._zonesBernBurgdorf; // change detection fails at this stage
       this.setBbox([7.35, 46.85, 7.75, 47.15]);

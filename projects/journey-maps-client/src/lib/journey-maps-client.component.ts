@@ -471,7 +471,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       });
     }
 
-    if (changes.zones) {
+    if (changes.zones?.currentValue || changes.zones?.previousValue) {
       this.mapZoneService.updateZones(this.map, this.zones);
     }
 
