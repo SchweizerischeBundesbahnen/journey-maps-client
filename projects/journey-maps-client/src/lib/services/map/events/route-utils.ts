@@ -1,7 +1,7 @@
 import {FeatureData, FeatureDataType} from '../../../journey-maps-client.interfaces';
 import {MapEventUtils} from './map-event-utils';
 import {Map as MaplibreMap} from 'maplibre-gl';
-import {MapRoutesService} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/map-routes.service';
+import {MapRoutesService} from '../map-routes.service';
 
 export const ROUTE_ID_PROPERTY_NAME = 'routeId';
 export const SELECTED_PROPERTY_NAME = 'isSelected';
