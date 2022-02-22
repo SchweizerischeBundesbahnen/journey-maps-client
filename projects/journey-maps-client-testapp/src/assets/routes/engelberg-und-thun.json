@@ -24,6 +24,7 @@
           },
           "type": "path",
           "pathType": "transport",
+          "transportType": "rail",
           "lines": [
             {
               "prob": 0.9784437825,
@@ -916,7 +917,8 @@
       {
         "type": "Feature",
         "properties": {
-          "type": "midpoint"
+          "type": "midpoint",
+          "transportType": "rail"
         },
         "geometry": {
           "type": "Point",
@@ -953,6 +955,7 @@
           },
           "type": "path",
           "pathType": "transport",
+          "transportType": "bus",
           "lines": [
             {
               "prob": 1,
@@ -1241,7 +1244,8 @@
       {
         "type": "Feature",
         "properties": {
-          "type": "midpoint"
+          "type": "midpoint",
+          "transportType": "bus"
         },
         "geometry": {
           "type": "Point",

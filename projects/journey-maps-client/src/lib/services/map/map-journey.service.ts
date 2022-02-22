@@ -3,7 +3,7 @@ import {MapService} from './map.service';
 import {MapRouteService} from './map-route.service';
 import {MapTransferService} from './map-transfer.service';
 import {Map as MaplibreMap} from 'maplibre-gl';
-
+import {ROUTE_ID_PROPERTY_NAME, SELECTED_PROPERTY_NAME} from './events/route-utils';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,9 @@ export class MapJourneyService {
       const properties = feature.properties;
       const type = properties.type;
       const pathType = properties.pathType;
+
+      properties[ROUTE_ID_PROPERTY_NAME] = 'journey'; // They all belong together
+      properties[SELECTED_PROPERTY_NAME] = true; // Always selected
 
       if (type === 'path' && (pathType === 'transport' || pathType === 'bee')) {
         routeFeatures.push(feature);
