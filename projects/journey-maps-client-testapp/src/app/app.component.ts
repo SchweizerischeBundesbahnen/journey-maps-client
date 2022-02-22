@@ -258,7 +258,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   log(data: any) {
-    console.debug('new:', data.features?.map(f => JSON.stringify(f.state)));
+    console.debug(data.features);
   }
 
   updateListenerOptions(): void {
@@ -266,12 +266,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   logSelection(selection: FeaturesSelectEventData) {
-    console.log(JSON.stringify(selection.features.map(s => {
+    console.log(selection.features.map(s => {
       return {
         id: s.id,
         type: s.featureDataType,
         selected: s.state.selected
       };
-    })));
+    }));
   }
 }
