@@ -456,7 +456,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         this.mapJourneyService.updateJourney(this.map, undefined);
         this.mapTransferService.updateTransfer(this.map, undefined);
         this.mapRoutesService.updateRoutes(this.map, undefined);
-        this.mapAreaService.updateAreas(this.map, undefined);
         this.mapLeitPoiService.processData(this.map, undefined);
         // only add new data if we have some
         if (changes.journeyMapsRoutingOption?.currentValue?.journey) {
@@ -469,10 +468,11 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         if (changes.journeyMapsRoutingOption?.currentValue?.routes) {
           this.mapRoutesService.updateRoutes(this.map, this.journeyMapsRoutingOption.routes);
         }
-        if (changes.areas) {
-          this.mapAreaService.updateAreas(this.map, this.areas);
-        }
       });
+    }
+
+    if (changes.areas) {
+      this.mapAreaService.updateAreas(this.map, this.areas);
     }
 
     if (Object.values(this.journeyMapsRoutingOption ?? {}).filter(val => val).length > 1) {

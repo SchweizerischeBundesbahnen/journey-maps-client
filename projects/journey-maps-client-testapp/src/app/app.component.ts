@@ -8,9 +8,9 @@ import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
   InteractionOptions,
-  UIOptions,
   JourneyMapsRoutingOptions,
   StyleOptions,
+  UIOptions,
   ViewportOptions,
   ZoomLevels,
 } from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
@@ -193,11 +193,6 @@ export class AppComponent implements OnInit, OnDestroy {
     if ((event.target as HTMLOptionElement).value === 'routes') {
       this.journeyMapsRoutingOption = {routes: this._routes};
     }
-    // works
-    // if ((event.target as HTMLOptionElement).value === 'bern-burgdorf') {
-    //   this.areas = this._areasBernBurgdorf;
-    //   bbox = [7.35, 46.85, 7.75, 47.15];
-    // }
 
     if (bbox) {
       this.setBbox(bbox);
@@ -209,26 +204,10 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  // TODO: cdi ROKAS-453 get this to work in this separate dropdown
-  // doesn't work:
   setAreaGeoJsonInput(event: Event): void {
-    this.areas = {
-      type: 'FeatureCollection',
-      features: []
-    };
-
-    let bbox;
-
     if ((event.target as HTMLOptionElement).value === 'bern-burgdorf') {
       this.areas = this._areasBernBurgdorf; // change detection fails at this stage
-      bbox = [7.35, 46.85, 7.75, 47.15];
-    }
-
-    if (bbox) {
-      this.setBbox(bbox);
-      this.mapCenterChange.pipe(take(1)).subscribe(() => {
-        this.cd.detectChanges();
-      });
+      this.setBbox([7.35, 46.85, 7.75, 47.15]);
     }
   }
 
