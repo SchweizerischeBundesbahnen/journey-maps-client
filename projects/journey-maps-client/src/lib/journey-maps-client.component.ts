@@ -211,7 +211,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /**
    * Input to display JourneyMaps GeoJson zone data on the map.
    */
-  @Input() zones: GeoJSON.FeatureCollection;
+  @Input() journeyMapsZones: GeoJSON.FeatureCollection;
 
   /* **************************************** MARKER OPTIONS *****************************************/
 
@@ -492,8 +492,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       });
     }
 
-    if (changes.zones?.currentValue || changes.zones?.previousValue) {
-      this.mapZoneService.updateZones(this.map, this.zones);
+    if (changes.journeyMapsZones?.currentValue || changes.journeyMapsZones?.previousValue) {
+      this.mapZoneService.updateZones(this.map, this.journeyMapsZones);
     }
 
     if (Object.values(this.journeyMapsRoutingOption ?? {}).filter(val => val).length > 1) {

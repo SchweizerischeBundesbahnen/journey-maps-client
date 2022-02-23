@@ -71,10 +71,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     ZONE: {watch: true, selectionMode: SelectionMode.multi},
   };
 
-  journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes', 'bern-burgdorf'];
+  journeyMapsRoutingOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes', 'bern-burgdorf'];
   journeyMapsRoutingOption: JourneyMapsRoutingOptions;
-  zonessGeoJsonOptions = ['bern-burgdorf'];
-  zones: GeoJSON.FeatureCollection;
+  journeyMapsZoneOptions = ['bern-burgdorf'];
+  journeyMapsZones: GeoJSON.FeatureCollection;
 
   zoomLevels: ZoomLevels;
   mapCenter: LngLatLike;
@@ -194,7 +194,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedFeatures = selectedFeatures;
   }
 
-  setGeoJsonInput(event: Event): void {
+  setRoutingGeoJsonInput(event: Event): void {
     this.journeyMapsRoutingOption = {};
 
     let bbox;
@@ -234,10 +234,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setZoneGeoJsonInput(event: Event): void {
-    this.zones = undefined;
+    this.journeyMapsZones = undefined;
 
     if ((event.target as HTMLOptionElement).value === 'bern-burgdorf') {
-      this.zones = this._zonesBernBurgdorf; // change detection fails at this stage
+      this.journeyMapsZones = this._zonesBernBurgdorf; // change detection fails at this stage
       this.setBbox([7.35, 46.85, 7.75, 47.15]);
     }
   }

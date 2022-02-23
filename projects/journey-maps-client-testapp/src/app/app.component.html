@@ -12,7 +12,7 @@
                                  [uiOptions]="uiOptions"
                                  [viewportOptions]="viewportOptions"
                                  [journeyMapsRoutingOption]="journeyMapsRoutingOption"
-                                 [zones]="zones"
+                                 [journeyMapsZones]="journeyMapsZones"
                                  [markerOptions]="markerOptions"
                                  [listenerOptions]="listenerOptions"
                                  [markerDetailsTemplate]="markerDetailsTemplate"
@@ -91,11 +91,11 @@
       <li>Allow moving the map with one finger: {{interactionOptions.oneFingerPan}}</li>
       <li>Allow zooming with the scroll button: {{interactionOptions.scrollZoom}}</li>
       <li>
-        <label for="geo-json-select">
+        <label for="routing-geo-json-select">
           Display Journey-Maps GeoJSON data for:
-          <select id="geo-json-select" (change)="setGeoJsonInput($event)">
-            <option value="" (change)="setGeoJsonInput($event)">(none)</option>
-            <option *ngFor="let input of journeyMapsGeoJsonOptions" [value]="input">{{input}}</option>
+          <select id="routing-geo-json-select" (change)="setRoutingGeoJsonInput($event)">
+            <option value="" (change)="setRoutingGeoJsonInput($event)">(none)</option>
+            <option *ngFor="let input of journeyMapsRoutingOptions" [value]="input">{{input}}</option>
           </select>
         </label>
       </li>
@@ -104,7 +104,7 @@
           Display Zone GeoJSON data for:
           <select id="zones-geo-json-select" (change)="setZoneGeoJsonInput($event)">
             <option value="" (change)="setZoneGeoJsonInput($event)">(none)</option>
-            <option *ngFor="let input of zonessGeoJsonOptions" [value]="input">{{input}}</option>
+            <option *ngFor="let input of journeyMapsZoneOptions" [value]="input">{{input}}</option>
           </select>
         </label>
       </li>
