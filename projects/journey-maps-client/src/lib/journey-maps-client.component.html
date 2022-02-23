@@ -7,7 +7,7 @@
       </span>
       <p class="mod_map_container_mobile_overlay_text">{{touchOverlayText}}</p>
     </div>
-    <rokas-feature-event-listener #featureEventListener
+    <rokas-feature-event-listener
       [listenerOptions]="listenerOptions"
       [map]="mapReady | async"
       (featuresHoverChange)="featuresHoverChange.next($event)"
