@@ -5,7 +5,7 @@ import {
   FeaturesSelectEventData,
   FeatureData
 } from '../../../journey-maps-client.interfaces';
-import {RouteUtils} from './route-utils';
+import {ROUTE_ID_PROPERTY_NAME, RouteUtils} from './route-utils';
 import {MapEventUtils} from './map-event-utils';
 import {Subject, Subscription} from 'rxjs';
 import {sampleTime} from 'rxjs/operators';
@@ -77,6 +77,9 @@ export class FeatureSelectionHandler {
     this.subscription = mapMove.pipe(sampleTime(MAP_MOVE_SAMPLE_TIME_MS))
       .subscribe(() => {
         FeatureSelectionHandler.lastEventData?.forEach((isSelected, feature) => {
+          if (!feature.properties[ROUTE_ID_PROPERTY_NAME]) {
+            return;
+          }
           FeatureSelectionHandler.setRelatedRouteFeaturesSelection(this.mapInstance, feature, isSelected);
         });
       });
