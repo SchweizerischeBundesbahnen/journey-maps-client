@@ -18,7 +18,7 @@ import {MapRoutesService} from '../../services/map/map-routes.service';
 import {MapMarkerService} from '../../services/map/map-marker.service';
 import {FeaturesHoverEvent} from '../../services/map/events/features-hover-event';
 import {FeatureSelectionHandler} from '../../services/map/events/feature-selection-handler';
-import {MapZoneService} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/map-zone.service';
+import {MapZoneService} from '../../services/map/map-zone.service';
 
 @Component({
   selector: 'rokas-feature-event-listener',
