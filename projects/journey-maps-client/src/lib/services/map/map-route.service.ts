@@ -3,6 +3,7 @@ import {Constants} from '../constants';
 import {GeoJSONSource, Map as MaplibreMap} from 'maplibre-gl';
 import {MapService} from './map.service';
 import {RouteUtils} from './events/route-utils';
+import {Feature} from 'geojson';
 
 @Injectable({providedIn: 'root'})
 export class MapRouteService {
@@ -14,7 +15,7 @@ export class MapRouteService {
     const source = map.getSource(Constants.ROUTE_SOURCE) as GeoJSONSource;
     source.setData(routeFeatureCollection);
     if (routeFeatureCollection.features?.length) {
-      map.once('idle', () => RouteUtils.initSelectedState(map));
+      map.once('idle', () => RouteUtils.initSelectedState(map, routeFeatureCollection.features));
     }
   }
 }

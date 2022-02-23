@@ -1,4 +1,4 @@
-import {GeoJSONSource, Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
+import {Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
 import {FeatureData, FeatureDataType} from '../../../journey-maps-client.interfaces';
 import {Constants} from '../../constants';
 
@@ -15,9 +15,9 @@ export class MapEventUtils {
   /**
    * Query feature in all visible layers in the layers list. Only features that are currently rendered are included.
    */
-  static queryVisibleFeaturesByFilter(mapInstance: MaplibreMap, feature: FeatureData, layers: string[], filter?: any[]): FeatureData[] {
+  static queryVisibleFeaturesByFilter(mapInstance: MaplibreMap, featureDataType: FeatureDataType, layers: string[], filter?: any[]): FeatureData[] {
     return mapInstance.queryRenderedFeatures(null, {layers, filter})
-      .map(f => this.toFeatureEventData(f, feature.featureDataType));
+      .map(f => this.toFeatureEventData(f, featureDataType));
   }
 
   /**
