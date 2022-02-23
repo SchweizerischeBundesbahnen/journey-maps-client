@@ -47,7 +47,7 @@ import {
   ZoomLevels,
 } from './journey-maps-client.interfaces';
 import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
-import {MapSelectionEventService} from './services/map/events/map-selection-event.service';
+import {FeatureEventListenerComponent} from './components/feature-event-listener/feature-event-listener.component';
 
 const SATELLITE_MAP_MAX_ZOOM = 19.2;
 const SATELLITE_MAP_TILE_SIZE = 256;
@@ -61,13 +61,15 @@ const SATELLITE_MAP_URL_TEMPLATE = 'https://services.arcgisonline.com/arcgis/res
   selector: 'rokas-journey-maps-client',
   templateUrl: './journey-maps-client.component.html',
   styleUrls: ['./journey-maps-client.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [MapSelectionEventService]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
   private map: MaplibreMap;
   @ViewChild('map') private mapElementRef: ElementRef;
+
+  @ViewChild(FeatureEventListenerComponent)
+  private featureEventListenerComponent: FeatureEventListenerComponent;
 
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
@@ -352,7 +354,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapLeitPoiService: MapLeitPoiService,
               private levelSwitchService: LevelSwitchService,
               private mapLayerFilterService: MapLayerFilterService,
-              private featureSelectionHandlerService: MapSelectionEventService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService,
               private host: ElementRef) {
@@ -476,21 +477,24 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     // handle journey, transfer, and routes together, otherwise they can overwrite each other's transfer or route data
     if (changes.journeyMapsRoutingOption) {
       this.executeWhenMapStyleLoaded(() => {
+        // stam: is there other way to achieve this ?
+        const mapSelectionEventService = this.featureEventListenerComponent.mapSelectionEventService;
+
         // remove previous data from map
-        this.mapJourneyService.updateJourney(this.map, undefined);
+        this.mapJourneyService.updateJourney(this.map, mapSelectionEventService, undefined);
         this.mapTransferService.updateTransfer(this.map, undefined);
-        this.mapRoutesService.updateRoutes(this.map, undefined);
+        this.mapRoutesService.updateRoutes(this.map, mapSelectionEventService, undefined);
         this.mapLeitPoiService.processData(this.map, undefined);
         // only add new data if we have some
         if (changes.journeyMapsRoutingOption?.currentValue?.journey) {
-          this.mapJourneyService.updateJourney(this.map, this.featureSelectionHandlerService, this.journeyMapsRoutingOption.journey);
+          this.mapJourneyService.updateJourney(this.map, mapSelectionEventService, this.journeyMapsRoutingOption.journey);
         }
         if (changes.journeyMapsRoutingOption?.currentValue?.transfer) {
           this.mapTransferService.updateTransfer(this.map, this.journeyMapsRoutingOption.transfer);
           this.mapLeitPoiService.processData(this.map, this.journeyMapsRoutingOption.transfer);
         }
         if (changes.journeyMapsRoutingOption?.currentValue?.routes) {
-          this.mapRoutesService.updateRoutes(this.map, this.featureSelectionHandlerService, this.journeyMapsRoutingOption.routes);
+          this.mapRoutesService.updateRoutes(this.map, mapSelectionEventService, this.journeyMapsRoutingOption.routes);
         }
       });
     }

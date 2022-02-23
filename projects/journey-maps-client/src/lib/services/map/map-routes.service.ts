@@ -23,7 +23,7 @@ export class MapRoutesService {
   constructor(private mapRouteService: MapRouteService) {
   }
 
-  updateRoutes(map: MaplibreMap, featureSelectionHandlerService: MapSelectionEventService, routes: SelectableFeatureCollection[] = [EMPTY_FEATURE_COLLECTION]): void {
+  updateRoutes(map: MaplibreMap, mapSelectionEventService: MapSelectionEventService, routes: SelectableFeatureCollection[] = [EMPTY_FEATURE_COLLECTION]): void {
     routes.forEach((featureCollection, idx) => {
       const id = featureCollection.id ?? `jmc-generated-${idx + 1}`;
       for (const f of featureCollection.features) {
@@ -31,7 +31,7 @@ export class MapRoutesService {
         f.properties[SELECTED_PROPERTY_NAME] = featureCollection.isSelected;
       }
     });
-    this.mapRouteService.updateRoute(map, featureSelectionHandlerService, {
+    this.mapRouteService.updateRoute(map, mapSelectionEventService, {
       type: 'FeatureCollection',
       // With ES2019 we can replace this with routes.flatMap(({features}) => features)
       features: routes.reduce((accumulatedFeatures, next) => accumulatedFeatures.concat(next.features), []),

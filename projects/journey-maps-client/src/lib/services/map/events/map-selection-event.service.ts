@@ -15,7 +15,11 @@ import {Injectable} from '@angular/core';
 
 const MAP_MOVE_SAMPLE_TIME_MS = 100;
 
-@Injectable(/* component scope */)
+/**
+ journey-maps-client component scope service.
+ Use one service instance per map instance.
+ */
+@Injectable()
 export class MapSelectionEventService {
   private lastEventData: Map<Feature, boolean>;
   private subscription: Subscription;

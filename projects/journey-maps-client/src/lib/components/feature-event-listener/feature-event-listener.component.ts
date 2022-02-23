@@ -23,7 +23,8 @@ import {RouteUtilsService} from '@schweizerischebundesbahnen/journey-maps-client
 
 @Component({
   selector: 'rokas-feature-event-listener',
-  templateUrl: './feature-event-listener.component.html'
+  templateUrl: './feature-event-listener.component.html',
+  providers: [MapSelectionEventService]
 })
 export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
 
@@ -51,7 +52,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     private mapRoutesService: MapRoutesService,
     private mapMarkerService: MapMarkerService,
     private routeUtilsService: RouteUtilsService,
-    private featureSelectionHandlerService: MapSelectionEventService
+    public readonly mapSelectionEventService: MapSelectionEventService
   ) {
   }
 
@@ -61,7 +62,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     this.mapCursorStyleEvent?.complete();
     this.featuresHoverEvent?.complete();
     this.featuresClickEvent?.complete();
-    this.featureSelectionHandlerService?.complete();
+    this.mapSelectionEventService?.complete();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -88,8 +89,8 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
       this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, [...this.watchOnLayers.keys()]);
 
       const selectionModes = this.listenerOptionsToSelectionModes();
-      this.featureSelectionHandlerService?.complete();
-      this.featureSelectionHandlerService.initialize(this.map, this.watchOnLayers, selectionModes);
+      this.mapSelectionEventService?.complete();
+      this.mapSelectionEventService.initialize(this.map, this.watchOnLayers, selectionModes);
 
       if (!this.featuresClickEvent) {
         this.featuresClickEvent = new FeaturesClickEvent(this.map, this.watchOnLayers);
@@ -129,8 +130,8 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
   }
 
   private featureClicked(data: FeaturesClickEventData) {
-    this.featureSelectionHandlerService.toggleSelection(data);
-    this.featureSelectionsChange.next(this.featureSelectionHandlerService.findSelectedFeatures());
+    this.mapSelectionEventService.toggleSelection(data);
+    this.featureSelectionsChange.next(this.mapSelectionEventService.findSelectedFeatures());
     this.featuresClick.next(data);
 
     const topMostFeature = data.features[0];

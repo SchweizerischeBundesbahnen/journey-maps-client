@@ -17,10 +17,8 @@ export class MapJourneyService {
     private mapTransferService: MapTransferService) {
   }
 
-  updateJourney(
-    map: MaplibreMap,
-    featureSelectionHandlerService: MapSelectionEventService,
-    journey: GeoJSON.FeatureCollection = EMPTY_FEATURE_COLLECTION
+  updateJourney(map: MaplibreMap, mapSelectionEventService: MapSelectionEventService,
+                journey: GeoJSON.FeatureCollection = EMPTY_FEATURE_COLLECTION
   ): void {
     const routeFeatures: GeoJSON.Feature[] = [];
     const transferFeatures: GeoJSON.Feature[] = [];
@@ -42,10 +40,9 @@ export class MapJourneyService {
       }
     }
 
-    this.mapRouteService.updateRoute(
-      map,
-      featureSelectionHandlerService,
-      {type: 'FeatureCollection', features: routeFeatures}
+    this.mapRouteService.updateRoute(map, mapSelectionEventService, {
+        type: 'FeatureCollection', features: routeFeatures
+      }
     );
 
     this.mapTransferService.updateTransfer(map, {type: 'FeatureCollection', features: transferFeatures});
