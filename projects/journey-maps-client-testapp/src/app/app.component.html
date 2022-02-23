@@ -93,8 +93,8 @@
       <li>
         <label for="routing-geo-json-select">
           Display Journey-Maps GeoJSON data for:
-          <select id="routing-geo-json-select" (change)="setRoutingGeoJsonInput($event)">
-            <option value="" (change)="setRoutingGeoJsonInput($event)">(none)</option>
+          <select id="routing-geo-json-select" (change)="setJourneyMapsRoutingInput($event)">
+            <option value="" (change)="setJourneyMapsRoutingInput($event)">(none)</option>
             <option *ngFor="let input of journeyMapsRoutingOptions" [value]="input">{{input}}</option>
           </select>
         </label>
@@ -102,8 +102,8 @@
       <li>
         <label for="zones-geo-json-select">
           Display Zone GeoJSON data for:
-          <select id="zones-geo-json-select" (change)="setZoneGeoJsonInput($event)">
-            <option value="" (change)="setZoneGeoJsonInput($event)">(none)</option>
+          <select id="zones-geo-json-select" (change)="setJourneyMapsZoneInput($event)">
+            <option value="" (change)="setJourneyMapsZoneInput($event)">(none)</option>
             <option *ngFor="let input of journeyMapsZoneOptions" [value]="input">{{input}}</option>
           </select>
         </label>

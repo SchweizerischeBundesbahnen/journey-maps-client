@@ -194,7 +194,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedFeatures = selectedFeatures;
   }
 
-  setRoutingGeoJsonInput(event: Event): void {
+  setJourneyMapsRoutingInput(event: Event): void {
     this.journeyMapsRoutingOption = {};
 
     let bbox;
@@ -233,7 +233,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  setZoneGeoJsonInput(event: Event): void {
+  setJourneyMapsZoneInput(event: Event): void {
     this.journeyMapsZones = undefined;
 
     if ((event.target as HTMLOptionElement).value === 'bern-burgdorf') {
