@@ -200,7 +200,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /* **************************************** JOURNEY-MAPS ROUTING OPTIONS *****************************************/
 
   /**
-   * Input to display JourneyMaps GeoJson line data on the map.
+   * Input to display JourneyMaps GeoJson routing data on the map.
    *
    * **WARNING:** The map currently doesn't support more than one of these fields to be set at a time
    */
