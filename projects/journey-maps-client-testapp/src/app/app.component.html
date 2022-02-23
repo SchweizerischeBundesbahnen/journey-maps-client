@@ -12,6 +12,7 @@
                                  [uiOptions]="uiOptions"
                                  [viewportOptions]="viewportOptions"
                                  [journeyMapsRoutingOption]="journeyMapsRoutingOption"
+                                 [journeyMapsZones]="journeyMapsZones"
                                  [markerOptions]="markerOptions"
                                  [listenerOptions]="listenerOptions"
                                  [markerDetailsTemplate]="markerDetailsTemplate"
@@ -90,11 +91,20 @@
       <li>Allow moving the map with one finger: {{interactionOptions.oneFingerPan}}</li>
       <li>Allow zooming with the scroll button: {{interactionOptions.scrollZoom}}</li>
       <li>
-        <label for="geo-json-select">
+        <label for="routing-geo-json-select">
           Display Journey-Maps GeoJSON data for:
-          <select id="geo-json-select" (change)="setGeoJsonInput($event)">
-            <option value="" (change)="setGeoJsonInput($event)">(none)</option>
-            <option *ngFor="let input of journeyMapsGeoJsonOptions" [value]="input">{{input}}</option>
+          <select id="routing-geo-json-select" (change)="setJourneyMapsRoutingInput($event)">
+            <option value="" (change)="setJourneyMapsRoutingInput($event)">(none)</option>
+            <option *ngFor="let input of journeyMapsRoutingOptions" [value]="input">{{input}}</option>
+          </select>
+        </label>
+      </li>
+      <li>
+        <label for="zones-geo-json-select">
+          Display Zone GeoJSON data for:
+          <select id="zones-geo-json-select" (change)="setJourneyMapsZoneInput($event)">
+            <option value="" (change)="setJourneyMapsZoneInput($event)">(none)</option>
+            <option *ngFor="let input of journeyMapsZoneOptions" [value]="input">{{input}}</option>
           </select>
         </label>
       </li>
@@ -118,7 +128,7 @@
       </li>
       <li>
         <label for="small-buttons-checkbox">
-          Show Small Buttons:
+          Show small buttons:
           <input id="small-buttons-checkbox" (change)="setShowSmallButtons($event)" [checked]="uiOptions.showSmallButtons"  value="smallButtons" type="checkbox"/>
         </label>
       </li>
@@ -127,11 +137,10 @@
   <div>
     Interaction listener for:
     <div class="sbb-checkbox-group-horizontal">
-      <sbb-checkbox [(ngModel)]="listenerOptions?.MARKER.watch" (change)="updateListenerOptions()">Markers
-      </sbb-checkbox>
+      <sbb-checkbox [(ngModel)]="listenerOptions?.MARKER.watch" (change)="updateListenerOptions()">Markers</sbb-checkbox>
       <sbb-checkbox [(ngModel)]="listenerOptions?.ROUTE.watch" (change)="updateListenerOptions()">Routes</sbb-checkbox>
-      <sbb-checkbox [(ngModel)]="listenerOptions?.STATION.watch" (change)="updateListenerOptions()">Stations
-      </sbb-checkbox>
+      <sbb-checkbox [(ngModel)]="listenerOptions?.STATION.watch" (change)="updateListenerOptions()">Stations</sbb-checkbox>
+      <sbb-checkbox [(ngModel)]="listenerOptions?.ZONE.watch" (change)="updateListenerOptions()">Zones</sbb-checkbox>
     </div>
   </div>
 

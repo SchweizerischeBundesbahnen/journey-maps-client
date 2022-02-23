@@ -4,10 +4,11 @@
 
 ### Added
 
-* Added support for map events for MARKER, ROUTE and STATION feature types. Use configuration setting in `listenerOptions` to enable the following events:
+* Added support for map events for MARKER, ROUTE, STATION and ZONE feature types. Use configuration setting in `listenerOptions` to enable the following events:
   * `selectedFeaturesChange`
   * `featuresClick`
   * `featuresHoverChange`
+* Added 'journeyMapsZones' @Input parameter to display selectable zones on the map.
 * An optional 'home button' has been added to the controls, allowing the user to zoom all of Switzerland into view.
 * `rokas-popup` and `rokas-teaser` components are made available to J-M-C integrators.
 * The option to show the map control buttons in a smaller size.

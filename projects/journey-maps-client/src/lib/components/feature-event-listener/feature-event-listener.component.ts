@@ -6,7 +6,7 @@ import {
   FeaturesHoverChangeEventData,
   FeaturesSelectEventData,
   ListenerOptions,
-  SelectionMode
+  SelectionMode,
 } from '../../journey-maps-client.interfaces';
 import {MapCursorStyleEvent} from '../../services/map/events/map-cursor-style-event';
 import {MapStationService} from '../../services/map/map-station.service';
@@ -18,6 +18,7 @@ import {MapRoutesService} from '../../services/map/map-routes.service';
 import {MapMarkerService} from '../../services/map/map-marker.service';
 import {FeaturesHoverEvent} from '../../services/map/events/features-hover-event';
 import {FeatureSelectionHandler} from '../../services/map/events/feature-selection-handler';
+import {MapZoneService} from '../../services/map/map-zone.service';
 
 @Component({
   selector: 'rokas-feature-event-listener',
@@ -65,16 +66,19 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
       this.watchOnLayers.clear();
 
       if (this.listenerOptions.MARKER?.watch) {
-        this.mapMarkerService.allMarkerAndClusterLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.MARKER));
+        this.updateWatchOnLayers(this.mapMarkerService.allMarkerAndClusterLayers, FeatureDataType.MARKER);
       }
       if (this.listenerOptions.ROUTE?.watch) {
-        MapRoutesService.allRouteLayers.forEach(id => this.watchOnLayers.set(id, FeatureDataType.ROUTE));
+        this.updateWatchOnLayers(MapRoutesService.allRouteLayers, FeatureDataType.ROUTE);
       }
       if (this.listenerOptions.STATION?.watch) {
-        this.watchOnLayers.set(MapStationService.STATION_LAYER, FeatureDataType.STATION);
+        this.updateWatchOnLayers([MapStationService.STATION_LAYER], FeatureDataType.STATION)
         this.mapStationService.registerStationUpdater(this.map);
       } else {
         this.mapStationService.deregisterStationUpdater(this.map);
+      }
+      if (this.listenerOptions.ZONE?.watch) {
+        this.updateWatchOnLayers(MapZoneService.allZoneLayers, FeatureDataType.ZONE);
       }
 
       this.mapCursorStyleEvent?.complete();
@@ -99,11 +103,16 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     }
   }
 
+  private updateWatchOnLayers(layers: string[], featureDataType: FeatureDataType): void {
+    layers.forEach(id => this.watchOnLayers.set(id, featureDataType));
+  }
+
   private listenerOptionsToSelectionModes() {
     const selectionModes = new Map<FeatureDataType, SelectionMode>();
     selectionModes.set(FeatureDataType.ROUTE, this.listenerOptions.ROUTE?.selectionMode ?? SelectionMode.single);
     selectionModes.set(FeatureDataType.MARKER, this.listenerOptions.MARKER?.selectionMode ?? SelectionMode.single);
     selectionModes.set(FeatureDataType.STATION, this.listenerOptions.STATION?.selectionMode ?? SelectionMode.single);
+    selectionModes.set(FeatureDataType.ZONE, this.listenerOptions.ZONE?.selectionMode ?? SelectionMode.multi);
     return selectionModes;
   }
 

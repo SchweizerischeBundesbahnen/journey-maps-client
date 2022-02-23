@@ -41,6 +41,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private _transferZurichIndoor: GeoJSON.FeatureCollection;
   private _transferBernIndoor: GeoJSON.FeatureCollection;
   private _transferGeneveIndoor: GeoJSON.FeatureCollection;
+  private _zonesBernBurgdorf: GeoJSON.FeatureCollection;
   private _routes: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
 
@@ -67,10 +68,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     MARKER: {watch: true, selectionMode: SelectionMode.single},
     ROUTE: {watch: true, selectionMode: SelectionMode.multi},
     STATION: {watch: true},
+    ZONE: {watch: true, selectionMode: SelectionMode.multi},
   };
 
-  journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
+  journeyMapsRoutingOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes', 'bern-burgdorf'];
   journeyMapsRoutingOption: JourneyMapsRoutingOptions;
+  journeyMapsZoneOptions = ['bern-burgdorf'];
+  journeyMapsZones: GeoJSON.FeatureCollection;
 
   zoomLevels: ZoomLevels;
   mapCenter: LngLatLike;
@@ -154,6 +158,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
       .subscribe(json => this._routes = json);
 
+    this.assetReaderService.loadAssetAsJSON('zones/bern-burgdorf.json')
+      .subscribe(json => this._zonesBernBurgdorf = json);
+
     this.assetReaderService.loadAssetAsString('secrets/apikey.txt')
       .subscribe(apiKey => this.apiKey = apiKey);
 
@@ -187,7 +194,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedFeatures = selectedFeatures;
   }
 
-  setGeoJsonInput(event: Event): void {
+  setJourneyMapsRoutingInput(event: Event): void {
     this.journeyMapsRoutingOption = {};
 
     let bbox;
@@ -223,6 +230,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           this.cd.detectChanges();
         }
       );
+    }
+  }
+
+  setJourneyMapsZoneInput(event: Event): void {
+    this.journeyMapsZones = undefined;
+
+    if ((event.target as HTMLOptionElement).value === 'bern-burgdorf') {
+      this.journeyMapsZones = this._zonesBernBurgdorf; // change detection fails at this stage
+      this.setBbox([7.35, 46.85, 7.75, 47.15]);
     }
   }
 
