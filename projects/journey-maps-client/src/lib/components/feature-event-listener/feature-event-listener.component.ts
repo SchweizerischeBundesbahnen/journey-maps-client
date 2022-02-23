@@ -112,7 +112,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     selectionModes.set(FeatureDataType.ROUTE, this.listenerOptions.ROUTE?.selectionMode ?? SelectionMode.single);
     selectionModes.set(FeatureDataType.MARKER, this.listenerOptions.MARKER?.selectionMode ?? SelectionMode.single);
     selectionModes.set(FeatureDataType.STATION, this.listenerOptions.STATION?.selectionMode ?? SelectionMode.single);
-    selectionModes.set(FeatureDataType.ZONE, SelectionMode.multi);
+    selectionModes.set(FeatureDataType.ZONE, this.listenerOptions.ZONE?.selectionMode ?? SelectionMode.multi);
     return selectionModes;
   }
 
