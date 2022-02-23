@@ -17,8 +17,9 @@ import {Subject} from 'rxjs';
 import {MapRoutesService} from '../../services/map/map-routes.service';
 import {MapMarkerService} from '../../services/map/map-marker.service';
 import {FeaturesHoverEvent} from '../../services/map/events/features-hover-event';
-import {FeatureSelectionHandler} from '../../services/map/events/feature-selection-handler';
+import {MapSelectionEventService} from '../../services/map/events/map-selection-event.service';
 import {MapZoneService} from '../../services/map/map-zone.service';
+import {RouteUtilsService} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/events/route-utils.service';
 
 @Component({
   selector: 'rokas-feature-event-listener',
@@ -44,12 +45,13 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
   private mapCursorStyleEvent: MapCursorStyleEvent;
   private featuresHoverEvent: FeaturesHoverEvent;
   private featuresClickEvent: FeaturesClickEvent;
-  private featureSelectionHandler: FeatureSelectionHandler;
 
   constructor(
     private mapStationService: MapStationService,
     private mapRoutesService: MapRoutesService,
     private mapMarkerService: MapMarkerService,
+    private routeUtilsService: RouteUtilsService,
+    private featureSelectionHandlerService: MapSelectionEventService
   ) {
   }
 
@@ -59,7 +61,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     this.mapCursorStyleEvent?.complete();
     this.featuresHoverEvent?.complete();
     this.featuresClickEvent?.complete();
-    this.featureSelectionHandler?.complete();
+    this.featureSelectionHandlerService?.complete();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -73,7 +75,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
         this.updateWatchOnLayers(MapRoutesService.allRouteLayers, FeatureDataType.ROUTE);
       }
       if (this.listenerOptions.STATION?.watch) {
-        this.updateWatchOnLayers([MapStationService.STATION_LAYER], FeatureDataType.STATION)
+        this.updateWatchOnLayers([MapStationService.STATION_LAYER], FeatureDataType.STATION);
         this.mapStationService.registerStationUpdater(this.map);
       } else {
         this.mapStationService.deregisterStationUpdater(this.map);
@@ -86,8 +88,8 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
       this.mapCursorStyleEvent = new MapCursorStyleEvent(this.map, [...this.watchOnLayers.keys()]);
 
       const selectionModes = this.listenerOptionsToSelectionModes();
-      this.featureSelectionHandler?.complete();
-      this.featureSelectionHandler = new FeatureSelectionHandler(this.map, this.watchOnLayers, selectionModes);
+      this.featureSelectionHandlerService?.complete();
+      this.featureSelectionHandlerService.initialize(this.map, this.watchOnLayers, selectionModes);
 
       if (!this.featuresClickEvent) {
         this.featuresClickEvent = new FeaturesClickEvent(this.map, this.watchOnLayers);
@@ -97,7 +99,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
       }
 
       if (!this.featuresHoverEvent) {
-        this.featuresHoverEvent = new FeaturesHoverEvent(this.map, this.watchOnLayers);
+        this.featuresHoverEvent = new FeaturesHoverEvent(this.map, this.watchOnLayers, this.routeUtilsService);
         this.featuresHoverEvent
           .pipe(takeUntil(this.destroyed))
           .subscribe(data => this.featureHovered(data));
@@ -127,8 +129,8 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
   }
 
   private featureClicked(data: FeaturesClickEventData) {
-    this.featureSelectionHandler.toggleSelection(data);
-    this.featureSelectionsChange.next(this.featureSelectionHandler.findSelectedFeatures());
+    this.featureSelectionHandlerService.toggleSelection(data);
+    this.featureSelectionsChange.next(this.featureSelectionHandlerService.findSelectedFeatures());
     this.featuresClick.next(data);
 
     const topMostFeature = data.features[0];

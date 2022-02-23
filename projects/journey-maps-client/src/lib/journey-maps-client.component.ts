@@ -47,6 +47,7 @@ import {
   ZoomLevels,
 } from './journey-maps-client.interfaces';
 import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
+import {MapSelectionEventService} from './services/map/events/map-selection-event.service';
 
 const SATELLITE_MAP_MAX_ZOOM = 19.2;
 const SATELLITE_MAP_TILE_SIZE = 256;
@@ -60,7 +61,8 @@ const SATELLITE_MAP_URL_TEMPLATE = 'https://services.arcgisonline.com/arcgis/res
   selector: 'rokas-journey-maps-client',
   templateUrl: './journey-maps-client.component.html',
   styleUrls: ['./journey-maps-client.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [MapSelectionEventService]
 })
 export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
@@ -350,6 +352,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapLeitPoiService: MapLeitPoiService,
               private levelSwitchService: LevelSwitchService,
               private mapLayerFilterService: MapLayerFilterService,
+              private featureSelectionHandlerService: MapSelectionEventService,
               private cd: ChangeDetectorRef,
               private i18n: LocaleService,
               private host: ElementRef) {
@@ -480,14 +483,14 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         this.mapLeitPoiService.processData(this.map, undefined);
         // only add new data if we have some
         if (changes.journeyMapsRoutingOption?.currentValue?.journey) {
-          this.mapJourneyService.updateJourney(this.map, this.journeyMapsRoutingOption.journey);
+          this.mapJourneyService.updateJourney(this.map, this.featureSelectionHandlerService, this.journeyMapsRoutingOption.journey);
         }
         if (changes.journeyMapsRoutingOption?.currentValue?.transfer) {
           this.mapTransferService.updateTransfer(this.map, this.journeyMapsRoutingOption.transfer);
           this.mapLeitPoiService.processData(this.map, this.journeyMapsRoutingOption.transfer);
         }
         if (changes.journeyMapsRoutingOption?.currentValue?.routes) {
-          this.mapRoutesService.updateRoutes(this.map, this.journeyMapsRoutingOption.routes);
+          this.mapRoutesService.updateRoutes(this.map, this.featureSelectionHandlerService, this.journeyMapsRoutingOption.routes);
         }
       });
     }

@@ -2,7 +2,7 @@ import {FeatureData, FeatureDataType, FeaturesHoverChangeEventData} from '../../
 import {LngLat, Map as MaplibreMap, MapboxGeoJSONFeature, Point} from 'maplibre-gl';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {MapEventUtils} from './map-event-utils';
-import {RouteUtils} from './route-utils';
+import {RouteUtilsService} from './route-utils.service';
 import {sampleTime} from 'rxjs/operators';
 
 const REPEAT_EVENTS = 1;
@@ -25,7 +25,10 @@ interface MouseHoverState {
 export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventData> {
   private subscription: Subscription;
 
-  constructor(private mapInstance: MaplibreMap, private layers: Map<string, FeatureDataType>) {
+  constructor(
+    private mapInstance: MaplibreMap,
+    private layers: Map<string, FeatureDataType>,
+    private routeUtilsService: RouteUtilsService) {
     super(REPEAT_EVENTS);
     if (!this.layers.size) {
       return;
@@ -70,10 +73,10 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
       MapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [eventPoint.x, eventPoint.y], this.layers);
     let hasNewFeatures = !!currentFeatures.length;
 
-    const routeFeatures = RouteUtils.filterRouteFeatures(currentFeatures);
+    const routeFeatures = this.routeUtilsService.filterRouteFeatures(currentFeatures);
     if (routeFeatures.length) {
       for (let routeFeature of routeFeatures) {
-        const relatedFeatures = RouteUtils.findRelatedRoutes(routeFeature, this.mapInstance, 'visibleOnly');
+        const relatedFeatures = this.routeUtilsService.findRelatedRoutes(routeFeature, this.mapInstance, 'visibleOnly');
         if (relatedFeatures.length) {
           currentFeatures.push(...relatedFeatures);
         }

@@ -4,7 +4,7 @@ import {Constants} from '../constants';
 import {Marker} from '../../model/marker';
 import {MarkerConverterService} from '../marker-converter.service';
 import {MarkerCategory} from '../../model/marker-category.enum';
-import {MapService} from './map.service';
+import {EMPTY_FEATURE_COLLECTION, MapService} from './map.service';
 import {MapConfigService} from './map-config.service';
 import {Feature} from 'geojson';
 import {MarkerCategoryMapping} from '../../model/marker-category-mapping';
@@ -65,7 +65,7 @@ export class MapMarkerService {
     }
 
     for (const sourceId of this.sources) {
-      const newData = {...this.mapService.emptyFeatureCollection};
+      const newData = {...EMPTY_FEATURE_COLLECTION};
       newData.features = featuresPerSource.get(sourceId) ?? [];
 
       const source = map.getSource(sourceId) as GeoJSONSource;

@@ -2,16 +2,13 @@ import {Injectable} from '@angular/core';
 import {Geometry, Point} from 'geojson';
 import {FlyToOptions, LngLat, LngLatLike, Map as MaplibreMap} from 'maplibre-gl';
 
+export const EMPTY_FEATURE_COLLECTION: GeoJSON.FeatureCollection = {
+  type: 'FeatureCollection',
+  features: []
+};
+
 @Injectable({providedIn: 'root'})
 export class MapService {
-
-  readonly emptyFeatureCollection: GeoJSON.FeatureCollection = {
-    type: 'FeatureCollection',
-    features: []
-  };
-
-  constructor() {
-  }
 
   moveMap(
     map: maplibregl.Map,

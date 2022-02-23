@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Constants} from '../constants';
 import {GeoJSONSource, Map as MaplibreMap} from 'maplibre-gl';
-import {MapService} from './map.service';
+import {EMPTY_FEATURE_COLLECTION} from './map.service';
 
 @Injectable({providedIn: 'root'})
 export class MapZoneService {
@@ -12,10 +12,7 @@ export class MapZoneService {
     'rokas-zone-label',
   ];
 
-  constructor(private mapService: MapService) {
-  }
-
-  updateZones(map: MaplibreMap, zonesFeatureCollection: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
+  updateZones(map: MaplibreMap, zonesFeatureCollection: GeoJSON.FeatureCollection = EMPTY_FEATURE_COLLECTION): void {
     const source = map.getSource(Constants.ZONE_SOURCE) as GeoJSONSource;
     source.setData(zonesFeatureCollection);
   }

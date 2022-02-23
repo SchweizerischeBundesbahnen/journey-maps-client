@@ -5,26 +5,35 @@ import {
   FeaturesSelectEventData,
   FeatureData
 } from '../../../journey-maps-client.interfaces';
-import {ROUTE_ID_PROPERTY_NAME, RouteUtils} from './route-utils';
+import {RouteUtilsService, SELECTED_PROPERTY_NAME} from './route-utils.service';
 import {MapEventUtils} from './map-event-utils';
 import {Subject, Subscription} from 'rxjs';
 import {sampleTime} from 'rxjs/operators';
 import {Map as MaplibreMap} from 'maplibre-gl';
 import {Feature} from 'geojson';
+import {Injectable} from '@angular/core';
 
 const MAP_MOVE_SAMPLE_TIME_MS = 100;
 
-export class FeatureSelectionHandler {
-
-  static lastEventData: Map<Feature, boolean>;
-
+@Injectable(/* component scope */)
+export class MapSelectionEventService {
+  private lastEventData: Map<Feature, boolean>;
   private subscription: Subscription;
 
-  constructor(
-    private mapInstance: MaplibreMap,
-    private layersTypes: Map<string, FeatureDataType>,
-    private selectionModes: Map<FeatureDataType, SelectionMode>) {
+  private mapInstance: MaplibreMap;
+  private layersTypes: Map<string, FeatureDataType>;
+  private selectionModes: Map<FeatureDataType, SelectionMode>;
 
+  constructor(private routeUtilsService: RouteUtilsService) {
+  }
+
+  initialize(
+    mapInstance: MaplibreMap,
+    layersTypes: Map<string, FeatureDataType>,
+    selectionModes: Map<FeatureDataType, SelectionMode>) {
+    this.mapInstance = mapInstance;
+    this.layersTypes = layersTypes;
+    this.selectionModes = selectionModes;
     this.attachMapMoveEvent();
   }
 
@@ -38,7 +47,15 @@ export class FeatureSelectionHandler {
       this.setFeatureSelection(data, selected);
     }
 
-    FeatureSelectionHandler.lastEventData = new Map(eventData.features.map(f => [f, f.state.selected]));
+    this.lastEventData = new Map(eventData.features.map(f => [f, f.state.selected]));
+  }
+
+  initSelectedState(mapInstance: MaplibreMap, features: Feature[]): void {
+    const selectedFeatures = features.filter(f => f.properties[SELECTED_PROPERTY_NAME]);
+    selectedFeatures.forEach(data => {
+      this.routeUtilsService.setRelatedRouteFeaturesSelection(mapInstance, data, true);
+    });
+    this.lastEventData = new Map(selectedFeatures.map(f => [f, true]));
   }
 
   findSelectedFeatures(): FeaturesSelectEventData {
@@ -55,28 +72,16 @@ export class FeatureSelectionHandler {
 
     MapEventUtils.setFeatureState(data, this.mapInstance, {selected});
 
-    FeatureSelectionHandler.setRelatedRouteFeaturesSelection(this.mapInstance, data, selected);
-  }
-
-  static setRelatedRouteFeaturesSelection(mapInstance: MaplibreMap, feature: Feature, selected: boolean) {
-    if (!feature.properties[ROUTE_ID_PROPERTY_NAME]) {
-      return;
-    }
-    const relatedRouteFeatures = RouteUtils.findRelatedRoutes(feature, mapInstance, 'all');
-    if (!relatedRouteFeatures.length) {
-      return;
-    }
-    for (let routeMapFeature of relatedRouteFeatures) {
-      MapEventUtils.setFeatureState(routeMapFeature, mapInstance, {selected});
-    }
+    this.routeUtilsService.setRelatedRouteFeaturesSelection(this.mapInstance, data, selected);
   }
 
   private attachMapMoveEvent() {
+    this.complete();
     const mapMove = new Subject();
     this.subscription = mapMove.pipe(sampleTime(MAP_MOVE_SAMPLE_TIME_MS))
       .subscribe(() => {
-        FeatureSelectionHandler.lastEventData?.forEach((isSelected, feature) => {
-          FeatureSelectionHandler.setRelatedRouteFeaturesSelection(this.mapInstance, feature, isSelected);
+        this.lastEventData?.forEach((isSelected, feature) => {
+          this.routeUtilsService.setRelatedRouteFeaturesSelection(this.mapInstance, feature, isSelected);
         });
       });
 
