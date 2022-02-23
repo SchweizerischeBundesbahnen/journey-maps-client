@@ -3,7 +3,6 @@ import {Constants} from '../constants';
 import {GeoJSONSource, Map as MaplibreMap} from 'maplibre-gl';
 import {MapService} from './map.service';
 import {RouteUtils} from './events/route-utils';
-import {Feature} from 'geojson';
 
 @Injectable({providedIn: 'root'})
 export class MapRouteService {
