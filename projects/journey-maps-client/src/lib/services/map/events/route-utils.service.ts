@@ -1,5 +1,5 @@
 import {FeatureData, FeatureDataType} from '../../../journey-maps-client.interfaces';
-import {MapEventUtils} from './map-event-utils';
+import {MapEventUtilsService} from './map-event-utils.service';
 import {Map as MaplibreMap} from 'maplibre-gl';
 import {MapRoutesService} from '../map-routes.service';
 import {Feature} from 'geojson';
@@ -10,6 +10,9 @@ export const SELECTED_PROPERTY_NAME = 'isSelected';
 
 @Injectable({providedIn: 'root'})
 export class RouteUtilsService {
+
+  constructor(private mapEventUtils: MapEventUtilsService) {
+  }
 
   filterRouteFeatures(currentFeatures: FeatureData[]): FeatureData[] {
     return currentFeatures.filter(hovered => !!hovered.properties[ROUTE_ID_PROPERTY_NAME]);
@@ -32,9 +35,9 @@ export class RouteUtilsService {
     const filter = this.getRouteFilter(routeFeature);
     if (find === 'visibleOnly') {
       const layers = MapRoutesService.allRouteLayers;
-      return MapEventUtils.queryVisibleFeaturesByFilter(mapInstance, FeatureDataType.ROUTE, layers, filter);
+      return this.mapEventUtils.queryVisibleFeaturesByFilter(mapInstance, FeatureDataType.ROUTE, layers, filter);
     } else {
-      return MapEventUtils.queryFeatureSourceByFilter(mapInstance, FeatureDataType.ROUTE, filter);
+      return this.mapEventUtils.queryFeatureSourceByFilter(mapInstance, FeatureDataType.ROUTE, filter);
     }
   }
 
@@ -47,7 +50,7 @@ export class RouteUtilsService {
       return;
     }
     for (let routeMapFeature of relatedRouteFeatures) {
-      MapEventUtils.setFeatureState(routeMapFeature, mapInstance, {selected});
+      this.mapEventUtils.setFeatureState(routeMapFeature, mapInstance, {selected});
     }
   }
 }

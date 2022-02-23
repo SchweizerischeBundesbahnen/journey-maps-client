@@ -6,7 +6,7 @@ import {
   FeatureData
 } from '../../../journey-maps-client.interfaces';
 import {RouteUtilsService, SELECTED_PROPERTY_NAME} from './route-utils.service';
-import {MapEventUtils} from './map-event-utils';
+import {MapEventUtilsService} from './map-event-utils.service';
 import {Subject, Subscription} from 'rxjs';
 import {sampleTime} from 'rxjs/operators';
 import {Map as MaplibreMap} from 'maplibre-gl';
@@ -28,7 +28,9 @@ export class MapSelectionEventService {
   private layersTypes: Map<string, FeatureDataType>;
   private selectionModes: Map<FeatureDataType, SelectionMode>;
 
-  constructor(private routeUtilsService: RouteUtilsService) {
+  constructor(
+    private routeUtilsService: RouteUtilsService,
+    private mapEventUtils: MapEventUtilsService) {
   }
 
   initialize(
@@ -63,7 +65,7 @@ export class MapSelectionEventService {
   }
 
   findSelectedFeatures(): FeaturesSelectEventData {
-    return {features: MapEventUtils.queryFeaturesByProperty(this.mapInstance, this.layersTypes, feature => feature.state.selected)};
+    return {features: this.mapEventUtils.queryFeaturesByProperty(this.mapInstance, this.layersTypes, feature => feature.state.selected)};
   }
 
   private setFeatureSelection(data: FeatureData, selected: boolean) {
@@ -71,10 +73,10 @@ export class MapSelectionEventService {
       // if multiple features of same type, only the last in the list will be selected:
       this.findSelectedFeatures()
         .features.filter(data => data.featureDataType === data.featureDataType)
-        .forEach(data => MapEventUtils.setFeatureState(data, this.mapInstance, {selected: false}));
+        .forEach(data => this.mapEventUtils.setFeatureState(data, this.mapInstance, {selected: false}));
     }
 
-    MapEventUtils.setFeatureState(data, this.mapInstance, {selected});
+    this.mapEventUtils.setFeatureState(data, this.mapInstance, {selected});
 
     this.routeUtilsService.setRelatedRouteFeaturesSelection(this.mapInstance, data, selected);
   }

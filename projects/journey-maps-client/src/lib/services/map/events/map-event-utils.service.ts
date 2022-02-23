@@ -1,37 +1,37 @@
 import {Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
 import {FeatureData, FeatureDataType} from '../../../journey-maps-client.interfaces';
 import {Constants} from '../../constants';
+import {Injectable} from '@angular/core';
 
-export class MapEventUtils {
+@Injectable({providedIn: 'root'})
+export class MapEventUtilsService {
 
-  /* PUBLIC */
-
-  static queryFeaturesByLayerIds(mapInstance: MaplibreMap, screenPoint: [number, number], layers: Map<string, FeatureDataType>): FeatureData[] {
+  queryFeaturesByLayerIds(mapInstance: MaplibreMap, screenPoint: [number, number], layers: Map<string, FeatureDataType>): FeatureData[] {
     return mapInstance.queryRenderedFeatures(screenPoint, {
       layers: [...layers.keys()]
-    }).map(f => this.toFeatureEventData(f, layers.get(f.layer.id)));
+    }).map(f => MapEventUtilsService.toFeatureEventData(f, layers.get(f.layer.id)));
   }
 
   /**
    * Query feature in all visible layers in the layers list. Only features that are currently rendered are included.
    */
-  static queryVisibleFeaturesByFilter(mapInstance: MaplibreMap, featureDataType: FeatureDataType, layers: string[], filter?: any[]): FeatureData[] {
+  queryVisibleFeaturesByFilter(mapInstance: MaplibreMap, featureDataType: FeatureDataType, layers: string[], filter?: any[]): FeatureData[] {
     return mapInstance.queryRenderedFeatures(null, {layers, filter})
-      .map(f => this.toFeatureEventData(f, featureDataType));
+      .map(f => MapEventUtilsService.toFeatureEventData(f, featureDataType));
   }
 
   /**
    *  WARNING: This function does not check features outside the currently visible viewport.
    *  In opposite to queryVisibleFeaturesByFilter, it includes all features: currently rendered or hidden by layer zoom-level or visibility.
    */
-  static queryFeatureSourceByFilter(mapInstance: MaplibreMap, featureDataType: FeatureDataType, filter?: any[]): FeatureData[] {
-    const sourceId = this.getSourceMapping(featureDataType);
+  queryFeatureSourceByFilter(mapInstance: MaplibreMap, featureDataType: FeatureDataType, filter?: any[]): FeatureData[] {
+    const sourceId = MapEventUtilsService.getSourceMapping(featureDataType);
     if (!sourceId) {
       throw new Error('Missing source mapping for feature type: ' + featureDataType);
     }
     return mapInstance.querySourceFeatures(sourceId, {filter})
       .map(f => {
-        const data = this.toFeatureEventData(f, featureDataType);
+        const data = MapEventUtilsService.toFeatureEventData(f, featureDataType);
         if (!data.source) {
           data.source = sourceId;
         }
@@ -39,7 +39,7 @@ export class MapEventUtils {
       });
   }
 
-  static setFeatureState(mapFeature: MapboxGeoJSONFeature, mapInstance: MaplibreMap, state: any) {
+  setFeatureState(mapFeature: MapboxGeoJSONFeature, mapInstance: MaplibreMap, state: any) {
     /* This part is important:
     - get fresh feature state instance from map source
     - override the input feature state -> keep in sync
@@ -53,14 +53,14 @@ export class MapEventUtils {
     mapInstance.setFeatureState(mapFeature, mapFeature.state);
   }
 
-  static queryFeaturesByProperty(
+  queryFeaturesByProperty(
     mapInstance: MaplibreMap,
     layers: Map<string, FeatureDataType>,
     propertyFilter: (value: MapboxGeoJSONFeature) => boolean
   ): FeatureData[] {
     return mapInstance.queryRenderedFeatures(null, {
       layers: [...layers.keys()]
-    }).filter(propertyFilter).map(f => this.toFeatureEventData(f, layers.get(f.layer.id)));
+    }).filter(propertyFilter).map(f => MapEventUtilsService.toFeatureEventData(f, layers.get(f.layer.id)));
   }
 
   /* private functions */

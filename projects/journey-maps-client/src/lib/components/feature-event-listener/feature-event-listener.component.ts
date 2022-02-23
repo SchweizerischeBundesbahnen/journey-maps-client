@@ -20,6 +20,7 @@ import {FeaturesHoverEvent} from '../../services/map/events/features-hover-event
 import {MapSelectionEventService} from '../../services/map/events/map-selection-event.service';
 import {MapZoneService} from '../../services/map/map-zone.service';
 import {RouteUtilsService} from '../../services/map/events/route-utils.service';
+import {MapEventUtilsService} from '../../services/map/events/map-event-utils.service';
 
 @Component({
   selector: 'rokas-feature-event-listener',
@@ -52,7 +53,8 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     private mapRoutesService: MapRoutesService,
     private mapMarkerService: MapMarkerService,
     private routeUtilsService: RouteUtilsService,
-    public readonly mapSelectionEventService: MapSelectionEventService
+    private mapEventUtils: MapEventUtilsService,
+    public readonly mapSelectionEventService: MapSelectionEventService,
   ) {
   }
 
@@ -93,14 +95,14 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
       this.mapSelectionEventService.initialize(this.map, this.watchOnLayers, selectionModes);
 
       if (!this.featuresClickEvent) {
-        this.featuresClickEvent = new FeaturesClickEvent(this.map, this.watchOnLayers);
+        this.featuresClickEvent = new FeaturesClickEvent(this.map, this.mapEventUtils, this.watchOnLayers);
         this.featuresClickEvent
           .pipe(takeUntil(this.destroyed))
           .subscribe(data => this.featureClicked(data));
       }
 
       if (!this.featuresHoverEvent) {
-        this.featuresHoverEvent = new FeaturesHoverEvent(this.map, this.watchOnLayers, this.routeUtilsService);
+        this.featuresHoverEvent = new FeaturesHoverEvent(this.map, this.mapEventUtils, this.watchOnLayers, this.routeUtilsService);
         this.featuresHoverEvent
           .pipe(takeUntil(this.destroyed))
           .subscribe(data => this.featureHovered(data));
