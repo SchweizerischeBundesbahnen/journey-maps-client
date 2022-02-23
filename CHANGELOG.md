@@ -1,7 +1,6 @@
 # Change Log
 
-## [3.0.0](...) - XXXX-XX-XX
-
+## [3.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.8.0&sourceBranch=refs%2Ftags%2F3.0.0&targetRepoId=46287) - 2022-02-23
 ### Added
 
 * Added support for map events for MARKER, ROUTE, STATION and ZONE feature types. Use configuration setting in `listenerOptions` to enable the following events:
