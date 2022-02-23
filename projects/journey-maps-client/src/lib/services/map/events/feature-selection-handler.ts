@@ -55,14 +55,13 @@ export class FeatureSelectionHandler {
 
     MapEventUtils.setFeatureState(data, this.mapInstance, {selected});
 
-    if (data.featureDataType !== FeatureDataType.ROUTE) {
-      return;
-    }
-
     FeatureSelectionHandler.setRelatedRouteFeaturesSelection(this.mapInstance, data, selected);
   }
 
   static setRelatedRouteFeaturesSelection(mapInstance: MaplibreMap, feature: Feature, selected: boolean) {
+    if (!feature.properties[ROUTE_ID_PROPERTY_NAME]) {
+      return;
+    }
     const relatedRouteFeatures = RouteUtils.findRelatedRoutes(feature, mapInstance, 'all');
     if (!relatedRouteFeatures.length) {
       return;
@@ -77,9 +76,6 @@ export class FeatureSelectionHandler {
     this.subscription = mapMove.pipe(sampleTime(MAP_MOVE_SAMPLE_TIME_MS))
       .subscribe(() => {
         FeatureSelectionHandler.lastEventData?.forEach((isSelected, feature) => {
-          if (!feature.properties[ROUTE_ID_PROPERTY_NAME]) {
-            return;
-          }
           FeatureSelectionHandler.setRelatedRouteFeaturesSelection(this.mapInstance, feature, isSelected);
         });
       });
