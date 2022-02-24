@@ -18,21 +18,12 @@ export class RouteUtilsService {
     return currentFeatures.filter(hovered => !!hovered.properties[ROUTE_ID_PROPERTY_NAME]);
   }
 
-  getRouteFilter(routeFeature: Feature): any[] {
-    const routeId = routeFeature.properties[ROUTE_ID_PROPERTY_NAME];
-    return [
-      'all',
-      ['==', ROUTE_ID_PROPERTY_NAME, routeId],
-      ['!=', '$id', routeFeature.id ?? -1]
-    ];
-  }
-
   /**
    * 'all' => find all routes in source |
    * 'visibleOnly' => find all routes in visible layer, means only current visible generalization
    * */
   findRelatedRoutes(routeFeature: Feature, mapInstance: MaplibreMap, find: 'all' | 'visibleOnly'): FeatureData[] {
-    const filter = this.getRouteFilter(routeFeature);
+    const filter = this.createRelatedRoutesFilter(routeFeature);
     if (find === 'visibleOnly') {
       const layers = MapRoutesService.allRouteLayers;
       return this.mapEventUtils.queryVisibleFeaturesByFilter(mapInstance, FeatureDataType.ROUTE, layers, filter);
@@ -52,5 +43,14 @@ export class RouteUtilsService {
     for (let routeMapFeature of relatedRouteFeatures) {
       this.mapEventUtils.setFeatureState(routeMapFeature, mapInstance, {selected});
     }
+  }
+
+  private createRelatedRoutesFilter(routeFeature: Feature): any[] {
+    const routeId = routeFeature.properties[ROUTE_ID_PROPERTY_NAME];
+    return [
+      'all',
+      ['==', ROUTE_ID_PROPERTY_NAME, routeId],
+      ['!=', '$id', routeFeature.id ?? -1]
+    ];
   }
 }
