@@ -15,10 +15,10 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {LngLatBounds, LngLatLike, Map as MaplibreMap, MapLayerMouseEvent} from 'maplibre-gl';
+import {LngLatBounds, LngLatLike, Map as MaplibreMap} from 'maplibre-gl';
 import {MapInitService} from './services/map/map-init.service';
 import {ReplaySubject, Subject} from 'rxjs';
-import {debounceTime, delay, filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
+import {debounceTime, delay, switchMap, take, takeUntil} from 'rxjs/operators';
 import {MapMarkerService} from './services/map/map-marker.service';
 import {Constants} from './services/constants';
 import {Marker} from './model/marker';
@@ -28,20 +28,30 @@ import {Direction, MapService} from './services/map/map.service';
 import {MapJourneyService} from './services/map/map-journey.service';
 import {MapTransferService} from './services/map/map-transfer.service';
 import {MapRoutesService} from './services/map/map-routes.service';
+import {MapZoneService} from './services/map/map-zone.service';
 import {MapConfigService} from './services/map/map-config.service';
 import {MapLeitPoiService} from './services/map/map-leit-poi.service';
 import {StyleMode} from './model/style-mode.enum';
 import {LevelSwitchService} from './components/level-switch/services/level-switch.service';
 import {
+  FeatureData,
+  FeaturesClickEventData,
+  FeaturesHoverChangeEventData, FeaturesSelectEventData,
   InteractionOptions,
-  UIOptions,
   JourneyMapsRoutingOptions,
+  ListenerOptions,
   MarkerOptions,
   StyleOptions,
+  UIOptions,
   ViewportOptions,
   ZoomLevels,
 } from './journey-maps-client.interfaces';
 import {MapLayerFilterService} from './components/level-switch/services/map-layer-filter.service';
+import {FeatureEventListenerComponent} from './components/feature-event-listener/feature-event-listener.component';
+
+const SATELLITE_MAP_MAX_ZOOM = 19.2;
+const SATELLITE_MAP_TILE_SIZE = 256;
+const SATELLITE_MAP_URL_TEMPLATE = 'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/WMTS/tile/1.0.0/World_Imagery/default/GoogleMapsCompatible/{z}/{y}/{x}.jpg';
 
 /**
  * This component uses the Maplibre GL JS api to render a map and display the given data on the map.
@@ -57,6 +67,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   private map: MaplibreMap;
   @ViewChild('map') private mapElementRef: ElementRef;
+
+  @ViewChild(FeatureEventListenerComponent)
+  private featureEventListenerComponent: FeatureEventListenerComponent;
 
   /** Your personal API key. Ask <a href="mailto:dlrokas@sbb.ch">dlrokas@sbb.ch</a> if you need one. */
   @Input() apiKey: string;
@@ -139,6 +152,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   // **************************************** BUTTON OPTIONS *****************************************/
 
   private defaultUIOptions: UIOptions = {
+    showSmallButtons: false,
     levelSwitch: true,
     zoomControls: true,
     basemapSwitch: true,
@@ -190,11 +204,18 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /* **************************************** JOURNEY-MAPS ROUTING OPTIONS *****************************************/
 
   /**
-   * Input to display JourneyMaps GeoJson data on the map.
+   * Input to display JourneyMaps GeoJson routing data on the map.
    *
    * **WARNING:** The map currently doesn't support more than one of these fields to be set at a time
    */
   @Input() journeyMapsRoutingOption: JourneyMapsRoutingOptions;
+
+  /* **************************************** JOURNEY-MAPS ZONES *****************************************/
+
+  /**
+   * Input to display JourneyMaps GeoJson zone data on the map.
+   */
+  @Input() journeyMapsZones: GeoJSON.FeatureCollection;
 
   /* **************************************** MARKER OPTIONS *****************************************/
 
@@ -252,6 +273,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   /** Which (floor-)level should be shown */
   @Input() selectedLevel: number;
 
+  @Input() listenerOptions: ListenerOptions;
+
   // **************************************** 2 WAY-BINDING (OUTPUTS) *****************************************
 
   /**
@@ -259,11 +282,25 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
    */
   @Output() selectedMarkerIdChange = new EventEmitter<string>();
   /**
-   * This event is emitted whenever the selected (floor-) level changes
+   * This event is emitted whenever the selected (floor-) level changes.
    */
   @Output() selectedLevelChange = new EventEmitter<number>();
+  /**
+   * This event is emitted whenever the selected features changes.
+   */
+  @Output() selectedFeaturesChange = new EventEmitter<FeaturesSelectEventData>();
 
   // **************************************** OTHER OUTPUTS *****************************************
+
+  /**
+   * This event is emitted whenever map features were clicked.
+   */
+  @Output() featuresClick = new EventEmitter<FeaturesClickEventData>();
+
+  /**
+   * This event is emitted whenever mouse hovered or leaved map features.
+   */
+  @Output() featuresHoverChange = new EventEmitter<FeaturesHoverChangeEventData>();
 
   /**
    * This event is emitted whenever the list of available (floor-) levels changes
@@ -286,8 +323,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private mapCenterChangeDebouncer = new Subject<void>();
   private windowResized = new Subject<void>();
   private destroyed = new Subject<void>();
-  private cursorChanged = new ReplaySubject<boolean>(1);
-  private mapClicked = new ReplaySubject<MapLayerMouseEvent>(1);
   private styleLoaded = new ReplaySubject<void>(1);
   private viewportOptionsChanged = new Subject<void>();
   private mapStyleModeChanged = new Subject<void>();
@@ -315,6 +350,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
               private mapJourneyService: MapJourneyService,
               private mapTransferService: MapTransferService,
               private mapRoutesService: MapRoutesService,
+              private mapZoneService: MapZoneService,
               private mapLeitPoiService: MapLeitPoiService,
               private levelSwitchService: LevelSwitchService,
               private mapLayerFilterService: MapLayerFilterService,
@@ -441,23 +477,30 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     // handle journey, transfer, and routes together, otherwise they can overwrite each other's transfer or route data
     if (changes.journeyMapsRoutingOption) {
       this.executeWhenMapStyleLoaded(() => {
+        // stam: is there other way to achieve this ?
+        const mapSelectionEventService = this.featureEventListenerComponent.mapSelectionEventService;
+
         // remove previous data from map
-        this.mapJourneyService.updateJourney(this.map, undefined);
+        this.mapJourneyService.updateJourney(this.map, mapSelectionEventService, undefined);
         this.mapTransferService.updateTransfer(this.map, undefined);
-        this.mapRoutesService.updateRoutes(this.map, undefined);
+        this.mapRoutesService.updateRoutes(this.map, mapSelectionEventService, undefined);
         this.mapLeitPoiService.processData(this.map, undefined);
         // only add new data if we have some
         if (changes.journeyMapsRoutingOption?.currentValue?.journey) {
-          this.mapJourneyService.updateJourney(this.map, this.journeyMapsRoutingOption.journey);
+          this.mapJourneyService.updateJourney(this.map, mapSelectionEventService, this.journeyMapsRoutingOption.journey);
         }
         if (changes.journeyMapsRoutingOption?.currentValue?.transfer) {
           this.mapTransferService.updateTransfer(this.map, this.journeyMapsRoutingOption.transfer);
           this.mapLeitPoiService.processData(this.map, this.journeyMapsRoutingOption.transfer);
         }
         if (changes.journeyMapsRoutingOption?.currentValue?.routes) {
-          this.mapRoutesService.updateRoutes(this.map, this.journeyMapsRoutingOption.routes);
+          this.mapRoutesService.updateRoutes(this.map, mapSelectionEventService, this.journeyMapsRoutingOption.routes);
         }
       });
+    }
+
+    if (changes.journeyMapsZones?.currentValue || changes.journeyMapsZones?.previousValue) {
+      this.mapZoneService.updateZones(this.map, this.journeyMapsZones);
     }
 
     if (Object.values(this.journeyMapsRoutingOption ?? {}).filter(val => val).length > 1) {
@@ -548,37 +591,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
       takeUntil(this.destroyed)
     ).subscribe(() => this.map.resize());
 
-    this.cursorChanged.pipe(
-      debounceTime(50),
-      takeUntil(this.destroyed)
-    ).subscribe(isEnter => this.map.getCanvas().style.cursor = isEnter ? 'pointer' : '');
-
-    this.mapClicked.pipe(
-      debounceTime(200),
-      map(e => this.map.queryRenderedFeatures(e.point, {layers: this.mapMarkerService.allMarkerAndClusterLayers})),
-      filter(features => features?.length > 0),
-      takeUntil(this.destroyed)
-    ).subscribe(features => {
-      let i = 0;
-      let target = features[0];
-
-      // The topmost rendered feature should be at position 0.
-      // But it doesn't work for features whithin the same layer.
-      while (target.layer.id === features[++i]?.layer.id) {
-        if (target.properties.order < features[i].properties.order) {
-          target = features[i];
-        }
-      }
-
-      if (target.properties.cluster) {
-        this.mapMarkerService.onClusterClicked(this.map, target);
-      } else {
-        const selectedMarkerId = this.mapMarkerService.onMarkerClicked(this.map, target, this.selectedMarkerId);
-        this.selectedMarker = this.markerOptions.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
-        this.cd.detectChanges();
-      }
-    });
-
     this.viewportOptionsChanged.pipe(
       debounceTime(200),
       takeUntil(this.destroyed)
@@ -645,11 +657,6 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     this.mapService.verifySources(this.map, [Constants.ROUTE_SOURCE, Constants.WALK_SOURCE, ...this.mapMarkerService.sources]);
     this.addSatelliteSource(this.map);
 
-    for (const layer of this.mapMarkerService.allMarkerAndClusterLayers) {
-      this.map.on('mouseenter', layer, () => this.cursorChanged.next(true));
-      this.map.on('mouseleave', layer, () => this.cursorChanged.next(false));
-      this.map.on('click', layer, event => this.mapClicked.next(event));
-    }
     this.map.on('zoomend', () => this.currentZoomLevelDebouncer.next());
     this.map.on('moveend', () => this.mapCenterChangeDebouncer.next());
     // Emit initial values
@@ -664,8 +671,8 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
   private addSatelliteSource(map: maplibregl.Map) {
     map.addSource(this.satelliteImageSourceName, {
       type: 'raster',
-      tiles: ['https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/WMTS/tile/1.0.0/World_Imagery/default/GoogleMapsCompatible/{z}/{y}/{x}.jpg'],
-      tileSize: 256,
+      tiles: [SATELLITE_MAP_URL_TEMPLATE],
+      tileSize: SATELLITE_MAP_TILE_SIZE,
     });
   }
 
@@ -717,10 +724,37 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
         id: this.satelliteLayerId,
         type: 'raster',
         source: this.satelliteImageSourceName,
-        maxzoom: 19.2,
+        maxzoom: SATELLITE_MAP_MAX_ZOOM,
       }, 'waterName_point_other');
     } else {
       this.map.removeLayer(this.satelliteLayerId);
+    }
+  }
+
+  handleMarkerOrClusterClick(features: FeatureData[]) {
+    const featureEventDataList = features.filter(feature =>
+      this.mapMarkerService.allMarkerAndClusterLayers.includes(feature.layer.id));
+
+    if (!featureEventDataList.length) {
+      return;
+    }
+
+    let i = 0;
+    let target = featureEventDataList[0];
+    // The topmost rendered feature should be at position 0.
+    // But it doesn't work for featureEventDataList within the same layer.
+    while (target.layer.id === featureEventDataList[++i]?.layer.id) {
+      if (target.properties.order < featureEventDataList[i].properties.order) {
+        target = featureEventDataList[i];
+      }
+    }
+
+    if (target.properties.cluster) {
+      this.mapMarkerService.onClusterClicked(this.map, target);
+    } else {
+      const selectedMarkerId = this.mapMarkerService.onMarkerClicked(this.map, target, this.selectedMarkerId);
+      this.selectedMarker = this.markerOptions.markers.find(marker => marker.id === selectedMarkerId && !!selectedMarkerId);
+      this.cd.detectChanges();
     }
   }
 

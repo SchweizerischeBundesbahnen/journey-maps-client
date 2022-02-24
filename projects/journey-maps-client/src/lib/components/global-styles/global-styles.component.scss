@@ -10,8 +10,6 @@
 
 .maplibregl-popup.rokas {
 
-  margin-top: 1rem;
-
   $closeIconSize: 24px;
 
   max-width: 400px !important;
@@ -37,6 +35,10 @@
 
     > div {
       padding: $closeIconSize;
+    }
+
+    @include esta.mq($to: tabletPortrait) {
+      width: 100%;
     }
   }
 
@@ -81,6 +83,12 @@
       }
     }
   }
+}
+
+.maplibregl-popup.rokas.marker-details {
+  // FIXME: Remove and adapt offset accordingly.
+  //  (not so simple as offset is also defined in the style itself =/)
+  margin-top: 1rem;
 }
 
 .leit-poi-popup {

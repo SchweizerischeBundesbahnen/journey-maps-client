@@ -1,6 +1,7 @@
 @use "colors" as c;
+@use 'node_modules/@sbb-esta/angular/styles' as esta;
 
-@mixin map-control-icon {
+@mixin map-controls-shared {
   button {
     display: block;
     width: 100%;
@@ -14,14 +15,42 @@
     background: c.$white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
     border-radius: 24px;
+
+    @include esta.mq($from: tabletPortrait) {
+      &.small-buttons {
+        margin: 6px;
+      }
+    }
   }
 
   .map-control-button-wrapper {
-    border-radius: 24px;
     line-height: 36px;
     padding: 6px;
-    pointer-events: none;
     width: 48px;
+
+    @include esta.mq($from: tabletPortrait) {
+      @at-root .map-control-container.small-buttons #{&} {
+        line-height: 26px;
+        padding: 3px;
+        width: 32px;
+      }
+    }
+  }
+}
+
+@mixin map-control-icon {
+  .map-control-button-wrapper {
+    // this makes sure we only show the hover effect when clicking on the button actually has an effect
+    // (i.e. NOT when the mouse is hovering over the outer edges of the button)
+    pointer-events: none;
+
+    border-radius: 24px;
+
+    @include esta.mq($from: tabletPortrait) {
+      @at-root .map-control-container.small-buttons #{&} {
+        border-radius: 16px;
+      }
+    }
 
     &:not([data-disabled='true']):active {
       @include _map-control-button-wrapper-active
@@ -69,7 +98,11 @@
       cursor: default;
       background-color: c.$lightgray;
     }
+
+    @include esta.mq($from: tabletPortrait) {
+      @at-root .map-control-container.small-buttons #{&}{
+        height: 26px;
+      }
+    }
   }
 }
-
-

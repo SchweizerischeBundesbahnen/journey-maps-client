@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MarkerCategory} from '../../../journey-maps-client/src/lib/model/marker-category.enum';
 import {LngLatLike, Map} from 'maplibre-gl';
 import {AssetReaderService} from './services/asset-reader.service';
@@ -7,10 +7,12 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
+  FeatureData, FeaturesSelectEventData,
   InteractionOptions,
-  UIOptions,
   JourneyMapsRoutingOptions,
+  ListenerOptions, SelectionMode,
   StyleOptions,
+  UIOptions,
   ViewportOptions,
   ZoomLevels,
 } from '../../../journey-maps-client/src/lib/journey-maps-client.interfaces';
@@ -21,7 +23,7 @@ import {JourneyMapsClientComponent} from '../../../journey-maps-client/src/lib/j
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private assetReaderService: AssetReaderService,
@@ -31,12 +33,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @ViewChild(JourneyMapsClientComponent)
   client: JourneyMapsClientComponent;
+  @ViewChild('stationTemplate')
+  stationTemplate: TemplateRef<any>;
 
   private _journey: GeoJSON.FeatureCollection;
   private _transferLuzern: GeoJSON.FeatureCollection;
   private _transferZurichIndoor: GeoJSON.FeatureCollection;
   private _transferBernIndoor: GeoJSON.FeatureCollection;
   private _transferGeneveIndoor: GeoJSON.FeatureCollection;
+  private _zonesBernBurgdorf: GeoJSON.FeatureCollection;
   private _routes: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
 
@@ -46,6 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
     scrollZoom: true,
   };
   uiOptions: UIOptions = {
+    showSmallButtons: false,
     levelSwitch: true,
     zoomControls: true,
     basemapSwitch: true,
@@ -54,11 +60,21 @@ export class AppComponent implements OnInit, OnDestroy {
   selectedMarkerId: string;
   visibleLevels$ = new BehaviorSubject<number[]>([]);
   selectedLevel = 0;
+  selectedFeatures: FeatureData[] = [];
   viewportOptions: ViewportOptions = {};
-  styleOptions: StyleOptions = {};
+  styleOptions: StyleOptions = {brightId: 'base_bright_v2_ki_casa'};
 
-  journeyMapsGeoJsonOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes'];
+  listenerOptions: ListenerOptions = {
+    MARKER: {watch: true, selectionMode: SelectionMode.single},
+    ROUTE: {watch: true, selectionMode: SelectionMode.multi},
+    STATION: {watch: true},
+    ZONE: {watch: true, selectionMode: SelectionMode.multi},
+  };
+
+  journeyMapsRoutingOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes', 'bern-burgdorf'];
   journeyMapsRoutingOption: JourneyMapsRoutingOptions;
+  journeyMapsZoneOptions = ['bern-burgdorf'];
+  journeyMapsZones: GeoJSON.FeatureCollection;
 
   zoomLevels: ZoomLevels;
   mapCenter: LngLatLike;
@@ -112,6 +128,14 @@ export class AppComponent implements OnInit, OnDestroy {
         category: MarkerCategory.RAIL,
         color: MarkerColor.DARKBLUE,
       },
+      {
+        id: 'work2',
+        title: 'Office2',
+        subtitle: 'SBB Wylerpark2',
+        position: [7.446490, 46.961409],
+        category: MarkerCategory.RAIL,
+        color: MarkerColor.DARKBLUE,
+      },
     ],
   };
 
@@ -134,10 +158,18 @@ export class AppComponent implements OnInit, OnDestroy {
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
       .subscribe(json => this._routes = json);
 
+    this.assetReaderService.loadAssetAsJSON('zones/bern-burgdorf.json')
+      .subscribe(json => this._zonesBernBurgdorf = json);
+
     this.assetReaderService.loadAssetAsString('secrets/apikey.txt')
       .subscribe(apiKey => this.apiKey = apiKey);
 
     this.mapCenterChange.pipe(takeUntil(this.destroyed)).subscribe(mapCenter => this.mapCenter = mapCenter);
+  }
+
+  ngAfterViewInit() {
+    this.listenerOptions.STATION.clickTemplate = this.stationTemplate;
+    this.updateListenerOptions();
   }
 
   onMapRecieved(map: Map): void {
@@ -157,7 +189,12 @@ export class AppComponent implements OnInit, OnDestroy {
     this.selectedLevel = selectedLevel;
   }
 
-  setGeoJsonInput(event: Event): void {
+  setSelectedFeatures(selectedFeatures: FeatureData[]): void {
+    console.debug(selectedFeatures);
+    this.selectedFeatures = selectedFeatures;
+  }
+
+  setJourneyMapsRoutingInput(event: Event): void {
     this.journeyMapsRoutingOption = {};
 
     let bbox;
@@ -196,11 +233,27 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+  setJourneyMapsZoneInput(event: Event): void {
+    this.journeyMapsZones = undefined;
+
+    if ((event.target as HTMLOptionElement).value === 'bern-burgdorf') {
+      this.journeyMapsZones = this._zonesBernBurgdorf; // change detection fails at this stage
+      this.setBbox([7.35, 46.85, 7.75, 47.15]);
+    }
+  }
+
   setPopupInput(event: Event): void {
     this.selectedMarkerId = undefined;
     this.markerOptions = {
       ...this.markerOptions,
       popup: (event.target as HTMLOptionElement).value === 'true',
+    };
+  }
+
+  setShowSmallButtons(event: Event): void {
+    this.uiOptions = {
+      ...this.uiOptions,
+      showSmallButtons: (event.target as HTMLInputElement).checked,
     };
   }
 
@@ -218,5 +271,23 @@ export class AppComponent implements OnInit, OnDestroy {
       ...this.viewportOptions,
       boundingBox: [[bbox[0], bbox[1]], [bbox[2], bbox[3]]],
     };
+  }
+
+  log(data: any) {
+    console.debug(data.features);
+  }
+
+  updateListenerOptions(): void {
+    this.listenerOptions = {...this.listenerOptions};
+  }
+
+  logSelection(selection: FeaturesSelectEventData) {
+    console.log(selection.features.map(s => {
+      return {
+        id: s.id,
+        type: s.featureDataType,
+        selected: s.state.selected
+      };
+    }));
   }
 }

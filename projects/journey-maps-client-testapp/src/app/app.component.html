@@ -2,45 +2,54 @@
   <h2>Journey-Maps-Client <a class="changelog" href="./documentation/changelog">changelog</a></h2>
 
   <div class="map">
-      <ng-container *ngIf="mapVisible && apiKey">
-            <!--  Do not use this API key in production. Contact dlrokas@sbb.ch to get your own.-->
-            <rokas-journey-maps-client #theMap
-                                       language="en"
-                                       [apiKey]="apiKey"
-                                       [styleOptions]="styleOptions"
-                                       [interactionOptions]="interactionOptions"
-                                       [uiOptions]="uiOptions"
-                                       [viewportOptions]="viewportOptions"
-                                       [journeyMapsRoutingOption]="journeyMapsRoutingOption"
-                                       [markerOptions]="markerOptions"
-                                       [markerDetailsTemplate]="markerDetailsTemplate"
-                                       [(selectedMarkerId)]="selectedMarkerId"
-                                       [(selectedLevel)]="selectedLevel"
-                                       (visibleLevelsChange)="visibleLevels$.next($event)"
-                                       (zoomLevelsChange)="zoomLevels=$event"
-                                       (mapCenterChange)="mapCenterChange.next($event)"
-                                       (mapReady)="onMapRecieved($event)"
-            >
-            </rokas-journey-maps-client>
-            <!-- ArcGIS Online Public Feature Service -->
-            <sbb-arcgis-feature-layer
-                  [map]="theMap.mapReady | async"
-                  [options]="{'url':'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/PROD_Route_Customization_View/FeatureServer/0'}"
-            ></sbb-arcgis-feature-layer>
-            <!-- GSharp Basic-Auth secured Feature Service -->
-            <sbb-arcgis-feature-layer
-                  [map]="theMap.mapReady | async"
-                  [options]="{
+    <ng-container *ngIf="mapVisible && apiKey">
+      <!--  Do not use this API key in production. Contact dlrokas@sbb.ch to get your own.-->
+      <rokas-journey-maps-client #theMap
+                                 language="en"
+                                 [apiKey]="apiKey"
+                                 [styleOptions]="styleOptions"
+                                 [interactionOptions]="interactionOptions"
+                                 [uiOptions]="uiOptions"
+                                 [viewportOptions]="viewportOptions"
+                                 [journeyMapsRoutingOption]="journeyMapsRoutingOption"
+                                 [journeyMapsZones]="journeyMapsZones"
+                                 [markerOptions]="markerOptions"
+                                 [listenerOptions]="listenerOptions"
+                                 [markerDetailsTemplate]="markerDetailsTemplate"
+                                 [(selectedMarkerId)]="selectedMarkerId"
+                                 [(selectedLevel)]="selectedLevel"
+                                 (visibleLevelsChange)="visibleLevels$.next($event)"
+                                 (zoomLevelsChange)="zoomLevels=$event"
+                                 (featuresClick)="log($event)"
+                                 (featuresHoverChange)="log($event)"
+                                 (selectedFeaturesChange)="logSelection($event)"
+                                 (mapCenterChange)="mapCenterChange.next($event)"
+                                 (mapReady)="onMapRecieved($event)"
+      >
+      </rokas-journey-maps-client>
+      <!-- ArcGIS Online Public Feature Service -->
+      <sbb-arcgis-feature-layer
+        [map]="theMap.mapReady | async"
+        [options]="{'url':'https://services7.arcgis.com/RZYPa9cXL4L1fYTj/arcgis/rest/services/PROD_Route_Customization_View/FeatureServer/0'}"
+      ></sbb-arcgis-feature-layer>
+      <!-- GSharp Basic-Auth secured Feature Service -->
+      <sbb-arcgis-feature-layer
+        [map]="theMap.mapReady | async"
+        [options]="{
                     'url': 'https://geo.sbb.ch/site/rest/services/ROKAS_PUBLIC/POIService/FeatureServer/0',
                     'filter':'CATEGORY=\'parking\'',
                     'requestWithCredentials': true,
                     'addLayerBefore':'poi_without_icons'
                     }"
-            ></sbb-arcgis-feature-layer>
-      </ng-container>
+      ></sbb-arcgis-feature-layer>
+    </ng-container>
     <ng-template #markerDetailsTemplate let-marker>
       <div class="markerdetails-title">{{marker.title}}</div>
       <div class="markerdetails-subtitle">{{marker.subtitle}}</div>
+    </ng-template>
+    <ng-template #stationTemplate let-station>
+      <div class="station-title">{{station.properties.name}}</div>
+      <div class="station-subtitle">{{station.properties.sbb_id}}</div>
     </ng-template>
   </div>
 
@@ -55,7 +64,8 @@
       </li>
       <li>Selected Marker ID: <span *ngIf="selectedMarkerId">{{selectedMarkerId}}</span>
       </li>
-      <li>Zoom Level (within range {{zoomLevels?.minZoom}}..{{zoomLevels?.maxZoom}}): {{zoomLevels?.currentZoom}}</li>
+      <li>Zoom Level (within range {{zoomLevels?.minZoom}}..{{zoomLevels?.maxZoom}}
+        ): {{zoomLevels?.currentZoom}}</li>
       <li>
         <button (click)="client.zoomIn()">Zoom In</button>
         <button (click)="client.zoomOut()">Zoom Out</button>
@@ -81,11 +91,20 @@
       <li>Allow moving the map with one finger: {{interactionOptions.oneFingerPan}}</li>
       <li>Allow zooming with the scroll button: {{interactionOptions.scrollZoom}}</li>
       <li>
-        <label for="geo-json-select">
+        <label for="routing-geo-json-select">
           Display Journey-Maps GeoJSON data for:
-          <select id="geo-json-select" (change)="setGeoJsonInput($event)">
-            <option value="" (change)="setGeoJsonInput($event)">(none)</option>
-            <option *ngFor="let input of journeyMapsGeoJsonOptions" [value]="input">{{input}}</option>
+          <select id="routing-geo-json-select" (change)="setJourneyMapsRoutingInput($event)">
+            <option value="" (change)="setJourneyMapsRoutingInput($event)">(none)</option>
+            <option *ngFor="let input of journeyMapsRoutingOptions" [value]="input">{{input}}</option>
+          </select>
+        </label>
+      </li>
+      <li>
+        <label for="zones-geo-json-select">
+          Display Zone GeoJSON data for:
+          <select id="zones-geo-json-select" (change)="setJourneyMapsZoneInput($event)">
+            <option value="" (change)="setJourneyMapsZoneInput($event)">(none)</option>
+            <option *ngFor="let input of journeyMapsZoneOptions" [value]="input">{{input}}</option>
           </select>
         </label>
       </li>
@@ -107,7 +126,22 @@
           </select>
         </label>
       </li>
+      <li>
+        <label for="small-buttons-checkbox">
+          Show small buttons:
+          <input id="small-buttons-checkbox" (change)="setShowSmallButtons($event)" [checked]="uiOptions.showSmallButtons"  value="smallButtons" type="checkbox"/>
+        </label>
+      </li>
     </ul>
+  </div>
+  <div>
+    Interaction listener for:
+    <div class="sbb-checkbox-group-horizontal">
+      <sbb-checkbox [(ngModel)]="listenerOptions?.MARKER.watch" (change)="updateListenerOptions()">Markers</sbb-checkbox>
+      <sbb-checkbox [(ngModel)]="listenerOptions?.ROUTE.watch" (change)="updateListenerOptions()">Routes</sbb-checkbox>
+      <sbb-checkbox [(ngModel)]="listenerOptions?.STATION.watch" (change)="updateListenerOptions()">Stations</sbb-checkbox>
+      <sbb-checkbox [(ngModel)]="listenerOptions?.ZONE.watch" (change)="updateListenerOptions()">Zones</sbb-checkbox>
+    </div>
   </div>
 
   <div class="source">
