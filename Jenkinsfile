@@ -55,7 +55,10 @@ pipeline {
 
     stage('Security Dependency-Check') {
       when {
-        expression { branch == 'master' && !params.RELEASE }
+        allOf {
+          branch 'master'
+          expression { return ! params.RELEASE }
+        }
       }
       steps {
           withCredentials([usernamePassword(credentialsId: 'OWASP-NVD_RO', passwordVariable: 'dbpwd', usernameVariable: 'dbuser')]) {
