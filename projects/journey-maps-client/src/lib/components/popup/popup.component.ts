@@ -12,7 +12,7 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import {LngLatLike, Map as MaplibreMap, Offset, Popup} from 'maplibre-gl';
+import {LngLatLike, Map as MaplibreMap, Offset, Popup, PopupOptions} from 'maplibre-gl';
 import {LocaleService} from '../../services/locale.service';
 
 @Component({
@@ -29,9 +29,10 @@ export class PopupComponent implements OnChanges, OnDestroy {
   @Input() templateContext: any;
   @Input() position: LngLatLike;
   @Input() offset: Offset;
+  @Input() additionalClassName?: string;
   @Output() closeClicked = new EventEmitter<void>();
 
-  private readonly options: any = {
+  private readonly options: PopupOptions = {
     closeOnClick: false,
     className: 'rokas',
   };
@@ -87,7 +88,12 @@ export class PopupComponent implements OnChanges, OnDestroy {
   }
 
   private initPopup(): void {
-    this.popup = new Popup(this.options)
+    const _options = this.options;
+    if (this.additionalClassName) {
+      _options.className = _options.className + ` ${this.additionalClassName}`;
+    }
+
+    this.popup = new Popup(_options)
       .setDOMContent(this.popupContent.nativeElement as HTMLElement)
       .addTo(this.map);
 

@@ -1,6 +1,8 @@
 import {StyleMode} from './model/style-mode.enum';
 import {Marker} from './model/marker';
-import {LngLatBoundsLike, LngLatLike} from 'maplibre-gl';
+import {LngLatBoundsLike, LngLatLike, MapboxGeoJSONFeature} from 'maplibre-gl';
+import {TemplateRef} from '@angular/core';
+import {FeatureCollection} from 'geojson';
 
 export interface StyleOptions {
   /** Overwrite this value if you want to use a style from a different source. */
@@ -23,6 +25,8 @@ export interface InteractionOptions {
 }
 
 export interface UIOptions {
+  /** Whether the map should show large (default) or small control buttons. */
+  showSmallButtons?: boolean;
   /** Whether the map should show the zoom level control or not. */
   levelSwitch?: boolean;
   /** Whether the map should show the level switch control or not. */
@@ -32,7 +36,6 @@ export interface UIOptions {
   /** Whether the map should show the home button control or not. Clicking this button zooms out to show all of Switzerland. */
   homeButton?: boolean;
 }
-
 
 export interface ViewportOptions {
   /**
@@ -74,7 +77,7 @@ export interface JourneyMapsRoutingOptions {
    * Indoor routing is not (yet) supported.
    * Note: journey, transfer and routes cannot be displayed at the same time
    */
-  routes?: GeoJSON.FeatureCollection[];
+  routes?: SelectableFeatureCollection[];
 }
 
 export interface MarkerOptions {
@@ -93,4 +96,73 @@ export interface ZoomLevels {
   maxZoom: number;
   /** The current zoom level of the map. */
   currentZoom: number;
+}
+
+/**
+ * Define for which feature types you want to be notified of events (click, hover)
+ * and define templates to display in case of such an event.
+ */
+export type ListenerOptions = {
+  /** The feature type for which you want to receive events */
+  [type in FeatureDataType]?: {
+    /** True if you want to receive events. Otherwise false. */
+    watch: boolean;
+    /** If a template is defined for an event: Should it be displayed in a popup or teaser? */
+    popup?: boolean;
+    /** Template to diplay when a feature is clicked */
+    clickTemplate?: TemplateRef<any>;
+    /** Template to display when a feature is hovered */
+    hoverTemplate?: TemplateRef<any>;
+    /** Selection mode */
+    selectionMode?: SelectionMode;
+  };
+};
+
+/** Selection mode options */
+export enum SelectionMode {
+  single,
+  multi
+}
+
+export interface FeaturesHoverChangeEventData {
+  /** Event screen position. */
+  eventPoint: { x: number, y: number };
+  /** Event map coordinates. */
+  eventLngLat: { lng: number, lat: number };
+  /** Whether is hovered or not. */
+  hover: boolean;
+  /** Whether is leaving or not. */
+  leave: boolean;
+  /** List of features affected by this event. */
+  features: FeatureData[];
+}
+
+export interface FeaturesSelectEventData {
+  /** List of features affected by this event. */
+  features: FeatureData[];
+}
+
+export interface FeaturesClickEventData {
+  /** Click screen position. */
+  clickPoint: { x: number, y: number };
+  /** Click map coordinates. */
+  clickLngLat: { lng: number, lat: number };
+  /** List of features affected by this event. */
+  features: FeatureData[];
+}
+
+export type FeatureData = MapboxGeoJSONFeature & {
+  featureDataType: FeatureDataType;
+};
+
+export type SelectableFeatureCollection = FeatureCollection & {
+  id?: string;
+  isSelected?: boolean;
+};
+
+export enum FeatureDataType {
+  MARKER = 'MARKER',
+  ROUTE = 'ROUTE',
+  STATION = 'STATION',
+  ZONE = 'ZONE',
 }

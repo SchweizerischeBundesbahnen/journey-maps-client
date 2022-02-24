@@ -28,7 +28,7 @@ describe('LeitPoiComponent', () => {
       expect(nextLevel).toEqual(1);
       doneFn();
     });
-    compiled.querySelector('.container').click();
+    compiled.querySelector('.poi_container').click();
   });
 
   it('should show lift and downstairs icons and level -2"', () => {

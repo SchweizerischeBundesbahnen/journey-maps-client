@@ -32,6 +32,7 @@
         scrollZoom: false,
       };
       client.uiOptions = {
+        showSmallButtons: false,
         levelSwitch: true,
         zoomControls: true,
         basemapSwitch: true,
@@ -55,6 +56,9 @@
             category: 'MISSED-CONNECTION',
           },
         ],
+      };
+      client.listenerOptions = {
+        MARKER: {watch: true}
       };
 
       document.addEventListener('DOMContentLoaded', function () {

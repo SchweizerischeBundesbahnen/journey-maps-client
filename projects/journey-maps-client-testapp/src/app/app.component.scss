@@ -46,7 +46,7 @@ a.changelog {
   font-size: 16px;
 }
 
-.markerdetails {
+.markerdetails, .station {
   &-title {
     font-size: x-large;
     margin-top: 0.5em;
@@ -56,4 +56,9 @@ a.changelog {
     font-size: large;
     margin-top: 1em;
   }
+}
+
+input[type='checkbox'] {
+  height: 20px;
+  vertical-align: middle;
 }

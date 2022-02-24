@@ -1,4 +1,4 @@
-<div class="map-control-container" *ngIf="map">
+<div class="map-control-container" [class.small-buttons]="showSmallButtons" *ngIf="map" >
   <div class="map-control-button-wrapper">
     <button (click)="onHomeButtonClicked()" class="map-control-button"
             [attr.aria-label]="homeButtonLabel">

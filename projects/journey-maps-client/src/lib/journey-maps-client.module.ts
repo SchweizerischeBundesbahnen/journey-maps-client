@@ -11,6 +11,7 @@ import {ZoomControlsComponent} from './components/zoom-controls/zoom-controls.co
 import {LeitPoiComponent} from './components/leit-poi/leit-poi.component';
 import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch.component';
 import {HomeButtonComponent} from './components/home-button/home-button.component';
+import {FeatureEventListenerComponent} from './components/feature-event-listener/feature-event-listener.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import {HomeButtonComponent} from './components/home-button/home-button.componen
     BasemapSwitchComponent,
     PopupComponent,
     MarkerDetailsComponent,
+    FeatureEventListenerComponent,
     LeitPoiComponent,
     HomeButtonComponent
   ],
