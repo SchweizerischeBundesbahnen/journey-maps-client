@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Map as MaplibreMap} from 'maplibre-gl';
-import {MapService} from './map.service';
+import {EMPTY_FEATURE_COLLECTION} from './map.service';
 import {Subject} from 'rxjs';
 import {LeitPoiFeature} from '../../components/leit-poi/model/leit-poi-feature';
 import {Feature, Geometry} from 'geojson';
@@ -23,7 +23,7 @@ export class MapLeitPoiService {
   private leitPoiFeatures: LeitPoiFeature[] = [];
   private mapLeitPois: MapLeitPoi[] = [];
 
-  constructor(private mapService: MapService, private mapLeitPoiCreator: MapLeitPoiCreatorService) {
+  constructor(private mapLeitPoiCreator: MapLeitPoiCreatorService) {
   }
 
   destroy(): void {
@@ -32,7 +32,7 @@ export class MapLeitPoiService {
     this.destroyed.complete();
   }
 
-  processData(map: MaplibreMap, featureCollection: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
+  processData(map: MaplibreMap, featureCollection: GeoJSON.FeatureCollection = EMPTY_FEATURE_COLLECTION): void {
     this.removeMapLeitPois();
     if (!featureCollection || !featureCollection.features?.length) {
       return;

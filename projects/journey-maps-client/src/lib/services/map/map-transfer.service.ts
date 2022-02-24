@@ -1,17 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Constants} from '../constants';
 import {GeoJSONSource, Map as MaplibreMap} from 'maplibre-gl';
-import {MapService} from './map.service';
+import {EMPTY_FEATURE_COLLECTION} from './map.service';
 
 @Injectable({providedIn: 'root'})
 export class MapTransferService {
 
   private data: GeoJSON.FeatureCollection;
 
-  constructor(private mapService: MapService) {
-  }
-
-  updateTransfer(map: MaplibreMap, featureCollection: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
+  updateTransfer(map: MaplibreMap, featureCollection: GeoJSON.FeatureCollection = EMPTY_FEATURE_COLLECTION): void {
     this.getSource(map).setData(featureCollection);
     this.data = featureCollection;
   }

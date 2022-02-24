@@ -1,22 +1,23 @@
 import {Injectable} from '@angular/core';
-import {MapService} from './map.service';
+import {EMPTY_FEATURE_COLLECTION} from './map.service';
 import {MapRouteService} from './map-route.service';
 import {MapTransferService} from './map-transfer.service';
 import {Map as MaplibreMap} from 'maplibre-gl';
-import {ROUTE_ID_PROPERTY_NAME, SELECTED_PROPERTY_NAME} from './events/route-utils';
+import {ROUTE_ID_PROPERTY_NAME, SELECTED_PROPERTY_NAME} from './events/route-utils.service';
+import {MapSelectionEventService} from './events/map-selection-event.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapJourneyService {
-
-  constructor(private mapService: MapService,
-              private mapRouteService: MapRouteService,
-              private mapTransferService: MapTransferService
-  ) {
+  constructor(
+    private mapRouteService: MapRouteService,
+    private mapTransferService: MapTransferService) {
   }
 
-  updateJourney(map: MaplibreMap, journey: GeoJSON.FeatureCollection = this.mapService.emptyFeatureCollection): void {
+  updateJourney(map: MaplibreMap, mapSelectionEventService: MapSelectionEventService,
+                journey: GeoJSON.FeatureCollection = EMPTY_FEATURE_COLLECTION
+  ): void {
     const routeFeatures: GeoJSON.Feature[] = [];
     const transferFeatures: GeoJSON.Feature[] = [];
 
@@ -37,7 +38,11 @@ export class MapJourneyService {
       }
     }
 
-    this.mapRouteService.updateRoute(map, {type: 'FeatureCollection', features: routeFeatures});
+    this.mapRouteService.updateRoute(map, mapSelectionEventService, {
+        type: 'FeatureCollection', features: routeFeatures
+      }
+    );
+
     this.mapTransferService.updateTransfer(map, {type: 'FeatureCollection', features: transferFeatures});
   }
 }

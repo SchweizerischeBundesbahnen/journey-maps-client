@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {MapService} from './map.service';
+import {EMPTY_FEATURE_COLLECTION} from './map.service';
 import {MapRouteService} from './map-route.service';
 import {Map as MaplibreMap} from 'maplibre-gl';
-import {ROUTE_ID_PROPERTY_NAME, SELECTED_PROPERTY_NAME} from './events/route-utils';
+import {ROUTE_ID_PROPERTY_NAME, SELECTED_PROPERTY_NAME} from './events/route-utils.service';
 import {SelectableFeatureCollection} from '../../journey-maps-client.interfaces';
+import {MapSelectionEventService} from './events/map-selection-event.service';
 
 @Injectable({providedIn: 'root'})
 export class MapRoutesService {
@@ -17,13 +18,10 @@ export class MapRoutesService {
     'rokas-route-gen4'
   ];
 
-  constructor(
-    private mapService: MapService,
-    private mapRouteService: MapRouteService,
-  ) {
+  constructor(private mapRouteService: MapRouteService) {
   }
 
-  updateRoutes(map: MaplibreMap, routes: SelectableFeatureCollection[] = [this.mapService.emptyFeatureCollection]): void {
+  updateRoutes(map: MaplibreMap, mapSelectionEventService: MapSelectionEventService, routes: SelectableFeatureCollection[] = [EMPTY_FEATURE_COLLECTION]): void {
     routes.forEach((featureCollection, idx) => {
       const id = featureCollection.id ?? `jmc-generated-${idx + 1}`;
       for (const f of featureCollection.features) {
@@ -31,7 +29,7 @@ export class MapRoutesService {
         f.properties[SELECTED_PROPERTY_NAME] = featureCollection.isSelected;
       }
     });
-    this.mapRouteService.updateRoute(map, {
+    this.mapRouteService.updateRoute(map, mapSelectionEventService, {
       type: 'FeatureCollection',
       // With ES2019 we can replace this with routes.flatMap(({features}) => features)
       features: routes.reduce((accumulatedFeatures, next) => accumulatedFeatures.concat(next.features), []),
