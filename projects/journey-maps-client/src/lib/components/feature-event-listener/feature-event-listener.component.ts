@@ -19,7 +19,7 @@ import {MapMarkerService} from '../../services/map/map-marker.service';
 import {FeaturesHoverEvent} from '../../services/map/events/features-hover-event';
 import {MapSelectionEventService} from '../../services/map/events/map-selection-event.service';
 import {MapZoneService} from '../../services/map/map-zone.service';
-import {RouteUtilsService} from '../../services/map/events/route-utils.service';
+import {ROUTE_ID_PROPERTY_NAME, RouteUtilsService} from '../../services/map/events/route-utils.service';
 import {MapEventUtilsService} from '../../services/map/events/map-event-utils.service';
 
 @Component({
@@ -39,7 +39,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
 
   // CONTINUE ROKAS-502: Add overlay on hover
   overlayVisible = false;
-  overlayFeature: FeatureData;
+  overlayFeatures: FeatureData[];
   overlayPosition: LngLatLike;
 
   private destroyed = new Subject<void>();
@@ -124,8 +124,8 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
   }
 
   overlayOptions(): any {
-    if (this.listenerOptions && this.overlayFeature) {
-      return this.listenerOptions[this.overlayFeature.featureDataType] ?? {};
+    if (this.listenerOptions && this.overlayFeatures?.length) {
+      return this.listenerOptions[this.overlayFeatures[0].featureDataType] ?? {};
     }
 
     return {};
@@ -140,7 +140,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     const template = this.listenerOptions[topMostFeature.featureDataType]?.clickTemplate;
     if (template) {
       this.overlayVisible = true;
-      this.overlayFeature = topMostFeature;
+      this.overlayFeatures = this.filterOverlayFeatures(data.features, topMostFeature.featureDataType);
       if (topMostFeature.geometry.type === 'Point') {
         this.overlayPosition = topMostFeature.geometry.coordinates as LngLatLike;
       } else {
@@ -149,6 +149,16 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     } else {
       this.overlayVisible = false;
     }
+  }
+
+  private filterOverlayFeatures(features: FeatureData[], type: FeatureDataType): FeatureData[] {
+    const filteredByType = features.filter(f => f.featureDataType === type);
+    if (type !== FeatureDataType.ROUTE) {
+      return filteredByType;
+    }
+
+    // Only one feature per route id
+    return [...new Map(filteredByType.map(route => [route.properties[ROUTE_ID_PROPERTY_NAME], route])).values()];
   }
 
   private featureHovered(data: FeaturesHoverChangeEventData) {

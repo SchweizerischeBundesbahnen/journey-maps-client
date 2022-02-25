@@ -30,6 +30,7 @@ export class PopupComponent implements OnChanges, OnDestroy {
   @Input() position: LngLatLike;
   @Input() offset: Offset;
   @Input() additionalClassName?: string;
+  @Input() withPaginator = false;
   @Output() closeClicked = new EventEmitter<void>();
 
   private readonly options: PopupOptions = {
@@ -37,6 +38,9 @@ export class PopupComponent implements OnChanges, OnDestroy {
     className: 'rokas',
   };
 
+
+  private templateContextIndex = 0;
+  private templateContextSize = 1;
   private popup: Popup;
   private popupContent: ElementRef;
 
@@ -57,10 +61,16 @@ export class PopupComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes.templateContext?.currentValue) {
+      this.templateContextIndex = 0;
+      this.templateContextSize = Array.isArray(this.templateContext) ? this.templateContext.length : 1;
+    }
+
     // Not sure why this is needed here...
     // Otherwise this.popupContent is not correctly updated.
     this.cd.detectChanges();
     this.showPopup();
+
   }
 
   ngOnDestroy(): void {
@@ -68,8 +78,10 @@ export class PopupComponent implements OnChanges, OnDestroy {
   }
 
   getTemplateContext(): any {
+    const paginated = Array.isArray(this.templateContext) && this.withPaginator;
+    const ctx = paginated ? this.templateContext[this.templateContextIndex] : this.templateContext;
     return {
-      $implicit: this.templateContext ?? {}
+      $implicit: ctx ?? {}
     };
   }
 
@@ -107,5 +119,10 @@ export class PopupComponent implements OnChanges, OnDestroy {
       this.popup = undefined;
       this.closeClicked.emit();
     });
+  }
+
+  onIndexSelected(index: number) {
+    this.templateContextIndex = index;
+    this.cd.detectChanges();
   }
 }

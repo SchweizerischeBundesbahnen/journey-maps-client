@@ -1,4 +1,14 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  TemplateRef
+} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {LocaleService} from '../../services/locale.service';
 
@@ -19,14 +29,18 @@ import {LocaleService} from '../../services/locale.service';
     ]),
   ]
 })
-export class TeaserComponent implements OnInit {
+export class TeaserComponent implements OnInit, OnChanges {
 
   @Input() rendered: boolean;
   @Input() templateContext: any;
   @Input() template: TemplateRef<any>;
+  @Input() withPaginator = false;
   @Output() closeClicked = new EventEmitter<void>();
 
   closeLabel: string;
+
+  private templateContextIndex = 0;
+  private templateContextSize = 1;
 
   constructor(private i18n: LocaleService) {
   }
@@ -35,9 +49,22 @@ export class TeaserComponent implements OnInit {
     this.closeLabel = this.i18n.getText('close');
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.templateContext?.currentValue) {
+      this.templateContextIndex = 0;
+      this.templateContextSize = Array.isArray(this.templateContext) ? this.templateContext.length : 1;
+    }
+  }
+
   getTemplateContext(): any {
+    const paginated = Array.isArray(this.templateContext) && this.withPaginator;
+    const ctx = paginated ? this.templateContext[this.templateContextIndex] : this.templateContext;
     return {
-      $implicit: this.templateContext
+      $implicit: ctx ?? {}
     };
+  }
+
+  onIndexSelected(index: number) {
+    this.templateContextIndex = index;
   }
 }

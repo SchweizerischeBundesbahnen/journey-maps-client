@@ -51,6 +51,10 @@
       <div class="station-title">{{station.properties.name}}</div>
       <div class="station-subtitle">{{station.properties.sbb_id}}</div>
     </ng-template>
+
+    <ng-template #routeTemplate let-route>
+      <div class="route-title">{{route.properties.routeId}}</div>
+    </ng-template>
   </div>
 
   <div>

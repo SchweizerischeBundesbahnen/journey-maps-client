@@ -40,6 +40,12 @@
     @include esta.mq($to: tabletPortrait) {
       width: 100%;
     }
+
+    rokas-overlay-paginator {
+      display: block;
+      margin-top: $closeIconSize * .5;
+      margin-bottom: $closeIconSize * -1;
+    }
   }
 
   .maplibregl-popup-tip {

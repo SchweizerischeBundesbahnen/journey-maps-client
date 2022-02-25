@@ -7,10 +7,12 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
-  FeatureData, FeaturesSelectEventData,
+  FeatureData,
+  FeaturesSelectEventData,
   InteractionOptions,
   JourneyMapsRoutingOptions,
-  ListenerOptions, SelectionMode,
+  ListenerOptions,
+  SelectionMode,
   StyleOptions,
   UIOptions,
   ViewportOptions,
@@ -35,6 +37,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   client: JourneyMapsClientComponent;
   @ViewChild('stationTemplate')
   stationTemplate: TemplateRef<any>;
+  @ViewChild('routeTemplate')
+  routeTemplate: TemplateRef<any>;
 
   private _journey: GeoJSON.FeatureCollection;
   private _transferLuzern: GeoJSON.FeatureCollection;
@@ -66,8 +70,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   listenerOptions: ListenerOptions = {
     MARKER: {watch: true, selectionMode: SelectionMode.single},
-    ROUTE: {watch: true, selectionMode: SelectionMode.multi},
-    STATION: {watch: true},
+    ROUTE: {watch: true, popup: true, selectionMode: SelectionMode.multi},
+    STATION: {watch: true, popup: true},
     ZONE: {watch: true, selectionMode: SelectionMode.multi},
   };
 
@@ -169,6 +173,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.listenerOptions.STATION.clickTemplate = this.stationTemplate;
+    this.listenerOptions.ROUTE.clickTemplate = this.routeTemplate;
     this.updateListenerOptions();
   }
 

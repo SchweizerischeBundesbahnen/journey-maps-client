@@ -2,7 +2,8 @@
   [rendered]="overlayVisible"
   [map]="map"
   [template]="overlayOptions().clickTemplate"
-  [templateContext]="overlayFeature"
+  [templateContext]="overlayFeatures"
+  [withPaginator]="true"
   [position]="overlayPosition"
   (closeClicked)="overlayVisible=false"
   *ngIf="overlayOptions().popup"
@@ -13,7 +14,8 @@
 <rokas-teaser
   [rendered]="overlayVisible"
   [template]="overlayOptions().clickTemplate"
-  [templateContext]="overlayFeature"
+  [templateContext]="overlayFeatures"
+  [withPaginator]="true"
   (closeClicked)="overlayVisible=false"
   *ngIf="!overlayOptions().popup"
 >
