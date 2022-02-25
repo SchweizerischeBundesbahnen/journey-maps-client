@@ -1,13 +1,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
   OnInit,
   Output,
   SimpleChanges,
-  TemplateRef
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {LocaleService} from '../../services/locale.service';
@@ -36,11 +38,25 @@ export class TeaserComponent implements OnInit, OnChanges {
   @Input() template: TemplateRef<any>;
   @Input() withPaginator = false;
   @Output() closeClicked = new EventEmitter<void>();
+  @Output() mouseEvent = new EventEmitter<'enter' | 'leave'>();
 
   closeLabel: string;
 
   private templateContextIndex = 0;
   private templateContextSize = 1;
+
+  private mouseEnter = () => this.mouseEvent.next('enter');
+  private mouseLeave = () => this.mouseEvent.next('leave');
+
+  @ViewChild('container') set container(container: ElementRef<HTMLElement>) {
+    const nativeElement = container?.nativeElement;
+    if (nativeElement) {
+      nativeElement.removeEventListener('mouseenter', this.mouseEnter);
+      nativeElement.removeEventListener('mouseleave', this.mouseLeave);
+      nativeElement.addEventListener('mouseenter', this.mouseEnter);
+      nativeElement.addEventListener('mouseleave', this.mouseLeave);
+    }
+  }
 
   constructor(private i18n: LocaleService) {
   }

@@ -173,7 +173,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.listenerOptions.STATION.clickTemplate = this.stationTemplate;
-    this.listenerOptions.ROUTE.clickTemplate = this.routeTemplate;
+    this.listenerOptions.ROUTE.hoverTemplate = this.routeTemplate;
     this.updateListenerOptions();
   }
 
