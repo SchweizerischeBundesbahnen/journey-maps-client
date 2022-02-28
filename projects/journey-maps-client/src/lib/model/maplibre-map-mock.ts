@@ -1,20 +1,31 @@
 import {Map as MapLibreMap} from 'maplibre-gl';
 
+interface EventInfo {
+  _layerId: string,
+  callbackFn: any
+}
+
 export class MaplibreMapMock {
 
-  private readonly callbackFnCache = new Map<String, any[]>();
+  private readonly callbackFnCache = new Map<String, EventInfo[] | any[]>();
 
   /**
    Provide on-function mock. Keeps callback functions in a list.
    Use raise(eventName) to simulate an event.
    * */
-  on(eventName: string, callbackFn) {
+  on(eventName, ...args) {
     let callbackList = this.callbackFnCache.get(eventName);
     if (!callbackList) {
       this.callbackFnCache.set(eventName, []);
       callbackList = this.callbackFnCache.get(eventName);
     }
-    callbackList.push(callbackFn);
+
+    if (args.length > 1) {
+      // layerId and
+      callbackList.push({_layerId: args[0], callbackFn: args[1]});
+    } else {
+      callbackList.push(args[0]);
+    }
   }
 
   raise(eventName: string) {
@@ -23,7 +34,12 @@ export class MaplibreMapMock {
       throw new Error(`Event ${eventName} was not registered.`);
     }
     for (let callback of callbackList) {
-      MaplibreMapMock.callbackWithEventArgs(eventName, callback);
+      if (callback._layerId) {
+        const info = callback as EventInfo;
+        MaplibreMapMock.callbackWithEventArgs(eventName, info.callbackFn);
+      } else {
+        MaplibreMapMock.callbackWithEventArgs(eventName, callback);
+      }
     }
   }
 

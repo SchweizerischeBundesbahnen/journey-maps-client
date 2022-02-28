@@ -28,9 +28,7 @@ describe('FeaturesClickEvent', () => {
   });
 
   it('should submit event on map click', (doneFn) => {
-    const timeout = setTimeout(() => fail('Should raise a click event before.'), 500);
     featuresClickEvent.subscribe((args: FeaturesClickEventData) => {
-      clearTimeout(timeout);
       expect(args.features.length).toBe(2);
       doneFn();
     });
@@ -45,6 +43,6 @@ describe('FeaturesClickEvent', () => {
     });
 
     mapMock.raise('click');
-    setTimeout(() => doneFn(), 500);
+    setTimeout(() => doneFn(), 1000);
   });
 });

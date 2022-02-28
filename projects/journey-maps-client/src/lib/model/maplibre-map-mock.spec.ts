@@ -22,6 +22,17 @@ describe('MaplibreMapMock', () => {
     mapMock.raise('click');
   });
 
+  it('should call event on map layer click', (doneFn) => {
+    mapMock.on('click', 'test-layer', (eventArgs) => {
+      expect(eventArgs).toBeTruthy();
+      expect(eventArgs.point).toBeTruthy();
+      expect(eventArgs.lngLat).toBeTruthy();
+      doneFn();
+    });
+
+    mapMock.raise('click');
+  });
+
   it('should call event on map test-event', (doneFn) => {
     mapMock.on('test-event', () => {
       doneFn();
