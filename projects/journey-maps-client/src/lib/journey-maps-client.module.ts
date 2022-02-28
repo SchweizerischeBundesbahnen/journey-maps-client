@@ -12,7 +12,7 @@ import {LeitPoiComponent} from './components/leit-poi/leit-poi.component';
 import {BasemapSwitchComponent} from './components/basemap-switch/basemap-switch.component';
 import {HomeButtonComponent} from './components/home-button/home-button.component';
 import {FeatureEventListenerComponent} from './components/feature-event-listener/feature-event-listener.component';
-
+import {OverlayPaginatorComponent} from './components/overlay-paginator/overlay-paginator.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,8 @@ import {FeatureEventListenerComponent} from './components/feature-event-listener
     MarkerDetailsComponent,
     FeatureEventListenerComponent,
     LeitPoiComponent,
-    HomeButtonComponent
+    HomeButtonComponent,
+    OverlayPaginatorComponent,
   ],
   imports: [
     CommonModule,

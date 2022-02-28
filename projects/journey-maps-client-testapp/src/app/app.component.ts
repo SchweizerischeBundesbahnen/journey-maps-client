@@ -7,10 +7,12 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {StyleMode} from '../../../journey-maps-client/src/lib/model/style-mode.enum';
 import {
-  FeatureData, FeaturesSelectEventData,
+  FeatureData,
+  FeaturesSelectEventData,
   InteractionOptions,
   JourneyMapsRoutingOptions,
-  ListenerOptions, SelectionMode,
+  ListenerOptions,
+  SelectionMode,
   StyleOptions,
   UIOptions,
   ViewportOptions,
@@ -35,6 +37,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   client: JourneyMapsClientComponent;
   @ViewChild('stationTemplate')
   stationTemplate: TemplateRef<any>;
+  @ViewChild('routeTemplate')
+  routeTemplate: TemplateRef<any>;
 
   private _journey: GeoJSON.FeatureCollection;
   private _transferLuzern: GeoJSON.FeatureCollection;
@@ -42,7 +46,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private _transferBernIndoor: GeoJSON.FeatureCollection;
   private _transferGeneveIndoor: GeoJSON.FeatureCollection;
   private _zonesBernBurgdorf: GeoJSON.FeatureCollection;
-  private _routes: GeoJSON.FeatureCollection[] = [];
+  private _routesEngelbergThun: GeoJSON.FeatureCollection[] = [];
+  private _routesBnLs: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
 
   apiKey: string = null;
@@ -66,12 +71,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   listenerOptions: ListenerOptions = {
     MARKER: {watch: true, selectionMode: SelectionMode.single},
-    ROUTE: {watch: true, selectionMode: SelectionMode.multi},
-    STATION: {watch: true},
+    ROUTE: {watch: true, popup: true, selectionMode: SelectionMode.multi},
+    STATION: {watch: true, popup: true},
     ZONE: {watch: true, selectionMode: SelectionMode.multi},
   };
 
-  journeyMapsRoutingOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes', 'bern-burgdorf'];
+  journeyMapsRoutingOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes-BN-LS', 'routes-engelberg-thun'];
   journeyMapsRoutingOption: JourneyMapsRoutingOptions;
   journeyMapsZoneOptions = ['bern-burgdorf'];
   journeyMapsZones: GeoJSON.FeatureCollection;
@@ -156,7 +161,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(json => this._transferGeneveIndoor = json);
 
     this.assetReaderService.loadAssetAsJSON('routes/engelberg-und-thun.json')
-      .subscribe(json => this._routes = json);
+      .subscribe(json => this._routesEngelbergThun = json);
+
+    this.assetReaderService.loadAssetAsJSON('routes/bn-ls.json')
+      .subscribe(json => this._routesBnLs = json);
 
     this.assetReaderService.loadAssetAsJSON('zones/bern-burgdorf.json')
       .subscribe(json => this._zonesBernBurgdorf = json);
@@ -169,6 +177,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.listenerOptions.STATION.clickTemplate = this.stationTemplate;
+    this.listenerOptions.ROUTE.hoverTemplate = this.routeTemplate;
     this.updateListenerOptions();
   }
 
@@ -219,8 +228,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       updateDataFunction = () => this.journeyMapsRoutingOption = {transfer: this._transferGeneveIndoor};
       bbox = this._transferGeneveIndoor.bbox;
     }
-    if ((event.target as HTMLOptionElement).value === 'routes') {
-      this.journeyMapsRoutingOption = {routes: this._routes};
+    if ((event.target as HTMLOptionElement).value === 'routes-engelberg-thun') {
+      this.journeyMapsRoutingOption = {routes: this._routesEngelbergThun};
+    }
+    if ((event.target as HTMLOptionElement).value === 'routes-BN-LS') {
+      this.journeyMapsRoutingOption = {routes: this._routesBnLs};
     }
 
     if (bbox) {

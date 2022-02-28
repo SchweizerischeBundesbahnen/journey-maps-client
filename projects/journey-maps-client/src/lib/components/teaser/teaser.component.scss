@@ -13,6 +13,7 @@
   box-shadow: -5px 0px 5px -5px rgba(0, 0, 0, .15);
 
   .close {
+    z-index: 101;
     position: absolute;
     top: 5px;
     right: 5px;
@@ -29,5 +30,13 @@
   width: 100%;
   @include esta.mq($from: tabletPortrait) {
     width: 20rem;
+  }
+
+  rokas-overlay-paginator {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    right: 0;
+    z-index: 100;
   }
 }

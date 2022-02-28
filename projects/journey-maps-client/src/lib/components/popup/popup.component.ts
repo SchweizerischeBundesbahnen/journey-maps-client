@@ -30,18 +30,25 @@ export class PopupComponent implements OnChanges, OnDestroy {
   @Input() position: LngLatLike;
   @Input() offset: Offset;
   @Input() additionalClassName?: string;
+  @Input() withPaginator = false;
   @Output() closeClicked = new EventEmitter<void>();
+  @Output() mouseEvent = new EventEmitter<'enter' | 'leave'>();
 
   private readonly options: PopupOptions = {
     closeOnClick: false,
     className: 'rokas',
   };
 
+  private templateContextIndex = 0;
+  private templateContextSize = 1;
   private popup: Popup;
-  private popupContent: ElementRef;
+  private popupContent: ElementRef<HTMLElement>;
+
+  private mouseEnter = () => this.mouseEvent.next('enter');
+  private mouseLeave = () => this.mouseEvent.next('leave');
 
   // The view child is initially undefined (because of the *ngif in the parent component).
-  @ViewChild('popupContent') set content(content: ElementRef) {
+  @ViewChild('popupContent') set content(content: ElementRef<HTMLElement>) {
 
     const firstChange = this.popupContent == null && content != null;
     this.popupContent = content;
@@ -57,10 +64,16 @@ export class PopupComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes.templateContext?.currentValue) {
+      this.templateContextIndex = 0;
+      this.templateContextSize = Array.isArray(this.templateContext) ? this.templateContext.length : 1;
+    }
+
     // Not sure why this is needed here...
     // Otherwise this.popupContent is not correctly updated.
     this.cd.detectChanges();
     this.showPopup();
+
   }
 
   ngOnDestroy(): void {
@@ -68,8 +81,10 @@ export class PopupComponent implements OnChanges, OnDestroy {
   }
 
   getTemplateContext(): any {
+    const paginated = Array.isArray(this.templateContext) && this.withPaginator;
+    const ctx = paginated ? this.templateContext[this.templateContextIndex] : this.templateContext;
     return {
-      $implicit: this.templateContext ?? {}
+      $implicit: ctx ?? {}
     };
   }
 
@@ -85,6 +100,18 @@ export class PopupComponent implements OnChanges, OnDestroy {
 
     this.popup.setOffset(this.offset);
     this.popup.setLngLat(this.position);
+    this.registerEventListeners(this.popup.getElement());
+  }
+
+  private registerEventListeners(element: HTMLElement) {
+    if (!element) {
+      return;
+    }
+
+    element.removeEventListener('mouseenter', this.mouseEnter);
+    element.removeEventListener('mouseleave', this.mouseLeave);
+    element.addEventListener('mouseenter', this.mouseEnter);
+    element.addEventListener('mouseleave', this.mouseLeave);
   }
 
   private initPopup(): void {
@@ -94,7 +121,7 @@ export class PopupComponent implements OnChanges, OnDestroy {
     }
 
     this.popup = new Popup(_options)
-      .setDOMContent(this.popupContent.nativeElement as HTMLElement)
+      .setDOMContent(this.popupContent.nativeElement)
       .addTo(this.map);
 
     try {
@@ -107,5 +134,10 @@ export class PopupComponent implements OnChanges, OnDestroy {
       this.popup = undefined;
       this.closeClicked.emit();
     });
+  }
+
+  onIndexSelected(index: number) {
+    this.templateContextIndex = index;
+    this.cd.detectChanges();
   }
 }

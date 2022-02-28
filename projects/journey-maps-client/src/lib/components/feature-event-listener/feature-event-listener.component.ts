@@ -1,4 +1,14 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {
   FeatureData,
   FeatureDataType,
@@ -6,6 +16,7 @@ import {
   FeaturesHoverChangeEventData,
   FeaturesSelectEventData,
   ListenerOptions,
+  ListenerTypeOptions,
   SelectionMode,
 } from '../../journey-maps-client.interfaces';
 import {MapCursorStyleEvent} from '../../services/map/events/map-cursor-style-event';
@@ -19,13 +30,14 @@ import {MapMarkerService} from '../../services/map/map-marker.service';
 import {FeaturesHoverEvent} from '../../services/map/events/features-hover-event';
 import {MapSelectionEventService} from '../../services/map/events/map-selection-event.service';
 import {MapZoneService} from '../../services/map/map-zone.service';
-import {RouteUtilsService} from '../../services/map/events/route-utils.service';
+import {ROUTE_ID_PROPERTY_NAME, RouteUtilsService} from '../../services/map/events/route-utils.service';
 import {MapEventUtilsService} from '../../services/map/events/map-event-utils.service';
 
 @Component({
   selector: 'rokas-feature-event-listener',
   templateUrl: './feature-event-listener.component.html',
-  providers: [MapSelectionEventService]
+  providers: [MapSelectionEventService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
 
@@ -37,10 +49,14 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
   @Output() featuresClick = new EventEmitter<FeaturesClickEventData>();
   @Output() featuresHoverChange = new EventEmitter<FeaturesHoverChangeEventData>();
 
-  // CONTINUE ROKAS-502: Add overlay on hover
   overlayVisible = false;
-  overlayFeature: FeatureData;
+  overlayEventType: 'click' | 'hover';
+  overlayFeatures: FeatureData[];
   overlayPosition: LngLatLike;
+  overlayTemplate: any;
+  overlayIsPopup: boolean;
+  overlayHasMouseFocus = false;
+  overlayTimeoutId: number;
 
   private destroyed = new Subject<void>();
   private watchOnLayers = new Map<string, FeatureDataType>();
@@ -54,6 +70,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     private mapMarkerService: MapMarkerService,
     private routeUtilsService: RouteUtilsService,
     private mapEventUtils: MapEventUtilsService,
+    private cd: ChangeDetectorRef,
     public readonly mapSelectionEventService: MapSelectionEventService,
   ) {
   }
@@ -110,6 +127,15 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     }
   }
 
+  onOverlayMouseEvent(event: 'enter' | 'leave'): void {
+    const isLeave = event === 'leave';
+    if (isLeave && this.overlayEventType === 'hover') {
+      this.overlayVisible = false;
+      this.cd.detectChanges();
+    }
+    this.overlayHasMouseFocus = !isLeave;
+  }
+
   private updateWatchOnLayers(layers: string[], featureDataType: FeatureDataType): void {
     layers.forEach(id => this.watchOnLayers.set(id, featureDataType));
   }
@@ -123,35 +149,60 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
     return selectionModes;
   }
 
-  overlayOptions(): any {
-    if (this.listenerOptions && this.overlayFeature) {
-      return this.listenerOptions[this.overlayFeature.featureDataType] ?? {};
-    }
-
-    return {};
-  }
-
   private featureClicked(data: FeaturesClickEventData) {
     this.mapSelectionEventService.toggleSelection(data);
     this.featureSelectionsChange.next(this.mapSelectionEventService.findSelectedFeatures());
     this.featuresClick.next(data);
 
-    const topMostFeature = data.features[0];
-    const template = this.listenerOptions[topMostFeature.featureDataType]?.clickTemplate;
-    if (template) {
-      this.overlayVisible = true;
-      this.overlayFeature = topMostFeature;
-      if (topMostFeature.geometry.type === 'Point') {
-        this.overlayPosition = topMostFeature.geometry.coordinates as LngLatLike;
-      } else {
-        this.overlayPosition = data.clickLngLat;
-      }
-    } else {
-      this.overlayVisible = false;
+    this.updateOverlay(data.features, 'click', data.clickLngLat);
+  }
+
+  private filterOverlayFeatures(features: FeatureData[], type: FeatureDataType): FeatureData[] {
+    const filteredByType = features.filter(f => f.featureDataType === type);
+    if (type !== FeatureDataType.ROUTE) {
+      return filteredByType;
     }
+
+    // Only one feature per route id
+    return [...new Map(filteredByType.map(route => [route.properties[ROUTE_ID_PROPERTY_NAME], route])).values()];
   }
 
   private featureHovered(data: FeaturesHoverChangeEventData) {
     this.featuresHoverChange.next(data);
+
+    if (data.hover) {
+      this.updateOverlay(data.features, 'hover', data.eventLngLat);
+    } else if (this.overlayVisible && this.overlayEventType === 'hover') {
+      this.overlayTimeoutId = setTimeout(() => {
+        if (!this.overlayHasMouseFocus) {
+          this.overlayVisible = false;
+          this.cd.detectChanges();
+        }
+      }, 1000);
+    }
+  }
+
+  private updateOverlay(features: FeatureData[], event: 'click' | 'hover', pos: { lng: number, lat: number }) {
+    const topMostFeature = features[0];
+    const listenerTypeOptions: ListenerTypeOptions = this.listenerOptions[topMostFeature.featureDataType];
+    const isClick = event === 'click';
+    const template = isClick ? listenerTypeOptions?.clickTemplate : listenerTypeOptions?.hoverTemplate;
+
+    if (template) {
+      clearTimeout(this.overlayTimeoutId);
+      this.overlayVisible = true;
+      this.overlayEventType = event;
+      this.overlayTemplate = template;
+      this.overlayFeatures = this.filterOverlayFeatures(features, topMostFeature.featureDataType);
+      this.overlayIsPopup = listenerTypeOptions.popup;
+
+      if (topMostFeature.geometry.type === 'Point') {
+        this.overlayPosition = topMostFeature.geometry.coordinates as LngLatLike;
+      } else {
+        this.overlayPosition = pos;
+      }
+    } else if (isClick) {
+      this.overlayVisible = false;
+    }
   }
 }
