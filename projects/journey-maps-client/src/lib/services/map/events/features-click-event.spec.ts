@@ -6,12 +6,13 @@ describe('FeaturesClickEvent', () => {
   let featuresClickEvent: FeaturesClickEvent;
   let mapMock: MaplibreMapMock;
   let mapEventUtilsMock: any;
+  let featureData = [{featureDataType: FeatureDataType.ROUTE} as FeatureData];
 
   beforeEach(() => {
     mapMock = new MaplibreMapMock();
     mapEventUtilsMock = {
       queryFeaturesByLayerIds: () => {
-        return [{featureDataType: FeatureDataType.ROUTE} as FeatureData];
+        return featureData;
       }
     };
 
@@ -23,11 +24,23 @@ describe('FeaturesClickEvent', () => {
     expect(featuresClickEvent).toBeTruthy();
   });
 
-  it('should submit on map click', (doneFn) => {
+  it('should submit event on map click', (doneFn) => {
+    const timeout = setTimeout(() => fail('Should raise a click event before.'), 500);
     featuresClickEvent.subscribe(() => {
+      clearTimeout(timeout);
       doneFn();
     });
 
     mapMock.raise('click');
+  });
+
+  it('should not submit event on map click when no features found.', (doneFn) => {
+    featureData.length = 0;
+    featuresClickEvent.subscribe(() => {
+      fail('Should not raise a click event.');
+    });
+
+    mapMock.raise('click');
+    setTimeout(() => doneFn(), 500);
   });
 });
