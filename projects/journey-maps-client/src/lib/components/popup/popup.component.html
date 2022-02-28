@@ -2,5 +2,12 @@
   <div #popupContent>
     <ng-container *ngTemplateOutlet="template;context:getTemplateContext()">
     </ng-container>
+    <rokas-overlay-paginator *ngIf="withPaginator && templateContextSize > 1"
+                             [index]="templateContextIndex"
+                             [size]="templateContextSize"
+                             (indexClicked)="onIndexSelected($event)"
+    >
+
+    </rokas-overlay-paginator>
   </div>
 </ng-container>
