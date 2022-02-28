@@ -1,4 +1,14 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {
   FeatureData,
   FeatureDataType,
@@ -26,7 +36,8 @@ import {MapEventUtilsService} from '../../services/map/events/map-event-utils.se
 @Component({
   selector: 'rokas-feature-event-listener',
   templateUrl: './feature-event-listener.component.html',
-  providers: [MapSelectionEventService]
+  providers: [MapSelectionEventService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
 
