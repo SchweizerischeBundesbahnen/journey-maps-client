@@ -1,12 +1,12 @@
 import {FeaturesClickEvent} from './features-click-event';
 import {MaplibreMapMock} from '../../../model/maplibre-map-mock';
-import {FeatureData, FeatureDataType} from '../../../journey-maps-client.interfaces';
+import {FeatureData, FeatureDataType, FeaturesClickEventData} from '../../../journey-maps-client.interfaces';
 
 describe('FeaturesClickEvent', () => {
   let featuresClickEvent: FeaturesClickEvent;
   let mapMock: MaplibreMapMock;
   let mapEventUtilsMock: any;
-  let featureData = [{featureDataType: FeatureDataType.ROUTE} as FeatureData];
+  let featureData = [{featureDataType: FeatureDataType.ROUTE}, {featureDataType: FeatureDataType.ROUTE}];
 
   beforeEach(() => {
     mapMock = new MaplibreMapMock();
@@ -26,8 +26,9 @@ describe('FeaturesClickEvent', () => {
 
   it('should submit event on map click', (doneFn) => {
     const timeout = setTimeout(() => fail('Should raise a click event before.'), 500);
-    featuresClickEvent.subscribe(() => {
+    featuresClickEvent.subscribe((args: FeaturesClickEventData) => {
       clearTimeout(timeout);
+      expect(args.features.length).toBe(2);
       doneFn();
     });
 
@@ -37,7 +38,7 @@ describe('FeaturesClickEvent', () => {
   it('should not submit event on map click when no features found.', (doneFn) => {
     featureData.length = 0;
     featuresClickEvent.subscribe(() => {
-      fail('Should not raise a click event.');
+      fail('Should not raise a click event when no features found.');
     });
 
     mapMock.raise('click');
