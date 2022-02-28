@@ -58,7 +58,7 @@ describe('FeaturesHoverEvent', () => {
     setTimeout(() => doneFn(), 1000);
   });
 
-  it('should submit leave event on mouse-hover change', (doneFn) => {
+  it('should submit hover then leave events on mouse-hover change', (doneFn) => {
     let hover = true;
     featuresHoverEvent.subscribe((eventArgs) => {
       expect(eventArgs.features.length).toBe(2);
@@ -79,6 +79,20 @@ describe('FeaturesHoverEvent', () => {
       /* simulate leave */
       featureData.length = 0; // nothing hovered
       mapMock.raise('mousemove');
-    }, 500);
+    }, 100);
+  });
+
+  it('should submit hover events periodically with delay', (doneFn) => {
+    let once = true;
+    featuresHoverEvent.subscribe(() => {
+      expect(once).toBeTruthy();
+      once = false;
+    });
+    /* simulate hover */
+    setTimeout(() => mapMock.raise('mousemove'), 1);
+    setTimeout(() => mapMock.raise('mousemove'), 2);
+    setTimeout(() => mapMock.raise('mousemove'), 3);
+    setTimeout(() => mapMock.raise('mousemove'), 4);
+    setTimeout(() => doneFn(), 100);
   });
 });
