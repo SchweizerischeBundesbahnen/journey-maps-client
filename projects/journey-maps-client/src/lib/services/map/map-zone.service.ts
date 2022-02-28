@@ -2,9 +2,7 @@ import {Injectable} from '@angular/core';
 import {Constants} from '../constants';
 import {GeoJSONSource, Map as MaplibreMap, MapboxGeoJSONFeature} from 'maplibre-gl';
 import {EMPTY_FEATURE_COLLECTION} from './map.service';
-import {
-  MapEventUtilsService,
-} from '@schweizerischebundesbahnen/journey-maps-client/src/lib/services/map/events/map-event-utils.service';
+import {MapEventUtilsService} from './events/map-event-utils.service';
 import {GeoJSON} from 'geojson';
 
 export const SELECTED_PROPERTY_NAME = 'isSelected';
