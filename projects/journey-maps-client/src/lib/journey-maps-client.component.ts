@@ -149,7 +149,7 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
 
   private _interactionOptions: InteractionOptions = this.defaultInteractionOptions;
 
-  // **************************************** BUTTON OPTIONS *****************************************/
+  // **************************************** UI OPTIONS *****************************************/
 
   private defaultUIOptions: UIOptions = {
     showSmallButtons: false,

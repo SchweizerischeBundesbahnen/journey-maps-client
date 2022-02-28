@@ -260,7 +260,8 @@
         "valid_from": "Sat, 14 Dec 2019 00:00:00 GMT",
         "id": 14514,
         "partner_code": "446",
-        "zoneplan": "Libero Abo Libero"
+        "zoneplan": "Libero Abo Libero",
+        "isSelected": true
       },
       "type": "Feature"
     },

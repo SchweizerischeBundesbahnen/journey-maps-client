@@ -24,9 +24,9 @@ export class MapRoutesService {
   updateRoutes(map: MaplibreMap, mapSelectionEventService: MapSelectionEventService, routes: SelectableFeatureCollection[] = [EMPTY_FEATURE_COLLECTION]): void {
     routes.forEach((featureCollection, idx) => {
       const id = featureCollection.id ?? `jmc-generated-${idx + 1}`;
-      for (const f of featureCollection.features) {
-        f.properties[ROUTE_ID_PROPERTY_NAME] = id;
-        f.properties[SELECTED_PROPERTY_NAME] = featureCollection.isSelected;
+      for (const feature of featureCollection.features) {
+        feature.properties[ROUTE_ID_PROPERTY_NAME] = id;
+        feature.properties[SELECTED_PROPERTY_NAME] = featureCollection.isSelected;
       }
     });
     this.mapRouteService.updateRoute(map, mapSelectionEventService, {
