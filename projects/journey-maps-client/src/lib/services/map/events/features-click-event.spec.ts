@@ -6,7 +6,10 @@ describe('FeaturesClickEvent', () => {
   let featuresClickEvent: FeaturesClickEvent;
   let mapMock: MaplibreMapMock;
   let mapEventUtilsMock: any;
-  let featureData = [{featureDataType: FeatureDataType.ROUTE}, {featureDataType: FeatureDataType.ROUTE}];
+  let featureData = [
+    {featureDataType: FeatureDataType.ROUTE},
+    {featureDataType: FeatureDataType.ROUTE}
+  ] as FeatureData[];
 
   beforeEach(() => {
     mapMock = new MaplibreMapMock();
