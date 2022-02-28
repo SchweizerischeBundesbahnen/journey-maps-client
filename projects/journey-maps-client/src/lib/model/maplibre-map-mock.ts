@@ -9,10 +9,15 @@ export class MaplibreMapMock {
 
   private readonly callbackFnCache = new Map<String, EventInfo[] | any[]>();
 
+  get(): MapLibreMap {
+    return this as unknown as MapLibreMap;
+  }
+
+  /* Public MaplibreMap functions */
+
   /**
-   Provide on-function mock. Keeps callback functions in a list.
-   Use raise(eventName) to simulate an event.
-   * */
+   * on-function mock. Use raise(eventName) to simulate an event.
+   */
   on(eventName, ...args) {
     let callbackList = this.callbackFnCache.get(eventName);
     if (!callbackList) {
@@ -27,6 +32,12 @@ export class MaplibreMapMock {
       callbackList.push(args[0]);
     }
   }
+
+  getCanvas() {
+    return {style: {cursor: ''}};
+  }
+
+  /* End of any Public MaplibreMap functions */
 
   raise(eventName: string) {
     let callbackList = this.callbackFnCache.get(eventName);
@@ -43,12 +54,9 @@ export class MaplibreMapMock {
     }
   }
 
-  get(): MapLibreMap {
-    return this as unknown as MapLibreMap;
-  }
-
   private static callbackWithEventArgs(eventName: string, callback: any) {
     switch (eventName) {
+      case 'mousemove':
       case 'click': {
         callback({
           point: {x: 150, y: 100},

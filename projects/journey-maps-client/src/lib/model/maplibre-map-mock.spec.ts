@@ -33,7 +33,7 @@ describe('MaplibreMapMock', () => {
     mapMock.raise('click');
   });
 
-  it('should call event on map test-event', (doneFn) => {
+  it('should call event on any test-event', (doneFn) => {
     mapMock.on('test-event', () => {
       doneFn();
     });
