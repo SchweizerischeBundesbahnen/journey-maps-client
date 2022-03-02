@@ -3,8 +3,8 @@ import {EMPTY_FEATURE_COLLECTION} from './map.service';
 import {MapRouteService} from './map-route.service';
 import {MapTransferService} from './map-transfer.service';
 import {Map as MaplibreMap} from 'maplibre-gl';
-import {ROUTE_ID_PROPERTY_NAME, SELECTED_PROPERTY_NAME} from './events/route-utils.service';
-import {MapSelectionEventService} from './events/map-selection-event.service';
+import {ROUTE_ID_PROPERTY_NAME} from './events/route-utils.service';
+import {MapSelectionEventService, SELECTED_PROPERTY_NAME} from './events/map-selection-event.service';
 
 @Injectable({
   providedIn: 'root'

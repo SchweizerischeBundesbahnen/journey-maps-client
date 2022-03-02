@@ -36,7 +36,8 @@ import {LevelSwitchService} from './components/level-switch/services/level-switc
 import {
   FeatureData,
   FeaturesClickEventData,
-  FeaturesHoverChangeEventData, FeaturesSelectEventData,
+  FeaturesHoverChangeEventData,
+  FeaturesSelectEventData,
   InteractionOptions,
   JourneyMapsRoutingOptions,
   ListenerOptions,
@@ -500,7 +501,9 @@ export class JourneyMapsClientComponent implements OnInit, AfterViewInit, OnDest
     }
 
     if (changes.journeyMapsZones?.currentValue || changes.journeyMapsZones?.previousValue) {
-      this.mapZoneService.updateZones(this.map, this.journeyMapsZones);
+      this.executeWhenMapStyleLoaded(() => {
+        this.mapZoneService.updateZones(this.map, this.featureEventListenerComponent.mapSelectionEventService, this.journeyMapsZones);
+      });
     }
 
     if (Object.values(this.journeyMapsRoutingOption ?? {}).filter(val => val).length > 1) {

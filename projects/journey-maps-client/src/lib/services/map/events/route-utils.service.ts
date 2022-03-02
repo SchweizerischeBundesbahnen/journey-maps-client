@@ -6,7 +6,6 @@ import {Feature} from 'geojson';
 import {Injectable} from '@angular/core';
 
 export const ROUTE_ID_PROPERTY_NAME = 'routeId';
-export const SELECTED_PROPERTY_NAME = 'isSelected';
 
 @Injectable({providedIn: 'root'})
 export class RouteUtilsService {

@@ -3,6 +3,7 @@ import {Constants} from '../constants';
 import {GeoJSONSource, Map as MaplibreMap} from 'maplibre-gl';
 import {EMPTY_FEATURE_COLLECTION} from './map.service';
 import {MapSelectionEventService} from './events/map-selection-event.service';
+import {FeatureDataType} from '../../journey-maps-client.interfaces';
 
 @Injectable({providedIn: 'root'})
 export class MapRouteService {
@@ -13,7 +14,7 @@ export class MapRouteService {
     const source = map.getSource(Constants.ROUTE_SOURCE) as GeoJSONSource;
     source.setData(routeFeatureCollection);
     if (routeFeatureCollection.features?.length) {
-      map.once('idle', () => mapSelectionEventService.initSelectedState(map, routeFeatureCollection.features));
+      map.once('idle', () => mapSelectionEventService.initSelectedState(map, routeFeatureCollection.features, FeatureDataType.ROUTE));
     }
   }
 }
