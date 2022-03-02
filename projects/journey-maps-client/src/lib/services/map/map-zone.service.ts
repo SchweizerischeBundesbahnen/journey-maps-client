@@ -20,7 +20,11 @@ export class MapZoneService {
     source.setData(zonesFeatureCollection);
 
     if (zonesFeatureCollection.features?.length) {
-      map.once('idle', () => {mapSelectionEventService.initSelectedState(map, zonesFeatureCollection.features, FeatureDataType.ZONE)});
+      map.once('idle', () => {
+        mapSelectionEventService.initSelectedState(map, zonesFeatureCollection.features, FeatureDataType.ZONE)
+      });
+    } else {
+      map.removeFeatureState({source: Constants.ZONE_SOURCE})
     }
   }
 }
