@@ -5,7 +5,7 @@ import {RouteUtilsService} from './route-utils.service';
 import {MapSelectionEventService} from './map-selection-event.service';
 
 describe('MapSelectionEventService', () => {
-  const watchOnLayers = new Map<string, FeatureDataType>();
+  let watchOnLayers: Map<string, FeatureDataType>;
   let mapSelectionEventService: MapSelectionEventService;
   let mapMock: MaplibreMapMock;
   let featureData: FeatureData[];
@@ -36,6 +36,7 @@ describe('MapSelectionEventService', () => {
     ] as undefined as FeatureData[];
 
     mapMock = new MaplibreMapMock();
+    watchOnLayers = new Map<string, FeatureDataType>();
     layers.forEach(id => watchOnLayers.set(id, FeatureDataType.ROUTE));
     mapSelectionEventService = new MapSelectionEventService(routeUtilsMock, mapEventUtilsMock);
   });

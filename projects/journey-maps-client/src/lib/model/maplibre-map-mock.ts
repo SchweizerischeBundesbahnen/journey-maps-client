@@ -6,8 +6,8 @@ interface EventInfo {
 }
 
 export class MaplibreMapMock {
-
   private readonly callbackFnCache = new Map<String, EventInfo[] | any[]>();
+  private readonly canvasStyle = {style: {cursor: ''}};
 
   get(): MapLibreMap {
     return this as unknown as MapLibreMap;
@@ -33,9 +33,7 @@ export class MaplibreMapMock {
     }
   }
 
-  getCanvas() {
-    return {style: {cursor: ''}};
-  }
+  getCanvas = () => this.canvasStyle;
 
   /* End of any Public MaplibreMap functions */
 

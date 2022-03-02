@@ -5,7 +5,7 @@ import {MapEventUtilsService} from './map-event-utils.service';
 import {RouteUtilsService} from './route-utils.service';
 
 describe('FeaturesHoverEvent', () => {
-  const watchOnLayers = new Map<string, FeatureDataType>();
+  let watchOnLayers: Map<string, FeatureDataType>;
   let featuresHoverEvent: FeaturesHoverEvent;
   let mapMock: MaplibreMapMock;
   let featureData: FeatureData[];
@@ -30,6 +30,7 @@ describe('FeaturesHoverEvent', () => {
     } as undefined as RouteUtilsService;
 
     const layers = ['route-layer-1', 'route-layer-2'];
+    watchOnLayers = new Map<string, FeatureDataType>();
     layers.forEach(id => watchOnLayers.set(id, FeatureDataType.ROUTE));
 
     featuresHoverEvent = new FeaturesHoverEvent(mapMock.get(), mapEventUtilsMock, watchOnLayers, routeUtilsMock);
