@@ -19,15 +19,21 @@ describe('MapCursorStyleEvent', () => {
     expect(mapCursorStyleEvent).toBeTruthy();
   });
 
-  it('should set pointer cursor on mouse enter', () => {
+  it('should set pointer cursor on mouse enter', (doneFn) => {
     expect(mapMock.getCanvas().style.cursor).toBe('');
     mapMock.raise('mouseenter');
-    setTimeout(() => expect(mapMock.getCanvas().style.cursor).toBe('pointer'), 100);
+    setTimeout(() => {
+      expect(mapMock.getCanvas().style.cursor).toBe('pointer');
+      doneFn();
+    }, 100);
   });
 
-  it('should set pointer cursor on mouse leave', () => {
+  it('should set pointer cursor on mouse leave', (doneFn) => {
     mapMock.getCanvas().style.cursor = 'pointer';
     mapMock.raise('mouseleave');
-    setTimeout(() => expect(mapMock.getCanvas().style.cursor).toBe(''), 100);
+    setTimeout(() => {
+      expect(mapMock.getCanvas().style.cursor).toBe('');
+      doneFn();
+    }, 100);
   });
 });
