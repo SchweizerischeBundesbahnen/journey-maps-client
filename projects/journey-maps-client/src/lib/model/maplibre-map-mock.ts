@@ -33,6 +33,25 @@ export class MaplibreMapMock {
     }
   }
 
+  off(eventName, ...args) {
+    let callbackList = this.callbackFnCache.get(eventName);
+    if (!callbackList) {
+      return;
+    }
+
+    let idx: number;
+    if (args.length > 1) {
+      // layerId and
+      idx = callbackList.findIndex(item => item._layerId === args[0] && item.callbackFn === args[1]);
+    } else {
+      idx = callbackList.findIndex(item => item === args[0]);
+    }
+
+    if (idx >= 0) {
+      callbackList.splice(idx, 1);
+    }
+  }
+
   getCanvas = () => this.canvasStyle;
 
   /* End of any Public MaplibreMap functions */

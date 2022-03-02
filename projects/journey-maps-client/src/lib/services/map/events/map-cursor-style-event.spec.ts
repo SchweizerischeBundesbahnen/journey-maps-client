@@ -11,6 +11,10 @@ describe('MapCursorStyleEvent', () => {
     mapCursorStyleEvent = new MapCursorStyleEvent(mapMock.get(), layers);
   });
 
+  afterEach(() => {
+    mapCursorStyleEvent.complete();
+  });
+
   it('should be created', () => {
     expect(mapCursorStyleEvent).toBeTruthy();
   });
