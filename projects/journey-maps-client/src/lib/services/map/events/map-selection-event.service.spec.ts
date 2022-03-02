@@ -50,6 +50,7 @@ describe('MapSelectionEventService', () => {
 
     mapSelectionEventService.toggleSelection({features: featureData} as FeaturesClickEventData);
     expect(featureData.some(f => !f.state.selected)).toBeTruthy();
+    expect(featureData.some(f => f.state.selected)).toBeTruthy();
   });
 
   it('should select all features in multi selection mode', () => {
