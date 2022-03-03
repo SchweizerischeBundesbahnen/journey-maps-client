@@ -33,6 +33,7 @@ export class MapStationService {
     const features = map.queryRenderedFeatures(null, {layers: this.stationLayers})
       .map(f => ({type: f.type, properties: f.properties, geometry: f.geometry}));
 
+    map.removeFeatureState({source: MapStationService.STATION_SOURCE});
     const source = map.getSource(MapStationService.STATION_SOURCE) as GeoJSONSource;
     source.setData({type: 'FeatureCollection', features});
   }
