@@ -1,18 +1,14 @@
 # Change Log
 
-## [3.1.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F3.0.0&sourceBranch=refs%2Ftags%2F3.1.0&targetRepoId=46287) - 2022-03-03
-### Added
-
-* 'journeyMapsZones' can now be marked as 'selected' by setting {"isSelected": true} inside 'properties' on the individual GeoJSON Feature.
-
-## [3.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.8.0&sourceBranch=refs%2Ftags%2F3.0.0&targetRepoId=46287) - 2022-02-23
+## [3.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.8.0&sourceBranch=refs%2Ftags%2F3.0.0&targetRepoId=46287) - 2022-03-03
 ### Added
 
 * Added support for map events for MARKER, ROUTE, STATION and ZONE feature types. Use configuration setting in `listenerOptions` to enable the following events:
-  * `selectedFeaturesChange`
+  * `selectedFeaturesChange` 
   * `featuresClick`
   * `featuresHoverChange`
 * Added 'journeyMapsZones' @Input parameter to display selectable zones on the map.
+* 'journeyMapsZones' can be marked as 'selected' by setting {"isSelected": true} inside 'properties' on the individual GeoJSON Feature.
 * An optional 'home button' has been added to the controls, allowing the user to zoom all of Switzerland into view.
 * `rokas-popup` and `rokas-teaser` components are made available to J-M-C integrators.
 * The option to show the map control buttons in a smaller size.
