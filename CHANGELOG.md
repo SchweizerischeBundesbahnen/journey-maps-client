@@ -1,6 +1,6 @@
 # Change Log
 
-## [3.1.0](...) - ...
+## [3.1.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F3.0.0&sourceBranch=refs%2Ftags%2F3.1.0&targetRepoId=46287) - 2022-03-03
 ### Added
 
 * 'journeyMapsZones' can now be marked as 'selected' by setting {"isSelected": true} inside 'properties' on the individual GeoJSON Feature.
