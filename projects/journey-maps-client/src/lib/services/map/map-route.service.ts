@@ -13,6 +13,7 @@ export class MapRouteService {
   ): void {
     const source = map.getSource(Constants.ROUTE_SOURCE) as GeoJSONSource;
     source.setData(routeFeatureCollection);
+    map.removeFeatureState({source: Constants.ROUTE_SOURCE})
     if (routeFeatureCollection.features?.length) {
       map.once('idle', () => mapSelectionEventService.initSelectedState(map, routeFeatureCollection.features, FeatureDataType.ROUTE));
     }
