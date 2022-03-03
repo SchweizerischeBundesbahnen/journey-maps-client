@@ -50,18 +50,21 @@ export class MapSelectionEventService {
   }
 
   toggleSelection(eventData: FeaturesClickEventData): void {
-    for (let data of eventData.features) {
-      const selected = !data.state.selected;
-      this.setFeatureSelection(data, selected);
+    const lastRouteEventData = new Map<FeatureData, boolean>();
+    for (let feature of eventData.features) {
+      const selected = !feature.state.selected;
+      this.setFeatureSelection(feature, selected);
 
-      if (data.featureDataType === FeatureDataType.ZONE) {
-        this.touchedZoneIds.add(Number(data.id));
+      if (feature.featureDataType === FeatureDataType.ZONE) {
+        this.touchedZoneIds.add(Number(feature.id));
+      } else if (feature.featureDataType === FeatureDataType.ROUTE) {
+        lastRouteEventData.set(feature, feature.state.selected);
       }
     }
 
-    this.lastRouteEventData = new Map(eventData.features
-      .filter(f => f.featureDataType === FeatureDataType.ROUTE)
-      .map(f => [f, f.state.selected]));
+    if (lastRouteEventData.size) {
+      this.lastRouteEventData = lastRouteEventData;
+    }
   }
 
   initSelectedState(mapInstance: MaplibreMap, features: Feature[], featureDataType: FeatureDataType): void {
