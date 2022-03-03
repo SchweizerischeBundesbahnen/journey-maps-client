@@ -50,7 +50,7 @@ export class MapSelectionEventService {
   }
 
   toggleSelection(eventData: FeaturesClickEventData): void {
-    const lastRouteEventData = new Map<FeatureData, boolean>();
+    const lastRouteEventDataCandidate = new Map<FeatureData, boolean>();
     for (let feature of eventData.features) {
       const selected = !feature.state.selected;
       this.setFeatureSelection(feature, selected);
@@ -58,12 +58,12 @@ export class MapSelectionEventService {
       if (feature.featureDataType === FeatureDataType.ZONE) {
         this.touchedZoneIds.add(Number(feature.id));
       } else if (feature.featureDataType === FeatureDataType.ROUTE) {
-        lastRouteEventData.set(feature, feature.state.selected);
+        lastRouteEventDataCandidate.set(feature, feature.state.selected);
       }
     }
 
-    if (lastRouteEventData.size) {
-      this.lastRouteEventData = lastRouteEventData;
+    if (lastRouteEventDataCandidate.size) {
+      this.lastRouteEventData = lastRouteEventDataCandidate;
     }
   }
 
