@@ -79,6 +79,8 @@ export class MapEventUtilsService {
         return Constants.MARKER_SOURCE;
       case FeatureDataType.ROUTE:
         return Constants.ROUTE_SOURCE;
+      case FeatureDataType.ZONE:
+        return Constants.ZONE_SOURCE;
       default:
         return undefined;
     }

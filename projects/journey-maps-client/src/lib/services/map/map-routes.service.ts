@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {EMPTY_FEATURE_COLLECTION} from './map.service';
 import {MapRouteService} from './map-route.service';
 import {Map as MaplibreMap} from 'maplibre-gl';
-import {ROUTE_ID_PROPERTY_NAME, SELECTED_PROPERTY_NAME} from './events/route-utils.service';
+import {ROUTE_ID_PROPERTY_NAME} from './events/route-utils.service';
 import {SelectableFeatureCollection} from '../../journey-maps-client.interfaces';
-import {MapSelectionEventService} from './events/map-selection-event.service';
+import {MapSelectionEventService, SELECTED_PROPERTY_NAME} from './events/map-selection-event.service';
 
 @Injectable({providedIn: 'root'})
 export class MapRoutesService {
@@ -24,9 +24,9 @@ export class MapRoutesService {
   updateRoutes(map: MaplibreMap, mapSelectionEventService: MapSelectionEventService, routes: SelectableFeatureCollection[] = [EMPTY_FEATURE_COLLECTION]): void {
     routes.forEach((featureCollection, idx) => {
       const id = featureCollection.id ?? `jmc-generated-${idx + 1}`;
-      for (const f of featureCollection.features) {
-        f.properties[ROUTE_ID_PROPERTY_NAME] = id;
-        f.properties[SELECTED_PROPERTY_NAME] = featureCollection.isSelected;
+      for (const feature of featureCollection.features) {
+        feature.properties[ROUTE_ID_PROPERTY_NAME] = id;
+        feature.properties[SELECTED_PROPERTY_NAME] = featureCollection.isSelected;
       }
     });
     this.mapRouteService.updateRoute(map, mapSelectionEventService, {

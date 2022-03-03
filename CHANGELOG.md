@@ -1,6 +1,6 @@
 # Change Log
 
-## [3.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.8.0&sourceBranch=refs%2Ftags%2F3.0.0&targetRepoId=46287) - 2022-02-23
+## [3.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.8.0&sourceBranch=refs%2Ftags%2F3.0.0&targetRepoId=46287) - 2022-03-03
 ### Added
 
 * Support map events for:
@@ -14,6 +14,7 @@
   * `featuresClick`: event is emitted whenever map features were clicked.
   * `featuresHoverChange`: event is emitted whenever mouse hovered or leaved map features.
 * Added 'journeyMapsZones' @Input parameter to display selectable zones on the map.
+* 'journeyMapsZones' can be marked as 'selected' by setting {"isSelected": true} inside 'properties' on the individual GeoJSON Feature.
 * An optional 'home button' has been added to the controls, allowing the user to zoom all of Switzerland into view.
 * `rokas-popup` and `rokas-teaser` components are made available to J-M-C integrators.
 * The option to show the map control buttons in a smaller size.

@@ -46,6 +46,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private _transferBernIndoor: GeoJSON.FeatureCollection;
   private _transferGeneveIndoor: GeoJSON.FeatureCollection;
   private _zonesBernBurgdorf: GeoJSON.FeatureCollection;
+  private _zonesBsBl: GeoJSON.FeatureCollection;
   private _routesEngelbergThun: GeoJSON.FeatureCollection[] = [];
   private _routesBnLs: GeoJSON.FeatureCollection[] = [];
   private destroyed = new Subject<void>();
@@ -78,7 +79,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   journeyMapsRoutingOptions = ['journey', 'transfer luzern', 'transfer zurich', 'transfer bern', 'transfer geneve', 'routes-BN-LS', 'routes-engelberg-thun'];
   journeyMapsRoutingOption: JourneyMapsRoutingOptions;
-  journeyMapsZoneOptions = ['bern-burgdorf'];
+  journeyMapsZoneOptions = ['bern-burgdorf', 'bs-bl'];
   journeyMapsZones: GeoJSON.FeatureCollection;
 
   zoomLevels: ZoomLevels;
@@ -169,6 +170,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.assetReaderService.loadAssetAsJSON('zones/bern-burgdorf.json')
       .subscribe(json => this._zonesBernBurgdorf = json);
 
+    this.assetReaderService.loadAssetAsJSON('zones/bs-bl.json')
+      .subscribe(json => this._zonesBsBl = json);
+
     this.assetReaderService.loadAssetAsString('secrets/apikey.txt')
       .subscribe(apiKey => this.apiKey = apiKey);
 
@@ -249,8 +253,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.journeyMapsZones = undefined;
 
     if ((event.target as HTMLOptionElement).value === 'bern-burgdorf') {
-      this.journeyMapsZones = this._zonesBernBurgdorf; // change detection fails at this stage
-      this.setBbox([7.35, 46.85, 7.75, 47.15]);
+      this.journeyMapsZones = this._zonesBernBurgdorf;
+    }
+    if ((event.target as HTMLOptionElement).value === 'bs-bl') {
+      this.journeyMapsZones = this._zonesBsBl;
+    }
+
+    if (this.journeyMapsZones) {
+      this.setBbox(this.journeyMapsZones.bbox);
     }
   }
 
