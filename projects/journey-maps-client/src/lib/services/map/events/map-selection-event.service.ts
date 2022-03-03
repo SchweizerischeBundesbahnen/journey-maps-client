@@ -28,7 +28,7 @@ export class MapSelectionEventService {
   private mapInstance: MaplibreMap;
   private layersTypes: Map<string, FeatureDataType>;
   private selectionModes: Map<FeatureDataType, SelectionMode>;
-  private touchedZoneIds: Set<number>;
+  private touchedZoneIds: Set<number> = new Set();
 
   constructor(
     private routeUtilsService: RouteUtilsService,
