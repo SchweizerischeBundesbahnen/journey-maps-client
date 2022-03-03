@@ -3,10 +3,16 @@
 ## [3.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.8.0&sourceBranch=refs%2Ftags%2F3.0.0&targetRepoId=46287) - 2022-03-03
 ### Added
 
-* Added support for map events for MARKER, ROUTE, STATION and ZONE feature types. Use configuration setting in `listenerOptions` to enable the following events:
-  * `selectedFeaturesChange` 
-  * `featuresClick`
-  * `featuresHoverChange`
+* Support map events for:
+  * markers
+  * routes
+  * stations
+  * zones 
+* By default, all events are disabled. Event watching can be enabled or disabled using the `watch` flag in `listenerOptions` configuration setting. 
+* Following event subscriptions are available:
+  * `selectedFeaturesChange`: event is emitted whenever the selected features changes.
+  * `featuresClick`: event is emitted whenever map features were clicked.
+  * `featuresHoverChange`: event is emitted whenever mouse hovered or leaved map features.
 * Added 'journeyMapsZones' @Input parameter to display selectable zones on the map.
 * 'journeyMapsZones' can be marked as 'selected' by setting {"isSelected": true} inside 'properties' on the individual GeoJSON Feature.
 * An optional 'home button' has been added to the controls, allowing the user to zoom all of Switzerland into view.
