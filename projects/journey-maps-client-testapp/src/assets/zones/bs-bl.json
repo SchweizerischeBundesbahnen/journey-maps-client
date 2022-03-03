@@ -750,7 +750,8 @@
         "valid_to": "Sun, 13 Dec 2020 00:00:00 GMT",
         "verbund": "TNW",
         "zone": "100",
-        "zoneplan": "TNW Abo"
+        "zoneplan": "TNW Abo",
+        "isSelected": true
       },
       "geometry": {
         "type": "Polygon",

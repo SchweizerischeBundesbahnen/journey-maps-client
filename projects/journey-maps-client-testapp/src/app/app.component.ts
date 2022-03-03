@@ -254,11 +254,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if ((event.target as HTMLOptionElement).value === 'bern-burgdorf') {
       this.journeyMapsZones = this._zonesBernBurgdorf;
-      this.setBbox([7.252629127, 46.887154663, 7.661314258, 47.110914758]);
     }
     if ((event.target as HTMLOptionElement).value === 'bs-bl') {
       this.journeyMapsZones = this._zonesBsBl;
-      this.setBbox([7.286583952, 47.302118043, 8.18445168, 47.636269137]);
+    }
+
+    if (this.journeyMapsZones) {
+      this.setBbox(this.journeyMapsZones.bbox);
     }
   }
 

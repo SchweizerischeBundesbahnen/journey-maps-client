@@ -1,14 +1,32 @@
 {
+  "type": "FeatureCollection",
+  "bbox": [
+    7.252629127,
+    46.887154663,
+    7.661314258,
+    47.110914758
+  ],
   "features": [
     {
+      "type": "Feature",
+      "bbox": [
+        7.39775923,
+        46.924691622,
+        7.491330567,
+        47.001966119
+      ],
+      "properties": {
+        "id": 14514,
+        "partner_code": "446",
+        "valid_from": "Sat, 14 Dec 2019 00:00:00 GMT",
+        "valid_to": "Sun, 13 Dec 2020 00:00:00 GMT",
+        "verbund": "Libero",
+        "zone": "100",
+        "zoneplan": "Libero Abo Libero",
+        "isSelected": true
+      },
       "geometry": {
         "type": "MultiPolygon",
-        "crs": {
-          "type": "name",
-          "properties": {
-            "name": "EPSG:4326"
-          }
-        },
         "coordinates": [
           [
             [
@@ -251,29 +269,27 @@
             ]
           ]
         ]
-      },
-      "id": null,
-      "properties": {
-        "verbund": "Libero",
-        "zone": "100",
-        "valid_to": "Sun, 13 Dec 2020 00:00:00 GMT",
-        "valid_from": "Sat, 14 Dec 2019 00:00:00 GMT",
-        "id": 14514,
-        "partner_code": "446",
-        "zoneplan": "Libero Abo Libero",
-        "isSelected": true
-      },
-      "type": "Feature"
+      }
     },
     {
+      "type": "Feature",
+      "bbox": [
+        7.252629127,
+        46.887154663,
+        7.538167187,
+        47.019454617
+      ],
+      "properties": {
+        "id": 14515,
+        "partner_code": "446",
+        "valid_from": "Sat, 14 Dec 2019 00:00:00 GMT",
+        "valid_to": "Sun, 13 Dec 2020 00:00:00 GMT",
+        "verbund": "Libero",
+        "zone": "101",
+        "zoneplan": "Libero Abo Libero"
+      },
       "geometry": {
         "type": "MultiPolygon",
-        "crs": {
-          "type": "name",
-          "properties": {
-            "name": "EPSG:4326"
-          }
-        },
         "coordinates": [
           [
             [
@@ -850,28 +866,27 @@
             ]
           ]
         ]
-      },
-      "id": null,
-      "properties": {
-        "verbund": "Libero",
-        "zone": "101",
-        "valid_to": "Sun, 13 Dec 2020 00:00:00 GMT",
-        "valid_from": "Sat, 14 Dec 2019 00:00:00 GMT",
-        "id": 14515,
-        "partner_code": "446",
-        "zoneplan": "Libero Abo Libero"
-      },
-      "type": "Feature"
+      }
     },
     {
+      "type": "Feature",
+      "bbox": [
+        7.558041191,
+        47.01683313,
+        7.661314258,
+        47.110914758
+      ],
+      "properties": {
+        "id": 14534,
+        "partner_code": "446",
+        "valid_from": "Sat, 14 Dec 2019 00:00:00 GMT",
+        "valid_to": "Sun, 13 Dec 2020 00:00:00 GMT",
+        "verbund": "Libero",
+        "zone": "150",
+        "zoneplan": "Libero Abo Libero"
+      },
       "geometry": {
         "type": "Polygon",
-        "crs": {
-          "type": "name",
-          "properties": {
-            "name": "EPSG:4326"
-          }
-        },
         "coordinates": [
           [
             [
@@ -980,19 +995,7 @@
             ]
           ]
         ]
-      },
-      "id": null,
-      "properties": {
-        "verbund": "Libero",
-        "zone": "150",
-        "valid_to": "Sun, 13 Dec 2020 00:00:00 GMT",
-        "valid_from": "Sat, 14 Dec 2019 00:00:00 GMT",
-        "id": 14534,
-        "partner_code": "446",
-        "zoneplan": "Libero Abo Libero"
-      },
-      "type": "Feature"
+      }
     }
-  ],
-  "type": "FeatureCollection"
+  ]
 }
