@@ -34,14 +34,7 @@ export class FeaturesClickEvent extends ReplaySubject<FeaturesClickEventData> {
           return;
         }
 
-        // Click priority: points, lines/multiline, polygons/others
-        const points = features.filter(f => f.geometry.type.includes('Point'));
-        const lines = features.filter(f => f.geometry.type.includes('Line'));
-        if (points.length) {
-          features = points;
-        } else if (lines.length) {
-          features = lines;
-        }
+        features = this.mapEventUtils.filterFeaturesByPriority(features);
 
         this.next({
           clickPoint: {x: e.point.x, y: e.point.y},
