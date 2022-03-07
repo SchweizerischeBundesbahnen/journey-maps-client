@@ -14,16 +14,12 @@ describe('FeaturesHoverEvent', () => {
     mapMock = new MaplibreMapMock();
 
     featureData = [
-      {featureDataType: FeatureDataType.ROUTE},
-      {featureDataType: FeatureDataType.ROUTE}
-    ] as FeatureData[];
+      {featureDataType: FeatureDataType.ROUTE, geometry: {type: 'Line'}, source: 'routes-source'},
+      {featureDataType: FeatureDataType.ROUTE, geometry: {type: 'Line'}, source: 'routes-source'},
+    ] as unknown as FeatureData[];
 
-    const mapEventUtilsMock = {
-      queryFeaturesByLayerIds: () => {
-        return featureData;
-      },
-      setFeatureState: () => void (0)
-    } as undefined as MapEventUtilsService;
+    const mapEventUtilsMock = new MapEventUtilsService();
+    spyOn(mapEventUtilsMock, 'queryFeaturesByLayerIds').and.returnValue(featureData);
 
     const routeUtilsMock = {
       filterRouteFeatures: () => []

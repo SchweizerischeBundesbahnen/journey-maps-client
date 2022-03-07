@@ -63,6 +63,23 @@ export class MapEventUtilsService {
     }).filter(propertyFilter).map(f => MapEventUtilsService.toFeatureEventData(f, layers.get(f.layer.id)));
   }
 
+  filterFeaturesByPriority(features: FeatureData[]): FeatureData[] {
+    // Click priority: points, lines/multiline, polygons/others
+    if (!features || !features.length) {
+      return features;
+    }
+
+    const points = features.filter(f => f.geometry.type.includes('Point'));
+    const lines = features.filter(f => f.geometry.type.includes('Line'));
+    if (points.length) {
+      features = points;
+    } else if (lines.length) {
+      features = lines;
+    }
+
+    return features;
+  }
+
   /* private functions */
   private static toFeatureEventData(feature: MapboxGeoJSONFeature, featureDataType: FeatureDataType): FeatureData {
     return {

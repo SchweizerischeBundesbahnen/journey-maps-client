@@ -90,8 +90,8 @@ export class MapSelectionEventService {
     if (this.selectionModes.get(data.featureDataType) === SelectionMode.single) {
       // if multiple features of same type, only the last in the list will be selected:
       this.findSelectedFeatures()
-        .features.filter(data => data.featureDataType === data.featureDataType)
-        .forEach(data => this.mapEventUtils.setFeatureState(data, this.mapInstance, {selected: false}));
+        .features.filter(f => f.featureDataType === data.featureDataType)
+        .forEach(f => this.mapEventUtils.setFeatureState(f, this.mapInstance, {selected: false}));
     }
 
     this.mapEventUtils.setFeatureState(data, this.mapInstance, {selected});

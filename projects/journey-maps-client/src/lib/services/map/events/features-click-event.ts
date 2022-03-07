@@ -29,10 +29,13 @@ export class FeaturesClickEvent extends ReplaySubject<FeaturesClickEventData> {
     const mapClicked = new Subject<MapLayerMouseEvent>();
     this.subscription = mapClicked.pipe(debounceTime(MAP_CLICK_EVENT_DEBOUNCE_TIME))
       .subscribe(e => {
-        const features = this.mapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [e.point.x, e.point.y], this.layers);
+        let features = this.mapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [e.point.x, e.point.y], this.layers);
         if (!features.length) {
           return;
         }
+
+        features = this.mapEventUtils.filterFeaturesByPriority(features);
+
         this.next({
           clickPoint: {x: e.point.x, y: e.point.y},
           clickLngLat: {lng: e.lngLat.lng, lat: e.lngLat.lat},

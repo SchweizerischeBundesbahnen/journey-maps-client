@@ -54,6 +54,10 @@ export class MaplibreMapMock {
 
   getCanvas = () => this.canvasStyle;
 
+  getFeatureState = () => new Object();
+
+  setFeatureState = () => void (0);
+
   /* End of any Public MaplibreMap functions */
 
   raise(eventName: string) {

@@ -73,6 +73,9 @@ export class FeaturesHoverEvent extends ReplaySubject<FeaturesHoverChangeEventDa
 
     let currentFeatures: FeatureData[] =
       this.mapEventUtils.queryFeaturesByLayerIds(this.mapInstance, [eventPoint.x, eventPoint.y], this.layers);
+
+    currentFeatures = this.mapEventUtils.filterFeaturesByPriority(currentFeatures);
+
     let hasNewFeatures = !!currentFeatures.length;
 
     const routeFeatures = this.routeUtilsService.filterRouteFeatures(currentFeatures);
