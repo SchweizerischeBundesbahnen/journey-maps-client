@@ -1,4 +1,4 @@
-import {Map as MapLibreMap} from 'maplibre-gl';
+import {Map as MapLibreMap, MapboxGeoJSONFeature, Point, PointLike} from 'maplibre-gl';
 
 interface EventInfo {
   _layerId: string,
@@ -6,8 +6,12 @@ interface EventInfo {
 }
 
 export class MaplibreMapMock {
+  static readonly EVENT_POINT: Point = new Point(150, 100);
+
   private readonly callbackFnCache = new Map<String, EventInfo[] | any[]>();
   private readonly canvasStyle = {style: {cursor: ''}};
+
+  private readonly featureData = new Map<string, { layers: string[], features: MapboxGeoJSONFeature[] }>();
 
   get(): MapLibreMap {
     return this as unknown as MapLibreMap;
@@ -58,6 +62,15 @@ export class MaplibreMapMock {
 
   setFeatureState = () => void (0);
 
+  queryRenderedFeatures(point: PointLike, options?: { layers?: string[] }): MapboxGeoJSONFeature[] {
+    const data = this.featureData.get(MaplibreMapMock.stringify(point));
+    if (data && (!options?.layers?.length || data.layers.some(l => options.layers.includes(l)))) {
+      return data.features;
+    }
+
+    return null;
+  }
+
   /* End of any Public MaplibreMap functions */
 
   raise(eventName: string) {
@@ -75,12 +88,18 @@ export class MaplibreMapMock {
     }
   }
 
+  addFeatureData(point: PointLike, layers: string[], features: MapboxGeoJSONFeature[]) {
+    this.featureData.set(MaplibreMapMock.stringify(point), {layers, features});
+  }
+
   private static callbackWithEventArgs(eventName: string, callback: any) {
     switch (eventName) {
       case 'mousemove':
+      case 'mouseenter':
+      case 'mouseleave':
       case 'click': {
         callback({
-          point: {x: 150, y: 100},
+          point: MaplibreMapMock.EVENT_POINT,
           lngLat: {lng: 7.265078, lat: 46.565312}
         });
         break;
@@ -90,4 +109,9 @@ export class MaplibreMapMock {
         break;
     }
   }
+
+  private static stringify(point: PointLike): string {
+    return Array.isArray(point) ? JSON.stringify(point) : JSON.stringify([point.x, point.y]);
+  }
+
 }
