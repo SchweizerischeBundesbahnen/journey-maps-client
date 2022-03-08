@@ -1,5 +1,6 @@
 import {MaplibreMapMock} from '../../../model/maplibre-map-mock';
 import {MapCursorStyleEvent} from './map-cursor-style-event';
+import {MapboxGeoJSONFeature} from 'maplibre-gl';
 
 describe('MapCursorStyleEvent', () => {
   let mapCursorStyleEvent: MapCursorStyleEvent;
@@ -7,7 +8,6 @@ describe('MapCursorStyleEvent', () => {
 
   beforeEach(() => {
     mapMock = new MaplibreMapMock();
-    const layers = ['layer-1', 'layer-2'];
     mapCursorStyleEvent = new MapCursorStyleEvent(mapMock.get(), layers);
   });
 
@@ -19,8 +19,9 @@ describe('MapCursorStyleEvent', () => {
     expect(mapCursorStyleEvent).toBeTruthy();
   });
 
-  it('should set pointer cursor on mouse enter', (doneFn) => {
+  it('should set pointer cursor when feature is present', (doneFn) => {
     expect(mapMock.getCanvas().style.cursor).toBe('');
+    mapMock.addFeatureData(MaplibreMapMock.EVENT_POINT, layers, dummyFeature);
     mapMock.raise('mouseenter');
     setTimeout(() => {
       expect(mapMock.getCanvas().style.cursor).toBe('pointer');
@@ -28,7 +29,7 @@ describe('MapCursorStyleEvent', () => {
     }, 100);
   });
 
-  it('should set pointer cursor on mouse leave', (doneFn) => {
+  it('should unset pointer cursor when NO feature is preent', (doneFn) => {
     mapMock.getCanvas().style.cursor = 'pointer';
     mapMock.raise('mouseleave');
     setTimeout(() => {
@@ -37,3 +38,15 @@ describe('MapCursorStyleEvent', () => {
     }, 100);
   });
 });
+
+const layers = ['layer-1', 'layer-2'];
+const dummyFeature: MapboxGeoJSONFeature[] = [{
+  type: 'Feature',
+  id: 'test-feature',
+  geometry: null,
+  properties: [],
+  layer: null,
+  source: null,
+  sourceLayer: null,
+  state: null,
+}];
