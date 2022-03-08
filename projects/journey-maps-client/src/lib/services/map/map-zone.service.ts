@@ -9,11 +9,7 @@ import {FeatureDataType} from '../../journey-maps-client.interfaces';
 @Injectable({providedIn: 'root'})
 export class MapZoneService {
 
-  static allZoneLayers: string[] = [
-    'rokas-zone',
-    'rokas-zone-outline',
-    'rokas-zone-label',
-  ];
+  static ZONE_LAYER = 'rokas-zone';
 
   updateZones(map: MaplibreMap, mapSelectionEventService: MapSelectionEventService, zonesFeatureCollection: GeoJSON.FeatureCollection = EMPTY_FEATURE_COLLECTION): void {
     const source = map.getSource(Constants.ZONE_SOURCE) as GeoJSONSource;

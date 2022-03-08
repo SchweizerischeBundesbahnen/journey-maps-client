@@ -9,7 +9,7 @@ import {MapSelectionEventService, SELECTED_PROPERTY_NAME} from './events/map-sel
 @Injectable({providedIn: 'root'})
 export class MapRoutesService {
 
-  static allRouteLayers: string[] = [
+  static ALL_ROUTE_LAYERS: string[] = [
     'rokas-route',
     'rokas-route-gen0',
     'rokas-route-gen1',

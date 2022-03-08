@@ -92,7 +92,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
         this.updateWatchOnLayers(this.mapMarkerService.allMarkerAndClusterLayers, FeatureDataType.MARKER);
       }
       if (this.listenerOptions.ROUTE?.watch) {
-        this.updateWatchOnLayers(MapRoutesService.allRouteLayers, FeatureDataType.ROUTE);
+        this.updateWatchOnLayers(MapRoutesService.ALL_ROUTE_LAYERS, FeatureDataType.ROUTE);
       }
       if (this.listenerOptions.STATION?.watch) {
         this.updateWatchOnLayers([MapStationService.STATION_LAYER], FeatureDataType.STATION);
@@ -101,7 +101,7 @@ export class FeatureEventListenerComponent implements OnChanges, OnDestroy {
         this.mapStationService.deregisterStationUpdater(this.map);
       }
       if (this.listenerOptions.ZONE?.watch) {
-        this.updateWatchOnLayers(MapZoneService.allZoneLayers, FeatureDataType.ZONE);
+        this.updateWatchOnLayers([MapZoneService.ZONE_LAYER], FeatureDataType.ZONE);
       }
 
       this.mapCursorStyleEvent?.complete();

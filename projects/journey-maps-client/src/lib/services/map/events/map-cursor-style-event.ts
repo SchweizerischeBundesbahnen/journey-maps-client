@@ -1,4 +1,4 @@
-import {Map as MaplibreMap} from 'maplibre-gl';
+import {Map as MaplibreMap, MapMouseEvent, Point} from 'maplibre-gl';
 import {Subject, Subscription} from 'rxjs';
 import {sampleTime} from 'rxjs/operators';
 
@@ -6,24 +6,25 @@ const CURSOR_STYLE_DELAY = 25;
 
 export class MapCursorStyleEvent {
 
-  private subject = new Subject<boolean>();
+  private subject = new Subject<Point>();
   private subscription: Subscription;
-  private enterListener: () => void;
-  private leaveListener: () => void;
+  private mouseEventListener: (event: MapMouseEvent) => void;
 
-  constructor(private mapInstance: MaplibreMap, private layerIds: string[]) {
+  constructor(
+    private mapInstance: MaplibreMap,
+    private layerIds: string[]
+  ) {
     if (!this.layerIds.length) {
       return;
     }
 
-    this.subscription = this.subject.pipe(sampleTime(CURSOR_STYLE_DELAY)).subscribe(hover => this.setCursorStyle(hover));
+    this.subscription = this.subject.pipe(sampleTime(CURSOR_STYLE_DELAY)).subscribe(point => this.updateCursorStyle(point));
 
-    this.enterListener = () => this.subject.next(true);
-    this.leaveListener = () => this.subject.next(false);
+    this.mouseEventListener = (e: MapMouseEvent) => this.subject.next(new Point(e.point.x, e.point.y));
 
     this.layerIds.forEach(layerId => {
-      this.mapInstance.on('mouseenter', layerId, this.enterListener);
-      this.mapInstance.on('mouseleave', layerId, this.leaveListener);
+      this.mapInstance.on('mouseenter', layerId, this.mouseEventListener);
+      this.mapInstance.on('mouseleave', layerId, this.mouseEventListener);
     });
   }
 
@@ -32,12 +33,15 @@ export class MapCursorStyleEvent {
     this.subscription?.unsubscribe();
 
     this.layerIds.forEach(layerId => {
-      this.mapInstance.off('mouseenter', layerId, this.enterListener);
-      this.mapInstance.off('mouseleave', layerId, this.leaveListener);
+      this.mapInstance.off('mouseenter', layerId, this.mouseEventListener);
+      this.mapInstance.off('mouseleave', layerId, this.mouseEventListener);
     });
   }
 
-  private setCursorStyle(hover: boolean): void {
+  private updateCursorStyle(point: Point): void {
+    const features = this.mapInstance.queryRenderedFeatures(point, {layers: this.layerIds});
+    const hover = features?.length;
+
     this.mapInstance.getCanvas().style.cursor = hover ? 'pointer' : '';
   }
 }
