@@ -1,14 +1,21 @@
 # Change Log
 
-## [3.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.8.0&sourceBranch=refs%2Ftags%2F3.0.0&targetRepoId=46287) - 2022-03-03
+NOTE: Version 3.0.0 will be the last version released in this repository. We are migrating to the SBB Angular component
+library. Future versions can be found here: https://angular.app.sbb.ch/
+
+See you there :-)
+
+## [3.0.0](https://code.sbb.ch/projects/KI_ROKAS/repos/journey-maps-client/compare/commits?targetBranch=refs%2Ftags%2F2.8.0&sourceBranch=refs%2Ftags%2F3.0.0&targetRepoId=46287) - 2022-03-08
+
 ### Added
 
 * Support map events for:
   * markers
   * routes
   * stations
-  * zones 
-* By default, all events are disabled. Event watching can be enabled or disabled using the `watch` flag in `listenerOptions` configuration setting. 
+  * zones
+* By default, all events are disabled. Event watching can be enabled or disabled using the `watch` flag
+  in `listenerOptions` configuration setting.
 * Following event subscriptions are available:
   * `selectedFeaturesChange`: event is emitted whenever the selected features changes.
   * `featuresClick`: event is emitted whenever map features were clicked.
