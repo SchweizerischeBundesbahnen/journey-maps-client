@@ -62,7 +62,7 @@ pipeline {
       }
       steps {
           withCredentials([usernamePassword(credentialsId: 'OWASP-NVD_RO', passwordVariable: 'dbpwd', usernameVariable: 'dbuser')]) {
-              dependencyCheck additionalArguments: ' --connectionString jdbc:postgresql://owasp-nvd-db.tools.sbb.ch:5432/owasp-nvd-v6 --dbDriverName org.postgresql.Driver --dbUser ' + dbuser + ' --dbPassword ' + dbpwd + ' --format ALL --disableOssIndex --disableRetireJS -n -scan ./**/*.jar', odcInstallation: 'dependency-check'
+              dependencyCheck additionalArguments: ' --disableAssembly --connectionString jdbc:postgresql://owasp-nvd-db.tools.sbb.ch:5432/owasp-nvd-v6 --dbDriverName org.postgresql.Driver --dbUser ' + dbuser + ' --dbPassword ' + dbpwd + ' --format ALL --disableOssIndex --disableRetireJS -n -scan ./**/*.jar', odcInstallation: 'dependency-check'
               dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
           }
       }
