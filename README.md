@@ -1,12 +1,11 @@
-# Journey Maps Client
+# [DEPRECATED] Journey Maps Client
 
-This is the map component of the [SBB ROKAS](https://sbb.sharepoint.com/sites/rokas) team based on Angular (Elements)
-and the  [MapLibre](https://maplibre.org/) framework.
+This repository is deprecated. We moved our component to the official SBB Angular components repository.
 
-You can find more information here:
+* Github: https://github.com/sbb-design-systems/sbb-angular
+* Showcase: https://angular.app.sbb.ch/journey-maps/introduction/getting-started
+* NPM: https://www.npmjs.com/package/@sbb-esta/journey-maps
 
-* [Angular Library](projects/journey-maps-client/README.md)
-* [Testapp](projects/journey-maps-client-testapp/README.md)
-* [Web Component](projects/journey-maps-client-elements/README.md)
+Please migrate to the version in the SBB Angular repository.
 
-![ROKAS Logo](ROKAS.png)
+Sincerly, your ROKAS team.
